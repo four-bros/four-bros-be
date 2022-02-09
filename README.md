@@ -1,4 +1,7 @@
-"# four-bros-be" 
+# four-bros-be
+
+four-bros-be is the backend app for the four-bros-fe. The purpose of the backend is solely to return
+the data necessary for the frontend to display.
 
 Create a virtual environment to handle packages and dependencies
 ```
