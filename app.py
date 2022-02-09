@@ -1,4 +1,3 @@
-from flask.helpers import send_from_directory
 from flask_cors import cross_origin
 
 from src.blueprints.players import players_bp
@@ -14,7 +13,7 @@ blueprints = [
 for bp in blueprints:
     app.register_blueprint(bp, url_prefix=f'/{bp.name}')
 
-app.route('/', methods=['GET', 'POST'])
+app.route('', methods=['GET', 'POST'])
 @cross_origin()
 def hello():
     return 'hello'
