@@ -289,7 +289,7 @@ def insert_player_info_into_db(player_info):
         readable_year = ncaa_dynasty.player_year_converter(record.fields['Year'])
         
         new_player = PlayerInfo(
-            player_id=record.fields['Player ID'],
+            id=record.fields['Player ID'],
             team_id=record.fields['Team ID'],
             first_name=record.fields['First Name'],
             last_name=record.fields['Last Name'],
@@ -344,14 +344,14 @@ def insert_player_info_into_db(player_info):
         )
         
         player: PlayerInfo = session.query(PlayerInfo).filter(
-            PlayerInfo.player_id == new_player.player_id).scalar()
+            PlayerInfo.id == new_player.id).scalar()
 
         if player is None:
             session.add(new_player)
             session.flush()
         else:
-            update(PlayerInfo).where(PlayerInfo.player_id == new_player.player_id).values(
-                player_id=new_player.player_id,
+            update(PlayerInfo).where(PlayerInfo.id == new_player.id).values(
+                player_id=new_player.id,
                 team_id=new_player.team_id,
                 first_name=new_player.first_name,
                 last_name=new_player.last_name,

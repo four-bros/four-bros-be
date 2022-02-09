@@ -2,13 +2,13 @@ from dataclasses import dataclass
 from sqlalchemy import Column, Integer
 from sqlalchemy.sql.schema import ForeignKey
 
-from src.constants import Base
+from constants import Base
 
 
 @dataclass
 class KickingStats(Base):
     __tablename__ = 'kicking_stats'
-    player_id = Column(Integer, ForeignKey('player_info.player_id'), primary_key=True)
+    player_id = Column(Integer, ForeignKey('player_info.id'), primary_key=True)
     fg_made_17_29 = Column(Integer)
     fg_att_17_29 = Column(Integer)
     long_fg = Column(Integer)
