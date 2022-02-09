@@ -3,7 +3,7 @@ from sqlalchemy import Column, Integer
 from sqlalchemy.sql.schema import ForeignKey
 from sqlalchemy.sql.sqltypes import String
 
-from src.constants import Base
+from constants import Base
 
 
 @dataclass
