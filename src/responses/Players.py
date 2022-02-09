@@ -4,7 +4,7 @@ from marshmallow import Schema
 class PlayerSchema(Schema):
     class Meta:
         fields = (
-            'player_id',
+            'id',
             'team_id',
             'first_name',
             'last_name',
@@ -14,7 +14,7 @@ class PlayerSchema(Schema):
             'power_moves',
             'kick_accuracy',
             'redshirt',
-            'year',
+            'player_year',
             'jersey_number',
             'throwing_power',
             'throwing_accuracy',

@@ -15,9 +15,9 @@ players_schema = PlayerSchema(many=True)
 
 def get_season_passing_stats(request):
     
-    players = session.query(PlayerInfo, OffensiveStats)\
+    players: List[PassingStatsSchema] = session.query(PlayerInfo, OffensiveStats)\
         .select_from(PlayerInfo, OffensiveStats)\
-        .join(OffensiveStats, OffensiveStats.player_id == PlayerInfo.player_id)\
+        .join(OffensiveStats, OffensiveStats.player_id == PlayerInfo.id)\
         .all()
     
     players_json = []

@@ -23,7 +23,7 @@ def get_all_players(request):
 
 def get_player_by_player_id(request, player_id) -> PlayerSchema:
     player: PlayerInfo = session.query(PlayerInfo).where(
-        PlayerInfo.player_id == player_id).one()
+        PlayerInfo.id == player_id).one()
     response = player_schema_single.dump(player)
     
     return response
