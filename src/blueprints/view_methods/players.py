@@ -1,9 +1,8 @@
 from typing import List
 
-from constants import session
-
-from data_models.PlayerInfo import PlayerInfo
-from responses.Players import PlayerSchema
+from src.constants import session
+from src.data_models.PlayerInfo import PlayerInfo
+from src.responses.Players import PlayerSchema
 
 
 player_schema_single = PlayerSchema()

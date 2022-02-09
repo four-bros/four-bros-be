@@ -1,6 +1,4 @@
-from marshmallow import fields, Schema
-
-from responses.Players import PlayerSchema
+from marshmallow import Schema
 
 
 class PassingStatsSchema(Schema):

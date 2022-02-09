@@ -2,7 +2,8 @@ from dataclasses import dataclass
 from sqlalchemy import Column, Integer
 from sqlalchemy.sql.schema import ForeignKey
 from sqlalchemy.sql.sqltypes import Float, String
-from constants import(Base)
+
+from src.constants import Base
 
 
 @dataclass

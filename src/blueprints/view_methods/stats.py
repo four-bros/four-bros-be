@@ -1,12 +1,10 @@
 from typing import List
-from constants import session
-from sqlalchemy import LABEL_STYLE_DISAMBIGUATE_ONLY
 
-from data_models.OffensiveStats import OffensiveStats
-from data_models.PlayerInfo import PlayerInfo
-
-from responses.Stats import PassingStatsSchema
-from responses.Players import PlayerSchema
+from src.constants import session
+from src.data_models.OffensiveStats import OffensiveStats
+from src.data_models.PlayerInfo import PlayerInfo
+from src.responses.Stats import PassingStatsSchema
+from src.responses.Players import PlayerSchema
 
 
 passing_stat_schema = PassingStatsSchema()

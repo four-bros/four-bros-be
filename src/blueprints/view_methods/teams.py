@@ -2,10 +2,9 @@ from typing import List
 
 from sqlalchemy.sql.expression import desc
 
-from constants import session
-
-from data_models.TeamInfo import TeamInfo
-from responses.Teams import TeamSchema
+from src.constants import session
+from src.data_models.TeamInfo import TeamInfo
+from src.responses.Teams import TeamSchema
 
 
 team_schema = TeamSchema()

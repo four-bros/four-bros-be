@@ -1,7 +1,7 @@
 from flask import Blueprint, request
 
-from responses.Players import PlayerSchema
-from blueprints.view_methods.players import(
+from src.responses.Players import PlayerSchema
+from src.blueprints.view_methods.players import(
     get_all_players,
     get_player_by_player_id,
     get_players_by_team_id,

@@ -1,10 +1,7 @@
 from dataclasses import dataclass
 from sqlalchemy import Column, Integer
-from constants import(
-    Base,
-    engine,
-    session
-)
+
+from src.constants import Base
 
 
 @dataclass

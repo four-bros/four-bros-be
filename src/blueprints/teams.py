@@ -1,10 +1,11 @@
 from flask import Blueprint, request
-from responses.Teams import TeamSchema
 
-from blueprints.view_methods.teams import(
+from src.blueprints.view_methods.teams import(
     get_all_teams,
     get_team_by_team_id
 )
+from src.responses.Teams import TeamSchema
+
 
 teams_bp = Blueprint('teams', __name__)
 

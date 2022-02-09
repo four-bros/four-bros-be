@@ -1,7 +1,7 @@
 from flask import Blueprint, request
 
-from responses.Players import PlayerSchema
-from blueprints.view_methods.stats import(
+from src.responses.Players import PlayerSchema
+from src.blueprints.view_methods.stats import(
     get_season_passing_stats,
 )
 
