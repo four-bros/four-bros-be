@@ -1,24 +1,12 @@
 from dataclasses import replace
 import ncaa_dynasty
-from typing import List
-from sqlalchemy import exc
 from sqlalchemy.sql.expression import update
-from sqlalchemy.sql import exists
 
 from constants import(
     session,
     user_teams
 )
-from data import (
-    def_stats,
-    kicking_stats,
-    player_info,
-    commits,
-    return_stats,
-    off_stats,
-    week_year,
-    team_info
-)
+
 from helpers import _convert_stats_year
 from data_models.Commits import Commits
 from data_models.DefensiveStats import DefensiveStats
@@ -311,7 +299,7 @@ def insert_player_info_into_db(player_info):
             power_moves=record.fields['Power Moves'],
             kick_accuracy=record.fields['Kick Accuracy'],
             redshirt=record.fields['Redshirt'],
-            year=readable_year,
+            player_year=readable_year,
             jersey_number=record.fields['Jersey #'],
             throwing_power=record.fields['Throwing Power'],
             throwing_accuracy=record.fields['Throwing Accuracy'],
@@ -373,7 +361,7 @@ def insert_player_info_into_db(player_info):
                 power_moves=new_player.power_moves,
                 kick_accuracy=new_player.kick_accuracy,
                 redshirt=new_player.redshirt,
-                year=new_player.year,
+                player_year=new_player.player_year,
                 jersey_number=new_player.jersey_number,
                 throwing_power=new_player.throwing_power,
                 throwing_accuracy=new_player.throwing_accuracy,

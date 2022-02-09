@@ -18,7 +18,7 @@ class PlayerInfo(Base):
     power_moves = Column(Integer)
     kick_accuracy = Column(Integer)
     redshirt = Column(Integer)
-    year = Column(String(10))
+    player_year = Column(String(10))
     jersey_number = Column(Integer)
     throwing_power = Column(Integer)
     throwing_accuracy = Column(Integer)
