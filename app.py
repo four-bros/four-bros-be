@@ -1,4 +1,3 @@
-from flask.helpers import send_from_directory
 from flask_cors import cross_origin
 
 from src.blueprints.players import players_bp
