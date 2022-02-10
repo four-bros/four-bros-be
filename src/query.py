@@ -29,12 +29,12 @@ player_schema = PlayerSchema()
 players_schema = PlayerSchema(many=True)
 
 
-jared_yates = session.query(PlayerInfo).filter(PlayerInfo.player_id == 8106).one()
+jared_yates = session.query(PlayerInfo).filter(PlayerInfo.id == 8106).one()
 print(jared_yates)
-jared_yates_off_stats = session.query(OffensiveStats).filter(OffensiveStats.player_id == jared_yates.player_id).one()
+jared_yates_off_stats = session.query(OffensiveStats).filter(OffensiveStats.player_id == jared_yates.id).one()
 print(jared_yates_off_stats)
 
-players = PlayerInfo.query.join(OffensiveStats, PlayerInfo.player_id == OffensiveStats.player_id)
+players = PlayerInfo.query.join(OffensiveStats, PlayerInfo.id == OffensiveStats.player_id)
 
 players_json = passing_stats_schema.dump(players)
 
