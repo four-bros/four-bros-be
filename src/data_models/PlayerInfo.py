@@ -59,7 +59,7 @@ class PlayerInfo(Base):
     zone_coverage = Column(Integer)
     finesse_moves = Column(Integer)
     juke_move = Column(Integer)
-    # games_played = Column(Integer)
+
 
     def __repr__(self):
         return f'ID: {self.id}, Name: {self.first_name} {self.last_name}'

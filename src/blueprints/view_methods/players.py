@@ -40,7 +40,7 @@ def get_player_by_player_id(request, player_id) -> PlayerSchema:
     player: PlayerInfo = session.query(PlayerInfo).where(
         PlayerInfo.id == player_id).one()
 
-    converted_player = _get_player_details_and_abilities(player)
+    converted_player: Player = _get_player_details_and_abilities(player)
 
     response = player_schema_single.dump(converted_player)
     
@@ -53,7 +53,7 @@ def get_players_by_team_id(request, team_id):
 
     players.sort(key=lambda p: p.overall, reverse=True)
 
-    converted_players = [_get_player_details_and_abilities(player) for player in players]
+    converted_players: List[Player] = [_get_player_details_and_abilities(player) for player in players]
 
     players_json = player_schema_list.dump(converted_players)
     
@@ -71,7 +71,7 @@ def get_players_by_team_id_and_position(team_id: int, position: str):
         PlayerInfo.position == position.upper()
     ).all()
     
-    converted_players = [_get_player_details_and_abilities(player) for player in players]
+    converted_players: List[Player] = [_get_player_details_and_abilities(player) for player in players]
 
     players_json = player_schema_list.dump(converted_players)
     
