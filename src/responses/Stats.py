@@ -7,6 +7,7 @@ class PassingStatsSchema(Schema):
             'player_id',
             'first_name',
             'last_name',
+            'player_year',
             'pass_yards',
             'longest_pass',
             'year',
