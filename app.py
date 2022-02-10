@@ -17,9 +17,9 @@ for bp in blueprints:
     app.register_blueprint(bp, url_prefix=f'/{bp.name}')
 
 
-app.route('', methods=['GET', 'POST'])
+app.route('/', methods=['GET', 'POST'])
 @cross_origin()
-def hello():
+def index():
     return 'hello'
 
 
