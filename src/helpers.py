@@ -167,7 +167,8 @@ def _get_rushing_stats(offensive_stats: OffensiveStats) -> RushingStats:
         ya_contact=offensive_stats.ya_contact,
         broke_tkls=offensive_stats.broke_tkls,
         fumbles=offensive_stats.fumbles,
-        twenty_plus_yd_runs=offensive_stats.twenty_plus_yd_runs
+        twenty_plus_yd_runs=offensive_stats.twenty_plus_yd_runs,
+        year=offensive_stats.year
     )
     
     return rushing_stats

@@ -21,6 +21,7 @@ class RushingStatsSchema(Schema):
     broke_tkls = fields.Int()
     fumbles = fields.Int()
     twenty_plus_yd_runs = fields.Int()
+    year = fields.Int()
 
 
 class PlayerPassingStatsSchema(Schema):

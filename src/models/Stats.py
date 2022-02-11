@@ -9,7 +9,8 @@ class RushingStats:
         ya_contact,
         broke_tkls,
         fumbles,
-        twenty_plus_yd_runs
+        twenty_plus_yd_runs,
+        year
     ):
         self.rush_att = rush_att
         self.rush_yards = rush_yards
@@ -17,6 +18,7 @@ class RushingStats:
         self.broke_tkls = broke_tkls
         self.fumbles = fumbles
         self.twenty_plus_yd_runs = twenty_plus_yd_runs
+        self.year = year
 
 
 class PassingStats:
