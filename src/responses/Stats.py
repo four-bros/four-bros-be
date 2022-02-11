@@ -14,6 +14,14 @@ class PassingStatsSchema(Schema):
     pass_att = fields.Int()
 
 
+class ReceivingStatsSchema(Schema):
+    receptions = fields.Int()
+    rec_yards = fields.Int()
+    rec_tds = fields.Int()
+    yac = fields.Int()
+    drops = fields.Int()
+
+
 class RushingStatsSchema(Schema):
     rush_att = fields.Int()
     rush_yards = fields.Int()
@@ -22,6 +30,11 @@ class RushingStatsSchema(Schema):
     fumbles = fields.Int()
     twenty_plus_yd_runs = fields.Int()
     year = fields.Int()
+
+
+class PlayerReceivingStatsSchema(Schema):
+    player_details = fields.Nested(PlayerDetailsSchema)
+    receiving_stats = fields.Nested(ReceivingStatsSchema)
 
 
 class PlayerPassingStatsSchema(Schema):
