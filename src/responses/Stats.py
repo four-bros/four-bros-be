@@ -4,24 +4,6 @@ from src.responses.Players import PlayerDetailsSchema
 
 
 class PassingStatsSchema(Schema):
-    class Meta:
-        fields = (
-            'player_id',
-            'first_name',
-            'last_name',
-            'player_year',
-            'pass_yards',
-            'longest_pass',
-            'year',
-            'pass_tds',
-            'games_played',
-            'completions',
-            'ints',
-            'pass_att'
-        )
-
-
-class PassingStatsSchema(Schema):
     pass_yards = fields.Int()
     longest_pass = fields.Int()
     year = fields.Int()
