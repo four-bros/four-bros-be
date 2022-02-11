@@ -25,7 +25,7 @@ def get_all_teams(request) -> TeamSchema:
 
 def get_team_by_team_id(request, team_id) -> TeamSchema:
     
-    team: TeamInfo = session.query(TeamInfo).where(TeamInfo.team_id == team_id).one()
+    team: TeamInfo = session.query(TeamInfo).where(TeamInfo.id == team_id).one()
     response: TeamSchema = team_schema.dump(team)
     
     return response
