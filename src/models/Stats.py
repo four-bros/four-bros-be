@@ -1,24 +1,6 @@
 from src.models.Player import PlayerDetails
 
 
-class RushingStats:
-    def __init__(
-        self,
-        rush_att,
-        rush_yards,
-        ya_contact,
-        broke_tkls,
-        fumbles,
-        twenty_plus_yd_runs
-    ):
-        self.rush_att = rush_att
-        self.rush_yards = rush_yards
-        self.ya_contact = ya_contact
-        self.broke_tkls = broke_tkls
-        self.fumbles = fumbles
-        self.twenty_plus_yd_runs = twenty_plus_yd_runs
-
-
 class PassingStats:
     def __init__(
         self,
@@ -42,6 +24,42 @@ class PassingStats:
         self.pass_att = pass_att
 
 
+class RushingStats:
+    def __init__(
+        self,
+        rush_att,
+        rush_yards,
+        ya_contact,
+        broke_tkls,
+        fumbles,
+        twenty_plus_yd_runs,
+        year
+    ):
+        self.rush_att = rush_att
+        self.rush_yards = rush_yards
+        self.ya_contact = ya_contact
+        self.broke_tkls = broke_tkls
+        self.fumbles = fumbles
+        self.twenty_plus_yd_runs = twenty_plus_yd_runs
+        self.year = year
+
+
+class ReceivingStats:
+    def __init__(
+        self,
+        receptions,
+        rec_yards,
+        rec_tds,
+        yac,
+        drops
+
+    ):
+        self.receptions = receptions
+        self.rec_yards = rec_yards
+        self.rec_tds = rec_tds
+        self.yac = yac
+        self.drops = drops
+
 
 class PlayerRushingStats:
     def __init__(
@@ -51,6 +69,16 @@ class PlayerRushingStats:
     ):
         self.player_details = player_details
         self.rushing_stats = rushing_stats
+
+
+class PlayerReceivingStats:
+    def __init__(
+        self,
+        player_details: PlayerDetails,
+        receiving_stats: ReceivingStats
+    ):
+        self.player_details = player_details
+        self.receiving_stats = receiving_stats
 
 
 class PlayerPassingStats:

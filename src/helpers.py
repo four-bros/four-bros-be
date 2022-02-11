@@ -10,7 +10,9 @@ from src.models.Player import(
 from src.models.Stats import(
     PassingStats,
     PlayerPassingStats,
+    PlayerReceivingStats,
     PlayerRushingStats,
+    ReceivingStats,
     RushingStats
 )
 
@@ -143,6 +145,38 @@ def _get_passing_stats(offensive_stats: OffensiveStats) -> PassingStats:
 ################################################
 ########## Get player rushing stats ############
 ################################################
+def _get_receiving_stats(offensive_stats: OffensiveStats) -> ReceivingStats:
+
+    receiving_stats: ReceivingStats = ReceivingStats(
+        receptions=offensive_stats.receptions,
+        rec_yards=offensive_stats.rec_yards,
+        rec_tds=offensive_stats.rec_tds,
+        yac=offensive_stats.yac,
+        drops=offensive_stats.drops
+    )
+
+    return receiving_stats
+
+
+def _get_player_receiving_stats(player) -> PlayerReceivingStats:
+
+    player_info: PlayerInfo = player[0]
+    offensive_stats: OffensiveStats = player[1]
+
+    player_details: PlayerDetails = _get_player_details(player=player_info)
+    receiving_stats: ReceivingStats = _get_receiving_stats(offensive_stats=offensive_stats)
+
+    player_receiving_stats: PlayerReceivingStats = PlayerReceivingStats(
+        player_details=player_details,
+        receiving_stats=receiving_stats
+    )
+
+    return player_receiving_stats
+
+
+################################################
+########## Get player rushing stats ############
+################################################
 def _get_player_rushing_stats(player) -> PlayerRushingStats:
 
     player_info: PlayerInfo = player[0]
@@ -167,7 +201,8 @@ def _get_rushing_stats(offensive_stats: OffensiveStats) -> RushingStats:
         ya_contact=offensive_stats.ya_contact,
         broke_tkls=offensive_stats.broke_tkls,
         fumbles=offensive_stats.fumbles,
-        twenty_plus_yd_runs=offensive_stats.twenty_plus_yd_runs
+        twenty_plus_yd_runs=offensive_stats.twenty_plus_yd_runs,
+        year=offensive_stats.year
     )
     
     return rushing_stats

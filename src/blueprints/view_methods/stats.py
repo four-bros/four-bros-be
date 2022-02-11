@@ -6,14 +6,17 @@ from src.data_models.PlayerInfo import PlayerInfo
 from src.data_models.WeekYear import WeekYear
 from src.helpers import(
     _get_player_passing_stats,
+    _get_player_receiving_stats,
     _get_player_rushing_stats
 )
 from src.models.Stats import(
     PlayerPassingStats,
+    PlayerReceivingStats,
     PlayerRushingStats
 )
 from src.responses.Stats import(
     PlayerPassingStatsSchema,
+    PlayerReceivingStatsSchema,
     PlayerRushingStatsSchema
 )
 
@@ -21,6 +24,8 @@ from src.responses.Stats import(
 # Schemas to deserialize objects
 passing_stat_schema = PlayerPassingStatsSchema()
 passing_stats_schema = PlayerPassingStatsSchema(many=True)
+receiving_stat_schema = PlayerReceivingStatsSchema()
+receiving_stats_schema = PlayerReceivingStatsSchema(many=True)
 rushing_stat_schema = PlayerRushingStatsSchema()
 rushing_stats_schema = PlayerRushingStatsSchema(many=True)
 
@@ -81,6 +86,43 @@ def get_season_passing_stats_leaders(request):
         'pass_yards': pass_yard_leaders_json,
         'pass_tds': pass_td_leaders_json,
         'interceptions': int_leaders_json
+    }
+
+    return response
+
+
+def get_season_receiving_stats_leaders(request):
+    # Query the year to filter out irrelevant years
+    week_year: WeekYear = session.query(WeekYear).first()
+    # Querying PlayerInfo first and OffensiveStats second will return 
+    # a set or tuple to the players variable.
+    players = session.query(PlayerInfo, OffensiveStats).filter(
+            PlayerInfo.id == OffensiveStats.player_id,
+            OffensiveStats.year == week_year.year
+            ).all()
+    # Convert players to PlayerReceivingStats model so they can be sorted
+    player_objects: List[PlayerReceivingStats] = [_get_player_receiving_stats(player) for player in players]
+
+    # Sort by category
+    reception_leaders = sorted(player_objects, key=lambda p: p.receiving_stats.receptions, reverse=True)[0:10]
+    rec_yards_leaders = sorted(player_objects, key=lambda p: p.receiving_stats.rec_yards, reverse=True)[0:10]
+    rec_tds_leaders = sorted(player_objects, key=lambda p: p.receiving_stats.rec_tds, reverse=True)[0:10]
+    yac_leaders = sorted(player_objects, key=lambda p: p.receiving_stats.yac, reverse=True)[0:10]
+    drops_leaders = sorted(player_objects, key=lambda p: p.receiving_stats.drops, reverse=True)[0:10]
+
+    # Convert top ten lists to json
+    reception_leaders_json = receiving_stats_schema.dump(reception_leaders)
+    rec_yards_leaders_json = receiving_stats_schema.dump(rec_yards_leaders)
+    rec_tds_leaders_json = receiving_stats_schema.dump(rec_tds_leaders)
+    yac_leaders_json = receiving_stats_schema.dump(yac_leaders)
+    drops_leaders_json = receiving_stats_schema.dump(drops_leaders)
+
+    response = {
+        'receptions': reception_leaders_json,
+        'rec_yards': rec_yards_leaders_json,
+        'rec_tds': rec_tds_leaders_json,
+        'yac': yac_leaders_json,
+        'drops': drops_leaders_json
     }
 
     return response
