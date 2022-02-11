@@ -4,6 +4,7 @@ from marshmallow import Schema, fields
 class PlayerDetailsSchema(Schema):
     id = fields.Int()
     team_id = fields.Int()
+    team_name = fields.Str()
     first_name = fields.Str()
     last_name = fields.Str()
     height = fields.Str()

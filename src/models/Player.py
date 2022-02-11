@@ -4,6 +4,7 @@ class PlayerDetails:
                 self,
                 id,
                 team_id,
+                team_name,
                 first_name,
                 last_name,
                 height,
@@ -17,6 +18,7 @@ class PlayerDetails:
 
         self.id = id
         self.team_id = team_id
+        self.team_name = team_name
         self.first_name = first_name
         self.last_name = last_name
         self.height = height
