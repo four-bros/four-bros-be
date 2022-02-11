@@ -5,7 +5,7 @@ from sqlalchemy import(
     String
 )
 
-from src.constants import Base
+from constants import Base
 
 
 @dataclass

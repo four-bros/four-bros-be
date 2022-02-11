@@ -43,8 +43,8 @@ insert_return_stats_into_db(return_stats)
 
 
 # delete duplicate team entries
-duplicate_cuse_1 = session.query(TeamInfo).filter(TeamInfo.team_id == 300).first()
-duplicate_cuse_2 = session.query(TeamInfo).filter(TeamInfo.team_id == 400).first()
+duplicate_cuse_1 = session.query(TeamInfo).filter(TeamInfo.id == 300).first()
+duplicate_cuse_2 = session.query(TeamInfo).filter(TeamInfo.id == 400).first()
 session.delete(duplicate_cuse_1)
 session.delete(duplicate_cuse_2)
 session.commit()

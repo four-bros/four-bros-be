@@ -2,14 +2,14 @@ from dataclasses import dataclass
 from sqlalchemy import Column, Integer, String
 from sqlalchemy.sql.schema import ForeignKey
 
-from src.constants import Base
+from constants import Base
 
 
 @dataclass
 class PlayerInfo(Base):
     __tablename__ = 'player_info'
     id = Column(Integer, primary_key=True)
-    team_id = Column(Integer, ForeignKey('team_info.team_id'))
+    team_id = Column(Integer, ForeignKey('team_info.id'))
     first_name = Column(String(50))
     last_name = Column(String(50))
     hometown_desc = Column(Integer)

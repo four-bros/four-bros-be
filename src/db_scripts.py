@@ -467,7 +467,7 @@ def insert_team_info_into_db(team_info):
         record = team_info[i]
         
         new_team = TeamInfo(
-            team_id=record.fields['Team ID'],
+            id=record.fields['Team ID'],
             team_name=record.fields['Team Name'],
             team_short_name=record.fields['Team Short Name'],
             is_user=True if record.fields['Team Name'] in user_teams else False,
@@ -483,14 +483,14 @@ def insert_team_info_into_db(team_info):
         )
         
         team: TeamInfo = session.query(TeamInfo).filter(
-            TeamInfo.team_id == new_team.team_id).scalar()
+            TeamInfo.id == new_team.id).scalar()
         
         if team is None:
             session.add(new_team)
             session.flush()
         else:
-            update(TeamInfo).where(TeamInfo.team_id == new_team.team_id).values(
-                team_id=new_team.team_id,
+            update(TeamInfo).where(TeamInfo.id == new_team.id).values(
+                id=new_team.id,
                 team_name=new_team.team_name,
                 team_short_name=new_team.team_short_name,
                 coachs_poll_1st_votes=new_team.coachs_poll_1st_votes,
