@@ -2,32 +2,39 @@ from src.constants import session
 from src.data_models.OffensiveStats import OffensiveStats
 from src.data_models.PlayerInfo import PlayerInfo
 from src.data_models.TeamInfo import TeamInfo
-from src.models.Player import Player, PlayerAbilities, PlayerDetails
-from src.models.Stats import PassingStats, PlayerPassingStats, PlayerRushingStats
+from src.models.Player import(
+    Player, 
+    PlayerAbilities, 
+    PlayerDetails
+)
+from src.models.Stats import(
+    PassingStats,
+    PlayerPassingStats,
+    PlayerRushingStats,
+    RushingStats
+)
 
 
 def _convert_stats_year(year: int) -> int:
     return year + 2013
 
-
+################################################
+### Get player details and player abilities ####
+################################################
 def _get_player_details_and_abilities(player: PlayerInfo) -> Player:
 
-    team_info: TeamInfo = session.query(TeamInfo).filter(TeamInfo.id == player.team_id).one()
+    player_details: PlayerDetails = _get_player_details(player=player)
+    player_abilities: PlayerAbilities = _get_player_abilities(player=player)
 
-    player_details: PlayerDetails = PlayerDetails(
-        id=player.id,
-        team_id=player.team_id,
-        team_name=team_info.team_name,
-        first_name=player.first_name,
-        last_name=player.last_name,
-        height=player.height,
-        weight=player.weight,
-        jersey_number=player.jersey_number,
-        player_year=player.player_year,
-        redshirt=player.redshirt,
-        position=player.position,
-        hometown_desc=player.hometown_desc
+    converted_player: Player = Player(
+        player_details=player_details,
+        player_abilities=player_abilities
     )
+
+    return converted_player
+
+
+def _get_player_abilities(player: PlayerInfo) -> PlayerAbilities:
 
     player_abilities: PlayerAbilities = PlayerAbilities(
         play_recognition=player.play_recognition,
@@ -72,54 +79,95 @@ def _get_player_details_and_abilities(player: PlayerInfo) -> Player:
         juke_move=player.juke_move,
     )
 
-    converted_player: Player = Player(
-        player_details=player_details,
-        player_abilities=player_abilities
-    )
-
-    return converted_player
+    return player_abilities
 
 
-def _get_player_passing_stats(player) -> PlayerPassingStats:
+def _get_player_details(player: PlayerInfo) -> PlayerDetails:
 
-    player_info: PlayerDetails = player[0]
-    player_passing_stats: OffensiveStats = player[1]
-
-    team_info: TeamInfo = session.query(TeamInfo).filter(TeamInfo.id == player_info.team_id).one()
+    team_info: TeamInfo = session.query(TeamInfo).filter(TeamInfo.id == player.team_id).one()
 
     player_details: PlayerDetails = PlayerDetails(
-        id=player_info.id,
-        team_id=player_info.team_id,
+        id=player.id,
+        team_id=player.team_id,
         team_name=team_info.team_name,
-        first_name=player_info.first_name,
-        last_name=player_info.last_name,
-        height=player_info.height,
-        weight=player_info.weight,
-        jersey_number=player_info.jersey_number,
-        player_year=player_info.player_year,
-        redshirt=player_info.redshirt,
-        position=player_info.position,
-        hometown_desc=player_info.hometown_desc
+        first_name=player.first_name,
+        last_name=player.last_name,
+        height=player.height,
+        weight=player.weight,
+        jersey_number=player.jersey_number,
+        player_year=player.player_year,
+        redshirt=player.redshirt,
+        position=player.position,
+        hometown_desc=player.hometown_desc
     )
 
-    passing_stats: PassingStats = PassingStats(
-        pass_yards=player_passing_stats.pass_yards,
-        longest_pass=player_passing_stats.longest_pass,
-        year=player_passing_stats.year,
-        pass_tds=player_passing_stats.pass_tds,
-        games_played=player_passing_stats.games_played,
-        completions=player_passing_stats.completions,
-        ints=player_passing_stats.ints,
-        pass_att=player_passing_stats.pass_att
-    )
+    return player_details
+
+
+################################################
+########## Get player passing stats ############
+################################################
+def _get_player_passing_stats(player) -> PlayerPassingStats:
+
+    player_info: PlayerInfo = player[0]
+    offensive_stats: OffensiveStats = player[1]
+
+    player_details: PlayerDetails = _get_player_details(player=player_info)
+
+    offensive_stats: PassingStats = _get_passing_stats(offensive_stats=offensive_stats)
 
     player_passing_stats: PlayerPassingStats = PlayerPassingStats(
         player_details=player_details,
-        passing_stats=passing_stats
+        passing_stats=offensive_stats
     )
 
     return player_passing_stats
 
 
+def _get_passing_stats(offensive_stats: OffensiveStats) -> PassingStats:
+
+    offensive_stats: PassingStats = PassingStats(
+        pass_yards=offensive_stats.pass_yards,
+        longest_pass=offensive_stats.longest_pass,
+        year=offensive_stats.year,
+        pass_tds=offensive_stats.pass_tds,
+        games_played=offensive_stats.games_played,
+        completions=offensive_stats.completions,
+        ints=offensive_stats.ints,
+        pass_att=offensive_stats.pass_att
+    )
+
+    return offensive_stats
+
+
+################################################
+########## Get player rushing stats ############
+################################################
 def _get_player_rushing_stats(player) -> PlayerRushingStats:
-    pass
+
+    player_info: PlayerInfo = player[0]
+    offensive_stats: OffensiveStats = player[1]
+
+    player_details: PlayerDetails = _get_player_details(player=player_info)
+    rushing_stats: RushingStats = _get_rushing_stats(offensive_stats=offensive_stats)
+
+    player_rushing_stats: PlayerRushingStats = PlayerRushingStats(
+        player_details=player_details,
+        rushing_stats=rushing_stats
+    )
+
+    return player_rushing_stats
+
+
+def _get_rushing_stats(offensive_stats: OffensiveStats) -> RushingStats:
+
+    rushing_stats: RushingStats = RushingStats(
+        rush_att=offensive_stats.rush_att,
+        rush_yards=offensive_stats.rush_yards,
+        ya_contact=offensive_stats.ya_contact,
+        broke_tkls=offensive_stats.broke_tkls,
+        fumbles=offensive_stats.fumbles,
+        twenty_plus_yd_runs=offensive_stats.twenty_plus_yd_runs
+    )
+    
+    return rushing_stats

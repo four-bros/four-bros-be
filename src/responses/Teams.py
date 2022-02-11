@@ -4,7 +4,7 @@ from marshmallow import Schema
 class TeamSchema(Schema):
     class Meta:
         fields = (
-            'team_id',
+            'id',
             'team_name',
             'team_short_name',
             'is_user',
