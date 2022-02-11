@@ -340,7 +340,6 @@ def insert_player_info_into_db(player_info):
             zone_coverage=record.fields['Zone Coverage'],
             finesse_moves=record.fields['Finesse Moves'],
             juke_move=record.fields['Juke Move'],
-            games_played=record.fields['Games Played'],
         )
         
         player: PlayerInfo = session.query(PlayerInfo).filter(
@@ -402,7 +401,6 @@ def insert_player_info_into_db(player_info):
                 zone_coverage=new_player.zone_coverage,
                 finesse_moves=new_player.finesse_moves,
                 juke_move=new_player.juke_move,
-                games_played=new_player.games_played,
             )
             session.flush()
             
