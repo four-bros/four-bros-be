@@ -2,6 +2,28 @@ from marshmallow import Schema, fields
 
 from src.responses.Players import PlayerDetailsSchema
 
+#############################
+### Stat Category Schemas ###
+#############################
+class DefensiveStatsSchema(Schema):
+    long_int_ret = fields.Int()
+    sacks = fields.Float()
+    year = fields.Str()
+    forced_fumbles = fields.Int()
+    solo_tkls = fields.Float()
+    safeties = fields.Int()
+    pass_def = fields.Int()
+    blocked_kicks = fields.Int()
+    tfl = fields.Int()
+    ints_made = fields.Int()
+    games_played = fields.Int()
+    fumbles_rec = fields.Int()
+    half_a_sack = fields.Float()
+    asst_tkls = fields.Float()
+    def_tds = fields.Int()
+    fum_rec_yards = fields.Int()
+    int_ret_yards = fields.Int()
+
 
 class PassingStatsSchema(Schema):
     pass_yards = fields.Int()
@@ -30,6 +52,13 @@ class RushingStatsSchema(Schema):
     fumbles = fields.Int()
     twenty_plus_yd_runs = fields.Int()
     year = fields.Int()
+
+##############################################
+### Player Details + Stat Category Schemas ###
+##############################################
+class PlayerDefensiveStatsSchema(Schema):
+    player_details = fields.Nested(PlayerDetailsSchema)
+    defensive_stats = fields.Nested(DefensiveStatsSchema)
 
 
 class PlayerReceivingStatsSchema(Schema):
