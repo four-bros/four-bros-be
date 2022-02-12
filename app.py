@@ -1,3 +1,4 @@
+from flask import Blueprint
 from flask_cors import cross_origin
 
 from src.blueprints.players import players_bp
@@ -17,10 +18,13 @@ for bp in blueprints:
     app.register_blueprint(bp, url_prefix=f'/{bp.name}')
 
 
-app.route('/', methods=['GET', 'POST'])
+app.route('/', methods=['GET'])
 @cross_origin()
 def index():
-    return 'hello'
+    response = {
+        'hello': 'world'
+    }
+    return response
 
 
 if __name__ == '__main__':

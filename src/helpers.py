@@ -1,4 +1,5 @@
 from src.constants import session
+from src.data_models.DefensiveStats import DefensiveStats
 from src.data_models.OffensiveStats import OffensiveStats
 from src.data_models.PlayerInfo import PlayerInfo
 from src.data_models.TeamInfo import TeamInfo
@@ -8,7 +9,9 @@ from src.models.Player import(
     PlayerDetails
 )
 from src.models.Stats import(
+    DefensiveStatsAll,
     PassingStats,
+    PlayerDefensiveStats,
     PlayerPassingStats,
     PlayerReceivingStats,
     PlayerRushingStats,
@@ -107,20 +110,63 @@ def _get_player_details(player: PlayerInfo) -> PlayerDetails:
 
 
 ################################################
+######### Get player defensive stats ###########
+################################################
+def _get_defensive_stats(defensive_stats: DefensiveStats) -> DefensiveStatsAll:
+
+    defensive_stats_all: DefensiveStatsAll = DefensiveStatsAll(
+        long_int_ret=defensive_stats.long_int_ret,
+        sacks=defensive_stats.sacks,
+        year=defensive_stats.year,
+        forced_fumbles=defensive_stats.forced_fumbles,
+        solo_tkls=defensive_stats.solo_tkls,
+        safeties=defensive_stats.safeties,
+        pass_def=defensive_stats.pass_def,
+        blocked_kicks=defensive_stats.blocked_kicks,
+        tfl=defensive_stats.tfl,
+        ints_made=defensive_stats.ints_made,
+        games_played=defensive_stats.games_played,
+        fumbles_rec=defensive_stats.fumbles_rec,
+        half_a_sack=defensive_stats.half_a_sack,
+        asst_tkls=defensive_stats.asst_tkls,
+        def_tds=defensive_stats.def_tds,
+        fum_rec_yards=defensive_stats.fum_rec_yards,
+        int_ret_yards=defensive_stats.int_ret_yards
+    )
+
+    return defensive_stats_all
+
+
+def _get_player_defensive_stats(player) -> PlayerDefensiveStats:
+
+    player_info: PlayerInfo = player[0]
+    def_stats: DefensiveStats = player[1]
+
+    player_details: PlayerDetails = _get_player_details(player=player_info)
+    defensive_stats: DefensiveStats = _get_defensive_stats(defensive_stats=def_stats)
+
+    player_defensive_stats: PlayerDefensiveStats = PlayerDefensiveStats(
+        player_details=player_details,
+        defensive_stats=defensive_stats
+    )
+
+    return player_defensive_stats
+
+
+################################################
 ########## Get player passing stats ############
 ################################################
 def _get_player_passing_stats(player) -> PlayerPassingStats:
 
     player_info: PlayerInfo = player[0]
-    offensive_stats: OffensiveStats = player[1]
+    off_stats: OffensiveStats = player[1]
 
     player_details: PlayerDetails = _get_player_details(player=player_info)
-
-    offensive_stats: PassingStats = _get_passing_stats(offensive_stats=offensive_stats)
+    passing_stats: PassingStats = _get_passing_stats(offensive_stats=off_stats)
 
     player_passing_stats: PlayerPassingStats = PlayerPassingStats(
         player_details=player_details,
-        passing_stats=offensive_stats
+        passing_stats=passing_stats
     )
 
     return player_passing_stats
@@ -128,7 +174,7 @@ def _get_player_passing_stats(player) -> PlayerPassingStats:
 
 def _get_passing_stats(offensive_stats: OffensiveStats) -> PassingStats:
 
-    offensive_stats: PassingStats = PassingStats(
+    passing_stats: PassingStats = PassingStats(
         pass_yards=offensive_stats.pass_yards,
         longest_pass=offensive_stats.longest_pass,
         year=offensive_stats.year,
@@ -139,7 +185,7 @@ def _get_passing_stats(offensive_stats: OffensiveStats) -> PassingStats:
         pass_att=offensive_stats.pass_att
     )
 
-    return offensive_stats
+    return passing_stats
 
 
 ################################################
