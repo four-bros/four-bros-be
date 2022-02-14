@@ -41,6 +41,64 @@ class DefensiveStatsAll:
         self.int_ret_yards = int_ret_yards
 
 
+class KickingStats:
+    def __init__(
+        self,
+        fg_made_17_29,
+        fg_att_17_29,
+        long_fg,
+        ko_touchbacks,
+        long_punt,
+        xp_att,
+        year,
+        punts_blocked,
+        fg_att,
+        total_punt_yards,
+        xp_blocked,
+        fg_blocked,
+        fg_att_40_49,
+        fg_made_40_49,
+        fg_att_30_39,
+        fg_made_30_39,
+        fg_att_50_plus,
+        fg_made_50_plus,
+        punt_touchbacks,
+        games_played,
+        kickoffs,
+        xp_made,
+        net_punting,
+        fg_made,
+        number_punts,
+        inside_twenty,
+    ):
+        self.fg_made_17_29 = fg_made_17_29
+        self.fg_att_17_29 = fg_att_17_29
+        self.long_fg = long_fg
+        self.ko_touchbacks = ko_touchbacks
+        self.long_punt = long_punt
+        self.xp_att = xp_att
+        self.year = year
+        self.punts_blocked = punts_blocked
+        self.fg_att = fg_att
+        self.total_punt_yards = total_punt_yards
+        self.xp_blocked = xp_blocked
+        self.fg_blocked = fg_blocked
+        self.fg_att_40_49 = fg_att_40_49
+        self.fg_made_40_49 = fg_made_40_49
+        self.fg_att_30_39 = fg_att_30_39
+        self.fg_made_30_39 = fg_made_30_39
+        self.fg_att_50_plus = fg_att_50_plus
+        self.fg_made_50_plus = fg_made_50_plus
+        self.punt_touchbacks = punt_touchbacks
+        self.games_played = games_played
+        self.kickoffs = kickoffs
+        self.xp_made = xp_made
+        self.net_punting = net_punting
+        self.fg_made = fg_made
+        self.number_punts = number_punts
+        self.inside_twenty = inside_twenty
+
+
 class PassingStats:
     def __init__(
         self,
@@ -109,6 +167,16 @@ class PlayerDefensiveStats:
     ):
         self.player_details = player_details
         self.defensive_stats = defensive_stats
+
+
+class PlayerKickingStats:
+    def __init__(
+        self,
+        player_details: PlayerDetails,
+        kicking_stats: KickingStats
+    ):
+        self.player_details = player_details
+        self.kicking_stats = kicking_stats
 
 
 class PlayerRushingStats:
