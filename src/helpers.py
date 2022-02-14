@@ -1,5 +1,6 @@
 from src.constants import session
 from src.data_models.DefensiveStats import DefensiveStats
+from src.data_models.KickingStats import KickingStats as KickingStatsDataModel
 from src.data_models.OffensiveStats import OffensiveStats
 from src.data_models.PlayerInfo import PlayerInfo
 from src.data_models.TeamInfo import TeamInfo
@@ -10,8 +11,10 @@ from src.models.Player import(
 )
 from src.models.Stats import(
     DefensiveStatsAll,
+    KickingStats,
     PassingStats,
     PlayerDefensiveStats,
+    PlayerKickingStats,
     PlayerPassingStats,
     PlayerReceivingStats,
     PlayerRushingStats,
@@ -151,6 +154,59 @@ def _get_player_defensive_stats(player) -> PlayerDefensiveStats:
     )
 
     return player_defensive_stats
+
+
+################################################
+######### Get player kicking stats ###########
+################################################
+def _get_kicking_stats(kicking_stats: KickingStatsDataModel) -> KickingStats:
+
+    kicking_stats_all: KickingStats = KickingStats(
+        fg_made_17_29=kicking_stats.fg_made_17_29,
+        fg_att_17_29=kicking_stats.fg_att_17_29,
+        long_fg=kicking_stats.long_fg,
+        ko_touchbacks=kicking_stats.ko_touchbacks,
+        long_punt=kicking_stats.long_punt,
+        xp_att=kicking_stats.xp_att,
+        year=kicking_stats.year,
+        punts_blocked=kicking_stats.punts_blocked,
+        fg_att=kicking_stats.fg_att,
+        total_punt_yards=kicking_stats.total_punt_yards,
+        xp_blocked=kicking_stats.xp_blocked,
+        fg_blocked=kicking_stats.fg_blocked,
+        fg_att_40_49=kicking_stats.fg_att_40_49,
+        fg_made_40_49=kicking_stats.fg_made_40_49,
+        fg_att_30_39=kicking_stats.fg_att_30_39,
+        fg_made_30_39=kicking_stats.fg_made_30_39,
+        fg_att_50_plus=kicking_stats.fg_att_50_plus,
+        fg_made_50_plus=kicking_stats.fg_made_50_plus,
+        punt_touchbacks=kicking_stats.punt_touchbacks,
+        games_played=kicking_stats.games_played,
+        kickoffs=kicking_stats.kickoffs,
+        xp_made=kicking_stats.xp_made,
+        net_punting=kicking_stats.net_punting,
+        fg_made=kicking_stats.fg_made,
+        number_punts=kicking_stats.number_punts,
+        inside_twenty=kicking_stats.inside_twenty,
+    )
+
+    return kicking_stats_all
+
+
+def _get_player_kicking_stats(player) -> PlayerKickingStats:
+
+    player_info: PlayerInfo = player[0]
+    kicking_stats_data: KickingStatsDataModel = player[1]
+
+    player_details: PlayerDetails = _get_player_details(player=player_info)
+    kicking_stats: DefensiveStats = _get_kicking_stats(kicking_stats=kicking_stats_data)
+
+    player_kicking_stats: PlayerKickingStats = PlayerKickingStats(
+        player_details=player_details,
+        kicking_stats=kicking_stats
+    )
+
+    return player_kicking_stats
 
 
 ################################################

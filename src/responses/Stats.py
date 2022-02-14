@@ -25,6 +25,35 @@ class DefensiveStatsSchema(Schema):
     int_ret_yards = fields.Int()
 
 
+class KickingStatsSchema(Schema):
+    fg_made_17_29 = fields.Int()
+    fg_att_17_29 = fields.Int()
+    long_fg = fields.Int()
+    ko_touchbacks = fields.Int()
+    long_punt = fields.Int()
+    xp_att = fields.Int()
+    year = fields.Int()
+    punts_blocked = fields.Int()
+    fg_att = fields.Int()
+    total_punt_yards = fields.Int()
+    xp_blocked = fields.Int()
+    fg_blocked = fields.Int()
+    fg_att_40_49 = fields.Int()
+    fg_made_40_49 = fields.Int()
+    fg_att_30_39 = fields.Int()
+    fg_made_30_39 = fields.Int()
+    fg_att_50_plus = fields.Int()
+    fg_made_50_plus = fields.Int()
+    punt_touchbacks = fields.Int()
+    games_played = fields.Int()
+    kickoffs = fields.Int()
+    xp_made = fields.Int()
+    net_punting = fields.Int()
+    fg_made = fields.Int()
+    number_punts = fields.Int()
+    inside_twenty = fields.Int()
+
+
 class PassingStatsSchema(Schema):
     pass_yards = fields.Int()
     longest_pass = fields.Int()
@@ -61,16 +90,21 @@ class PlayerDefensiveStatsSchema(Schema):
     defensive_stats = fields.Nested(DefensiveStatsSchema)
 
 
+class PlayerKickingStatsSchema(Schema):
+    player_details = fields.Nested(PlayerDetailsSchema)
+    kicking_stats = fields.Nested(KickingStatsSchema)
+
+
 class PlayerReceivingStatsSchema(Schema):
     player_details = fields.Nested(PlayerDetailsSchema)
     receiving_stats = fields.Nested(ReceivingStatsSchema)
 
 
-class PlayerPassingStatsSchema(Schema):
-    player_details = fields.Nested(PlayerDetailsSchema)
-    passing_stats = fields.Nested(PassingStatsSchema)
-
-
 class PlayerRushingStatsSchema(Schema):
     player_details = fields.Nested(PlayerDetailsSchema)
     rushing_stats = fields.Nested(RushingStatsSchema)
+
+
+class PlayerPassingStatsSchema(Schema):
+    player_details = fields.Nested(PlayerDetailsSchema)
+    passing_stats = fields.Nested(PassingStatsSchema)

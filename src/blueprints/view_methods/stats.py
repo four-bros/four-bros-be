@@ -2,23 +2,28 @@ from typing import List
 
 from src.constants import session
 from src.data_models.DefensiveStats import DefensiveStats
+from src.data_models.KickingStats import KickingStats as KickingStatsDataModel
 from src.data_models.OffensiveStats import OffensiveStats
 from src.data_models.PlayerInfo import PlayerInfo
+from src.data_models.ReturnStats import ReturnStats
 from src.data_models.WeekYear import WeekYear
 from src.helpers import(
     _get_player_defensive_stats,
+    _get_player_kicking_stats,
     _get_player_passing_stats,
     _get_player_receiving_stats,
     _get_player_rushing_stats
 )
 from src.models.Stats import(
     PlayerDefensiveStats,
+    PlayerKickingStats,
     PlayerPassingStats,
     PlayerReceivingStats,
     PlayerRushingStats
 )
 from src.responses.Stats import(
     PlayerDefensiveStatsSchema,
+    PlayerKickingStatsSchema,
     PlayerPassingStatsSchema,
     PlayerReceivingStatsSchema,
     PlayerRushingStatsSchema
@@ -28,6 +33,8 @@ from src.responses.Stats import(
 # Schemas to deserialize objects
 defensive_stat_schema = PlayerDefensiveStatsSchema()
 defensive_stats_schema = PlayerDefensiveStatsSchema(many=True)
+kicking_stat_schema = PlayerKickingStatsSchema()
+kicking_stats_schema = PlayerKickingStatsSchema(many=True)
 passing_stat_schema = PlayerPassingStatsSchema()
 passing_stats_schema = PlayerPassingStatsSchema(many=True)
 receiving_stat_schema = PlayerReceivingStatsSchema()
@@ -102,14 +109,59 @@ def get_season_defense_stats_leaders(request):
     return response
 
 
+def get_season_kicking_stats_leaders(request):
+    # Query the year to filter out irrelevant years
+    week_year: WeekYear = session.query(WeekYear).first()
+    # Querying PlayerInfo first and OffensiveStats second will return 
+    # a set or tuple to the players variable.
+    players = session.query(PlayerInfo, KickingStatsDataModel).filter(
+            KickingStatsDataModel.player_id == PlayerInfo.id,
+            KickingStatsDataModel.year == week_year.year
+        ).all()    
+    # Convert players to PlayerKickingStats model so they can be sorted
+    converted_players: List[PlayerKickingStats] = [_get_player_kicking_stats(player) for player in players]
+    # Sort players based on kicking stat categories
+    fg_made_leaders = sorted(converted_players, key=lambda p: p.kicking_stats.fg_made, reverse=True)[:10]
+    fg_att_leaders = sorted(converted_players, key=lambda p: p.kicking_stats.fg_att, reverse=True)[:10]
+    long_fg_leaders = sorted(converted_players, key=lambda p: p.kicking_stats.long_fg, reverse=True)[:10]
+    fg_made_50_plus_leaders = sorted(converted_players, key=lambda p: p.kicking_stats.fg_made_50_plus, reverse=True)[:10]
+    number_punts_leaders = sorted(converted_players, key=lambda p: p.kicking_stats.number_punts, reverse=True)[:10]
+    net_punting_leaders = sorted(converted_players, key=lambda p: p.kicking_stats.net_punting, reverse=True)[:10]
+    long_punt_leaders = sorted(converted_players, key=lambda p: p.kicking_stats.long_punt, reverse=True)[:10]
+    inside_twenty_leaders = sorted(converted_players, key=lambda p: p.kicking_stats.inside_twenty, reverse=True)[:10]
+    # Convert top ten lists into json
+    fg_made_leaders_json = kicking_stats_schema.dump(fg_made_leaders)
+    fg_att_leaders_json = kicking_stats_schema.dump(fg_att_leaders)
+    long_fg_leaders_json = kicking_stats_schema.dump(long_fg_leaders)
+    fg_made_50_plus_leaders_json = kicking_stats_schema.dump(fg_made_50_plus_leaders)
+    number_punts_leaders_json = kicking_stats_schema.dump(number_punts_leaders)
+    net_punting_leaders_json = kicking_stats_schema.dump(net_punting_leaders)
+    long_punt_leaders_json = kicking_stats_schema.dump(long_punt_leaders)
+    inside_twenty_leaders_json = kicking_stats_schema.dump(inside_twenty_leaders)
+
+    response = {
+        'fg_made': fg_made_leaders_json,
+        'fg_att': fg_att_leaders_json,
+        'long_fg': long_fg_leaders_json,
+        'fg_50_plus': fg_made_50_plus_leaders_json,
+        'number_punts': number_punts_leaders_json,
+        'net_punting': net_punting_leaders_json,
+        'long_punt': long_punt_leaders_json,
+        'inside_twenty': inside_twenty_leaders_json,
+    }
+
+    return response
+
+
+
 def get_season_passing_stats(request):
     # Query the year to filter out irrelevant years
     week_year: WeekYear = session.query(WeekYear).first()
     # Querying PlayerInfo first and OffensiveStats second will return 
     # a set or tuple to the players variable.
-    players = session.query(PlayerInfo, OffensiveStats).filter(
-            OffensiveStats.player_id == PlayerInfo.id,
-            OffensiveStats.year == week_year.year
+    players = session.query(PlayerInfo, KickingStats).filter(
+            KickingStats.player_id == PlayerInfo.id,
+            KickingStats.year == week_year.year
         ).all()
 
     converted_players: List[PlayerPassingStats] = [_get_player_passing_stats(player) for player in players]

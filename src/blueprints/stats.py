@@ -2,6 +2,7 @@ from flask import Blueprint, request
 
 from src.blueprints.view_methods.stats import(
     get_season_defense_stats_leaders,
+    get_season_kicking_stats_leaders,
     get_season_passing_stats,
     get_season_passing_stats_leaders,
     get_season_receiving_stats_leaders,
@@ -12,9 +13,14 @@ from src.blueprints.view_methods.stats import(
 stats_bp = Blueprint('stats', __name__)
 
 
-@stats_bp.route('/season/passing', methods=['GET'])
-def stats_get_season_passing():
-    return get_season_passing_stats(request)
+@stats_bp.route('season/leaders/defense', methods=['GET'])
+def stats_get_season_defense_leaders():
+    return get_season_defense_stats_leaders(request)
+
+
+@stats_bp.route('season/leaders/kicking', methods=['GET'])
+def stats_get_season_kicking_leaders():
+    return get_season_kicking_stats_leaders(request)
 
 
 @stats_bp.route('season/leaders/passing', methods=['GET'])
@@ -32,6 +38,4 @@ def stats_get_season_receiving_leaders():
     return get_season_receiving_stats_leaders(request)
 
 
-@stats_bp.route('season/leaders/defense', methods=['GET'])
-def stats_get_season_defense_leaders():
-    return get_season_defense_stats_leaders(request)
+
