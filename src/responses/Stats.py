@@ -73,6 +73,19 @@ class ReceivingStatsSchema(Schema):
     drops = fields.Int()
 
 
+class ReturnStatsSchema(Schema):
+    kick_returns = fields.Int()
+    year = fields.Int()
+    long_kr = fields.Int()
+    punt_returns = fields.Int()
+    long_pr = fields.Int()
+    games_played = fields.Int()
+    kr_tds = fields.Int()
+    pr_tds = fields.Int()
+    kr_yds = fields.Int()
+    pr_yds = fields.Int()
+
+
 class RushingStatsSchema(Schema):
     rush_att = fields.Int()
     rush_yards = fields.Int()
@@ -98,6 +111,11 @@ class PlayerKickingStatsSchema(Schema):
 class PlayerReceivingStatsSchema(Schema):
     player_details = fields.Nested(PlayerDetailsSchema)
     receiving_stats = fields.Nested(ReceivingStatsSchema)
+
+
+class PlayerReturnStatsSchema(Schema):
+    player_details = fields.Nested(PlayerDetailsSchema)
+    return_stats = fields.Nested(ReturnStatsSchema)    
 
 
 class PlayerRushingStatsSchema(Schema):

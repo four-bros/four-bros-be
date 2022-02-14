@@ -122,6 +122,49 @@ class PassingStats:
         self.pass_att = pass_att
 
 
+class ReceivingStats:
+    def __init__(
+        self,
+        receptions,
+        rec_yards,
+        rec_tds,
+        yac,
+        drops
+
+    ):
+        self.receptions = receptions
+        self.rec_yards = rec_yards
+        self.rec_tds = rec_tds
+        self.yac = yac
+        self.drops = drops
+
+
+class ReturnStats:
+    def __init__(
+        self,
+        kick_returns,
+        year,
+        long_kr,
+        punt_returns,
+        long_pr,
+        games_played,
+        kr_tds,
+        pr_tds,
+        kr_yds,
+        pr_yds,
+    ):
+
+        self.kick_returns = kick_returns
+        self.year = year
+        self.long_kr = long_kr
+        self.punt_returns = punt_returns
+        self.long_pr = long_pr
+        self.games_played = games_played
+        self.kr_tds = kr_tds
+        self.pr_tds = pr_tds
+        self.kr_yds = kr_yds
+        self.pr_yds = pr_yds
+
 class RushingStats:
     def __init__(
         self,
@@ -140,23 +183,6 @@ class RushingStats:
         self.fumbles = fumbles
         self.twenty_plus_yd_runs = twenty_plus_yd_runs
         self.year = year
-
-
-class ReceivingStats:
-    def __init__(
-        self,
-        receptions,
-        rec_yards,
-        rec_tds,
-        yac,
-        drops
-
-    ):
-        self.receptions = receptions
-        self.rec_yards = rec_yards
-        self.rec_tds = rec_tds
-        self.yac = yac
-        self.drops = drops
 
 
 class PlayerDefensiveStats:
@@ -179,16 +205,6 @@ class PlayerKickingStats:
         self.kicking_stats = kicking_stats
 
 
-class PlayerRushingStats:
-    def __init__(
-        self,
-        player_details: PlayerDetails,
-        rushing_stats: RushingStats
-    ):
-        self.player_details = player_details
-        self.rushing_stats = rushing_stats
-
-
 class PlayerReceivingStats:
     def __init__(
         self,
@@ -197,6 +213,26 @@ class PlayerReceivingStats:
     ):
         self.player_details = player_details
         self.receiving_stats = receiving_stats
+
+
+class PlayerReturnStats:
+    def __init__(
+        self,
+        player_details: PlayerDetails,
+        return_stats: ReturnStats
+    ):
+        self.player_details = player_details
+        self.return_stats = return_stats    
+
+
+class PlayerRushingStats:
+    def __init__(
+        self,
+        player_details: PlayerDetails,
+        rushing_stats: RushingStats
+    ):
+        self.player_details = player_details
+        self.rushing_stats = rushing_stats
 
 
 class PlayerPassingStats:
