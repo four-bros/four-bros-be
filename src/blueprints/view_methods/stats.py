@@ -2,7 +2,7 @@ from typing import List
 
 from src.constants import session
 from src.data_models.DefensiveStats import DefensiveStats
-from src.data_models.KickingStats import KickingStats as KickingStatsDataModel
+from src.data_models.KickingStats import KickingStats
 from src.data_models.OffensiveStats import OffensiveStats
 from src.data_models.PlayerInfo import PlayerInfo
 from src.data_models.ReturnStats import ReturnStats
@@ -12,6 +12,7 @@ from src.helpers import(
     _get_player_kicking_stats,
     _get_player_passing_stats,
     _get_player_receiving_stats,
+    _get_player_return_stats,
     _get_player_rushing_stats
 )
 from src.models.Stats import(
@@ -19,6 +20,7 @@ from src.models.Stats import(
     PlayerKickingStats,
     PlayerPassingStats,
     PlayerReceivingStats,
+    PlayerReturnStats,
     PlayerRushingStats
 )
 from src.responses.Stats import(
@@ -26,6 +28,7 @@ from src.responses.Stats import(
     PlayerKickingStatsSchema,
     PlayerPassingStatsSchema,
     PlayerReceivingStatsSchema,
+    PlayerReturnStatsSchema,
     PlayerRushingStatsSchema
 )
 
@@ -39,6 +42,8 @@ passing_stat_schema = PlayerPassingStatsSchema()
 passing_stats_schema = PlayerPassingStatsSchema(many=True)
 receiving_stat_schema = PlayerReceivingStatsSchema()
 receiving_stats_schema = PlayerReceivingStatsSchema(many=True)
+return_stat_schema = PlayerReturnStatsSchema()
+return_stats_schema = PlayerReturnStatsSchema(many=True)
 rushing_stat_schema = PlayerRushingStatsSchema()
 rushing_stats_schema = PlayerRushingStatsSchema(many=True)
 
@@ -53,24 +58,24 @@ def get_season_defense_stats_leaders(request):
             DefensiveStats.year == week_year.year
             ).all()
     
-    player_objects: List[PlayerDefensiveStats] = [_get_player_defensive_stats(player) for player in players]
+    converted_players: List[PlayerDefensiveStats] = [_get_player_defensive_stats(player) for player in players]
 
     # Sort players based on passing stat categories
-    long_int_ret_leaders = sorted(player_objects, key=lambda p: p.defensive_stats.long_int_ret, reverse=True)[:10]
-    sacks_leaders = sorted(player_objects, key=lambda p: p.defensive_stats.sacks, reverse=True)[:10]
-    forced_fumbles_leaders = sorted(player_objects, key=lambda p: p.defensive_stats.forced_fumbles, reverse=True)[:10]
-    solo_tkls_leaders = sorted(player_objects, key=lambda p: p.defensive_stats.solo_tkls, reverse=True)[:10]
-    safeties_leaders = sorted(player_objects, key=lambda p: p.defensive_stats.safeties, reverse=True)[:10]
-    pass_def_leaders = sorted(player_objects, key=lambda p: p.defensive_stats.pass_def, reverse=True)[:10]
-    blocked_kicks_leaders = sorted(player_objects, key=lambda p: p.defensive_stats.blocked_kicks, reverse=True)[:10]
-    tfl_leaders = sorted(player_objects, key=lambda p: p.defensive_stats.tfl, reverse=True)[:10]
-    ints_made_leaders = sorted(player_objects, key=lambda p: p.defensive_stats.ints_made, reverse=True)[:10]
-    fumbles_rec_leaders = sorted(player_objects, key=lambda p: p.defensive_stats.fumbles_rec, reverse=True)[:10]
-    half_a_sack_leaders = sorted(player_objects, key=lambda p: p.defensive_stats.half_a_sack, reverse=True)[:10]
-    asst_tkls_leaders = sorted(player_objects, key=lambda p: p.defensive_stats.asst_tkls, reverse=True)[:10]
-    def_tds_leaders = sorted(player_objects, key=lambda p: p.defensive_stats.def_tds, reverse=True)[:10]
-    fum_rec_yards_leaders = sorted(player_objects, key=lambda p: p.defensive_stats.fum_rec_yards, reverse=True)[:10]
-    int_ret_yards_leaders = sorted(player_objects, key=lambda p: p.defensive_stats.int_ret_yards, reverse=True)[:10]
+    long_int_ret_leaders = sorted(converted_players, key=lambda p: p.defensive_stats.long_int_ret, reverse=True)[:10]
+    sacks_leaders = sorted(converted_players, key=lambda p: p.defensive_stats.sacks, reverse=True)[:10]
+    forced_fumbles_leaders = sorted(converted_players, key=lambda p: p.defensive_stats.forced_fumbles, reverse=True)[:10]
+    solo_tkls_leaders = sorted(converted_players, key=lambda p: p.defensive_stats.solo_tkls, reverse=True)[:10]
+    safeties_leaders = sorted(converted_players, key=lambda p: p.defensive_stats.safeties, reverse=True)[:10]
+    pass_def_leaders = sorted(converted_players, key=lambda p: p.defensive_stats.pass_def, reverse=True)[:10]
+    blocked_kicks_leaders = sorted(converted_players, key=lambda p: p.defensive_stats.blocked_kicks, reverse=True)[:10]
+    tfl_leaders = sorted(converted_players, key=lambda p: p.defensive_stats.tfl, reverse=True)[:10]
+    ints_made_leaders = sorted(converted_players, key=lambda p: p.defensive_stats.ints_made, reverse=True)[:10]
+    fumbles_rec_leaders = sorted(converted_players, key=lambda p: p.defensive_stats.fumbles_rec, reverse=True)[:10]
+    half_a_sack_leaders = sorted(converted_players, key=lambda p: p.defensive_stats.half_a_sack, reverse=True)[:10]
+    asst_tkls_leaders = sorted(converted_players, key=lambda p: p.defensive_stats.asst_tkls, reverse=True)[:10]
+    def_tds_leaders = sorted(converted_players, key=lambda p: p.defensive_stats.def_tds, reverse=True)[:10]
+    fum_rec_yards_leaders = sorted(converted_players, key=lambda p: p.defensive_stats.fum_rec_yards, reverse=True)[:10]
+    int_ret_yards_leaders = sorted(converted_players, key=lambda p: p.defensive_stats.int_ret_yards, reverse=True)[:10]
     # Convert top ten lists into json
     long_int_ret_leaders_json = defensive_stats_schema.dump(long_int_ret_leaders)
     sacks_leaders_json = defensive_stats_schema.dump(sacks_leaders)
@@ -114,9 +119,9 @@ def get_season_kicking_stats_leaders(request):
     week_year: WeekYear = session.query(WeekYear).first()
     # Querying PlayerInfo first and OffensiveStats second will return 
     # a set or tuple to the players variable.
-    players = session.query(PlayerInfo, KickingStatsDataModel).filter(
-            KickingStatsDataModel.player_id == PlayerInfo.id,
-            KickingStatsDataModel.year == week_year.year
+    players = session.query(PlayerInfo, KickingStats).filter(
+            KickingStats.player_id == PlayerInfo.id,
+            KickingStats.year == week_year.year
         ).all()    
     # Convert players to PlayerKickingStats model so they can be sorted
     converted_players: List[PlayerKickingStats] = [_get_player_kicking_stats(player) for player in players]
@@ -153,28 +158,6 @@ def get_season_kicking_stats_leaders(request):
     return response
 
 
-
-def get_season_passing_stats(request):
-    # Query the year to filter out irrelevant years
-    week_year: WeekYear = session.query(WeekYear).first()
-    # Querying PlayerInfo first and OffensiveStats second will return 
-    # a set or tuple to the players variable.
-    players = session.query(PlayerInfo, KickingStats).filter(
-            KickingStats.player_id == PlayerInfo.id,
-            KickingStats.year == week_year.year
-        ).all()
-
-    converted_players: List[PlayerPassingStats] = [_get_player_passing_stats(player) for player in players]
-
-    players_json = passing_stats_schema.dump(converted_players)
-    
-    response = {
-        'players': players_json
-    }
-    
-    return response
-
-
 def get_season_passing_stats_leaders(request):
     # Query the year to filter out irrelevant years
     week_year: WeekYear = session.query(WeekYear).first()
@@ -186,14 +169,14 @@ def get_season_passing_stats_leaders(request):
             ).all()
 
     # Convert players to PlayerPassingStats model so they can be sorted
-    player_objects: List[PlayerPassingStats] = [_get_player_passing_stats(player) for player in players]
+    converted_players: List[PlayerPassingStats] = [_get_player_passing_stats(player) for player in players]
     # Sort players based on passing stat categories
-    completions_leaders = sorted(player_objects, key=lambda p: p.passing_stats.completions, reverse=True)[:10]
-    pass_att_leaders = sorted(player_objects, key=lambda p: p.passing_stats.pass_att, reverse=True)[:10]
-    longest_pass_leaders = sorted(player_objects, key=lambda p: p.passing_stats.longest_pass, reverse=True)[:10]
-    pass_yards_leaders = sorted(player_objects, key=lambda p: p.passing_stats.pass_yards, reverse=True)[:10]
-    pass_td_leaders = sorted(player_objects, key=lambda p: p.passing_stats.pass_tds, reverse=True)[:10]
-    int_leaders = sorted(player_objects, key=lambda p: p.passing_stats.ints, reverse=True)[:10]
+    completions_leaders = sorted(converted_players, key=lambda p: p.passing_stats.completions, reverse=True)[:10]
+    pass_att_leaders = sorted(converted_players, key=lambda p: p.passing_stats.pass_att, reverse=True)[:10]
+    longest_pass_leaders = sorted(converted_players, key=lambda p: p.passing_stats.longest_pass, reverse=True)[:10]
+    pass_yards_leaders = sorted(converted_players, key=lambda p: p.passing_stats.pass_yards, reverse=True)[:10]
+    pass_td_leaders = sorted(converted_players, key=lambda p: p.passing_stats.pass_tds, reverse=True)[:10]
+    int_leaders = sorted(converted_players, key=lambda p: p.passing_stats.ints, reverse=True)[:10]
     # Convert top ten lists into json
     completions_leaders_json = passing_stats_schema.dump(completions_leaders)
     pass_att_leaders_jason = passing_stat_schema.dump(pass_att_leaders)
@@ -225,14 +208,14 @@ def get_season_receiving_stats_leaders(request):
             OffensiveStats.year == week_year.year
             ).all()
     # Convert players to PlayerReceivingStats model so they can be sorted
-    player_objects: List[PlayerReceivingStats] = [_get_player_receiving_stats(player) for player in players]
+    converted_players: List[PlayerReceivingStats] = [_get_player_receiving_stats(player) for player in players]
 
-    # Sort by category
-    reception_leaders = sorted(player_objects, key=lambda p: p.receiving_stats.receptions, reverse=True)[0:10]
-    rec_yards_leaders = sorted(player_objects, key=lambda p: p.receiving_stats.rec_yards, reverse=True)[0:10]
-    rec_tds_leaders = sorted(player_objects, key=lambda p: p.receiving_stats.rec_tds, reverse=True)[0:10]
-    yac_leaders = sorted(player_objects, key=lambda p: p.receiving_stats.yac, reverse=True)[0:10]
-    drops_leaders = sorted(player_objects, key=lambda p: p.receiving_stats.drops, reverse=True)[0:10]
+    # Sort by receiving stat category
+    reception_leaders = sorted(converted_players, key=lambda p: p.receiving_stats.receptions, reverse=True)[0:10]
+    rec_yards_leaders = sorted(converted_players, key=lambda p: p.receiving_stats.rec_yards, reverse=True)[0:10]
+    rec_tds_leaders = sorted(converted_players, key=lambda p: p.receiving_stats.rec_tds, reverse=True)[0:10]
+    yac_leaders = sorted(converted_players, key=lambda p: p.receiving_stats.yac, reverse=True)[0:10]
+    drops_leaders = sorted(converted_players, key=lambda p: p.receiving_stats.drops, reverse=True)[0:10]
 
     # Convert top ten lists to json
     reception_leaders_json = receiving_stats_schema.dump(reception_leaders)
@@ -252,6 +235,52 @@ def get_season_receiving_stats_leaders(request):
     return response
 
 
+def get_season_return_stats_leaders(request):
+    # Query the year to filter out irrelevant years
+    week_year: WeekYear = session.query(WeekYear).first()
+    # Querying PlayerInfo first and OffensiveStats second will return 
+    # a set or tuple to the players variable.
+    players = session.query(PlayerInfo, ReturnStats).filter(
+            PlayerInfo.id == ReturnStats.player_id,
+            ReturnStats.year == week_year.year
+            ).all()
+    # Convert players to PlayerKickingStats model so they can be sorted
+    converted_players: List[PlayerReturnStats] = [_get_player_return_stats(player) for player in players]
+    # Sort by rushing stat category
+    kick_return_leaders = sorted(converted_players, key=lambda p: p.return_stats.kick_returns, reverse=True)[:10]
+    long_kr_leaders = sorted(converted_players, key=lambda p: p.return_stats.long_kr, reverse=True)[:10]
+    punt_returns_leaders = sorted(converted_players, key=lambda p: p.return_stats.punt_returns, reverse=True)[:10]
+    long_pr_leaders = sorted(converted_players, key=lambda p: p.return_stats.long_pr, reverse=True)[:10]
+    kr_tds_leaders = sorted(converted_players, key=lambda p: p.return_stats.kr_tds, reverse=True)[:10]
+    pr_tds_leaders = sorted(converted_players, key=lambda p: p.return_stats.pr_tds, reverse=True)[:10]
+    kr_yds_leaders = sorted(converted_players, key=lambda p: p.return_stats.kr_yds, reverse=True)[:10]
+    pr_yds_leaders = sorted(converted_players, key=lambda p: p.return_stats.pr_yds, reverse=True)[:10]
+    # Convert top ten lists to json
+    kick_return_leaders_json = return_stats_schema.dump(kick_return_leaders)
+    long_kr_leaders_json = return_stats_schema.dump(long_kr_leaders)
+    punt_returns_leaders_json = return_stats_schema.dump(punt_returns_leaders)
+    long_pr_leaders_json = return_stats_schema.dump(long_pr_leaders)
+    kr_tds_leaders_json = return_stats_schema.dump(kr_tds_leaders)
+    pr_tds_leaders_json = return_stats_schema.dump(pr_tds_leaders)
+    kr_yds_leaders_json = return_stats_schema.dump(kr_yds_leaders)
+    pr_yds_leaders_json = return_stats_schema.dump(pr_yds_leaders)
+
+
+
+    response = {
+        'kick_returns': kick_return_leaders_json,
+        'long_kr': long_kr_leaders_json,
+        'punt_returns': punt_returns_leaders_json,
+        'long_pr': long_pr_leaders_json,
+        'kr_tds': kr_tds_leaders_json,
+        'pr_tds': pr_tds_leaders_json,
+        'kr_yards': kr_yds_leaders_json,
+        'pr_yards': pr_yds_leaders_json
+    }
+
+    return response
+
+
 def get_season_rushing_stats_leaders(request):
     # Query the year to filter out irrelevant years
     week_year: WeekYear = session.query(WeekYear).first()
@@ -259,19 +288,21 @@ def get_season_rushing_stats_leaders(request):
     # a set or tuple to the players variable.
     players = session.query(PlayerInfo, OffensiveStats).filter(
             PlayerInfo.id == OffensiveStats.player_id,
-            OffensiveStats.year == week_year.year
+            OffensiveStats.year == week_year.year,
+            # Filter out incorrect data
+            OffensiveStats.rush_yards < 16000
             ).all()
 
-    # Convert players to PlayerPassingStats model so they can be sorted
-    player_objects: List[PlayerRushingStats] = [_get_player_rushing_stats(player) for player in players]
+    # Convert players to PlayerRushingStats model so they can be sorted
+    converted_players: List[PlayerRushingStats] = [_get_player_rushing_stats(player) for player in players]
 
-    # Sort
-    rush_att_leaders = sorted(player_objects, key=lambda p: p.rushing_stats.rush_att, reverse=True)[:10]
-    rush_yards_leaders = sorted(player_objects, key=lambda p: p.rushing_stats.rush_yards, reverse=True)[:10]
-    ya_contact_leaders = sorted(player_objects, key=lambda p: p.rushing_stats.ya_contact, reverse=True)[:10]
-    broke_tkls_leaders = sorted(player_objects, key=lambda p: p.rushing_stats.broke_tkls, reverse=True)[:10]
-    fumbles_leaders = sorted(player_objects, key=lambda p: p.rushing_stats.fumbles, reverse=True)[:10]
-    twenty_plus_yd_runs_leaders = sorted(player_objects, key=lambda p: p.rushing_stats.twenty_plus_yd_runs, reverse=True)[:10]
+    # Sort by rushing stat category
+    rush_att_leaders = sorted(converted_players, key=lambda p: p.rushing_stats.rush_att, reverse=True)[:10]
+    rush_yards_leaders = sorted(converted_players, key=lambda p: p.rushing_stats.rush_yards, reverse=True)[:10]
+    ya_contact_leaders = sorted(converted_players, key=lambda p: p.rushing_stats.ya_contact, reverse=True)[:10]
+    broke_tkls_leaders = sorted(converted_players, key=lambda p: p.rushing_stats.broke_tkls, reverse=True)[:10]
+    fumbles_leaders = sorted(converted_players, key=lambda p: p.rushing_stats.fumbles, reverse=True)[:10]
+    twenty_plus_yd_runs_leaders = sorted(converted_players, key=lambda p: p.rushing_stats.twenty_plus_yd_runs, reverse=True)[:10]
     # Convert top ten lists to json
     rush_att_leaders_json = rushing_stats_schema.dump(rush_att_leaders)
     rush_yards_leaders_json = rushing_stats_schema.dump(rush_yards_leaders)

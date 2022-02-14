@@ -3,6 +3,7 @@ from src.data_models.DefensiveStats import DefensiveStats
 from src.data_models.KickingStats import KickingStats as KickingStatsDataModel
 from src.data_models.OffensiveStats import OffensiveStats
 from src.data_models.PlayerInfo import PlayerInfo
+from src.data_models.ReturnStats import ReturnStats as ReturnStatsDataModel
 from src.data_models.TeamInfo import TeamInfo
 from src.models.Player import(
     Player, 
@@ -17,8 +18,10 @@ from src.models.Stats import(
     PlayerKickingStats,
     PlayerPassingStats,
     PlayerReceivingStats,
+    PlayerReturnStats,
     PlayerRushingStats,
     ReceivingStats,
+    ReturnStats,
     RushingStats
 )
 
@@ -199,7 +202,7 @@ def _get_player_kicking_stats(player) -> PlayerKickingStats:
     kicking_stats_data: KickingStatsDataModel = player[1]
 
     player_details: PlayerDetails = _get_player_details(player=player_info)
-    kicking_stats: DefensiveStats = _get_kicking_stats(kicking_stats=kicking_stats_data)
+    kicking_stats: KickingStats = _get_kicking_stats(kicking_stats=kicking_stats_data)
 
     player_kicking_stats: PlayerKickingStats = PlayerKickingStats(
         player_details=player_details,
@@ -244,9 +247,9 @@ def _get_passing_stats(offensive_stats: OffensiveStats) -> PassingStats:
     return passing_stats
 
 
-################################################
-########## Get player rushing stats ############
-################################################
+##################################################
+########## Get player receiving stats ############
+##################################################
 def _get_receiving_stats(offensive_stats: OffensiveStats) -> ReceivingStats:
 
     receiving_stats: ReceivingStats = ReceivingStats(
@@ -274,6 +277,43 @@ def _get_player_receiving_stats(player) -> PlayerReceivingStats:
     )
 
     return player_receiving_stats
+
+
+##############################################
+######### Get player return stats ###########
+##############################################
+def _get_return_stats(return_stats: ReturnStatsDataModel) -> ReturnStats:
+
+    converted_return_stats: ReturnStats = ReturnStats(
+        kick_returns=return_stats.kick_returns,
+        year=return_stats.year,
+        long_kr=return_stats.long_kr,
+        punt_returns=return_stats.punt_returns,
+        long_pr=return_stats.long_pr,
+        games_played=return_stats.games_played,
+        kr_tds=return_stats.kr_tds,
+        pr_tds=return_stats.pr_tds,
+        kr_yds=return_stats.kr_yds,
+        pr_yds=return_stats.pr_yds
+    )
+
+    return converted_return_stats
+
+
+def _get_player_return_stats(player) -> PlayerReturnStats:
+
+    player_info: PlayerInfo = player[0]
+    return_stats_data: ReturnStatsDataModel = player[1]
+
+    player_details: PlayerDetails = _get_player_details(player=player_info)
+    return_stats: ReturnStats = _get_return_stats(return_stats=return_stats_data)
+
+    player_kicking_stats: PlayerReturnStats = PlayerReturnStats(
+        player_details=player_details,
+        return_stats=return_stats
+    )
+
+    return player_kicking_stats
 
 
 ################################################
