@@ -1,6 +1,15 @@
 from typing import List
 
-from src.constants import session
+from src.constants import (
+    defensive_stats_schema,
+    kicking_stats_schema,
+    passing_stat_schema,
+    passing_stats_schema,
+    receiving_stats_schema,
+    return_stats_schema,
+    rushing_stats_schema,
+    session
+)
 from src.data_models.DefensiveStats import DefensiveStats
 from src.data_models.KickingStats import KickingStats
 from src.data_models.OffensiveStats import OffensiveStats
@@ -23,29 +32,6 @@ from src.models.Stats import(
     PlayerReturnStats,
     PlayerRushingStats
 )
-from src.responses.Stats import(
-    PlayerDefensiveStatsSchema,
-    PlayerKickingStatsSchema,
-    PlayerPassingStatsSchema,
-    PlayerReceivingStatsSchema,
-    PlayerReturnStatsSchema,
-    PlayerRushingStatsSchema
-)
-
-
-# Schemas to deserialize objects
-defensive_stat_schema = PlayerDefensiveStatsSchema()
-defensive_stats_schema = PlayerDefensiveStatsSchema(many=True)
-kicking_stat_schema = PlayerKickingStatsSchema()
-kicking_stats_schema = PlayerKickingStatsSchema(many=True)
-passing_stat_schema = PlayerPassingStatsSchema()
-passing_stats_schema = PlayerPassingStatsSchema(many=True)
-receiving_stat_schema = PlayerReceivingStatsSchema()
-receiving_stats_schema = PlayerReceivingStatsSchema(many=True)
-return_stat_schema = PlayerReturnStatsSchema()
-return_stats_schema = PlayerReturnStatsSchema(many=True)
-rushing_stat_schema = PlayerRushingStatsSchema()
-rushing_stats_schema = PlayerRushingStatsSchema(many=True)
 
 
 def get_season_defense_stats_leaders(request):
