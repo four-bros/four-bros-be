@@ -4,7 +4,6 @@ from src.responses.Players import PlayerSchema
 from src.blueprints.view_methods.players import(
     get_all_players,
     get_player_by_player_id,
-    get_players_by_team_id,
     get_players_by_team_id_and_position,
 )
 

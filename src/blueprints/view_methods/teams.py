@@ -5,7 +5,6 @@ from sqlalchemy.sql.expression import desc
 from src.constants import(
     defensive_stats_schema,
     passing_stats_schema,
-    player_details_schema_list,
     receiving_stats_schema,
     rushing_stats_schema,
     session,
