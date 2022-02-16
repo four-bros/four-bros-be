@@ -7,7 +7,17 @@ from sqlalchemy.orm import(
     sessionmaker
 )
 
-from src.responses.Stats import PlayerDefensiveStatsSchema, PlayerKickingStatsSchema, PlayerPassingStatsSchema, PlayerReceivingStatsSchema, PlayerReturnStatsSchema, PlayerRushingStatsSchema
+from src.responses.Players import PlayerSchema
+from src.responses.Stats import(
+    PlayerDefensiveStatsSchema,
+    PlayerKickingStatsSchema,
+    PlayerPassingStatsSchema,
+    PlayerReceivingStatsSchema,
+    PlayerReturnStatsSchema,
+    PlayerRushingStatsSchema,
+)
+from src.responses.Teams import TeamSchema
+
 
 # App constants
 app = Flask(__name__)
@@ -35,15 +45,50 @@ kicking_stat_schema = PlayerKickingStatsSchema()
 kicking_stats_schema = PlayerKickingStatsSchema(many=True)
 passing_stat_schema = PlayerPassingStatsSchema()
 passing_stats_schema = PlayerPassingStatsSchema(many=True)
+player_schema_single = PlayerSchema()
+player_schema_list = PlayerSchema(many=True)
 receiving_stat_schema = PlayerReceivingStatsSchema()
 receiving_stats_schema = PlayerReceivingStatsSchema(many=True)
 return_stat_schema = PlayerReturnStatsSchema()
 return_stats_schema = PlayerReturnStatsSchema(many=True)
 rushing_stat_schema = PlayerRushingStatsSchema()
 rushing_stats_schema = PlayerRushingStatsSchema(many=True)
+team_schema = TeamSchema()
+teams_schema = TeamSchema(many=True)
 
 
-# Request methods
-class HTTPMethods(Enum):
-    GET = 'GET'
-    POST = 'POST'
+# String Enums
+class Positions():
+    QB = 'QB'
+    RB = 'RB'
+    FB = 'FB'
+    WR = 'WR'
+    TE = 'TE'
+    LT = 'LT'
+    LG = 'LG'
+    C = 'C'
+    RG = 'RG'
+    RT = 'RT'
+    RE = 'RE'
+    LE = 'LE'
+    DT = 'DT'
+    LOLB = 'LOLB'
+    ROLB = 'ROLB'
+    MLB = 'MLB'
+    CB = 'CB'
+    FS = 'FS'
+    SS = 'SS'
+    K = 'K'
+    P = 'P'
+
+    offense_positions = [
+        QB, RB, FB, WR, TE, LT, LG, C, RG, RT
+    ]
+
+    defense_positions = [
+        RE, LE, DT, LOLB, ROLB, MLB, CB, FS, SS
+    ]
+
+    sp_teams_positions = [
+        K, P
+    ]

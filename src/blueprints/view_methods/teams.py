@@ -10,7 +10,9 @@ from src.constants import(
     receiving_stats_schema,
     return_stats_schema,
     rushing_stats_schema,
-    session
+    session,
+    team_schema,
+    teams_schema,
 )
 from src.data_models.DefensiveStats import DefensiveStats
 from src.data_models.OffensiveStats import OffensiveStats
@@ -19,21 +21,21 @@ from src.data_models.TeamInfo import TeamInfo
 from src.data_models.WeekYear import WeekYear
 from src.helpers import (
     _get_player_defensive_stats,
+    _get_player_details_and_abilities,
     _get_player_passing_stats,
     _get_player_receiving_stats,
-    _get_player_rushing_stats
+    _get_player_rushing_stats,
+    _get_team_info
 )
+from src.models.Player import Player
 from src.models.Stats import (
     PlayerDefensiveStats,
     PlayerPassingStats,
     PlayerReceivingStats,
     PlayerRushingStats
 )
+from src.models.Team import Team
 from src.responses.Teams import TeamSchema
-
-
-team_schema = TeamSchema()
-teams_schema = TeamSchema(many=True)
 
 
 def get_all_teams(request) -> TeamSchema:
@@ -50,7 +52,14 @@ def get_all_teams(request) -> TeamSchema:
 
 def get_team_by_team_id(request, team_id) -> TeamSchema:
     
-    team: TeamInfo = session.query(TeamInfo).where(TeamInfo.id == team_id).one()
+    team_info: TeamInfo = session.query(TeamInfo).where(TeamInfo.id == team_id).one()
+
+    players: List[PlayerInfo] = session.query(PlayerInfo).where(
+        PlayerInfo.team_id == team_id).all()
+
+
+    team: Team = _get_team_info(team_info=team_info, players=players)
+
     response: TeamSchema = team_schema.dump(team)
     
     return response
