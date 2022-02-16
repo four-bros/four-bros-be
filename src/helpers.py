@@ -361,10 +361,10 @@ def _get_team_info(team_info: TeamInfo, players: List[PlayerInfo]) -> Team:
     defense_players: List[PlayerInfo] = [player for player in players if player.position in Positions.defense_positions]
     sp_team_players: List[PlayerInfo] = [player for player in players if player.position in Positions.sp_teams_positions]
 
-    avg_overall = round(sum([player.overall for player in players]) / len(players), 2)
-    avg_offense = round(sum(player.overall for player in offense_players) / len(offense_players), 2)
-    avg_defense = round(sum(player.overall for player in defense_players) / len(defense_players), 2)
-    avg_sp_teams = round(sum(player.overall for player in sp_team_players) / len(sp_team_players), 2)
+    avg_overall = round(sum([player.overall for player in players]) / len(players), 1)
+    avg_offense = round(sum(player.overall for player in offense_players) / len(offense_players), 1)
+    avg_defense = round(sum(player.overall for player in defense_players) / len(defense_players), 1)
+    avg_sp_teams = round(sum(player.overall for player in sp_team_players) / len(sp_team_players), 1)
 
     team: Team = Team(
         id=team_info.id,
