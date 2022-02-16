@@ -1,6 +1,3 @@
-from flask import Blueprint
-from flask_cors import cross_origin
-
 from src.blueprints.players import players_bp
 from src.blueprints.stats import stats_bp
 from src.blueprints.teams import teams_bp
@@ -19,10 +16,9 @@ for bp in blueprints:
 
 
 app.route('/', methods=['GET'])
-@cross_origin()
 def index():
     response = {
-        'hello': 'world'
+        'hello': 'how are you?'
     }
     return response
 
