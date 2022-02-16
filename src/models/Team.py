@@ -1,5 +1,8 @@
 
 
+from src.models.Player import PlayerDetails
+
+
 class Team:
     def __init__(
         self,
@@ -38,3 +41,32 @@ class Team:
         self.losses = losses
         self.media_poll_points = media_poll_points
         self.coachs_poll_points = coachs_poll_points
+
+
+# Should be able to refactor this in some way
+class TeamRoster(PlayerDetails):
+    def __init__(
+        self,
+        id,
+        first_name,
+        last_name,
+        height,
+        weight,
+        jersey_number,
+        player_year,
+        redshirt,
+        position,
+        hometown_desc,
+        overall
+    ):
+        self.id = id
+        self.first_name = first_name
+        self.last_name = last_name
+        self.height = height
+        self.weight = weight
+        self.jersey_number = jersey_number
+        self.player_year = player_year
+        self.redshirt = redshirt
+        self.position = position
+        self.hometown_desc = hometown_desc
+        self.overall = overall

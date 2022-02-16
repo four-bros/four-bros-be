@@ -42,23 +42,6 @@ def get_player_by_player_id(request, player_id) -> PlayerSchema:
     return response
 
 
-def get_players_by_team_id(request, team_id):
-    players: List[PlayerInfo] = session.query(PlayerInfo).where(
-        PlayerInfo.team_id == team_id).all()
-
-    players.sort(key=lambda p: p.overall, reverse=True)
-
-    converted_players: List[Player] = [_get_player_details_and_abilities(player) for player in players]
-
-    players_json = player_schema_list.dump(converted_players)
-    
-    response = {
-        'players': players_json
-    }
-    
-    return response
-
-
 def get_players_by_team_id_and_position(team_id: int, position: str):
     
     players: List[PlayerInfo] = session.query(PlayerInfo).filter(

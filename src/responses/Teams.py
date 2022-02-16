@@ -1,5 +1,7 @@
 from marshmallow import Schema, fields
 
+from src.responses.Players import PlayerDetailsSchema
+
 
 class TeamSchema(Schema):
     id = fields.Int()
@@ -19,3 +21,17 @@ class TeamSchema(Schema):
     losses = fields.Int()
     media_poll_points = fields.Int()
     coachs_poll_points = fields.Int()
+
+
+class TeamRosterSchema(PlayerDetailsSchema):
+    id = fields.Int()
+    first_name = fields.Str()
+    last_name = fields.Str()
+    height = fields.Str()
+    weight = fields.Int()
+    jersey_number = fields.Int()
+    player_year = fields.Str()
+    redshirt = fields.Str()
+    position = fields.Str()
+    hometown_desc = fields.Int()
+    overall = fields.Int()

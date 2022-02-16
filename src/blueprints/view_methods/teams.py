@@ -4,13 +4,12 @@ from sqlalchemy.sql.expression import desc
 
 from src.constants import(
     defensive_stats_schema,
-    kicking_stats_schema,
-    passing_stat_schema,
     passing_stats_schema,
+    player_details_schema_list,
     receiving_stats_schema,
-    return_stats_schema,
     rushing_stats_schema,
     session,
+    team_roster_schema,
     team_schema,
     teams_schema,
 )
@@ -21,11 +20,11 @@ from src.data_models.TeamInfo import TeamInfo
 from src.data_models.WeekYear import WeekYear
 from src.helpers import (
     _get_player_defensive_stats,
-    _get_player_details_and_abilities,
     _get_player_passing_stats,
     _get_player_receiving_stats,
     _get_player_rushing_stats,
-    _get_team_info
+    _get_team_info,
+    _get_team_roster
 )
 from src.models.Player import Player
 from src.models.Stats import (
@@ -34,7 +33,7 @@ from src.models.Stats import (
     PlayerReceivingStats,
     PlayerRushingStats
 )
-from src.models.Team import Team
+from src.models.Team import Team, TeamRoster
 from src.responses.Teams import TeamSchema
 
 
@@ -61,6 +60,23 @@ def get_team_by_team_id(request, team_id) -> TeamSchema:
     team: Team = _get_team_info(team_info=team_info, players=players)
 
     response: TeamSchema = team_schema.dump(team)
+    
+    return response
+
+
+def get_team_roster(request, team_id):
+    players: List[PlayerInfo] = session.query(PlayerInfo).where(
+        PlayerInfo.team_id == team_id).all()
+
+    players.sort(key=lambda p: p.overall, reverse=True)
+
+    converted_players: List[TeamRoster] = [_get_team_roster(player) for player in players]
+
+    players_json = team_roster_schema.dump(converted_players)
+    
+    response = {
+        'players': players_json
+    }
     
     return response
 

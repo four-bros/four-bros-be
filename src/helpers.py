@@ -28,7 +28,7 @@ from src.models.Stats import(
     ReturnStats,
     RushingStats
 )
-from src.models.Team import Team
+from src.models.Team import Team, TeamRoster
 
 
 def _convert_stats_year(year: int) -> int:
@@ -355,6 +355,9 @@ def _get_rushing_stats(offensive_stats: OffensiveStats) -> RushingStats:
     return rushing_stats
 
 
+################################################
+########## Get team info and stats #############
+################################################
 def _get_team_info(team_info: TeamInfo, players: List[PlayerInfo]) -> Team:
 
     offense_players: List[PlayerInfo] = [player for player in players if player.position in Positions.offense_positions]
@@ -387,3 +390,28 @@ def _get_team_info(team_info: TeamInfo, players: List[PlayerInfo]) -> Team:
     )
 
     return team
+
+
+def _get_team_roster(player: PlayerInfo) -> TeamRoster:
+
+    player_details: TeamRoster = TeamRoster(
+        id=player.id,
+        first_name=player.first_name,
+        last_name=player.last_name,
+        height=player.height,
+        weight=player.weight,
+        jersey_number=player.jersey_number,
+        player_year=player.player_year,
+        redshirt=player.redshirt,
+        position=player.position,
+        hometown_desc=player.hometown_desc,
+        overall=player.overall
+    )
+
+    return player_details
+
+
+
+def _get_team_stats(team_info: TeamInfo, players: List[PlayerInfo]):
+    # TODO: create function to get team passing stats, rushing stats, etc.
+    pass

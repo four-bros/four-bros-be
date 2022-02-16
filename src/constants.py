@@ -1,4 +1,3 @@
-from enum import Enum
 from flask import Flask
 from flask_cors import CORS
 from sqlalchemy import create_engine
@@ -10,13 +9,14 @@ from sqlalchemy.orm import(
 from src.responses.Players import PlayerSchema
 from src.responses.Stats import(
     PlayerDefensiveStatsSchema,
+    PlayerDetailsSchema,
     PlayerKickingStatsSchema,
     PlayerPassingStatsSchema,
     PlayerReceivingStatsSchema,
     PlayerReturnStatsSchema,
     PlayerRushingStatsSchema,
 )
-from src.responses.Teams import TeamSchema
+from src.responses.Teams import TeamRosterSchema, TeamSchema
 
 
 # App constants
@@ -45,6 +45,8 @@ kicking_stat_schema = PlayerKickingStatsSchema()
 kicking_stats_schema = PlayerKickingStatsSchema(many=True)
 passing_stat_schema = PlayerPassingStatsSchema()
 passing_stats_schema = PlayerPassingStatsSchema(many=True)
+player_details_schema_single = PlayerDetailsSchema()
+player_details_schema_list = PlayerDetailsSchema(many=True)
 player_schema_single = PlayerSchema()
 player_schema_list = PlayerSchema(many=True)
 receiving_stat_schema = PlayerReceivingStatsSchema()
@@ -55,6 +57,7 @@ rushing_stat_schema = PlayerRushingStatsSchema()
 rushing_stats_schema = PlayerRushingStatsSchema(many=True)
 team_schema = TeamSchema()
 teams_schema = TeamSchema(many=True)
+team_roster_schema = TeamRosterSchema(many=True)
 
 
 # String Enums
