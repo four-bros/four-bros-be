@@ -1,14 +1,14 @@
 from typing import List
 
-from src.constants import session
+from src.constants import(
+    session,
+    player_schema_single,
+    player_schema_list
+)
 from src.data_models.PlayerInfo import PlayerInfo
 from src.helpers import _get_player_details_and_abilities
 from src.models.Player import Player
 from src.responses.Players import PlayerSchema
-
-
-player_schema_single = PlayerSchema()
-player_schema_list = PlayerSchema(many=True)
 
 
 def get_all_players(request):
