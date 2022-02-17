@@ -8,38 +8,38 @@ from src.constants import(
     receiving_stats_schema,
     rushing_stats_schema,
     session,
-    team_roster_schema,
-    team_schema,
-    teams_schema,
+    team_details_schema,
+    team_schema
 )
-from src.data_models.DefensiveStats import DefensiveStats
-from src.data_models.OffensiveStats import OffensiveStats
-from src.data_models.PlayerInfo import PlayerInfo
-from src.data_models.TeamInfo import TeamInfo
-from src.data_models.WeekYear import WeekYear
+from src.data_models.DefensiveStatsData import DefensiveStatsData
+from src.data_models.OffensiveStatsData import OffensiveStatsData
+from src.data_models.PlayerInfoData import PlayerInfoData
+from src.data_models.TeamInfoData import TeamInfoData
+from src.data_models.TeamStatsData import TeamStatsData
+from src.data_models.WeekYearData import WeekYearData
 from src.helpers import (
     _get_player_defensive_stats,
     _get_player_passing_stats,
     _get_player_receiving_stats,
     _get_player_rushing_stats,
-    _get_team_info,
-    _get_team_roster
+    _get_team_details,
+    _get_team_roster,
+    _get_team_stats
 )
-from src.models.Player import Player
 from src.models.Stats import (
     PlayerDefensiveStats,
     PlayerPassingStats,
     PlayerReceivingStats,
     PlayerRushingStats
 )
-from src.models.Team import Team, TeamRoster
-from src.responses.Teams import TeamSchema
+from src.models.Teams import TeamDetails, TeamInfo, TeamRoster, TeamStats
+from src.responses.Teams import TeamDetailsSchema, TeamInfoSchema
 
 
-def get_all_teams(request) -> TeamSchema:
+def get_all_teams(request):
     
-    teams: List[TeamInfo] = session.query(TeamInfo).order_by(desc(TeamInfo.is_user)).all()
-    teams_json = teams_schema.dump(teams)
+    teams: List[TeamInfoData] = session.query(TeamInfoData).order_by(desc(TeamInfoData.is_user)).all()
+    teams_json = team_details_schema.dump(teams)
     
     response = {
         'teams': teams_json
@@ -48,55 +48,48 @@ def get_all_teams(request) -> TeamSchema:
     return response
 
 
-def get_team_by_team_id(request, team_id) -> TeamSchema:
+def get_team_by_team_id(request, team_id) -> TeamDetailsSchema:
     
-    team_info: TeamInfo = session.query(TeamInfo).where(TeamInfo.id == team_id).one()
+    team_info_data: TeamInfoData = session.query(TeamInfoData).where(TeamInfoData.id == team_id).one()
+    team_stats_data: TeamStatsData = session.query(TeamStatsData).where(TeamStatsData.id == team_id).one()
 
-    players: List[PlayerInfo] = session.query(PlayerInfo).where(
-        PlayerInfo.team_id == team_id).all()
-
-
-    team: Team = _get_team_info(team_info=team_info, players=players)
-
-    response: TeamSchema = team_schema.dump(team)
-    
-    return response
-
-
-def get_team_roster(request, team_id):
-    players: List[PlayerInfo] = session.query(PlayerInfo).where(
-        PlayerInfo.team_id == team_id).all()
+    players: List[PlayerInfoData] = session.query(PlayerInfoData).where(
+        PlayerInfoData.team_id == team_id).all()
 
     players.sort(key=lambda p: p.overall, reverse=True)
 
-    converted_players: List[TeamRoster] = [_get_team_roster(player) for player in players]
+    team_details: TeamDetails = _get_team_details(team_info=team_info_data, players=players)
+    team_roster: TeamRoster = [_get_team_roster(player) for player in players]
+    team_stats: TeamStats = _get_team_stats(team_stats_data=team_stats_data)
 
-    players_json = team_roster_schema.dump(converted_players)
-    
-    response = {
-        'players': players_json
-    }
+    team_info: TeamInfo = TeamInfo(
+        team_details=team_details,
+        team_roster=team_roster,
+        team_stats=team_stats
+    )
+
+    response: TeamInfoSchema = team_schema.dump(team_info)
     
     return response
 
 
 def get_team_stats_leaders(request, team_id):
     # Query the year to filter out irrelevant years
-    week_year: WeekYear = session.query(WeekYear).first()
+    week_year: WeekYearData = session.query(WeekYearData).first()
     # Query the team to get the team_id
-    team: TeamInfo = session.query(TeamInfo).where(TeamInfo.id == team_id).one()
+    team: TeamInfoData = session.query(TeamInfoData).where(TeamInfoData.id == team_id).one()
 
     # Get defensive stats
-    defense_stats = session.query(PlayerInfo, DefensiveStats).filter(
-        PlayerInfo.id == DefensiveStats.player_id,
-        PlayerInfo.team_id == team.id,
-        DefensiveStats.year == week_year.year
+    defense_stats = session.query(PlayerInfoData, DefensiveStatsData).filter(
+        PlayerInfoData.id == DefensiveStatsData.player_id,
+        PlayerInfoData.team_id == team.id,
+        DefensiveStatsData.year == week_year.year
     ).all()
     # Get offensive stats
-    offense_stats = session.query(PlayerInfo, OffensiveStats).filter(
-        PlayerInfo.id == OffensiveStats.player_id,
-        PlayerInfo.team_id == team.id,
-        OffensiveStats.year == week_year.year
+    offense_stats = session.query(PlayerInfoData, OffensiveStatsData).filter(
+        PlayerInfoData.id == OffensiveStatsData.player_id,
+        PlayerInfoData.team_id == team.id,
+        OffensiveStatsData.year == week_year.year
         ).all()
     # Convert players to the appropriate models based on stat category
     converted_players_defense: List[PlayerDefensiveStats] = [_get_player_defensive_stats(player) for player in defense_stats]

@@ -1,6 +1,6 @@
 from marshmallow import Schema, fields
 
-from responses.Players import PlayerDetailsSchema
+from src.responses.Players import PlayerDetailsSchema
 
 #############################
 ### Stat Category Schemas ###

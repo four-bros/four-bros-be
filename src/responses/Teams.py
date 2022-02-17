@@ -1,9 +1,9 @@
 from marshmallow import Schema, fields
 
-from responses.Players import PlayerDetailsSchema
+from src.responses.Players import PlayerDetailsSchema
 
 
-class TeamSchema(Schema):
+class TeamDetailsSchema(Schema):
     id = fields.Int()
     team_name = fields.Str()
     team_short_name = fields.Str()
@@ -35,3 +35,34 @@ class TeamRosterSchema(PlayerDetailsSchema):
     position = fields.Str()
     hometown_desc = fields.Int()
     overall = fields.Int()
+
+
+class TeamStatsSchema(Schema):
+    total_points = fields.Int()
+    ppg = fields.Float()
+    pass_yds = fields.Int()
+    pass_ypg = fields.Float()
+    pass_tds = fields.Int()
+    rush_yds = fields.Int()
+    rush_ypg = fields.Float()
+    rush_tds = fields.Int()
+    rec_yds = fields.Int()
+    rec_ypg = fields.Float()
+    rec_tds = fields.Int()
+    sacks = fields.Int()
+    ints = fields.Int()
+    ff = fields.Int()
+    fr = fields.Int()
+    pass_def = fields.Int()
+    safeties = fields.Int()
+    def_tds = fields.Int()
+    kr_yds = fields.Int()
+    kr_tds = fields.Int()
+    pr_yds = fields.Int()
+    pr_tds = fields.Int()
+
+
+class TeamInfoSchema(Schema):
+    team_details = fields.Nested(TeamDetailsSchema)
+    team_roster = fields.List(fields.Nested(TeamRosterSchema))
+    team_stats = fields.Nested(TeamStatsSchema)

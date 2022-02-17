@@ -5,10 +5,10 @@ from sqlalchemy import(
     Float
 )
 
-from constants import Base
+from src.constants import Base
 
 @dataclass
-class TeamStats(Base):
+class TeamStatsData(Base):
     __tablename__ = 'team_stats'
     id = Column(Integer, primary_key=True)
     total_points = Column(Integer)
