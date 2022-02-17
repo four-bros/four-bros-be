@@ -3,11 +3,8 @@ from flask import Blueprint, request
 from src.blueprints.view_methods.teams import(
     get_all_teams,
     get_team_by_team_id,
-    get_team_roster,
-    get_team_stats,
     get_team_stats_leaders
 )
-from src.responses.Teams import TeamDetailsSchema
 
 
 teams_bp = Blueprint('teams', __name__)
