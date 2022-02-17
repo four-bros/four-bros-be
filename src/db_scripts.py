@@ -7,7 +7,15 @@ from constants import(
     user_teams
 )
 
-from helpers import _convert_stats_year
+from helpers import(
+    _convert_stats_year,
+    _get_player_defensive_stats,
+    _get_player_kicking_stats,
+    _get_player_passing_stats,
+    _get_player_receiving_stats,
+    _get_player_return_stats,
+    _get_player_rushing_stats
+)
 from data_models.Commits import Commits
 from data_models.DefensiveStats import DefensiveStats
 from data_models.KickingStats import KickingStats
@@ -15,7 +23,9 @@ from data_models.OffensiveStats import OffensiveStats
 from data_models.PlayerInfo import PlayerInfo
 from data_models.ReturnStats import ReturnStats
 from data_models.TeamInfo import TeamInfo
+from data_models.TeamStats import TeamStats
 from data_models.WeekYear import WeekYear
+from models.Stats import PlayerDefensiveStats, PlayerKickingStats, PlayerPassingStats, PlayerReceivingStats, PlayerReturnStats, PlayerRushingStats
 
 
 ################################################
@@ -569,6 +579,11 @@ def insert_team_info_into_db(team_info):
                 coachs_poll_points=new_team.coachs_poll_points,
             )
             session.flush()
+    # delete duplicate team entries
+    duplicate_cuse_1 = session.query(TeamInfo).filter(TeamInfo.id == 300).first()
+    duplicate_cuse_2 = session.query(TeamInfo).filter(TeamInfo.id == 400).first()
+    session.delete(duplicate_cuse_1)
+    session.delete(duplicate_cuse_2)
     try:
         session.commit()
     except:
@@ -605,7 +620,7 @@ def insert_week_year_into_db(week_year):
 
 
 ################################################
-######## insert player data functions ##########
+######### insert team stats function ###########
 ################################################
 def insert_team_stats_into_db():
 
@@ -614,21 +629,144 @@ def insert_team_stats_into_db():
     week_year: WeekYear = session.query(WeekYear).first()
 
     for team in all_teams_info:
-
-        def_stats = session.query(PlayerInfo, DefensiveStats).filter(
+        # Grab all player data for each team
+        def_data = session.query(PlayerInfo, DefensiveStats).filter(
+                PlayerInfo.team_id == team.id,
                 PlayerInfo.id == DefensiveStats.player_id,
-                PlayerInfo.team_id == team.id,
                 DefensiveStats.year == week_year.year
-                ).all()
-
-        off_stats = session.query(PlayerInfo, OffensiveStats).filter(
-            PlayerInfo.id == OffensiveStats.player_id,
-            PlayerInfo.team_id == team.id,
-            OffensiveStats.year == week_year.year
             ).all()
-
-        kick_stats = session.query(PlayerInfo, KickingStats).filter(
-                KickingStats.player_id == PlayerInfo.id,
+        off_data = session.query(PlayerInfo, OffensiveStats).filter(
+            PlayerInfo.team_id == team.id,
+            PlayerInfo.id == OffensiveStats.player_id,
+            OffensiveStats.year == week_year.year,
+            # filter out incorrect data
+            OffensiveStats.rush_yards < 16000
+            ).all()
+        ret_data = session.query(PlayerInfo, ReturnStats).filter(
                 PlayerInfo.team_id == team.id,
+                PlayerInfo.id == ReturnStats.player_id,
+                ReturnStats.year == week_year.year
+                ).all()
+        kick_data = session.query(PlayerInfo, KickingStats).filter(
+                PlayerInfo.team_id == team.id,
+                KickingStats.player_id == PlayerInfo.id,
                 KickingStats.year == week_year.year
             ).all()   
+
+        # Convert data to models for data manipulation
+        def_stats: List[PlayerDefensiveStats] = [_get_player_defensive_stats(player) for player in def_data]
+        kick_stats: List[PlayerKickingStats] = [_get_player_kicking_stats(player) for player in kick_data]
+        pass_stats: List[PlayerPassingStats] = [_get_player_passing_stats(player) for player in off_data]
+        rush_stats: List[PlayerRushingStats] = [_get_player_rushing_stats(player) for player in off_data]
+        rec_stats: List[PlayerReceivingStats] = [_get_player_receiving_stats(player) for player in off_data]
+        return_stats: List[PlayerReturnStats] = [_get_player_return_stats(player) for player in ret_data]
+        
+        # compile all TDs and TD points
+        passing_tds = sum([p.passing_stats.pass_tds for p in pass_stats])
+        rushing_tds = sum([p.rushing_stats.rush_tds for p in rush_stats])
+        receiving_tds = sum([p.receiving_stats.rec_tds for p in rec_stats])
+        def_tds = sum([p.defensive_stats.def_tds for p in def_stats])
+        kr_tds = sum([p.return_stats.kr_tds for p in return_stats])
+        pr_tds = sum([p.return_stats.pr_tds for p in return_stats])
+        td_points = sum([passing_tds, rushing_tds, receiving_tds, def_tds, kr_tds, pr_tds]) * 6
+        
+        # compile all FGs and XP points
+        fgs = sum([p.kicking_stats.fg_made for p in kick_stats])
+        xps = sum([p.kicking_stats.xp_made for p in kick_stats])
+        kick_points = sum([fgs * 3, xps])
+        
+        # calculate total points, ppg
+        def_stats_sorted_by_gp: List[PlayerDefensiveStats] = sorted(def_stats, key=lambda p: p.defensive_stats.games_played, reverse=True)
+        games_played = 1
+        if len(def_stats_sorted_by_gp) > 0:
+            games_played = def_stats_sorted_by_gp[0].defensive_stats.games_played
+        if games_played is 0:
+            games_played += 1
+        total_points = sum([td_points, kick_points])
+        ppg = round(total_points / games_played, 1)
+        
+        # calculate pass, rush, rec. total yards and YPG
+        pass_yards = sum([p.passing_stats.pass_yards for p in pass_stats])
+        pass_ypg = round(pass_yards / games_played, 1)
+        rush_yards = sum([p.rushing_stats.rush_yards for p in rush_stats])
+        rush_ypg = round(rush_yards / games_played, 1)
+        rec_yards = sum([p.receiving_stats.rec_yards for p in rec_stats])
+        rec_ypg = round(rec_yards / games_played, 1)
+        
+        # calculate defensive stat totals
+        sacks = sum([p.defensive_stats.sacks for p in def_stats])
+        ints = sum([p.defensive_stats.ints_made for p in def_stats])
+        ff = sum([p.defensive_stats.forced_fumbles for p in def_stats])
+        fr = sum([p.defensive_stats.fumbles_rec for p in def_stats])
+        pass_def = sum([p.defensive_stats.pass_def for p in def_stats])
+        safeties = sum([p.defensive_stats.safeties for p in def_stats])
+        
+        # calculate KR and PR yards
+        kr_yds = sum([p.return_stats.kr_yds for p in return_stats])
+        pr_yds = sum([p.return_stats.pr_yds for p in return_stats])
+        
+        new_team = TeamStats(
+            id=team.id,
+            total_points=total_points,
+            ppg=ppg,
+            pass_yds=pass_yards,
+            pass_ypg=pass_ypg,
+            pass_tds=passing_tds,
+            rush_yds=rush_yards,
+            rush_tds=rushing_tds,
+            rush_ypg=rush_ypg,
+            rec_yds=rec_yards,
+            rec_ypg=rec_ypg,
+            rec_tds=receiving_tds,
+            sacks=sacks,
+            ints=ints,
+            ff=ff,
+            fr=fr,
+            pass_def=pass_def,
+            safeties=safeties,
+            def_tds=def_tds,
+            kr_yds=kr_yds,
+            kr_tds=kr_tds,
+            pr_yds=pr_yds,
+            pr_tds=pr_tds
+        )
+        # query DB to see if team_stat exists
+        team: TeamStats = session.query(TeamStats).filter(
+            TeamStats.id == new_team.id).scalar()
+        
+        if team is None:
+            session.add(new_team)
+            session.flush()
+        else:
+            update(TeamStats).where(TeamStats.id == new_team.id).values(
+                id=new_team.id,
+                total_points=new_team.total_points,
+                ppg=new_team.ppg,
+                pass_yds=new_team.pass_yds,
+                pass_ypg=new_team.pass_ypg,
+                pass_tds=new_team.pass_tds,
+                rush_yds=new_team.rush_yds,
+                rush_ypg=new_team.rush_ypg,
+                rush_tds=new_team.rush_tds,
+                rec_yds=new_team.rec_yds,
+                rec_ypg=new_team.rec_ypg,
+                rec_tds=new_team.rec_tds,
+                sacks=new_team.sacks,
+                ints=new_team.ints,
+                ff=new_team.ff,
+                fr=new_team.fr,
+                pass_def=new_team.pass_def,
+                safeties=new_team.safeties,
+                def_tds=new_team.def_tds,
+                kr_yds=new_team.kr_yds,
+                kr_tds=new_team.kr_tds,
+                pr_yds=new_team.pr_yds,
+                pr_tds=new_team.pr_tds
+            )
+            session.flush()
+    try:
+        session.commit()
+    except:
+        session.rollback()
+    finally:
+        session.close()

@@ -1,17 +1,4 @@
-<<<<<<< Updated upstream
 from typing import List
-from src.constants import(
-    Positions,
-    session
-)
-from src.data_models.DefensiveStats import DefensiveStats
-from src.data_models.KickingStats import KickingStats as KickingStatsDataModel
-from src.data_models.OffensiveStats import OffensiveStats
-from src.data_models.PlayerInfo import PlayerInfo
-from src.data_models.ReturnStats import ReturnStats as ReturnStatsDataModel
-from src.data_models.TeamInfo import TeamInfo
-from src.models.Player import(
-=======
 from constants import session
 from data_models.DefensiveStats import DefensiveStats
 from data_models.KickingStats import KickingStats as KickingStatsDataModel
@@ -20,7 +7,6 @@ from data_models.PlayerInfo import PlayerInfo
 from data_models.ReturnStats import ReturnStats as ReturnStatsDataModel
 from data_models.TeamInfo import TeamInfo
 from models.Player import(
->>>>>>> Stashed changes
     Player, 
     PlayerAbilities, 
     PlayerDetails
@@ -39,7 +25,8 @@ from models.Stats import(
     ReturnStats,
     RushingStats
 )
-from src.models.Team import Team, TeamRoster
+from constants import Positions
+from models.Team import Team, TeamRoster
 
 
 def _convert_stats_year(year: int) -> int:
@@ -356,6 +343,7 @@ def _get_rushing_stats(offensive_stats: OffensiveStats) -> RushingStats:
     rushing_stats: RushingStats = RushingStats(
         rush_att=offensive_stats.rush_att,
         rush_yards=offensive_stats.rush_yards,
+        rush_tds=offensive_stats.rush_tds,
         ya_contact=offensive_stats.ya_contact,
         broke_tkls=offensive_stats.broke_tkls,
         fumbles=offensive_stats.fumbles,

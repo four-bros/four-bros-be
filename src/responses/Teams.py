@@ -1,6 +1,6 @@
 from marshmallow import Schema, fields
 
-from src.responses.Players import PlayerDetailsSchema
+from responses.Players import PlayerDetailsSchema
 
 
 class TeamSchema(Schema):

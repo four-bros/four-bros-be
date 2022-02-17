@@ -8,7 +8,7 @@ from sqlalchemy import(
 from constants import Base
 
 @dataclass
-class TeamInfo(Base):
+class TeamStats(Base):
     __tablename__ = 'team_stats'
     id = Column(Integer, primary_key=True)
     total_points = Column(Integer)

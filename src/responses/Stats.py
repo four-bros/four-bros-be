@@ -1,6 +1,6 @@
 from marshmallow import Schema, fields
 
-from src.responses.Players import PlayerDetailsSchema
+from responses.Players import PlayerDetailsSchema
 
 #############################
 ### Stat Category Schemas ###
@@ -89,6 +89,7 @@ class ReturnStatsSchema(Schema):
 class RushingStatsSchema(Schema):
     rush_att = fields.Int()
     rush_yards = fields.Int()
+    rush_tds = fields.Int()
     ya_contact = fields.Int()
     broke_tkls = fields.Int()
     fumbles = fields.Int()

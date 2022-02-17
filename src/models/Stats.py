@@ -170,6 +170,7 @@ class RushingStats:
         self,
         rush_att,
         rush_yards,
+        rush_tds,
         ya_contact,
         broke_tkls,
         fumbles,
@@ -178,6 +179,7 @@ class RushingStats:
     ):
         self.rush_att = rush_att
         self.rush_yards = rush_yards
+        self.rush_tds = rush_tds
         self.ya_contact = ya_contact
         self.broke_tkls = broke_tkls
         self.fumbles = fumbles

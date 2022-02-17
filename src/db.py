@@ -21,6 +21,7 @@ from db_scripts import (
     insert_player_info_into_db,
     insert_return_stats_into_db,
     insert_team_info_into_db,
+    insert_team_stats_into_db,
     insert_week_year_into_db
     )
 from data_models.TeamInfo import TeamInfo
@@ -39,12 +40,6 @@ def main():
     insert_commits_into_db(commits)
     insert_kicking_stats_into_db(kicking_stats)
     insert_return_stats_into_db(return_stats)
-    # delete duplicate team entries
-    duplicate_cuse_1 = session.query(TeamInfo).filter(TeamInfo.id == 300).first()
-    duplicate_cuse_2 = session.query(TeamInfo).filter(TeamInfo.id == 400).first()
-    session.delete(duplicate_cuse_1)
-    session.delete(duplicate_cuse_2)
-    session.commit()
-
+    insert_team_stats_into_db()
 
 main()
