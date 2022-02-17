@@ -1,3 +1,4 @@
+from typing import List
 from src.models.Player import PlayerDetails
 
 
@@ -124,7 +125,7 @@ class TeamInfo:
     def __init__(
         self,
         team_details: TeamDetails,
-        team_roster: TeamRoster,
+        team_roster: List[TeamRoster],
         team_stats: TeamStats
     ):
         self.team_details = team_details
