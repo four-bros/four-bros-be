@@ -64,5 +64,5 @@ class TeamStatsSchema(Schema):
 
 class TeamInfoSchema(Schema):
     team_details = fields.Nested(TeamDetailsSchema)
-    team_roster = fields.Nested(TeamRosterSchema)
+    team_roster = fields.List(fields.Nested(TeamRosterSchema))
     team_stats = fields.Nested(TeamStatsSchema)
