@@ -3,7 +3,7 @@ from sqlalchemy import Column, Integer
 from sqlalchemy.sql.schema import ForeignKey
 from sqlalchemy.sql.sqltypes import Float, String
 
-from src.constants import Base
+from constants import Base
 
 
 @dataclass
@@ -27,3 +27,4 @@ class DefensiveStats(Base):
     def_tds = Column(Integer)
     fum_rec_yards = Column(Integer)
     int_ret_yards = Column(Integer)
+    total_tkls = Column(Float)

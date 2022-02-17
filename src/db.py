@@ -26,25 +26,25 @@ from db_scripts import (
 from data_models.TeamInfo import TeamInfo
 
 
-# Create all DB tables
-Base.metadata.drop_all(engine)
-Base.metadata.create_all(engine)
+def main():
+    # Create all DB tables
+    Base.metadata.drop_all(engine)
+    Base.metadata.create_all(engine)
+    # Insert all data to DB tables
+    insert_team_info_into_db(team_info)
+    insert_player_info_into_db(player_info)
+    insert_def_stats_into_db(def_stats)
+    insert_off_stats_into_db(off_stats)
+    insert_week_year_into_db(week_year)
+    insert_commits_into_db(commits)
+    insert_kicking_stats_into_db(kicking_stats)
+    insert_return_stats_into_db(return_stats)
+    # delete duplicate team entries
+    duplicate_cuse_1 = session.query(TeamInfo).filter(TeamInfo.id == 300).first()
+    duplicate_cuse_2 = session.query(TeamInfo).filter(TeamInfo.id == 400).first()
+    session.delete(duplicate_cuse_1)
+    session.delete(duplicate_cuse_2)
+    session.commit()
 
 
-# Insert all data to DB tables
-insert_team_info_into_db(team_info)
-insert_player_info_into_db(player_info)
-insert_def_stats_into_db(def_stats)
-insert_off_stats_into_db(off_stats)
-insert_week_year_into_db(week_year)
-insert_commits_into_db(commits)
-insert_kicking_stats_into_db(kicking_stats)
-insert_return_stats_into_db(return_stats)
-
-
-# delete duplicate team entries
-duplicate_cuse_1 = session.query(TeamInfo).filter(TeamInfo.id == 300).first()
-duplicate_cuse_2 = session.query(TeamInfo).filter(TeamInfo.id == 400).first()
-session.delete(duplicate_cuse_1)
-session.delete(duplicate_cuse_2)
-session.commit()
+main()

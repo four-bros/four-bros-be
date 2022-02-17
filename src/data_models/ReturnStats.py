@@ -1,8 +1,8 @@
 from dataclasses import dataclass
-from sqlalchemy import Column, Integer
+from sqlalchemy import Column, Float, Integer
 from sqlalchemy.sql.schema import ForeignKey
 
-from src.constants import Base
+from constants import Base
 
 
 @dataclass
@@ -19,3 +19,5 @@ class ReturnStats(Base):
     pr_tds = Column(Integer)
     kr_yds = Column(Integer)
     pr_yds = Column(Integer)
+    kr_avg = Column(Float)
+    pr_avg = Column(Float)

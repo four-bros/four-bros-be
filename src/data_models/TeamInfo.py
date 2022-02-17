@@ -4,9 +4,9 @@ from sqlalchemy import(
     Column,
     Integer,
     String
-    )
+)
 
-from src.constants import Base
+from constants import Base
 
 @dataclass
 class TeamInfo(Base):

@@ -1,4 +1,4 @@
-from dataclasses import replace
+from typing import List
 import ncaa_dynasty
 from sqlalchemy.sql.expression import update
 
@@ -18,6 +18,9 @@ from data_models.TeamInfo import TeamInfo
 from data_models.WeekYear import WeekYear
 
 
+################################################
+######## insert player data functions ##########
+################################################
 def insert_commits_into_db(commits):
     
     for i, value in enumerate(commits):
@@ -62,6 +65,8 @@ def insert_def_stats_into_db(def_stats):
         
         readable_year = _convert_stats_year(record.fields['Year'])
         
+        total_tackles = record.fields['Solo Tkls'] + record.fields['Asst. Tkls']
+        
         new_player = DefensiveStats(
             player_id=record.fields['Player ID'],
             long_int_ret=record.fields['Long INT Ret'],
@@ -80,7 +85,8 @@ def insert_def_stats_into_db(def_stats):
             asst_tkls=record.fields['Asst. Tkls'],
             def_tds=record.fields['Def. TDs'],
             fum_rec_yards=record.fields['Fum. Rec. Yards'],
-            int_ret_yards=record.fields['INT Ret. Yards']
+            int_ret_yards=record.fields['INT Ret. Yards'],
+            total_tkls=total_tackles
         )
         player: DefensiveStats = session.query(DefensiveStats).filter(
             DefensiveStats.player_id == new_player.player_id).scalar()
@@ -107,7 +113,8 @@ def insert_def_stats_into_db(def_stats):
                 asst_tkls=new_player.asst_tkls,
                 def_tds=new_player.def_tds,
                 fum_rec_yards=new_player.fum_rec_yards,
-                int_ret_yards=new_player.int_ret_yards
+                int_ret_yards=new_player.int_ret_yards,
+                total_tkls=new_player.total_tkls
             )
             session.flush()
     try:
@@ -207,6 +214,37 @@ def insert_off_stats_into_db(off_stats):
         
         readable_year = _convert_stats_year(record.fields['Year'])
         
+        pass_yp_attempt = round(
+            record.fields['Pass. Yards'] / record.fields['Pass Att.']\
+                if record.fields['Pass Att.'] is not 0 else 0,
+            1
+            )
+        pass_yp_game = round(
+            record.fields['Pass. Yards'] / record.fields['Games Played']\
+                if record.fields['Games Played'] is not 0 else 0, 
+            1
+            )
+        rush_yp_carry = round(
+            record.fields['Rush Yards'] / record.fields['Rush Att.']\
+                if record.fields['Rush Att.'] is not 0 else 0,
+            1
+            )
+        rush_yp_game = round(
+            record.fields['Rush Yards'] / record.fields['Games Played']\
+                if record.fields['Games Played'] is not 0 else 0,
+            1
+            )
+        rec_yp_catch = round(
+            record.fields['Rec. Yards'] / record.fields['Receptions']\
+                if record.fields['Receptions'] is not 0 else 0,
+            1
+            )
+        rec_yp_game = round(
+            record.fields['Rec. Yards'] / record.fields['Games Played']\
+                if record.fields['Games Played'] is not 0 else 0,
+            1
+            )
+        
         new_player = OffensiveStats(
             player_id=record.fields['Player ID'],
             pass_yards=record.fields['Pass. Yards'],
@@ -231,7 +269,13 @@ def insert_off_stats_into_db(off_stats):
             rush_att=record.fields['Rush Att.'],
             broke_tkls=record.fields['Broke Tkls.'],
             fumbles=record.fields['Fumbles'],
-            twenty_plus_yd_runs=record.fields['20+ yd. Runs']
+            twenty_plus_yd_runs=record.fields['20+ yd. Runs'],
+            pass_yp_attempt=pass_yp_attempt,
+            pass_yp_game=pass_yp_game,
+            rush_yp_carry=rush_yp_carry,
+            rush_yp_game=rush_yp_game,
+            rec_yp_catch=rec_yp_catch,
+            rec_yp_game=rec_yp_game
         )
         
         player: OffensiveStats = session.query(OffensiveStats).filter(
@@ -265,7 +309,13 @@ def insert_off_stats_into_db(off_stats):
                 rush_att=new_player.rush_att,
                 broke_tkls=new_player.broke_tkls,
                 fumbles=new_player.fumbles,
-                twenty_plus_yd_runs=new_player.twenty_plus_yd_runs
+                twenty_plus_yd_runs=new_player.twenty_plus_yd_runs,
+                pass_yp_attempt=new_player.pass_yp_attempt,
+                pass_yp_game=new_player.pass_yp_game,
+                rush_yp_carry=new_player.rush_yp_carry,
+                rush_yp_game=new_player.rush_yp_game,
+                rec_yp_catch=new_player.rec_yp_catch,
+                rec_yp_game=new_player.rec_yp_game
             )
             session.flush()
     try:
@@ -419,6 +469,17 @@ def insert_return_stats_into_db(return_stats):
         
         readable_year = _convert_stats_year(record.fields['Year'])
         
+        kr_avg = round(
+            record.fields['KR Yds.'] / record.fields['Kick Returns']\
+                if record.fields['Kick Returns'] is not 0 else 0,
+            1
+            )
+        pr_avg = round(
+            record.fields['PR Yds.'] / record.fields['Punt Returns']\
+                if record.fields['Punt Returns'] is not 0 else 0,
+            1
+            )
+        
         new_player = ReturnStats(
             player_id=record.fields['Player ID'],
             kick_returns=record.fields['Kick Returns'],
@@ -431,6 +492,8 @@ def insert_return_stats_into_db(return_stats):
             pr_tds=record.fields['PR TDs'],
             kr_yds=record.fields['KR Yds.'],
             pr_yds=record.fields['PR Yds.'],
+            kr_avg=kr_avg,
+            pr_avg=pr_avg
         )
         
         player = session.query(ReturnStats).filter(ReturnStats.player_id == new_player.player_id).scalar()
@@ -451,6 +514,8 @@ def insert_return_stats_into_db(return_stats):
                 pr_tds=new_player.pr_tds,
                 kr_yds=new_player.kr_yds,
                 pr_yds=new_player.pr_yds,
+                kr_avg=new_player.kr_avg,
+                pr_avg=new_player.pr_avg
             )
             session.flush()
     try:
@@ -537,3 +602,33 @@ def insert_week_year_into_db(week_year):
         session.rollback()
     finally:
         session.close()
+
+
+################################################
+######## insert player data functions ##########
+################################################
+def insert_team_stats_into_db():
+
+    all_teams_info: List[TeamInfo] = session.query(TeamInfo).all()
+    # Query the year to filter out irrelevant years
+    week_year: WeekYear = session.query(WeekYear).first()
+
+    for team in all_teams_info:
+
+        def_stats = session.query(PlayerInfo, DefensiveStats).filter(
+                PlayerInfo.id == DefensiveStats.player_id,
+                PlayerInfo.team_id == team.id,
+                DefensiveStats.year == week_year.year
+                ).all()
+
+        off_stats = session.query(PlayerInfo, OffensiveStats).filter(
+            PlayerInfo.id == OffensiveStats.player_id,
+            PlayerInfo.team_id == team.id,
+            OffensiveStats.year == week_year.year
+            ).all()
+
+        kick_stats = session.query(PlayerInfo, KickingStats).filter(
+                KickingStats.player_id == PlayerInfo.id,
+                PlayerInfo.team_id == team.id,
+                KickingStats.year == week_year.year
+            ).all()   
