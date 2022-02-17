@@ -16,15 +16,15 @@ from helpers import(
     _get_player_return_stats,
     _get_player_rushing_stats
 )
-from data_models.Commits import Commits
-from data_models.DefensiveStats import DefensiveStats
-from data_models.KickingStats import KickingStats
-from data_models.OffensiveStats import OffensiveStats
-from data_models.PlayerInfo import PlayerInfo
-from data_models.ReturnStats import ReturnStats
-from data_models.TeamInfo import TeamInfo
-from data_models.TeamStats import TeamStats
-from data_models.WeekYear import WeekYear
+from data_models.Commits import CommitsData
+from data_models.DefensiveStats import DefensiveStatsData
+from data_models.KickingStats import KickingStatsData
+from data_models.OffensiveStats import OffensiveStatsData
+from data_models.PlayerInfo import PlayerInfoData
+from data_models.ReturnStats import ReturnStatsData
+from data_models.TeamInfo import TeamInfoData
+from data_models.TeamStats import TeamStatsData
+from data_models.WeekYear import WeekYearData
 from models.Stats import PlayerDefensiveStats, PlayerKickingStats, PlayerPassingStats, PlayerReceivingStats, PlayerReturnStats, PlayerRushingStats
 
 
@@ -36,7 +36,7 @@ def insert_commits_into_db(commits):
     for i, value in enumerate(commits):
         record = commits[i]
         
-        new_commit = Commits(
+        new_commit = CommitsData(
             stars=record.fields['Stars'],
             name=record.fields['Name'],
             position=record.fields['Position'],
@@ -44,14 +44,14 @@ def insert_commits_into_db(commits):
             school=record.fields['School']
         )
         
-        commit = session.query(Commits).filter(
-            Commits.name == new_commit.name).scalar()
+        commit = session.query(CommitsData).filter(
+            CommitsData.name == new_commit.name).scalar()
         
         if commit is None:
             session.add(new_commit)
             session.flush()
         else:
-            update(Commits).where(Commits.name == new_commit.name).values(
+            update(CommitsData).where(CommitsData.name == new_commit.name).values(
                 stars=new_commit.stars,
                 name=new_commit.name,
                 position=new_commit.position,
@@ -77,7 +77,7 @@ def insert_def_stats_into_db(def_stats):
         
         total_tackles = record.fields['Solo Tkls'] + record.fields['Asst. Tkls']
         
-        new_player = DefensiveStats(
+        new_player = DefensiveStatsData(
             player_id=record.fields['Player ID'],
             long_int_ret=record.fields['Long INT Ret'],
             sacks=record.fields['Sacks'],
@@ -98,14 +98,14 @@ def insert_def_stats_into_db(def_stats):
             int_ret_yards=record.fields['INT Ret. Yards'],
             total_tkls=total_tackles
         )
-        player: DefensiveStats = session.query(DefensiveStats).filter(
-            DefensiveStats.player_id == new_player.player_id).scalar()
+        player: DefensiveStatsData = session.query(DefensiveStatsData).filter(
+            DefensiveStatsData.player_id == new_player.player_id).scalar()
 
         if player is None:
             session.add(new_player)
             session.flush()
         else:
-            update(DefensiveStats).where(DefensiveStats.player_id == new_player.player_id).values(
+            update(DefensiveStatsData).where(DefensiveStatsData.player_id == new_player.player_id).values(
                 player_id=new_player.player_id,
                 long_int_ret=new_player.long_int_ret,
                 sacks=new_player.sacks,
@@ -142,7 +142,7 @@ def insert_kicking_stats_into_db(kicking_stats):
         
         readable_year = _convert_stats_year(record.fields['Year'])
         
-        new_player = KickingStats(
+        new_player = KickingStatsData(
             player_id=record.fields['Player ID'],
             fg_made_17_29=record.fields['FG Made 17-29'],
             fg_att_17_29=record.fields['FG Att. 17-29'],
@@ -172,15 +172,15 @@ def insert_kicking_stats_into_db(kicking_stats):
             inside_twenty=record.fields['Inside 20']
         )
         
-        player = session.query(KickingStats).filter(
-            KickingStats.player_id == new_player.player_id
+        player = session.query(KickingStatsData).filter(
+            KickingStatsData.player_id == new_player.player_id
         ).scalar()
         
         if player is None:
             session.add(new_player)
             session.flush()
         else:
-            update(KickingStats).where(KickingStats.player_id == new_player.player_id).values(
+            update(KickingStatsData).where(KickingStatsData.player_id == new_player.player_id).values(
                 player_id=new_player.player_id,
                 fg_made_17_29=new_player.fg_made_17_29,
                 fg_att_17_29=new_player.fg_att_17_29,
@@ -255,7 +255,7 @@ def insert_off_stats_into_db(off_stats):
             1
             )
         
-        new_player = OffensiveStats(
+        new_player = OffensiveStatsData(
             player_id=record.fields['Player ID'],
             pass_yards=record.fields['Pass. Yards'],
             longest_rec=record.fields['Longest Rec.'],
@@ -288,14 +288,14 @@ def insert_off_stats_into_db(off_stats):
             rec_yp_game=rec_yp_game
         )
         
-        player: OffensiveStats = session.query(OffensiveStats).filter(
-            OffensiveStats.player_id == new_player.player_id).scalar()
+        player: OffensiveStatsData = session.query(OffensiveStatsData).filter(
+            OffensiveStatsData.player_id == new_player.player_id).scalar()
 
         if player is None:
             session.add(new_player)
             session.flush()
         else:
-            update(OffensiveStats).where(OffensiveStats.player_id == new_player.player_id).values(
+            update(OffensiveStatsData).where(OffensiveStatsData.player_id == new_player.player_id).values(
                 player_id=new_player.player_id,
                 pass_yards=new_player.pass_yards,
                 longest_rec=new_player.longest_rec,
@@ -348,7 +348,7 @@ def insert_player_info_into_db(player_info):
         readable_weight = ncaa_dynasty.weight_converter(record.fields['Weight'])
         readable_year = ncaa_dynasty.player_year_converter(record.fields['Year'])
         
-        new_player = PlayerInfo(
+        new_player = PlayerInfoData(
             id=record.fields['Player ID'],
             team_id=record.fields['Team ID'],
             first_name=record.fields['First Name'],
@@ -402,14 +402,14 @@ def insert_player_info_into_db(player_info):
             juke_move=record.fields['Juke Move'],
         )
         
-        player: PlayerInfo = session.query(PlayerInfo).filter(
-            PlayerInfo.id == new_player.id).scalar()
+        player: PlayerInfoData = session.query(PlayerInfoData).filter(
+            PlayerInfoData.id == new_player.id).scalar()
 
         if player is None:
             session.add(new_player)
             session.flush()
         else:
-            update(PlayerInfo).where(PlayerInfo.id == new_player.id).values(
+            update(PlayerInfoData).where(PlayerInfoData.id == new_player.id).values(
                 player_id=new_player.id,
                 team_id=new_player.team_id,
                 first_name=new_player.first_name,
@@ -490,7 +490,7 @@ def insert_return_stats_into_db(return_stats):
             1
             )
         
-        new_player = ReturnStats(
+        new_player = ReturnStatsData(
             player_id=record.fields['Player ID'],
             kick_returns=record.fields['Kick Returns'],
             year=readable_year,
@@ -506,13 +506,13 @@ def insert_return_stats_into_db(return_stats):
             pr_avg=pr_avg
         )
         
-        player = session.query(ReturnStats).filter(ReturnStats.player_id == new_player.player_id).scalar()
+        player = session.query(ReturnStatsData).filter(ReturnStatsData.player_id == new_player.player_id).scalar()
         
         if player is None:
             session.add(new_player)
             session.flush()
         else:
-            update(ReturnStats).where(ReturnStats.player_id == new_player.player_id).values(
+            update(ReturnStatsData).where(ReturnStatsData.player_id == new_player.player_id).values(
                 player_id=new_player.player_id,
                 kick_returns=new_player.kick_returns,
                 year=new_player.year,
@@ -541,7 +541,7 @@ def insert_team_info_into_db(team_info):
     for i, value in enumerate(team_info):
         record = team_info[i]
         
-        new_team = TeamInfo(
+        new_team = TeamInfoData(
             id=record.fields['Team ID'],
             team_name=record.fields['Team Name'],
             team_short_name=record.fields['Team Short Name'],
@@ -557,14 +557,14 @@ def insert_team_info_into_db(team_info):
             coachs_poll_points=record.fields["Coach's Poll Points"],
         )
         
-        team: TeamInfo = session.query(TeamInfo).filter(
-            TeamInfo.id == new_team.id).scalar()
+        team: TeamInfoData = session.query(TeamInfoData).filter(
+            TeamInfoData.id == new_team.id).scalar()
         
         if team is None:
             session.add(new_team)
             session.flush()
         else:
-            update(TeamInfo).where(TeamInfo.id == new_team.id).values(
+            update(TeamInfoData).where(TeamInfoData.id == new_team.id).values(
                 id=new_team.id,
                 team_name=new_team.team_name,
                 team_short_name=new_team.team_short_name,
@@ -580,8 +580,8 @@ def insert_team_info_into_db(team_info):
             )
             session.flush()
     # delete duplicate team entries
-    duplicate_cuse_1 = session.query(TeamInfo).filter(TeamInfo.id == 300).first()
-    duplicate_cuse_2 = session.query(TeamInfo).filter(TeamInfo.id == 400).first()
+    duplicate_cuse_1 = session.query(TeamInfoData).filter(TeamInfoData.id == 300).first()
+    duplicate_cuse_2 = session.query(TeamInfoData).filter(TeamInfoData.id == 400).first()
     session.delete(duplicate_cuse_1)
     session.delete(duplicate_cuse_2)
     try:
@@ -598,14 +598,14 @@ def insert_week_year_into_db(week_year):
     
     readable_year = _convert_stats_year(record.fields['Year'])
     
-    new_week_year = WeekYear(
+    new_week_year = WeekYearData(
         week=record.fields['Week'],
         year=readable_year
     )
     
-    week_year_query: WeekYear = session.query(WeekYear).filter(
-        WeekYear.week == new_week_year.week,
-        WeekYear.year == new_week_year.year
+    week_year_query: WeekYearData = session.query(WeekYearData).filter(
+        WeekYearData.week == new_week_year.week,
+        WeekYearData.year == new_week_year.year
     ).scalar()
     
     if week_year_query is None:
@@ -624,33 +624,33 @@ def insert_week_year_into_db(week_year):
 ################################################
 def insert_team_stats_into_db():
 
-    all_teams_info: List[TeamInfo] = session.query(TeamInfo).all()
+    all_teams_info: List[TeamInfoData] = session.query(TeamInfoData).all()
     # Query the year to filter out irrelevant years
-    week_year: WeekYear = session.query(WeekYear).first()
+    week_year: WeekYearData = session.query(WeekYearData).first()
 
     for team in all_teams_info:
         # Grab all player data for each team
-        def_data = session.query(PlayerInfo, DefensiveStats).filter(
-                PlayerInfo.team_id == team.id,
-                PlayerInfo.id == DefensiveStats.player_id,
-                DefensiveStats.year == week_year.year
+        def_data = session.query(PlayerInfoData, DefensiveStatsData).filter(
+                PlayerInfoData.team_id == team.id,
+                PlayerInfoData.id == DefensiveStatsData.player_id,
+                DefensiveStatsData.year == week_year.year
             ).all()
-        off_data = session.query(PlayerInfo, OffensiveStats).filter(
-            PlayerInfo.team_id == team.id,
-            PlayerInfo.id == OffensiveStats.player_id,
-            OffensiveStats.year == week_year.year,
+        off_data = session.query(PlayerInfoData, OffensiveStatsData).filter(
+            PlayerInfoData.team_id == team.id,
+            PlayerInfoData.id == OffensiveStatsData.player_id,
+            OffensiveStatsData.year == week_year.year,
             # filter out incorrect data
-            OffensiveStats.rush_yards < 16000
+            OffensiveStatsData.rush_yards < 16000
             ).all()
-        ret_data = session.query(PlayerInfo, ReturnStats).filter(
-                PlayerInfo.team_id == team.id,
-                PlayerInfo.id == ReturnStats.player_id,
-                ReturnStats.year == week_year.year
+        ret_data = session.query(PlayerInfoData, ReturnStatsData).filter(
+                PlayerInfoData.team_id == team.id,
+                PlayerInfoData.id == ReturnStatsData.player_id,
+                ReturnStatsData.year == week_year.year
                 ).all()
-        kick_data = session.query(PlayerInfo, KickingStats).filter(
-                PlayerInfo.team_id == team.id,
-                KickingStats.player_id == PlayerInfo.id,
-                KickingStats.year == week_year.year
+        kick_data = session.query(PlayerInfoData, KickingStatsData).filter(
+                PlayerInfoData.team_id == team.id,
+                KickingStatsData.player_id == PlayerInfoData.id,
+                KickingStatsData.year == week_year.year
             ).all()   
 
         # Convert data to models for data manipulation
@@ -705,7 +705,7 @@ def insert_team_stats_into_db():
         kr_yds = sum([p.return_stats.kr_yds for p in return_stats])
         pr_yds = sum([p.return_stats.pr_yds for p in return_stats])
         
-        new_team = TeamStats(
+        new_team = TeamStatsData(
             id=team.id,
             total_points=total_points,
             ppg=ppg,
@@ -731,14 +731,14 @@ def insert_team_stats_into_db():
             pr_tds=pr_tds
         )
         # query DB to see if team_stat exists
-        team: TeamStats = session.query(TeamStats).filter(
-            TeamStats.id == new_team.id).scalar()
+        team: TeamStatsData = session.query(TeamStatsData).filter(
+            TeamStatsData.id == new_team.id).scalar()
         
         if team is None:
             session.add(new_team)
             session.flush()
         else:
-            update(TeamStats).where(TeamStats.id == new_team.id).values(
+            update(TeamStatsData).where(TeamStatsData.id == new_team.id).values(
                 id=new_team.id,
                 total_points=new_team.total_points,
                 ppg=new_team.ppg,

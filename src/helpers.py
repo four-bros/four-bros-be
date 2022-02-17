@@ -1,17 +1,21 @@
 from typing import List
-from constants import session
-from data_models.DefensiveStats import DefensiveStats
-from data_models.KickingStats import KickingStats as KickingStatsDataModel
-from data_models.OffensiveStats import OffensiveStats
-from data_models.PlayerInfo import PlayerInfo
-from data_models.ReturnStats import ReturnStats as ReturnStatsDataModel
-from data_models.TeamInfo import TeamInfo
-from models.Player import(
+from src.constants import(
+    session,
+    Positions
+)
+from src.data_models.DefensiveStatsData import DefensiveStatsData
+from src.data_models.KickingStatsData import KickingStatsData as KickingStatsDataModel
+from src.data_models.OffensiveStatsData import OffensiveStatsData
+from src.data_models.PlayerInfoData import PlayerInfoData
+from src.data_models.ReturnStatsData import ReturnStatsData as ReturnStatsDataModel
+from src.data_models.TeamInfoData import TeamInfoData
+from src.data_models.TeamStatsData import TeamStatsData
+from src.models.Player import(
     Player, 
     PlayerAbilities, 
     PlayerDetails
 )
-from models.Stats import(
+from src.models.Stats import(
     DefensiveStatsAll,
     KickingStats,
     PassingStats,
@@ -25,8 +29,11 @@ from models.Stats import(
     ReturnStats,
     RushingStats
 )
-from constants import Positions
-from models.Team import Team, TeamRoster
+from src.models.Teams import(
+    TeamDetails,
+    TeamRoster,
+    TeamStats
+)
 
 
 def _convert_stats_year(year: int) -> int:
@@ -35,7 +42,7 @@ def _convert_stats_year(year: int) -> int:
 ################################################
 ### Get player details and player abilities ####
 ################################################
-def _get_player_details_and_abilities(player: PlayerInfo) -> Player:
+def _get_player_details_and_abilities(player: PlayerInfoData) -> Player:
 
     player_details: PlayerDetails = _get_player_details(player=player)
     player_abilities: PlayerAbilities = _get_player_abilities(player=player)
@@ -48,7 +55,7 @@ def _get_player_details_and_abilities(player: PlayerInfo) -> Player:
     return converted_player
 
 
-def _get_player_abilities(player: PlayerInfo) -> PlayerAbilities:
+def _get_player_abilities(player: PlayerInfoData) -> PlayerAbilities:
 
     player_abilities: PlayerAbilities = PlayerAbilities(
         play_recognition=player.play_recognition,
@@ -96,9 +103,9 @@ def _get_player_abilities(player: PlayerInfo) -> PlayerAbilities:
     return player_abilities
 
 
-def _get_player_details(player: PlayerInfo) -> PlayerDetails:
+def _get_player_details(player: PlayerInfoData) -> PlayerDetails:
 
-    team_info: TeamInfo = session.query(TeamInfo).filter(TeamInfo.id == player.team_id).one()
+    team_info: TeamInfoData = session.query(TeamInfoData).filter(TeamInfoData.id == player.team_id).one()
 
     player_details: PlayerDetails = PlayerDetails(
         id=player.id,
@@ -121,7 +128,7 @@ def _get_player_details(player: PlayerInfo) -> PlayerDetails:
 ################################################
 ######### Get player defensive stats ###########
 ################################################
-def _get_defensive_stats(defensive_stats: DefensiveStats) -> DefensiveStatsAll:
+def _get_defensive_stats(defensive_stats: DefensiveStatsData) -> DefensiveStatsAll:
 
     defensive_stats_all: DefensiveStatsAll = DefensiveStatsAll(
         long_int_ret=defensive_stats.long_int_ret,
@@ -148,11 +155,11 @@ def _get_defensive_stats(defensive_stats: DefensiveStats) -> DefensiveStatsAll:
 
 def _get_player_defensive_stats(player) -> PlayerDefensiveStats:
 
-    player_info: PlayerInfo = player[0]
-    def_stats: DefensiveStats = player[1]
+    player_info: PlayerInfoData = player[0]
+    def_stats: DefensiveStatsData = player[1]
 
     player_details: PlayerDetails = _get_player_details(player=player_info)
-    defensive_stats: DefensiveStats = _get_defensive_stats(defensive_stats=def_stats)
+    defensive_stats: DefensiveStatsData = _get_defensive_stats(defensive_stats=def_stats)
 
     player_defensive_stats: PlayerDefensiveStats = PlayerDefensiveStats(
         player_details=player_details,
@@ -201,7 +208,7 @@ def _get_kicking_stats(kicking_stats: KickingStatsDataModel) -> KickingStats:
 
 def _get_player_kicking_stats(player) -> PlayerKickingStats:
 
-    player_info: PlayerInfo = player[0]
+    player_info: PlayerInfoData = player[0]
     kicking_stats_data: KickingStatsDataModel = player[1]
 
     player_details: PlayerDetails = _get_player_details(player=player_info)
@@ -220,8 +227,8 @@ def _get_player_kicking_stats(player) -> PlayerKickingStats:
 ################################################
 def _get_player_passing_stats(player) -> PlayerPassingStats:
 
-    player_info: PlayerInfo = player[0]
-    off_stats: OffensiveStats = player[1]
+    player_info: PlayerInfoData = player[0]
+    off_stats: OffensiveStatsData = player[1]
 
     player_details: PlayerDetails = _get_player_details(player=player_info)
     passing_stats: PassingStats = _get_passing_stats(offensive_stats=off_stats)
@@ -234,7 +241,7 @@ def _get_player_passing_stats(player) -> PlayerPassingStats:
     return player_passing_stats
 
 
-def _get_passing_stats(offensive_stats: OffensiveStats) -> PassingStats:
+def _get_passing_stats(offensive_stats: OffensiveStatsData) -> PassingStats:
 
     passing_stats: PassingStats = PassingStats(
         pass_yards=offensive_stats.pass_yards,
@@ -253,7 +260,7 @@ def _get_passing_stats(offensive_stats: OffensiveStats) -> PassingStats:
 ##################################################
 ########## Get player receiving stats ############
 ##################################################
-def _get_receiving_stats(offensive_stats: OffensiveStats) -> ReceivingStats:
+def _get_receiving_stats(offensive_stats: OffensiveStatsData) -> ReceivingStats:
 
     receiving_stats: ReceivingStats = ReceivingStats(
         receptions=offensive_stats.receptions,
@@ -268,8 +275,8 @@ def _get_receiving_stats(offensive_stats: OffensiveStats) -> ReceivingStats:
 
 def _get_player_receiving_stats(player) -> PlayerReceivingStats:
 
-    player_info: PlayerInfo = player[0]
-    offensive_stats: OffensiveStats = player[1]
+    player_info: PlayerInfoData = player[0]
+    offensive_stats: OffensiveStatsData = player[1]
 
     player_details: PlayerDetails = _get_player_details(player=player_info)
     receiving_stats: ReceivingStats = _get_receiving_stats(offensive_stats=offensive_stats)
@@ -305,7 +312,7 @@ def _get_return_stats(return_stats: ReturnStatsDataModel) -> ReturnStats:
 
 def _get_player_return_stats(player) -> PlayerReturnStats:
 
-    player_info: PlayerInfo = player[0]
+    player_info: PlayerInfoData = player[0]
     return_stats_data: ReturnStatsDataModel = player[1]
 
     player_details: PlayerDetails = _get_player_details(player=player_info)
@@ -324,8 +331,8 @@ def _get_player_return_stats(player) -> PlayerReturnStats:
 ################################################
 def _get_player_rushing_stats(player) -> PlayerRushingStats:
 
-    player_info: PlayerInfo = player[0]
-    offensive_stats: OffensiveStats = player[1]
+    player_info: PlayerInfoData = player[0]
+    offensive_stats: OffensiveStatsData = player[1]
 
     player_details: PlayerDetails = _get_player_details(player=player_info)
     rushing_stats: RushingStats = _get_rushing_stats(offensive_stats=offensive_stats)
@@ -338,7 +345,7 @@ def _get_player_rushing_stats(player) -> PlayerRushingStats:
     return player_rushing_stats
 
 
-def _get_rushing_stats(offensive_stats: OffensiveStats) -> RushingStats:
+def _get_rushing_stats(offensive_stats: OffensiveStatsData) -> RushingStats:
 
     rushing_stats: RushingStats = RushingStats(
         rush_att=offensive_stats.rush_att,
@@ -357,18 +364,18 @@ def _get_rushing_stats(offensive_stats: OffensiveStats) -> RushingStats:
 ################################################
 ########## Get team info and stats #############
 ################################################
-def _get_team_info(team_info: TeamInfo, players: List[PlayerInfo]) -> Team:
+def _get_team_details(team_info: TeamInfoData, players: List[PlayerInfoData]) -> TeamDetails:
 
-    offense_players: List[PlayerInfo] = [player for player in players if player.position in Positions.offense_positions]
-    defense_players: List[PlayerInfo] = [player for player in players if player.position in Positions.defense_positions]
-    sp_team_players: List[PlayerInfo] = [player for player in players if player.position in Positions.sp_teams_positions]
+    offense_players: List[PlayerInfoData] = [player for player in players if player.position in Positions.offense_positions]
+    defense_players: List[PlayerInfoData] = [player for player in players if player.position in Positions.defense_positions]
+    sp_team_players: List[PlayerInfoData] = [player for player in players if player.position in Positions.sp_teams_positions]
 
     avg_overall = round(sum([player.overall for player in players]) / len(players), 1)
     avg_offense = round(sum(player.overall for player in offense_players) / len(offense_players), 1)
     avg_defense = round(sum(player.overall for player in defense_players) / len(defense_players), 1)
     avg_sp_teams = round(sum(player.overall for player in sp_team_players) / len(sp_team_players), 1)
 
-    team: Team = Team(
+    team_details: TeamDetails = TeamDetails(
         id=team_info.id,
         team_name=team_info.team_name,
         team_short_name=team_info.team_short_name,
@@ -388,10 +395,10 @@ def _get_team_info(team_info: TeamInfo, players: List[PlayerInfo]) -> Team:
         coachs_poll_points=team_info.coachs_poll_points
     )
 
-    return team
+    return team_details
 
 
-def _get_team_roster(player: PlayerInfo) -> TeamRoster:
+def _get_team_roster(player: PlayerInfoData) -> TeamRoster:
 
     player_details: TeamRoster = TeamRoster(
         id=player.id,
@@ -410,7 +417,31 @@ def _get_team_roster(player: PlayerInfo) -> TeamRoster:
     return player_details
 
 
+def _get_team_stats(team_stats_data: TeamStatsData):
 
-def _get_team_stats(team_info: TeamInfo, players: List[PlayerInfo]):
-    # TODO: create function to get team passing stats, rushing stats, etc.
-    pass
+    team_stats: TeamStats = TeamStats(
+        total_points=team_stats_data.total_points,
+        ppg=team_stats_data.ppg,
+        pass_yds=team_stats_data.pass_yds,
+        pass_ypg=team_stats_data.pass_ypg,
+        pass_tds=team_stats_data.pass_tds,
+        rush_yds=team_stats_data.rush_yds,
+        rush_ypg=team_stats_data.rush_ypg,
+        rush_tds=team_stats_data.rush_tds,
+        rec_yds=team_stats_data.rec_yds,
+        rec_ypg=team_stats_data.rec_ypg,
+        rec_tds=team_stats_data.rec_tds,
+        sacks=team_stats_data.sacks,
+        ints=team_stats_data.ints,
+        ff=team_stats_data.ff,
+        fr=team_stats_data.fr,
+        pass_def=team_stats_data.pass_def,
+        safeties=team_stats_data.safeties,
+        def_tds=team_stats_data.def_tds,
+        kr_yds=team_stats_data.kr_yds,
+        kr_tds=team_stats_data.kr_tds,
+        pr_yds=team_stats_data.pr_yds,
+        pr_tds=team_stats_data.pr_tds
+    )
+
+    return team_stats

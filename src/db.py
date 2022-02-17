@@ -24,7 +24,7 @@ from db_scripts import (
     insert_team_stats_into_db,
     insert_week_year_into_db
     )
-from data_models.TeamInfo import TeamInfo
+from data_models.TeamInfo import TeamInfoData
 
 
 def main():

@@ -1,4 +1,4 @@
-from models.Player import PlayerDetails
+from src.models.Player import PlayerDetails
 
 
 class DefensiveStatsAll:
