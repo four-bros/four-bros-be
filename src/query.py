@@ -14,10 +14,10 @@ from constants import(
     engine,
     session
 )
-from data_models.DefensiveStats import DefensiveStats
-from data_models.PlayerInfo import PlayerInfo
-from data_models.OffensiveStats import OffensiveStats
-from data_models.TeamInfo import TeamInfo
+from data_models.DefensiveStats import DefensiveStatsData
+from data_models.PlayerInfo import PlayerInfoData
+from data_models.OffensiveStats import OffensiveStatsData
+from data_models.TeamInfo import TeamInfoData
 
 from responses.Stats import PassingStatsSchema
 from responses.Players import PlayerSchema
@@ -29,12 +29,12 @@ player_schema = PlayerSchema()
 players_schema = PlayerSchema(many=True)
 
 
-jared_yates = session.query(PlayerInfo).filter(PlayerInfo.id == 8106).one()
+jared_yates = session.query(PlayerInfoData).filter(PlayerInfoData.id == 8106).one()
 print(jared_yates)
-jared_yates_off_stats = session.query(OffensiveStats).filter(OffensiveStats.player_id == jared_yates.id).one()
+jared_yates_off_stats = session.query(OffensiveStatsData).filter(OffensiveStatsData.player_id == jared_yates.id).one()
 print(jared_yates_off_stats)
 
-players = PlayerInfo.query.join(OffensiveStats, PlayerInfo.id == OffensiveStats.player_id)
+players = PlayerInfoData.query.join(OffensiveStatsData, PlayerInfoData.id == OffensiveStatsData.player_id)
 
 players_json = passing_stats_schema.dump(players)
 

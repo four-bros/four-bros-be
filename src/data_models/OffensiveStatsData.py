@@ -3,11 +3,11 @@ from sqlalchemy import Column, Float, Integer
 from sqlalchemy.sql.schema import ForeignKey
 from sqlalchemy.sql.sqltypes import String
 
-from constants import Base
+from src.constants import Base
 
 
 @dataclass
-class OffensiveStats(Base):
+class OffensiveStatsData(Base):
     __tablename__ = 'offensive_stats'
     player_id = Column(Integer, ForeignKey('player_info.id'), primary_key=True)
     pass_yards = Column(Integer)

@@ -1,9 +1,7 @@
+from src.models.Player import PlayerDetails
 
 
-from models.Player import PlayerDetails
-
-
-class Team:
+class TeamDetails:
     def __init__(
         self,
         id,
@@ -70,3 +68,65 @@ class TeamRoster(PlayerDetails):
         self.position = position
         self.hometown_desc = hometown_desc
         self.overall = overall
+
+
+class TeamStats:
+    def __init__(
+        self,
+        total_points,
+        ppg,
+        pass_yds,
+        pass_ypg,
+        pass_tds,
+        rush_yds,
+        rush_ypg,
+        rush_tds,
+        rec_yds,
+        rec_ypg,
+        rec_tds,
+        sacks,
+        ints,
+        ff,
+        fr,
+        pass_def,
+        safeties,
+        def_tds,
+        kr_yds,
+        kr_tds,
+        pr_yds,
+        pr_tds,
+    ):
+        self.total_points = total_points
+        self.ppg = ppg
+        self.pass_yds = pass_yds
+        self.pass_ypg = pass_ypg
+        self.pass_tds = pass_tds
+        self.rush_yds = rush_yds
+        self.rush_ypg = rush_ypg
+        self.rush_tds = rush_tds
+        self.rec_yds = rec_yds
+        self.rec_ypg = rec_ypg
+        self.rec_tds = rec_tds
+        self.sacks = sacks
+        self.ints = ints
+        self.ff = ff
+        self.fr = fr
+        self.pass_def = pass_def
+        self.safeties = safeties
+        self.def_tds = def_tds
+        self.kr_yds = kr_yds
+        self.kr_tds = kr_tds
+        self.pr_yds = pr_yds
+        self.pr_tds = pr_tds
+
+
+class TeamInfo:
+    def __init__(
+        self,
+        team_details: TeamDetails,
+        team_roster: TeamRoster,
+        team_stats: TeamStats
+    ):
+        self.team_details = team_details
+        self.team_roster = team_roster
+        self.team_stats = team_stats

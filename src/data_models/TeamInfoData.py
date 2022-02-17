@@ -6,10 +6,10 @@ from sqlalchemy import(
     String
 )
 
-from constants import Base
+from src.constants import Base
 
 @dataclass
-class TeamInfo(Base):
+class TeamInfoData(Base):
     __tablename__ = 'team_info'
     id = Column(Integer, primary_key=True)
     team_name = Column(String(50))
