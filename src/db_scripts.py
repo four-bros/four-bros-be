@@ -341,6 +341,9 @@ def insert_player_info_into_db(player_info):
     for i, value in enumerate(player_info):
         
         record = player_info[i]
+        # Skip over players from duplicate teams
+        if record.fields['Team ID'] == 300 or record.fields['Team ID'] == 400:
+            continue
         
         # Convert unintelligble values to readable values
         readable_position = ncaa_dynasty.position_number_to_text(record.fields['Position'])
