@@ -1,7 +1,6 @@
 from constants import(
     Base,
-    engine,
-    session
+    engine
 )
 from data import (
     def_stats,
@@ -24,12 +23,12 @@ from db_scripts import (
     insert_team_stats_into_db,
     insert_week_year_into_db
     )
-from data_models.TeamInfo import TeamInfoData
+from data_models.TeamInfoData import TeamInfoData
 
 
 def main():
     # Create all DB tables
-    Base.metadata.drop_all(engine)
+    # Base.metadata.drop_all(engine)
     Base.metadata.create_all(engine)
     # Insert all data to DB tables
     insert_team_info_into_db(team_info)
