@@ -23,6 +23,7 @@ class DefensiveStatsSchema(Schema):
     def_tds = fields.Int()
     fum_rec_yards = fields.Int()
     int_ret_yards = fields.Int()
+    total_tkls = fields.Float()
 
 
 class KickingStatsSchema(Schema):
@@ -63,6 +64,8 @@ class PassingStatsSchema(Schema):
     completions = fields.Int()
     ints = fields.Int()
     pass_att = fields.Int()
+    pass_yp_attempt = fields.Float()
+    pass_yp_game = fields.Float()
 
 
 class ReceivingStatsSchema(Schema):
@@ -71,6 +74,8 @@ class ReceivingStatsSchema(Schema):
     rec_tds = fields.Int()
     yac = fields.Int()
     drops = fields.Int()
+    rec_yp_catch = fields.Float()
+    rec_yp_game = fields.Float()
 
 
 class ReturnStatsSchema(Schema):
@@ -84,6 +89,8 @@ class ReturnStatsSchema(Schema):
     pr_tds = fields.Int()
     kr_yds = fields.Int()
     pr_yds = fields.Int()
+    kr_avg = fields.Float()
+    pr_avg = fields.Float()
 
 
 class RushingStatsSchema(Schema):
@@ -94,7 +101,9 @@ class RushingStatsSchema(Schema):
     broke_tkls = fields.Int()
     fumbles = fields.Int()
     twenty_plus_yd_runs = fields.Int()
-    year = fields.Int()
+    rush_yp_carry = fields.Float()
+    rush_yp_game = fields.Float()
+
 
 ##############################################
 ### Player Details + Stat Category Schemas ###
