@@ -62,6 +62,7 @@ def get_season_defense_stats_leaders(request):
     def_tds_leaders = sorted(converted_players, key=lambda p: p.defensive_stats.def_tds, reverse=True)[:10]
     fum_rec_yards_leaders = sorted(converted_players, key=lambda p: p.defensive_stats.fum_rec_yards, reverse=True)[:10]
     int_ret_yards_leaders = sorted(converted_players, key=lambda p: p.defensive_stats.int_ret_yards, reverse=True)[:10]
+    total_tkls_leaders = sorted(converted_players, key=lambda p: p.defensive_stats.total_tkls, reverse=True)[:10]
     # Convert top ten lists into json
     long_int_ret_leaders_json = defensive_stats_schema.dump(long_int_ret_leaders)
     sacks_leaders_json = defensive_stats_schema.dump(sacks_leaders)
@@ -78,6 +79,7 @@ def get_season_defense_stats_leaders(request):
     def_tds_leaders_json = defensive_stats_schema.dump(def_tds_leaders)
     fum_rec_yards_leaders_json = defensive_stats_schema.dump(fum_rec_yards_leaders)
     int_ret_yards_leaders_json = defensive_stats_schema.dump(int_ret_yards_leaders)
+    total_tkls_leaders_json = defensive_stats_schema.dump(total_tkls_leaders)
 
     response = {
         'long_int_ret_leaders': long_int_ret_leaders_json,
@@ -94,7 +96,8 @@ def get_season_defense_stats_leaders(request):
         'asst_tkls_leaders': asst_tkls_leaders_json,
         'def_tds_leaders': def_tds_leaders_json,
         'fum_rec_yards_leaders': fum_rec_yards_leaders_json,
-        'int_ret_yards_leaders': int_ret_yards_leaders_json
+        'int_ret_yards_leaders': int_ret_yards_leaders_json,
+        'total_tkls_leaders': total_tkls_leaders_json
     }
 
     return response
@@ -163,6 +166,8 @@ def get_season_passing_stats_leaders(request):
     pass_yards_leaders = sorted(converted_players, key=lambda p: p.passing_stats.pass_yards, reverse=True)[:10]
     pass_td_leaders = sorted(converted_players, key=lambda p: p.passing_stats.pass_tds, reverse=True)[:10]
     int_leaders = sorted(converted_players, key=lambda p: p.passing_stats.ints, reverse=True)[:10]
+    pass_yp_attempt_leaders = sorted(converted_players, key=lambda p: p.passing_stats.pass_yp_attempt, reverse=True)[:10]
+    pass_yp_game_leaders = sorted(converted_players, key=lambda p: p.passing_stats.pass_yp_game, reverse=True)[:10]
     # Convert top ten lists into json
     completions_leaders_json = passing_stats_schema.dump(completions_leaders)
     pass_att_leaders_jason = passing_stat_schema.dump(pass_att_leaders)
@@ -170,7 +175,8 @@ def get_season_passing_stats_leaders(request):
     pass_yard_leaders_json = passing_stats_schema.dump(pass_yards_leaders)
     pass_td_leaders_json = passing_stats_schema.dump(pass_td_leaders)
     int_leaders_json = passing_stats_schema.dump(int_leaders)
-
+    pass_yp_attempt_leaders_json = passing_stats_schema.dump(pass_yp_attempt_leaders)
+    pass_yp_game_leaders_json = passing_stats_schema.dump(pass_yp_game_leaders)
 
     response = {
         'completions': completions_leaders_json,
@@ -178,7 +184,10 @@ def get_season_passing_stats_leaders(request):
         'longest_pass': longest_pass_leaders_jason,
         'pass_yards': pass_yard_leaders_json,
         'pass_tds': pass_td_leaders_json,
-        'interceptions': int_leaders_json
+        'interceptions': int_leaders_json,
+        'pass_yp_attempt': pass_yp_attempt_leaders_json,
+        'pass_yp_game': pass_yp_game_leaders_json
+        
     }
 
     return response
@@ -202,6 +211,8 @@ def get_season_receiving_stats_leaders(request):
     rec_tds_leaders = sorted(converted_players, key=lambda p: p.receiving_stats.rec_tds, reverse=True)[0:10]
     yac_leaders = sorted(converted_players, key=lambda p: p.receiving_stats.yac, reverse=True)[0:10]
     drops_leaders = sorted(converted_players, key=lambda p: p.receiving_stats.drops, reverse=True)[0:10]
+    rec_yp_catch_leaders = sorted(converted_players, key=lambda p: p.receiving_stats.rec_yp_catch, reverse=True)[0:10]
+    rec_yp_game_leaders = sorted(converted_players, key=lambda p: p.receiving_stats.rec_yp_game, reverse=True)[0:10]
 
     # Convert top ten lists to json
     reception_leaders_json = receiving_stats_schema.dump(reception_leaders)
@@ -209,13 +220,17 @@ def get_season_receiving_stats_leaders(request):
     rec_tds_leaders_json = receiving_stats_schema.dump(rec_tds_leaders)
     yac_leaders_json = receiving_stats_schema.dump(yac_leaders)
     drops_leaders_json = receiving_stats_schema.dump(drops_leaders)
+    rec_yp_catch_leaders_json = receiving_stats_schema.dump(rec_yp_catch_leaders)
+    rec_yp_game_leaders_json = receiving_stats_schema.dump(rec_yp_game_leaders)
 
     response = {
         'receptions': reception_leaders_json,
         'rec_yards': rec_yards_leaders_json,
         'rec_tds': rec_tds_leaders_json,
         'yac': yac_leaders_json,
-        'drops': drops_leaders_json
+        'drops': drops_leaders_json,
+        'rec_yp_catch': rec_yp_catch_leaders_json,
+        'rec_yp_game': rec_yp_game_leaders_json
     }
 
     return response
@@ -241,6 +256,8 @@ def get_season_return_stats_leaders(request):
     pr_tds_leaders = sorted(converted_players, key=lambda p: p.return_stats.pr_tds, reverse=True)[:10]
     kr_yds_leaders = sorted(converted_players, key=lambda p: p.return_stats.kr_yds, reverse=True)[:10]
     pr_yds_leaders = sorted(converted_players, key=lambda p: p.return_stats.pr_yds, reverse=True)[:10]
+    kr_avg_leaders = sorted(converted_players, key=lambda p: p.return_stats.kr_avg, reverse=True)[:10]
+    pr_avg_leaders = sorted(converted_players, key=lambda p: p.return_stats.pr_avg, reverse=True)[:10]
     # Convert top ten lists to json
     kick_return_leaders_json = return_stats_schema.dump(kick_return_leaders)
     long_kr_leaders_json = return_stats_schema.dump(long_kr_leaders)
@@ -250,8 +267,8 @@ def get_season_return_stats_leaders(request):
     pr_tds_leaders_json = return_stats_schema.dump(pr_tds_leaders)
     kr_yds_leaders_json = return_stats_schema.dump(kr_yds_leaders)
     pr_yds_leaders_json = return_stats_schema.dump(pr_yds_leaders)
-
-
+    kr_avg_leaders_json = return_stats_schema.dump(kr_avg_leaders)
+    pr_avg_leaders_json = return_stats_schema.dump(pr_avg_leaders)
 
     response = {
         'kick_returns': kick_return_leaders_json,
@@ -261,7 +278,9 @@ def get_season_return_stats_leaders(request):
         'kr_tds': kr_tds_leaders_json,
         'pr_tds': pr_tds_leaders_json,
         'kr_yards': kr_yds_leaders_json,
-        'pr_yards': pr_yds_leaders_json
+        'pr_yards': pr_yds_leaders_json,
+        'kr_avg': kr_avg_leaders_json,
+        'pr_avg': pr_avg_leaders_json
     }
 
     return response
@@ -289,6 +308,8 @@ def get_season_rushing_stats_leaders(request):
     broke_tkls_leaders = sorted(converted_players, key=lambda p: p.rushing_stats.broke_tkls, reverse=True)[:10]
     fumbles_leaders = sorted(converted_players, key=lambda p: p.rushing_stats.fumbles, reverse=True)[:10]
     twenty_plus_yd_runs_leaders = sorted(converted_players, key=lambda p: p.rushing_stats.twenty_plus_yd_runs, reverse=True)[:10]
+    rush_yp_carry_leaders = sorted(converted_players, key=lambda p: p.rushing_stats.rush_yp_carry, reverse=True)[:10]
+    rush_yp_game_leaders = sorted(converted_players, key=lambda p: p.rushing_stats.rush_yp_game, reverse=True)[:10]
     # Convert top ten lists to json
     rush_att_leaders_json = rushing_stats_schema.dump(rush_att_leaders)
     rush_yards_leaders_json = rushing_stats_schema.dump(rush_yards_leaders)
@@ -296,6 +317,8 @@ def get_season_rushing_stats_leaders(request):
     broke_tkls_leaders_json = rushing_stats_schema.dump(broke_tkls_leaders)
     fumbles_leaders_json = rushing_stats_schema.dump(fumbles_leaders)
     twenty_plus_yd_runs_leaders_json = rushing_stats_schema.dump(twenty_plus_yd_runs_leaders)
+    rush_yp_carry_leaders_json = rushing_stats_schema.dump(rush_yp_carry_leaders)
+    rush_yp_game_leaders_json = rushing_stats_schema.dump(rush_yp_game_leaders)
 
     response = {
         'rush_att': rush_att_leaders_json,
@@ -303,7 +326,9 @@ def get_season_rushing_stats_leaders(request):
         'ya_contact': ya_contact_leaders_json,
         'broken_tackles': broke_tkls_leaders_json,
         'fumbles': fumbles_leaders_json,
-        'twenty_plus_runs': twenty_plus_yd_runs_leaders_json
+        'twenty_plus_runs': twenty_plus_yd_runs_leaders_json,
+        'rush_yp_carry': rush_yp_carry_leaders_json,
+        'rush_yp_game': rush_yp_game_leaders_json
     }
 
     return response

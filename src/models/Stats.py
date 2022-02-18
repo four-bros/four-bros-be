@@ -1,7 +1,7 @@
 from src.models.Player import PlayerDetails
 
 
-class DefensiveStatsAll:
+class DefensiveStats:
     def __init__(
         self,
         long_int_ret,
@@ -21,6 +21,7 @@ class DefensiveStatsAll:
         def_tds,
         fum_rec_yards,
         int_ret_yards,
+        total_tkls
     ):
         self.long_int_ret = long_int_ret
         self.sacks = sacks
@@ -39,7 +40,7 @@ class DefensiveStatsAll:
         self.def_tds = def_tds
         self.fum_rec_yards = fum_rec_yards
         self.int_ret_yards = int_ret_yards
-
+        self.total_tkls = total_tkls
 
 class KickingStats:
     def __init__(
@@ -109,7 +110,9 @@ class PassingStats:
         games_played,
         completions,
         ints,
-        pass_att
+        pass_att,
+        pass_yp_attempt,
+        pass_yp_game
     ):      
 
         self.pass_yards = pass_yards
@@ -120,6 +123,8 @@ class PassingStats:
         self.completions = completions
         self.ints = ints
         self.pass_att = pass_att
+        self.pass_yp_attempt = pass_yp_attempt
+        self.pass_yp_game = pass_yp_game
 
 
 class ReceivingStats:
@@ -129,7 +134,9 @@ class ReceivingStats:
         rec_yards,
         rec_tds,
         yac,
-        drops
+        drops,
+        rec_yp_catch,
+        rec_yp_game
 
     ):
         self.receptions = receptions
@@ -137,6 +144,8 @@ class ReceivingStats:
         self.rec_tds = rec_tds
         self.yac = yac
         self.drops = drops
+        self.rec_yp_catch = rec_yp_catch
+        self.rec_yp_game = rec_yp_game
 
 
 class ReturnStats:
@@ -152,6 +161,8 @@ class ReturnStats:
         pr_tds,
         kr_yds,
         pr_yds,
+        kr_avg,
+        pr_avg
     ):
 
         self.kick_returns = kick_returns
@@ -164,6 +175,8 @@ class ReturnStats:
         self.pr_tds = pr_tds
         self.kr_yds = kr_yds
         self.pr_yds = pr_yds
+        self.kr_avg = kr_avg
+        self.pr_avg = pr_avg
 
 class RushingStats:
     def __init__(
@@ -175,7 +188,8 @@ class RushingStats:
         broke_tkls,
         fumbles,
         twenty_plus_yd_runs,
-        year
+        rush_yp_carry,
+        rush_yp_game
     ):
         self.rush_att = rush_att
         self.rush_yards = rush_yards
@@ -184,14 +198,16 @@ class RushingStats:
         self.broke_tkls = broke_tkls
         self.fumbles = fumbles
         self.twenty_plus_yd_runs = twenty_plus_yd_runs
-        self.year = year
+        self.rush_yp_carry = rush_yp_carry
+        self.rush_yp_game = rush_yp_game
+
 
 
 class PlayerDefensiveStats:
     def __init__(
         self,
         player_details: PlayerDetails,
-        defensive_stats: DefensiveStatsAll
+        defensive_stats: DefensiveStats
     ):
         self.player_details = player_details
         self.defensive_stats = defensive_stats
