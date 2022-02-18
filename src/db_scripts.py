@@ -16,15 +16,15 @@ from helpers import(
     _get_player_return_stats,
     _get_player_rushing_stats
 )
-from data_models.Commits import CommitsData
-from data_models.DefensiveStats import DefensiveStatsData
-from data_models.KickingStats import KickingStatsData
-from data_models.OffensiveStats import OffensiveStatsData
-from data_models.PlayerInfo import PlayerInfoData
-from data_models.ReturnStats import ReturnStatsData
-from data_models.TeamInfo import TeamInfoData
-from data_models.TeamStats import TeamStatsData
-from data_models.WeekYear import WeekYearData
+from data_models.CommitsData import CommitsData
+from data_models.DefensiveStatsData import DefensiveStatsData
+from data_models.KickingStatsData import KickingStatsData
+from data_models.OffensiveStatsData import OffensiveStatsData
+from data_models.PlayerInfoData import PlayerInfoData
+from data_models.ReturnStatsData import ReturnStatsData
+from data_models.TeamInfoData import TeamInfoData
+from data_models.TeamStatsData import TeamStatsData
+from data_models.WeekYearData import WeekYearData
 from models.Stats import PlayerDefensiveStats, PlayerKickingStats, PlayerPassingStats, PlayerReceivingStats, PlayerReturnStats, PlayerRushingStats
 
 
@@ -342,7 +342,11 @@ def insert_player_info_into_db(player_info):
         
         record = player_info[i]
         # Skip over players from duplicate teams
-        if record.fields['Team ID'] == 300 or record.fields['Team ID'] == 400:
+        if (
+            record.fields['Team ID'] == 300 or
+            record.fields['Team ID'] == 400 or
+            record.fields['Team ID'] == 1023
+        ):
             continue
         
         # Convert unintelligble values to readable values
