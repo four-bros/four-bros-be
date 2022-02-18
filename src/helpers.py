@@ -16,7 +16,7 @@ from src.models.Player import(
     PlayerDetails
 )
 from src.models.Stats import(
-    DefensiveStatsAll,
+    DefensiveStats,
     KickingStats,
     PassingStats,
     PlayerDefensiveStats,
@@ -128,9 +128,9 @@ def _get_player_details(player: PlayerInfoData) -> PlayerDetails:
 ################################################
 ######### Get player defensive stats ###########
 ################################################
-def _get_defensive_stats(defensive_stats: DefensiveStatsData) -> DefensiveStatsAll:
+def _get_defensive_stats(defensive_stats: DefensiveStatsData) -> DefensiveStats:
 
-    defensive_stats_all: DefensiveStatsAll = DefensiveStatsAll(
+    defensive_stats_all: DefensiveStats = DefensiveStats(
         long_int_ret=defensive_stats.long_int_ret,
         sacks=defensive_stats.sacks,
         year=defensive_stats.year,
@@ -147,7 +147,8 @@ def _get_defensive_stats(defensive_stats: DefensiveStatsData) -> DefensiveStatsA
         asst_tkls=defensive_stats.asst_tkls,
         def_tds=defensive_stats.def_tds,
         fum_rec_yards=defensive_stats.fum_rec_yards,
-        int_ret_yards=defensive_stats.int_ret_yards
+        int_ret_yards=defensive_stats.int_ret_yards,
+        total_tkls=defensive_stats.total_tkls
     )
 
     return defensive_stats_all
@@ -251,7 +252,9 @@ def _get_passing_stats(offensive_stats: OffensiveStatsData) -> PassingStats:
         games_played=offensive_stats.games_played,
         completions=offensive_stats.completions,
         ints=offensive_stats.ints,
-        pass_att=offensive_stats.pass_att
+        pass_att=offensive_stats.pass_att,
+        pass_yp_attempt=offensive_stats.pass_yp_attempt,
+        pass_yp_game=offensive_stats.pass_yp_game
     )
 
     return passing_stats
@@ -267,7 +270,9 @@ def _get_receiving_stats(offensive_stats: OffensiveStatsData) -> ReceivingStats:
         rec_yards=offensive_stats.rec_yards,
         rec_tds=offensive_stats.rec_tds,
         yac=offensive_stats.yac,
-        drops=offensive_stats.drops
+        drops=offensive_stats.drops,
+        rec_yp_catch=offensive_stats.rec_yp_catch,
+        rec_yp_game=offensive_stats.rec_yp_game
     )
 
     return receiving_stats
@@ -304,7 +309,9 @@ def _get_return_stats(return_stats: ReturnStatsDataModel) -> ReturnStats:
         kr_tds=return_stats.kr_tds,
         pr_tds=return_stats.pr_tds,
         kr_yds=return_stats.kr_yds,
-        pr_yds=return_stats.pr_yds
+        pr_yds=return_stats.pr_yds,
+        kr_avg=return_stats.kr_avg,
+        pr_avg=return_stats.pr_avg
     )
 
     return converted_return_stats
@@ -355,7 +362,8 @@ def _get_rushing_stats(offensive_stats: OffensiveStatsData) -> RushingStats:
         broke_tkls=offensive_stats.broke_tkls,
         fumbles=offensive_stats.fumbles,
         twenty_plus_yd_runs=offensive_stats.twenty_plus_yd_runs,
-        year=offensive_stats.year
+        rush_yp_carry=offensive_stats.rush_yp_carry,
+        rush_yp_game=offensive_stats.rush_yp_game
     )
     
     return rushing_stats

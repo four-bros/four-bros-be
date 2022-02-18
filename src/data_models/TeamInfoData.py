@@ -26,5 +26,5 @@ class TeamInfoData(Base):
     coachs_poll_points = Column(Integer)
 
     def __repr__(self):
-        return f'ID: {self.team_id}, Name: {self.team_name}'
+        return f'ID: {self.id}, Name: {self.team_name}'
 
