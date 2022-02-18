@@ -675,7 +675,7 @@ def insert_team_stats_into_db():
         def_tds = sum([p.defensive_stats.def_tds for p in def_stats])
         kr_tds = sum([p.return_stats.kr_tds for p in return_stats])
         pr_tds = sum([p.return_stats.pr_tds for p in return_stats])
-        td_points = sum([passing_tds, rushing_tds, receiving_tds, def_tds, kr_tds, pr_tds]) * 6
+        td_points = sum([passing_tds, rushing_tds, def_tds, kr_tds, pr_tds]) * 6
         
         # compile all FGs and XP points
         fgs = sum([p.kicking_stats.fg_made for p in kick_stats])
