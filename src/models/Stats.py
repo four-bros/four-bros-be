@@ -165,7 +165,8 @@ class ReceivingStats:
         yac,
         drops,
         rec_yp_catch,
-        rec_yp_game
+        rec_yp_game,
+        games_played
 
     ):
         self.receptions = receptions
@@ -175,6 +176,7 @@ class ReceivingStats:
         self.drops = drops
         self.rec_yp_catch = rec_yp_catch
         self.rec_yp_game = rec_yp_game
+        self.games_played = games_played
 
 
 class ReturnStats:
@@ -218,7 +220,8 @@ class RushingStats:
         fumbles,
         twenty_plus_yd_runs,
         rush_yp_carry,
-        rush_yp_game
+        rush_yp_game,
+        games_played
     ):
         self.rush_att = rush_att
         self.rush_yards = rush_yards
@@ -229,6 +232,7 @@ class RushingStats:
         self.twenty_plus_yd_runs = twenty_plus_yd_runs
         self.rush_yp_carry = rush_yp_carry
         self.rush_yp_game = rush_yp_game
+        self.games_played = games_played
 
 
 

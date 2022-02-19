@@ -90,6 +90,7 @@ class ReceivingStatsSchema(Schema):
     drops = fields.Int()
     rec_yp_catch = fields.Float()
     rec_yp_game = fields.Float()
+    games_played = fields.Int()
 
 
 class ReturnStatsSchema(Schema):
@@ -117,6 +118,7 @@ class RushingStatsSchema(Schema):
     twenty_plus_yd_runs = fields.Int()
     rush_yp_carry = fields.Float()
     rush_yp_game = fields.Float()
+    games_played = fields.Int()
 
 
 ##############################################
