@@ -1,5 +1,34 @@
-from src.models.Player import PlayerDetails
 
+# Create Player Details Model to avoid circular import
+class PlayerDetails:
+    def __init__(
+        self,
+        id,
+        team_id,
+        team_name,
+        first_name,
+        last_name,
+        height,
+        weight,
+        jersey_number,
+        player_year,
+        redshirt,
+        position,
+        hometown_desc
+    ):
+
+        self.id = id
+        self.team_id = team_id
+        self.team_name = team_name
+        self.first_name = first_name
+        self.last_name = last_name
+        self.height = height
+        self.weight = weight
+        self.jersey_number = jersey_number
+        self.player_year = player_year
+        self.redshirt = redshirt
+        self.position = position
+        self.hometown_desc = hometown_desc
 
 class DefensiveStats:
     def __init__(

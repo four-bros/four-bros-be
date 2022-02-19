@@ -1,5 +1,14 @@
 from marshmallow import Schema, fields
 
+from src.responses.Stats import(
+    DefensiveStatsSchema,
+    KickingStatsSchema,
+    PassingStatsSchema,
+    ReceivingStatsSchema,
+    ReturnStatsSchema,
+    RushingStatsSchema
+)
+
 
 class PlayerDetailsSchema(Schema):
     id = fields.Int()
@@ -59,6 +68,15 @@ class PlayerAbilitiesSchema(Schema):
     juke_move = fields.Int()
 
 
+class PlayerStatsSchema(Schema):
+    passing_stats = fields.Nested(PassingStatsSchema)
+    rushing_stats = fields.Nested(RushingStatsSchema)
+    receiving_stats = fields.Nested(ReceivingStatsSchema)
+    defensive_stats = fields.Nested(DefensiveStatsSchema)
+    return_stats = fields.Nested(ReturnStatsSchema)
+    kicking_stats = fields.Nested(KickingStatsSchema)
+
 class PlayerSchema(Schema):
     player_details = fields.Nested(PlayerDetailsSchema)
     player_abilities = fields.Nested(PlayerAbilitiesSchema)
+    player_stats = fields.Nested(PlayerStatsSchema)
