@@ -321,7 +321,8 @@ def _get_receiving_stats(offensive_stats: OffensiveStatsData) -> ReceivingStats:
         yac=offensive_stats.yac,
         drops=offensive_stats.drops,
         rec_yp_catch=offensive_stats.rec_yp_catch,
-        rec_yp_game=offensive_stats.rec_yp_game
+        rec_yp_game=offensive_stats.rec_yp_game,
+        games_played=offensive_stats.games_played
     )
 
     return receiving_stats
@@ -412,7 +413,8 @@ def _get_rushing_stats(offensive_stats: OffensiveStatsData) -> RushingStats:
         fumbles=offensive_stats.fumbles,
         twenty_plus_yd_runs=offensive_stats.twenty_plus_yd_runs,
         rush_yp_carry=offensive_stats.rush_yp_carry,
-        rush_yp_game=offensive_stats.rush_yp_game
+        rush_yp_game=offensive_stats.rush_yp_game,
+        games_played=offensive_stats.games_played
     )
     
     return rushing_stats

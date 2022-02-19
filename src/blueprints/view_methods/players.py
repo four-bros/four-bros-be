@@ -15,14 +15,9 @@ def get_all_players(request):
     
     players: List[PlayerInfoData] = session.query(PlayerInfoData).all()
 
-    players_json = []
+    converted_players: List[PlayerAbilitiesDetailsStats] = [_get_player_abilities_details_stats(player) for player in players]
 
-    for player in players:
-
-        converted_player = _get_player_abilities_details_stats(player)
-
-        player_json = player_schema_single.dump(converted_player)
-        players_json.append(player_json)
+    players_json = player_schema_list.dump(converted_players)
     
     response = {
         'players': players_json
