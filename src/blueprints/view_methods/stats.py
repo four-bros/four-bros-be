@@ -187,7 +187,6 @@ def get_season_passing_stats_leaders(request):
         'interceptions': int_leaders_json,
         'pass_yp_attempt': pass_yp_attempt_leaders_json,
         'pass_yp_game': pass_yp_game_leaders_json
-        
     }
 
     return response

@@ -6,8 +6,8 @@ from src.constants import(
     player_schema_list
 )
 from src.data_models.PlayerInfoData import PlayerInfoData
-from src.helpers import _get_player_details_and_abilities
-from src.models.Player import Player
+from src.helpers import _get_player_abilities_details_stats
+from src.models.Player import PlayerAbilitiesDetailsStats
 from src.responses.Players import PlayerSchema
 
 
@@ -19,7 +19,7 @@ def get_all_players(request):
 
     for player in players:
 
-        converted_player = _get_player_details_and_abilities(player)
+        converted_player = _get_player_abilities_details_stats(player)
 
         player_json = player_schema_single.dump(converted_player)
         players_json.append(player_json)
@@ -35,7 +35,7 @@ def get_player_by_player_id(request, player_id) -> PlayerSchema:
     player: PlayerInfoData = session.query(PlayerInfoData).where(
         PlayerInfoData.id == player_id).one()
 
-    converted_player: Player = _get_player_details_and_abilities(player)
+    converted_player: PlayerAbilitiesDetailsStats = _get_player_abilities_details_stats(player)
 
     response = player_schema_single.dump(converted_player)
     
@@ -49,7 +49,7 @@ def get_players_by_team_id_and_position(team_id: int, position: str):
         PlayerInfoData.position == position.upper()
     ).all()
     
-    converted_players: List[Player] = [_get_player_details_and_abilities(player) for player in players]
+    converted_players: List[PlayerAbilitiesDetailsStats] = [_get_player_abilities_details_stats(player) for player in players]
 
     players_json = player_schema_list.dump(converted_players)
     

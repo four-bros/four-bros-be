@@ -1,6 +1,20 @@
 from marshmallow import Schema, fields
 
-from src.responses.Players import PlayerDetailsSchema
+
+# Create Player Details Schema to avoid circular import
+class PlayerDetailsSchema(Schema):
+    id = fields.Int()
+    team_id = fields.Int()
+    team_name = fields.Str()
+    first_name = fields.Str()
+    last_name = fields.Str()
+    height = fields.Str()
+    weight = fields.Int()
+    jersey_number = fields.Int()
+    player_year = fields.Str()
+    redshirt = fields.Str()
+    position = fields.Str()
+    hometown_desc = fields.Int()
 
 #############################
 ### Stat Category Schemas ###
