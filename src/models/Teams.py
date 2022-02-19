@@ -1,5 +1,5 @@
 from typing import List
-from src.models.Player import PlayerDetails
+from models.Player import PlayerDetails
 
 
 class TeamDetails:

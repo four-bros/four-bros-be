@@ -1,23 +1,23 @@
 from typing import List
-from src.constants import(
+from constants import(
     session,
     Positions
 )
-from src.data_models.DefensiveStatsData import DefensiveStatsData
-from src.data_models.KickingStatsData import KickingStatsData
-from src.data_models.OffensiveStatsData import OffensiveStatsData
-from src.data_models.PlayerInfoData import PlayerInfoData
-from src.data_models.ReturnStatsData import ReturnStatsData
-from src.data_models.TeamInfoData import TeamInfoData
-from src.data_models.TeamStatsData import TeamStatsData
-from src.data_models.WeekYearData import WeekYearData
-from src.models.Player import(
-    PlayerAbilitiesDetailsStats, 
+from data_models.DefensiveStatsData import DefensiveStatsData
+from data_models.KickingStatsData import KickingStatsData
+from data_models.OffensiveStatsData import OffensiveStatsData
+from data_models.PlayerInfoData import PlayerInfoData
+from data_models.ReturnStatsData import ReturnStatsData
+from data_models.TeamInfoData import TeamInfoData
+from data_models.TeamStatsData import TeamStatsData
+from data_models.WeekYearData import WeekYearData
+from models.Player import(
     PlayerAbilities, 
     PlayerDetails,
-    PlayerStats
+    PlayerStats,
+    PlayerAbilitiesDetailsStats
 )
-from src.models.Stats import(
+from models.Stats import(
     DefensiveStats,
     KickingStats,
     PassingStats,
@@ -31,7 +31,7 @@ from src.models.Stats import(
     ReturnStats,
     RushingStats
 )
-from src.models.Teams import(
+from models.Teams import(
     TeamDetails,
     TeamRoster,
     TeamStats

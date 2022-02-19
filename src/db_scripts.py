@@ -271,6 +271,12 @@ def insert_off_stats_into_db(off_stats):
                 if record.fields['Games Played'] is not 0 else 0,
             1
             )
+        pass_rating_calc = (
+            0 if record.fields['Pass Att.'] == 0 else \
+            ((8.4 * record.fields['Pass. Yards']) + (330 * record.fields['Pass. TDs']) + \
+            (100 * record.fields['Completions']) - (200 * record.fields['INTs'])) / record.fields['Pass Att.']
+            )
+        pass_rating = round(pass_rating_calc, 1)
         
         new_player = OffensiveStatsData(
             player_id=record.fields['Player ID'],
@@ -302,7 +308,8 @@ def insert_off_stats_into_db(off_stats):
             rush_yp_carry=rush_yp_carry,
             rush_yp_game=rush_yp_game,
             rec_yp_catch=rec_yp_catch,
-            rec_yp_game=rec_yp_game
+            rec_yp_game=rec_yp_game,
+            pass_rating=pass_rating
         )
         
 

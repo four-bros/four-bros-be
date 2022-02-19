@@ -1,6 +1,6 @@
 from marshmallow import Schema, fields
 
-from src.responses.Stats import(
+from responses.Stats import(
     DefensiveStatsSchema,
     KickingStatsSchema,
     PassingStatsSchema,

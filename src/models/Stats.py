@@ -1,4 +1,3 @@
-
 # Create Player Details Model to avoid circular import
 class PlayerDetails:
     def __init__(

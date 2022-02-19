@@ -1,4 +1,4 @@
-from src.models.Stats import(
+from models.Stats import(
     DefensiveStats,
     KickingStats,
     PassingStats,

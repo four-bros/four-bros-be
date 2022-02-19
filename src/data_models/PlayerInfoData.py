@@ -1,8 +1,13 @@
 from dataclasses import dataclass
-from sqlalchemy import Column, Integer, String
+from sqlalchemy import(
+    Column,
+    Integer,
+    String,
+    Boolean
+)
 from sqlalchemy.sql.schema import ForeignKey
 
-from src.constants import Base
+from constants import Base
 
 
 @dataclass
@@ -17,7 +22,7 @@ class PlayerInfoData(Base):
     press = Column(Integer)
     power_moves = Column(Integer)
     kick_accuracy = Column(Integer)
-    redshirt = Column(Integer)
+    redshirt = Column(Boolean)
     player_year = Column(String(10))
     jersey_number = Column(Integer)
     throwing_power = Column(Integer)

@@ -3,7 +3,7 @@ from sqlalchemy import Column, Float, Integer
 from sqlalchemy.sql.schema import ForeignKey
 from sqlalchemy.sql.sqltypes import String
 
-from src.constants import Base
+from constants import Base
 
 
 @dataclass
@@ -39,6 +39,7 @@ class OffensiveStatsData(Base):
     rush_yp_game = Column(Float)
     rec_yp_catch = Column(Float)
     rec_yp_game = Column(Float)
+    pass_rating = Column(Float)
     
     def __repr__(self) -> str:
         return f'ID: {self.player_id}, Passing Yds: {self.pass_yards}, Passing TDs: {self.pass_tds}'
