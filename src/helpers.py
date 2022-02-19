@@ -10,6 +10,7 @@ from src.data_models.PlayerInfoData import PlayerInfoData
 from src.data_models.ReturnStatsData import ReturnStatsData
 from src.data_models.TeamInfoData import TeamInfoData
 from src.data_models.TeamStatsData import TeamStatsData
+from src.data_models.WeekYearData import WeekYearData
 from src.models.Player import(
     PlayerAbilitiesDetailsStats, 
     PlayerAbilities, 
@@ -130,17 +131,23 @@ def _get_player_details(player: PlayerInfoData) -> PlayerDetails:
 
 def _get_player_stats(player: PlayerInfoData) -> PlayerStats:
 
+    week_year: WeekYearData = session.query(WeekYearData).first()
+
     offensive_stats_data: OffensiveStatsData = session.query(OffensiveStatsData).where(
-        OffensiveStatsData.player_id == player.id
+        OffensiveStatsData.player_id == player.id,
+        OffensiveStatsData.year == week_year.year
     ).scalar()
     defensive_stats_data: DefensiveStatsData = session.query(DefensiveStatsData).where(
-        DefensiveStatsData.player_id == player.id
+        DefensiveStatsData.player_id == player.id,
+        DefensiveStatsData.year == week_year.year
     ).scalar()
     return_stats_data: ReturnStatsData = session.query(ReturnStatsData).where(
-        ReturnStatsData.player_id == player.id
+        ReturnStatsData.player_id == player.id,
+        ReturnStatsData.year == week_year.year
     ).scalar()
     kicking_stats_data: KickingStatsData = session.query(KickingStatsData).where(
-        KickingStatsData.player_id == player.id
+        KickingStatsData.player_id == player.id,
+        KickingStatsData.year == week_year.year
     ).scalar()
 
     passing_stats: PassingStats = None
