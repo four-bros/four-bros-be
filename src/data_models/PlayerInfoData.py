@@ -7,7 +7,7 @@ from sqlalchemy import(
 )
 from sqlalchemy.sql.schema import ForeignKey
 
-from constants import Base
+from  src.constants import Base
 
 
 @dataclass

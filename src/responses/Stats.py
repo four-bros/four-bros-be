@@ -80,6 +80,7 @@ class PassingStatsSchema(Schema):
     pass_att = fields.Int()
     pass_yp_attempt = fields.Float()
     pass_yp_game = fields.Float()
+    pass_rating = fields.Float()
 
 
 class ReceivingStatsSchema(Schema):

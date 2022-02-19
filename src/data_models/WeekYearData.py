@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 from sqlalchemy import Column, Integer
 
-from constants import Base
+from  src.constants import Base
 
 
 @dataclass
