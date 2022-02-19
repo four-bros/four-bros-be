@@ -4,16 +4,17 @@ from src.constants import(
     Positions
 )
 from src.data_models.DefensiveStatsData import DefensiveStatsData
-from src.data_models.KickingStatsData import KickingStatsData as KickingStatsDataModel
+from src.data_models.KickingStatsData import KickingStatsData
 from src.data_models.OffensiveStatsData import OffensiveStatsData
 from src.data_models.PlayerInfoData import PlayerInfoData
-from src.data_models.ReturnStatsData import ReturnStatsData as ReturnStatsDataModel
+from src.data_models.ReturnStatsData import ReturnStatsData
 from src.data_models.TeamInfoData import TeamInfoData
 from src.data_models.TeamStatsData import TeamStatsData
 from src.models.Player import(
-    Player, 
+    PlayerAbilitiesDetailsStats, 
     PlayerAbilities, 
-    PlayerDetails
+    PlayerDetails,
+    PlayerStats
 )
 from src.models.Stats import(
     DefensiveStats,
@@ -39,20 +40,22 @@ from src.models.Teams import(
 def _convert_stats_year(year: int) -> int:
     return year + 2013
 
-################################################
-### Get player details and player abilities ####
-################################################
-def _get_player_details_and_abilities(player: PlayerInfoData) -> Player:
+##################################################
+#### Get player details, abilities, and stats ####
+##################################################
+def _get_player_abilities_details_stats(player: PlayerInfoData) -> PlayerAbilitiesDetailsStats:
 
     player_details: PlayerDetails = _get_player_details(player=player)
     player_abilities: PlayerAbilities = _get_player_abilities(player=player)
+    player_stats: PlayerStats = _get_player_stats(player=player)
 
-    converted_player: Player = Player(
+    player_abilities_details_stats: PlayerAbilitiesDetailsStats = PlayerAbilitiesDetailsStats(
         player_details=player_details,
-        player_abilities=player_abilities
+        player_abilities=player_abilities,
+        player_stats=player_stats
     )
 
-    return converted_player
+    return player_abilities_details_stats
 
 
 def _get_player_abilities(player: PlayerInfoData) -> PlayerAbilities:
@@ -125,6 +128,52 @@ def _get_player_details(player: PlayerInfoData) -> PlayerDetails:
     return player_details
 
 
+def _get_player_stats(player: PlayerInfoData) -> PlayerStats:
+
+    offensive_stats_data: OffensiveStatsData = session.query(OffensiveStatsData).where(
+        OffensiveStatsData.player_id == player.id
+    ).scalar()
+    defensive_stats_data: DefensiveStatsData = session.query(DefensiveStatsData).where(
+        DefensiveStatsData.player_id == player.id
+    ).scalar()
+    return_stats_data: ReturnStatsData = session.query(ReturnStatsData).where(
+        ReturnStatsData.player_id == player.id
+    ).scalar()
+    kicking_stats_data: KickingStatsData = session.query(KickingStatsData).where(
+        KickingStatsData.player_id == player.id
+    ).scalar()
+
+    passing_stats: PassingStats = None
+    receiving_stats: ReceivingStats = None
+    rushing_stats: RushingStats = None
+    defensive_stats: DefensiveStats = None
+    return_stats: ReturnStats = None
+    kicking_stats: KickingStats = None
+
+    if offensive_stats_data:
+        passing_stats = _get_passing_stats(offensive_stats_data)
+        receiving_stats = _get_receiving_stats(offensive_stats_data)
+        rushing_stats = _get_rushing_stats(offensive_stats_data)
+    if defensive_stats_data:
+        defensive_stats = _get_defensive_stats(defensive_stats_data)
+    if return_stats_data:
+        return_stats = _get_return_stats(return_stats_data)
+    if kicking_stats_data:
+        kicking_stats = _get_kicking_stats(kicking_stats_data)
+    
+    player_stats: PlayerStats = PlayerStats(
+        passing_stats=passing_stats,
+        rushing_stats=rushing_stats,
+        receiving_stats=receiving_stats,
+        defensive_stats=defensive_stats,
+        return_stats=return_stats,
+        kicking_stats=kicking_stats
+    )
+
+    return player_stats
+
+
+
 ################################################
 ######### Get player defensive stats ###########
 ################################################
@@ -173,7 +222,7 @@ def _get_player_defensive_stats(player) -> PlayerDefensiveStats:
 ################################################
 ######### Get player kicking stats ###########
 ################################################
-def _get_kicking_stats(kicking_stats: KickingStatsDataModel) -> KickingStats:
+def _get_kicking_stats(kicking_stats: KickingStatsData) -> KickingStats:
 
     kicking_stats_all: KickingStats = KickingStats(
         fg_made_17_29=kicking_stats.fg_made_17_29,
@@ -210,7 +259,7 @@ def _get_kicking_stats(kicking_stats: KickingStatsDataModel) -> KickingStats:
 def _get_player_kicking_stats(player) -> PlayerKickingStats:
 
     player_info: PlayerInfoData = player[0]
-    kicking_stats_data: KickingStatsDataModel = player[1]
+    kicking_stats_data: KickingStatsData = player[1]
 
     player_details: PlayerDetails = _get_player_details(player=player_info)
     kicking_stats: KickingStats = _get_kicking_stats(kicking_stats=kicking_stats_data)
@@ -297,7 +346,7 @@ def _get_player_receiving_stats(player) -> PlayerReceivingStats:
 ##############################################
 ######### Get player return stats ###########
 ##############################################
-def _get_return_stats(return_stats: ReturnStatsDataModel) -> ReturnStats:
+def _get_return_stats(return_stats: ReturnStatsData) -> ReturnStats:
 
     converted_return_stats: ReturnStats = ReturnStats(
         kick_returns=return_stats.kick_returns,
@@ -320,7 +369,7 @@ def _get_return_stats(return_stats: ReturnStatsDataModel) -> ReturnStats:
 def _get_player_return_stats(player) -> PlayerReturnStats:
 
     player_info: PlayerInfoData = player[0]
-    return_stats_data: ReturnStatsDataModel = player[1]
+    return_stats_data: ReturnStatsData = player[1]
 
     player_details: PlayerDetails = _get_player_details(player=player_info)
     return_stats: ReturnStats = _get_return_stats(return_stats=return_stats_data)
