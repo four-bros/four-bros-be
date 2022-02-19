@@ -5,7 +5,7 @@ from sqlalchemy import(
     Float
 )
 
-from constants import Base
+from  src.constants import Base
 
 @dataclass
 class TeamStatsData(Base):

@@ -6,8 +6,8 @@ from sqlalchemy.orm import(
     sessionmaker
 )
 
-from responses.Players import PlayerSchema
-from responses.Stats import(
+from src.responses.Players import PlayerSchema
+from src.responses.Stats import(
     PlayerDefensiveStatsSchema,
     PlayerDetailsSchema,
     PlayerKickingStatsSchema,
@@ -16,8 +16,11 @@ from responses.Stats import(
     PlayerReturnStatsSchema,
     PlayerRushingStatsSchema,
 )
-from responses.Teams import TeamRosterSchema, TeamDetailsSchema
-from responses.Teams import TeamInfoSchema
+from src.responses.Teams import(
+    TeamInfoSchema,
+    TeamRosterSchema,
+    TeamDetailsSchema
+)
 
 
 # App constants
