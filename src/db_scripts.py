@@ -374,6 +374,8 @@ def insert_player_info_into_db(player_info):
         readable_weight = ncaa_dynasty.weight_converter(record.fields['Weight'])
         readable_year = ncaa_dynasty.player_year_converter(record.fields['Year'])
         
+        is_redshirt = False if record.fields['Redshirt'] == 0 else True
+        
         new_player = PlayerInfoData(
             id=record.fields['Player ID'],
             team_id=record.fields['Team ID'],
@@ -384,7 +386,7 @@ def insert_player_info_into_db(player_info):
             press=record.fields['Press'],
             power_moves=record.fields['Power Moves'],
             kick_accuracy=record.fields['Kick Accuracy'],
-            redshirt=record.fields['Redshirt'],
+            redshirt=is_redshirt,
             player_year=readable_year,
             jersey_number=record.fields['Jersey #'],
             throwing_power=record.fields['Throwing Power'],
