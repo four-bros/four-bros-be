@@ -6,8 +6,8 @@ from sqlalchemy.orm import(
     sessionmaker
 )
 
-from responses.Players import PlayerSchema
-from responses.Stats import(
+from src.responses.Players import PlayerSchema
+from src.responses.Stats import(
     PlayerDefensiveStatsSchema,
     PlayerDetailsSchema,
     PlayerKickingStatsSchema,
@@ -16,8 +16,11 @@ from responses.Stats import(
     PlayerReturnStatsSchema,
     PlayerRushingStatsSchema,
 )
-from responses.Teams import TeamRosterSchema, TeamDetailsSchema
-from responses.Teams import TeamInfoSchema
+from src.responses.Teams import(
+    TeamInfoSchema,
+    TeamRosterSchema,
+    TeamDetailsSchema
+)
 
 
 # App constants
@@ -27,7 +30,10 @@ CORS(app)
 
 
 # File constants
-dynasty_file_path = 'D:\Content\E00001485AECABB5\\454109B6\\00000001\OD-4Bros3'
+# Windows file path
+# dynasty_file_path = 'D:\Content\E00001485AECABB5\\454109B6\\00000001\OD-4Bros3'
+# Mac file path
+dynasty_file_path = 'data/OD-4Bros3'
 user_teams = {'Baylor', 'Syracuse', 'Vanderbilt', 'Wyoming'}
 
 

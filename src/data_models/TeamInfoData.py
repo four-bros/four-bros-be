@@ -6,11 +6,12 @@ from sqlalchemy import(
     String
 )
 
-from constants import Base
+from  src.constants import Base
 
 @dataclass
 class TeamInfoData(Base):
     __tablename__ = 'team_info'
+    __table_args__ = {'extend_existing': True}
     id = Column(Integer, primary_key=True)
     team_name = Column(String(50))
     team_short_name = Column(String(50))

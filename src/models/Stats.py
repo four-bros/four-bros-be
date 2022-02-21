@@ -140,7 +140,8 @@ class PassingStats:
         ints,
         pass_att,
         pass_yp_attempt,
-        pass_yp_game
+        pass_yp_game,
+        pass_rating
     ):      
 
         self.pass_yards = pass_yards
@@ -153,6 +154,7 @@ class PassingStats:
         self.pass_att = pass_att
         self.pass_yp_attempt = pass_yp_attempt
         self.pass_yp_game = pass_yp_game
+        self.pass_rating = pass_rating
 
 
 class ReceivingStats:

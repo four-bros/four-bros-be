@@ -1,14 +1,20 @@
 from dataclasses import dataclass
-from sqlalchemy import Column, Integer
+from sqlalchemy import (
+    Column,
+    Integer,
+    String
+)
 from sqlalchemy.sql.schema import ForeignKey
 
-from constants import Base
+from  src.constants import Base
 
 
 @dataclass
 class KickingStatsData(Base):
     __tablename__ = 'kicking_stats'
-    player_id = Column(Integer, ForeignKey('player_info.id'), primary_key=True)
+    __table_args__ = {'extend_existing': True}
+    id = Column(String(50), primary_key=True)
+    player_id = Column(Integer, ForeignKey('player_info.id'))
     fg_made_17_29 = Column(Integer)
     fg_att_17_29 = Column(Integer)
     long_fg = Column(Integer)

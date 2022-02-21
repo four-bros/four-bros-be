@@ -1,23 +1,23 @@
 from typing import List
-from constants import(
+from src.constants import(
     session,
     Positions
 )
-from data_models.DefensiveStatsData import DefensiveStatsData
-from data_models.KickingStatsData import KickingStatsData
-from data_models.OffensiveStatsData import OffensiveStatsData
-from data_models.PlayerInfoData import PlayerInfoData
-from data_models.ReturnStatsData import ReturnStatsData
-from data_models.TeamInfoData import TeamInfoData
-from data_models.TeamStatsData import TeamStatsData
-from data_models.WeekYearData import WeekYearData
-from models.Player import(
+from src.data_models.DefensiveStatsData import DefensiveStatsData
+from src.data_models.KickingStatsData import KickingStatsData
+from src.data_models.OffensiveStatsData import OffensiveStatsData
+from src.data_models.PlayerInfoData import PlayerInfoData
+from src.data_models.ReturnStatsData import ReturnStatsData
+from src.data_models.TeamInfoData import TeamInfoData
+from src.data_models.TeamStatsData import TeamStatsData
+from src.data_models.WeekYearData import WeekYearData
+from src.models.Player import(
     PlayerAbilities, 
     PlayerDetails,
     PlayerStats,
     PlayerAbilitiesDetailsStats
 )
-from models.Stats import(
+from src.models.Stats import(
     DefensiveStats,
     KickingStats,
     PassingStats,
@@ -31,7 +31,7 @@ from models.Stats import(
     ReturnStats,
     RushingStats
 )
-from models.Teams import(
+from src.models.Teams import(
     TeamDetails,
     TeamRoster,
     TeamStats
@@ -310,7 +310,8 @@ def _get_passing_stats(offensive_stats: OffensiveStatsData) -> PassingStats:
         ints=offensive_stats.ints,
         pass_att=offensive_stats.pass_att,
         pass_yp_attempt=offensive_stats.pass_yp_attempt,
-        pass_yp_game=offensive_stats.pass_yp_game
+        pass_yp_game=offensive_stats.pass_yp_game,
+        pass_rating=offensive_stats.pass_rating
     )
 
     return passing_stats

@@ -5,12 +5,13 @@ from sqlalchemy import(
     String
 )
 
-from constants import Base
+from  src.constants import Base
 
 
 @dataclass
 class CommitsData(Base):
     __tablename__ = 'commits'
+    __table_args__ = {'extend_existing': True}
     stars = Column(Integer)
     name = Column(String(50), primary_key=True)
     position = Column(String(50))
