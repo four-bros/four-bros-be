@@ -30,7 +30,10 @@ CORS(app)
 
 
 # File constants
-dynasty_file_path = 'D:\Content\E00001485AECABB5\\454109B6\\00000001\OD-4Bros3'
+# Windows file path
+# dynasty_file_path = 'D:\Content\E00001485AECABB5\\454109B6\\00000001\OD-4Bros3'
+# Mac file path
+dynasty_file_path = 'data/OD-4Bros3'
 user_teams = {'Baylor', 'Syracuse', 'Vanderbilt', 'Wyoming'}
 
 
