@@ -1,5 +1,10 @@
 from dataclasses import dataclass
-from sqlalchemy import Column, Float, Integer
+from sqlalchemy import (
+    Column,
+    Integer,
+    Float,
+    String
+)
 from sqlalchemy.sql.schema import ForeignKey
 from sqlalchemy.sql.sqltypes import String
 
@@ -10,7 +15,8 @@ from  src.constants import Base
 class OffensiveStatsData(Base):
     __tablename__ = 'offensive_stats'
     __table_args__ = {'extend_existing': True}
-    player_id = Column(Integer, ForeignKey('player_info.id'), primary_key=True)
+    id = Column(String(50), primary_key=True)
+    player_id = Column(Integer, ForeignKey('player_info.id'))
     pass_yards = Column(Integer)
     longest_rec = Column(Integer)
     longest_pass = Column(Integer)

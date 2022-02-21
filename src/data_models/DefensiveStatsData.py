@@ -1,7 +1,11 @@
 from dataclasses import dataclass
-from sqlalchemy import Column, Integer
+from sqlalchemy import (
+    Column,
+    Integer,
+    String
+)
 from sqlalchemy.sql.schema import ForeignKey
-from sqlalchemy.sql.sqltypes import Float, String
+from sqlalchemy.sql.sqltypes import Float
 
 from src.constants import Base
 
@@ -10,7 +14,8 @@ from src.constants import Base
 class DefensiveStatsData(Base):
     __tablename__ = 'defensive_stats'
     __table_args__ = {'extend_existing': True}
-    player_id = Column(Integer, ForeignKey('player_info.id'), primary_key=True)
+    id = Column(String(50), primary_key=True)
+    player_id = Column(Integer, ForeignKey('player_info.id'))
     long_int_ret = Column(Integer)
     sacks = Column(Float)
     year = Column(String(10))

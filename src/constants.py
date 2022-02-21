@@ -33,7 +33,7 @@ CORS(app)
 # Windows file path
 # dynasty_file_path = 'D:\Content\E00001485AECABB5\\454109B6\\00000001\OD-4Bros3'
 # Mac file path
-dynasty_file_path = '/Users/sgreen4/Desktop/projects/OD-4Bros3'
+dynasty_file_path = 'data/OD-4Bros3'
 user_teams = {'Baylor', 'Syracuse', 'Vanderbilt', 'Wyoming'}
 
 

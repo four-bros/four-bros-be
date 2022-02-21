@@ -1,5 +1,10 @@
 from dataclasses import dataclass
-from sqlalchemy import Column, Float, Integer
+from sqlalchemy import (
+    Column,
+    Float,
+    Integer,
+    String
+)
 from sqlalchemy.sql.schema import ForeignKey
 
 from  src.constants import Base
@@ -9,7 +14,8 @@ from  src.constants import Base
 class ReturnStatsData(Base):
     __tablename__ = 'return_stats'
     __table_args__ = {'extend_existing': True}
-    player_id = Column(Integer, ForeignKey('player_info.id'), primary_key=True)
+    id = Column(String(50), primary_key=True)
+    player_id = Column(Integer, ForeignKey('player_info.id'))
     kick_returns = Column(Integer)
     year = Column(Integer)
     long_kr = Column(Integer)
