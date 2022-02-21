@@ -10,6 +10,7 @@ from  src.constants import Base
 @dataclass
 class TeamStatsData(Base):
     __tablename__ = 'team_stats'
+    __table_args__ = {'extend_existing': True}
     id = Column(Integer, primary_key=True)
     total_points = Column(Integer)
     ppg = Column(Float)

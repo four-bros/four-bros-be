@@ -9,6 +9,7 @@ from  src.constants import Base
 @dataclass
 class OffensiveStatsData(Base):
     __tablename__ = 'offensive_stats'
+    __table_args__ = {'extend_existing': True}
     player_id = Column(Integer, ForeignKey('player_info.id'), primary_key=True)
     pass_yards = Column(Integer)
     longest_rec = Column(Integer)

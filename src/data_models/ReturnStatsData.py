@@ -8,6 +8,7 @@ from  src.constants import Base
 @dataclass
 class ReturnStatsData(Base):
     __tablename__ = 'return_stats'
+    __table_args__ = {'extend_existing': True}
     player_id = Column(Integer, ForeignKey('player_info.id'), primary_key=True)
     kick_returns = Column(Integer)
     year = Column(Integer)

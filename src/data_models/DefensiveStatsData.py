@@ -3,12 +3,13 @@ from sqlalchemy import Column, Integer
 from sqlalchemy.sql.schema import ForeignKey
 from sqlalchemy.sql.sqltypes import Float, String
 
-from  src.constants import Base
+from src.constants import Base
 
 
 @dataclass
 class DefensiveStatsData(Base):
     __tablename__ = 'defensive_stats'
+    __table_args__ = {'extend_existing': True}
     player_id = Column(Integer, ForeignKey('player_info.id'), primary_key=True)
     long_int_ret = Column(Integer)
     sacks = Column(Float)

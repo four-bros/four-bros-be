@@ -1,6 +1,6 @@
 import ncaa_dynasty
 
-from constants import(
+from src.constants import(
     dynasty_file_path,
     user_teams
 )

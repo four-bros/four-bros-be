@@ -1,8 +1,8 @@
-from constants import(
+from src.constants import(
     Base,
     engine
 )
-from data import (
+from src.data import (
     def_stats,
     kicking_stats,
     player_info,
@@ -12,7 +12,7 @@ from data import (
     week_year,
     team_info
     )
-from db_scripts import (
+from src.db_scripts import (
     insert_commits_into_db,
     insert_def_stats_into_db,
     insert_kicking_stats_into_db,

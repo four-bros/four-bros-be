@@ -2,7 +2,7 @@ from typing import List
 import ncaa_dynasty
 from sqlalchemy.sql.expression import update
 
-from constants import(
+from src.constants import(
     session,
     user_teams
 )
@@ -243,32 +243,32 @@ def insert_off_stats_into_db(off_stats):
         
         pass_yp_attempt = round(
             record.fields['Pass. Yards'] / record.fields['Pass Att.']\
-                if record.fields['Pass Att.'] is not 0 else 0,
+                if record.fields['Pass Att.'] != 0 else 0,
             1
             )
         pass_yp_game = round(
             record.fields['Pass. Yards'] / record.fields['Games Played']\
-                if record.fields['Games Played'] is not 0 else 0, 
+                if record.fields['Games Played'] != 0 else 0, 
             1
             )
         rush_yp_carry = round(
             record.fields['Rush Yards'] / record.fields['Rush Att.']\
-                if record.fields['Rush Att.'] is not 0 else 0,
+                if record.fields['Rush Att.'] != 0 else 0,
             1
             )
         rush_yp_game = round(
             record.fields['Rush Yards'] / record.fields['Games Played']\
-                if record.fields['Games Played'] is not 0 else 0,
+                if record.fields['Games Played'] != 0 else 0,
             1
             )
         rec_yp_catch = round(
             record.fields['Rec. Yards'] / record.fields['Receptions']\
-                if record.fields['Receptions'] is not 0 else 0,
+                if record.fields['Receptions'] != 0 else 0,
             1
             )
         rec_yp_game = round(
             record.fields['Rec. Yards'] / record.fields['Games Played']\
-                if record.fields['Games Played'] is not 0 else 0,
+                if record.fields['Games Played'] != 0 else 0,
             1
             )
         pass_rating_calc = (
@@ -518,12 +518,12 @@ def insert_return_stats_into_db(return_stats):
         
         kr_avg = round(
             record.fields['KR Yds.'] / record.fields['Kick Returns']\
-                if record.fields['Kick Returns'] is not 0 else 0,
+                if record.fields['Kick Returns'] != 0 else 0,
             1
             )
         pr_avg = round(
             record.fields['PR Yds.'] / record.fields['Punt Returns']\
-                if record.fields['Punt Returns'] is not 0 else 0,
+                if record.fields['Punt Returns'] != 0 else 0,
             1
             )
         
