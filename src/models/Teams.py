@@ -85,10 +85,13 @@ class TeamStats:
         rec_yds,
         rec_ypg,
         rec_tds,
+        total_yds,
+        total_ypg,
         sacks,
         ints,
         ff,
         fr,
+        turnovers,
         pass_def,
         safeties,
         def_tds,
@@ -108,10 +111,13 @@ class TeamStats:
         self.rec_yds = rec_yds
         self.rec_ypg = rec_ypg
         self.rec_tds = rec_tds
+        self.total_yds = total_yds
+        self.total_ypg = total_ypg
         self.sacks = sacks
         self.ints = ints
         self.ff = ff
         self.fr = fr
+        self.turnovers = turnovers
         self.pass_def = pass_def
         self.safeties = safeties
         self.def_tds = def_tds
