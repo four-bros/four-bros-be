@@ -34,15 +34,23 @@ from src.models.Stats import(
 )
 
 
-def get_season_defense_stats_leaders(request):
-    # Query the year to filter out irrelevant years
-    week_year: WeekYearData = session.query(WeekYearData).first()
-    # Querying PlayerInfo first and DefensiveStats second will return 
-    # a set or tuple to the players variable.
-    players = session.query(PlayerInfoData, DefensiveStatsData).filter(
-            PlayerInfoData.id == DefensiveStatsData.player_id,
-            DefensiveStatsData.year == week_year.year
-            ).all()
+def get_season_defense_stats_leaders(request, is_season_specific: bool):
+
+    players = []
+
+    if is_season_specific:
+        # Query the year to filter out irrelevant years
+        week_year: WeekYearData = session.query(WeekYearData).first()
+        # Querying PlayerInfo first and DefensiveStats second will return 
+        # a set or tuple to the players variable.
+        players = session.query(PlayerInfoData, DefensiveStatsData).filter(
+                PlayerInfoData.id == DefensiveStatsData.player_id,
+                DefensiveStatsData.year == week_year.year
+                ).all()
+    else:
+        players = session.query(PlayerInfoData, DefensiveStatsData).filter(
+                PlayerInfoData.id == DefensiveStatsData.player_id
+                ).all()
     
     converted_players: List[PlayerDefensiveStats] = [_get_player_defensive_stats(player) for player in players]
 
@@ -103,15 +111,24 @@ def get_season_defense_stats_leaders(request):
     return response
 
 
-def get_season_kicking_stats_leaders(request):
-    # Query the year to filter out irrelevant years
-    week_year: WeekYearData = session.query(WeekYearData).first()
-    # Querying PlayerInfo first and OffensiveStats second will return 
-    # a set or tuple to the players variable.
-    players = session.query(PlayerInfoData, KickingStatsData).filter(
-            KickingStatsData.player_id == PlayerInfoData.id,
-            KickingStatsData.year == week_year.year
-        ).all()    
+def get_season_kicking_stats_leaders(request, is_season_specific: bool):
+ 
+    players = []
+
+    if is_season_specific:
+        # Query the year to filter out irrelevant years
+        week_year: WeekYearData = session.query(WeekYearData).first()
+        # Querying PlayerInfo first and OffensiveStats second will return 
+        # a set or tuple to the players variable.
+        players = session.query(PlayerInfoData, KickingStatsData).filter(
+                KickingStatsData.player_id == PlayerInfoData.id,
+                KickingStatsData.year == week_year.year
+            ).all()
+    else:
+        players = session.query(PlayerInfoData, KickingStatsData).filter(
+                KickingStatsData.player_id == PlayerInfoData.id,
+            ).all()
+   
     # Convert players to PlayerKickingStats model so they can be sorted
     converted_players: List[PlayerKickingStats] = [_get_player_kicking_stats(player) for player in players]
     # Sort players based on kicking stat categories
@@ -147,15 +164,23 @@ def get_season_kicking_stats_leaders(request):
     return response
 
 
-def get_season_passing_stats_leaders(request):
-    # Query the year to filter out irrelevant years
-    week_year: WeekYearData = session.query(WeekYearData).first()
-    # Querying PlayerInfo first and OffensiveStats second will return 
-    # a set or tuple to the players variable.
-    players = session.query(PlayerInfoData, OffensiveStatsData).filter(
-            PlayerInfoData.id == OffensiveStatsData.player_id,
-            OffensiveStatsData.year == week_year.year
-            ).all()
+def get_season_passing_stats_leaders(request, is_season_specific: bool):
+
+    players = []
+
+    if is_season_specific:
+        # Query the year to filter out irrelevant years
+        week_year: WeekYearData = session.query(WeekYearData).first()
+        # Querying PlayerInfo first and OffensiveStats second will return 
+        # a set or tuple to the players variable.
+        players = session.query(PlayerInfoData, OffensiveStatsData).filter(
+                PlayerInfoData.id == OffensiveStatsData.player_id,
+                OffensiveStatsData.year == week_year.year
+                ).all()
+    else:
+        players = session.query(PlayerInfoData, OffensiveStatsData).filter(
+                PlayerInfoData.id == OffensiveStatsData.player_id,
+                ).all()
 
     # Convert players to PlayerPassingStats model so they can be sorted
     converted_players: List[PlayerPassingStats] = [_get_player_passing_stats(player) for player in players]
@@ -192,15 +217,24 @@ def get_season_passing_stats_leaders(request):
     return response
 
 
-def get_season_receiving_stats_leaders(request):
-    # Query the year to filter out irrelevant years
-    week_year: WeekYearData = session.query(WeekYearData).first()
-    # Querying PlayerInfo first and OffensiveStats second will return 
-    # a set or tuple to the players variable.
-    players = session.query(PlayerInfoData, OffensiveStatsData).filter(
-            PlayerInfoData.id == OffensiveStatsData.player_id,
-            OffensiveStatsData.year == week_year.year
-            ).all()
+def get_season_receiving_stats_leaders(request, is_season_specific: bool):
+
+    players = []
+
+    if is_season_specific:
+        # Query the year to filter out irrelevant years
+        week_year: WeekYearData = session.query(WeekYearData).first()
+        # Querying PlayerInfo first and OffensiveStats second will return 
+        # a set or tuple to the players variable.
+        players = session.query(PlayerInfoData, OffensiveStatsData).filter(
+                PlayerInfoData.id == OffensiveStatsData.player_id,
+                OffensiveStatsData.year == week_year.year
+                ).all()
+    else:
+        players = session.query(PlayerInfoData, OffensiveStatsData).filter(
+                PlayerInfoData.id == OffensiveStatsData.player_id,
+                ).all()
+
     # Convert players to PlayerReceivingStats model so they can be sorted
     converted_players: List[PlayerReceivingStats] = [_get_player_receiving_stats(player) for player in players]
 
@@ -235,15 +269,24 @@ def get_season_receiving_stats_leaders(request):
     return response
 
 
-def get_season_return_stats_leaders(request):
-    # Query the year to filter out irrelevant years
-    week_year: WeekYearData = session.query(WeekYearData).first()
-    # Querying PlayerInfo first and OffensiveStats second will return 
-    # a set or tuple to the players variable.
-    players = session.query(PlayerInfoData, ReturnStatsData).filter(
-            PlayerInfoData.id == ReturnStatsData.player_id,
-            ReturnStatsData.year == week_year.year
-            ).all()
+def get_season_return_stats_leaders(request, is_season_specific: bool):
+
+    players = []
+
+    if is_season_specific:
+        # Query the year to filter out irrelevant years
+        week_year: WeekYearData = session.query(WeekYearData).first()
+        # Querying PlayerInfo first and OffensiveStats second will return 
+        # a set or tuple to the players variable.
+        players = session.query(PlayerInfoData, ReturnStatsData).filter(
+                PlayerInfoData.id == ReturnStatsData.player_id,
+                ReturnStatsData.year == week_year.year
+                ).all()
+    else:
+        players = session.query(PlayerInfoData, ReturnStatsData).filter(
+                PlayerInfoData.id == ReturnStatsData.player_id,
+                ).all()
+
     # Convert players to PlayerKickingStats model so they can be sorted
     converted_players: List[PlayerReturnStats] = [_get_player_return_stats(player) for player in players]
     # Sort by rushing stat category
@@ -285,17 +328,27 @@ def get_season_return_stats_leaders(request):
     return response
 
 
-def get_season_rushing_stats_leaders(request):
-    # Query the year to filter out irrelevant years
-    week_year: WeekYearData = session.query(WeekYearData).first()
-    # Querying PlayerInfo first and OffensiveStats second will return 
-    # a set or tuple to the players variable.
-    players = session.query(PlayerInfoData, OffensiveStatsData).filter(
-            PlayerInfoData.id == OffensiveStatsData.player_id,
-            OffensiveStatsData.year == week_year.year,
-            # Filter out incorrect data
-            OffensiveStatsData.rush_yards < 16000
-            ).all()
+def get_season_rushing_stats_leaders(request, is_season_specific: bool):
+
+    players = []
+
+    if is_season_specific:
+        # Query the year to filter out irrelevant years
+        week_year: WeekYearData = session.query(WeekYearData).first()
+        # Querying PlayerInfo first and OffensiveStats second will return 
+        # a set or tuple to the players variable.
+        players = session.query(PlayerInfoData, OffensiveStatsData).filter(
+                PlayerInfoData.id == OffensiveStatsData.player_id,
+                OffensiveStatsData.year == week_year.year,
+                # Filter out incorrect data
+                OffensiveStatsData.rush_yards < 16000
+                ).all()
+    else:
+        players = session.query(PlayerInfoData, OffensiveStatsData).filter(
+                PlayerInfoData.id == OffensiveStatsData.player_id,
+                # Filter out incorrect data
+                OffensiveStatsData.rush_yards < 16000
+                ).all()
 
     # Convert players to PlayerRushingStats model so they can be sorted
     converted_players: List[PlayerRushingStats] = [_get_player_rushing_stats(player) for player in players]
