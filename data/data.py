@@ -4,7 +4,6 @@ from src.constants import(
     dynasty_file_path,
     user_teams
 )
-
 from src.helpers import _convert_stats_year
 
 
@@ -25,9 +24,3 @@ year = _convert_stats_year(week_year[0].fields['Year'])
 
 print(f"Week: {week_year[0].fields['Week']}")
 print(f"Year: {year}")
-
-print(f'def_stats # of records: {len(def_stats)}')
-print(f'off_stats # of records: {len(off_stats)}')
-
-# for player in off_stats:
-#     print(player.fields['Player ID'])

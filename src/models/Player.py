@@ -38,6 +38,8 @@ class PlayerDetails:
         self.position = position
         self.hometown_desc = hometown_desc
 
+    def __repr__(self):
+        return f'ID: {self.id}, Name: {self.first_name} {self.last_name}'
 
 class PlayerAbilities:
     def __init__(
@@ -143,16 +145,28 @@ class PlayerStats:
         self.return_stats = return_stats
         self.kicking_stats = kicking_stats
 
+    def __repr__(self):
+        return f'passing stats: {self.passing_stats}, rushing stats: {self.rushing_stats}, rec stats {self.receiving_stats}'
 
+class PlayerSeasonAndCareerStats:
+    def __init__(
+        self,
+        season: PlayerStats,
+        career: PlayerStats
+    ):
+        self.season = season
+        self.career = career
+
+    def __repr__(self):
+        return f'season passing: {self.season.passing_stats}, career passing: {self.career.passing_stats}'
 
 class PlayerAbilitiesDetailsStats:
     def __init__(
         self,
-        player_details: PlayerDetails,
-        player_abilities: PlayerAbilities,
-        player_stats: PlayerStats
+        details: PlayerDetails,
+        abilities: PlayerAbilities,
+        stats: PlayerSeasonAndCareerStats
     ):
-
-        self.player_details = player_details
-        self.player_abilities = player_abilities
-        self.player_stats = player_stats
+        self.details = details
+        self.abilities = abilities
+        self.stats = stats

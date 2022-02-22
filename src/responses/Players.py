@@ -76,7 +76,13 @@ class PlayerStatsSchema(Schema):
     return_stats = fields.Nested(ReturnStatsSchema)
     kicking_stats = fields.Nested(KickingStatsSchema)
 
+
+class PlayerSeasonAndCareerStatsSchema(Schema):
+    season = fields.Nested(PlayerStatsSchema)
+    career = fields.Nested(PlayerStatsSchema)
+
+
 class PlayerSchema(Schema):
-    player_details = fields.Nested(PlayerDetailsSchema)
-    player_abilities = fields.Nested(PlayerAbilitiesSchema)
-    player_stats = fields.Nested(PlayerStatsSchema)
+    details = fields.Nested(PlayerDetailsSchema)
+    abilities = fields.Nested(PlayerAbilitiesSchema)
+    stats = fields.Nested(PlayerSeasonAndCareerStatsSchema)
