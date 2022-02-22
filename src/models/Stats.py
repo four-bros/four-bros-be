@@ -70,6 +70,10 @@ class DefensiveStats:
         self.int_ret_yards = int_ret_yards
         self.total_tkls = total_tkls
 
+
+    def __repr__(self):
+        return f'Total Tackles: {self.total_tkls}'
+
 class KickingStats:
     def __init__(
         self,
@@ -127,6 +131,8 @@ class KickingStats:
         self.number_punts = number_punts
         self.inside_twenty = inside_twenty
 
+    def __repr__(self):
+        return f'Total FGs: {self.fg_made}, Total Punts: {self.number_punts}'
 
 class PassingStats:
     def __init__(
@@ -156,6 +162,9 @@ class PassingStats:
         self.pass_yp_game = pass_yp_game
         self.pass_rating = pass_rating
 
+    def __repr__(self):
+        return f'Total Pass Yards: {self.pass_yards}'
+
 
 class ReceivingStats:
     def __init__(
@@ -178,6 +187,9 @@ class ReceivingStats:
         self.rec_yp_catch = rec_yp_catch
         self.rec_yp_game = rec_yp_game
         self.games_played = games_played
+
+    def __repr__(self):
+        return f'Total Rec. Yards: {self.rec_yards}'
 
 
 class ReturnStats:
@@ -210,6 +222,10 @@ class ReturnStats:
         self.kr_avg = kr_avg
         self.pr_avg = pr_avg
 
+    def __repr__(self):
+        return f'Total Ret. TDS: {self.kr_tds + self.pr_tds}'
+
+
 class RushingStats:
     def __init__(
         self,
@@ -235,6 +251,8 @@ class RushingStats:
         self.rush_yp_game = rush_yp_game
         self.games_played = games_played
 
+    def __repr__(self):
+        return f'Total Rush Yards: {self.rush_yards}'
 
 
 class PlayerDefensiveStats:

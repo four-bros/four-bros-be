@@ -32,7 +32,9 @@ def get_player_by_player_id(request, player_id) -> PlayerSchema:
 
     converted_player: PlayerAbilitiesDetailsStats = _get_player_abilities_details_stats(player)
 
-    response = player_schema_single.dump(converted_player)
+    # breakpoint()
+
+    response: PlayerSchema = player_schema_single.dump(converted_player)
     
     return response
 

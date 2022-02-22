@@ -3,7 +3,7 @@
 /src/__pycache__/
 /src/data_models/__pycache__/
 __pycache__/
-/src/tempCodeRunnerFile.py
+.DS_Store
 
 # VS 
 .vscode/
