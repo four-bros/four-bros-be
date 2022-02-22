@@ -768,12 +768,15 @@ def insert_team_stats_into_db():
         rush_ypg = round(rush_yards / games_played, 1)
         rec_yards = sum([p.receiving_stats.rec_yards for p in rec_stats])
         rec_ypg = round(rec_yards / games_played, 1)
+        total_yards = pass_yards + rush_yards
+        total_ypg = round(total_yards / games_played, 1)
         
         # calculate defensive stat totals
         sacks = sum([p.defensive_stats.sacks for p in def_stats])
         ints = sum([p.defensive_stats.ints_made for p in def_stats])
         ff = sum([p.defensive_stats.forced_fumbles for p in def_stats])
         fr = sum([p.defensive_stats.fumbles_rec for p in def_stats])
+        turnovers = sum([ints, fr])
         pass_def = sum([p.defensive_stats.pass_def for p in def_stats])
         safeties = sum([p.defensive_stats.safeties for p in def_stats])
         
@@ -794,10 +797,13 @@ def insert_team_stats_into_db():
             rec_yds=rec_yards,
             rec_ypg=rec_ypg,
             rec_tds=receiving_tds,
+            total_yards=total_yards,
+            total_ypg=total_ypg,
             sacks=sacks,
             ints=ints,
             ff=ff,
             fr=fr,
+            turnovers=turnovers,
             pass_def=pass_def,
             safeties=safeties,
             def_tds=def_tds,
