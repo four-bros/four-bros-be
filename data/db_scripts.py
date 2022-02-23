@@ -8,8 +8,10 @@ from src.constants import(
     user_teams
 )
 
-from src.helpers import(
-    _convert_stats_year,
+from src.utils.helpers import(
+    _convert_stats_year
+)
+from src.utils.player_stats import (
     _get_player_defensive_stats,
     _get_player_kicking_stats,
     _get_player_passing_stats,
@@ -90,6 +92,7 @@ def insert_def_stats_into_db(def_stats):
         readable_year = _convert_stats_year(record.fields['Year'])
         
         total_tackles = record.fields['Solo Tkls'] + record.fields['Asst. Tkls']
+        total_sacks = record.fields['Half A Sack'] + record.fields['Sacks']
 
         new_id = str(uuid4())
         
@@ -113,7 +116,8 @@ def insert_def_stats_into_db(def_stats):
             def_tds=record.fields['Def. TDs'],
             fum_rec_yards=record.fields['Fum. Rec. Yards'],
             int_ret_yards=record.fields['INT Ret. Yards'],
-            total_tkls=total_tackles
+            total_tkls=total_tackles,
+            total_sacks=total_sacks
         )
 
 
@@ -162,11 +166,26 @@ def insert_kicking_stats_into_db(kicking_stats):
     current_year = week_year.year
     
     for i, value in enumerate(kicking_stats):
-        record = kicking_stats[i]
-        
-        readable_year = _convert_stats_year(record.fields['Year'])
 
+        record = kicking_stats[i]
         new_id = str(uuid4())
+        readable_year = _convert_stats_year(record.fields['Year'])
+        fg_pct = round(
+            record.fields['FG Made'] / record.fields['FG Att.'] * 100\
+                if record.fields['FG Att.'] != 0 else 0,
+            1)
+        xp_pct = round(
+            record.fields['XP Made'] / record.fields['XP Att.'] * 100\
+                if record.fields['XP Att.'] != 0 else 0,
+            1)
+        fg_50_plus_pct = round(
+            record.fields['FG Made 50+'] / record.fields['FG Att. 50+'] * 100\
+                if record.fields['FG Att. 50+'] != 0 else 0,
+            1)
+        punt_avg = round(
+            record.fields['Total Punt Yards'] / record.fields['# Punts']\
+                if record.fields['# Punts'] != 0 else 0, 
+            1)
         
         new_player = KickingStatsData(
             id=new_id,
@@ -196,7 +215,11 @@ def insert_kicking_stats_into_db(kicking_stats):
             net_punting=record.fields['Net Punting'],
             fg_made=record.fields['FG Made'],
             number_punts=record.fields['# Punts'],
-            inside_twenty=record.fields['Inside 20']
+            inside_twenty=record.fields['Inside 20'],
+            fg_pct=fg_pct,
+            xp_pct=xp_pct,
+            fg_50_plus_pct=fg_50_plus_pct,
+            punt_avg=punt_avg
         )
 
         player: KickingStatsData = session.query(KickingStatsData).where(

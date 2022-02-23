@@ -1,5 +1,4 @@
 from typing import List
-
 from sqlalchemy.sql.expression import desc
 
 from src.constants import(
@@ -17,11 +16,13 @@ from src.data_models.PlayerInfoData import PlayerInfoData
 from src.data_models.TeamInfoData import TeamInfoData
 from src.data_models.TeamStatsData import TeamStatsData
 from src.data_models.WeekYearData import WeekYearData
-from src.helpers import (
+from src.utils.player_stats import (
     _get_player_defensive_stats,
     _get_player_passing_stats,
     _get_player_receiving_stats,
-    _get_player_rushing_stats,
+    _get_player_rushing_stats
+)
+from src.utils.team_stats import (
     _get_team_details,
     _get_team_roster,
     _get_team_stats

@@ -38,6 +38,7 @@ class DefensiveStatsSchema(Schema):
     fum_rec_yards = fields.Int()
     int_ret_yards = fields.Int()
     total_tkls = fields.Float()
+    total_sacks = fields.Float()
 
 
 class KickingStatsSchema(Schema):
@@ -47,7 +48,7 @@ class KickingStatsSchema(Schema):
     ko_touchbacks = fields.Int()
     long_punt = fields.Int()
     xp_att = fields.Int()
-    year = fields.Int()
+    year = fields.Str()
     punts_blocked = fields.Int()
     fg_att = fields.Int()
     total_punt_yards = fields.Int()
@@ -67,12 +68,16 @@ class KickingStatsSchema(Schema):
     fg_made = fields.Int()
     number_punts = fields.Int()
     inside_twenty = fields.Int()
+    fg_pct = fields.Float()
+    xp_pct = fields.Float()
+    fg_50_plus_pct = fields.Float()
+    punt_avg = fields.Float()
 
 
 class PassingStatsSchema(Schema):
     pass_yards = fields.Int()
     longest_pass = fields.Int()
-    year = fields.Int()
+    year = fields.Str()
     pass_tds = fields.Int()
     games_played = fields.Int()
     completions = fields.Int()
@@ -92,11 +97,12 @@ class ReceivingStatsSchema(Schema):
     rec_yp_catch = fields.Float()
     rec_yp_game = fields.Float()
     games_played = fields.Int()
+    year = fields.Str()
 
 
 class ReturnStatsSchema(Schema):
     kick_returns = fields.Int()
-    year = fields.Int()
+    year = fields.Str()
     long_kr = fields.Int()
     punt_returns = fields.Int()
     long_pr = fields.Int()
@@ -120,6 +126,7 @@ class RushingStatsSchema(Schema):
     rush_yp_carry = fields.Float()
     rush_yp_game = fields.Float()
     games_played = fields.Int()
+    year = fields.Int()
 
 
 ##############################################

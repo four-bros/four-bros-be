@@ -6,7 +6,7 @@ from src.constants import(
     player_schema_list
 )
 from src.data_models.PlayerInfoData import PlayerInfoData
-from src.helpers import _get_player_abilities_details_stats
+from src.utils.player_stats import _get_player_abilities_details_stats
 from src.models.Player import PlayerAbilitiesDetailsStats
 from src.responses.Players import PlayerSchema
 

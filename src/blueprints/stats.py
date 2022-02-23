@@ -35,9 +35,9 @@ def stats_get_season_receiving_leaders():
 
 @stats_bp.route('season/leaders/return', methods=['GET'])
 def stats_get_season_return_leaders():
-    return get_season_return_stats_leaders(request)
+    return get_season_return_stats_leaders(request, is_season_specific=True)
 
 
 @stats_bp.route('season/leaders/rushing', methods=['GET'])
 def stats_get_season_rushing_leaders():
-    return get_season_rushing_stats_leaders(request)
+    return get_season_rushing_stats_leaders(request, is_season_specific=True)

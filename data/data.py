@@ -4,7 +4,7 @@ from src.constants import(
     dynasty_file_path,
     user_teams
 )
-from src.helpers import _convert_stats_year
+from src.utils.helpers import _convert_stats_year
 
 
 data = ncaa_dynasty.read_database(dynasty_file_path, user_teams)
