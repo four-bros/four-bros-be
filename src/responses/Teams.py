@@ -31,7 +31,7 @@ class TeamRosterSchema(PlayerDetailsSchema):
     weight = fields.Int()
     jersey_number = fields.Int()
     player_year = fields.Str()
-    redshirt = fields.Str()
+    redshirt = fields.Boolean()
     position = fields.Str()
     hometown_desc = fields.Int()
     overall = fields.Int()
