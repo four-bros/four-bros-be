@@ -49,7 +49,8 @@ class DefensiveStats:
         def_tds,
         fum_rec_yards,
         int_ret_yards,
-        total_tkls
+        total_tkls,
+        total_sacks
     ):
         self.long_int_ret = long_int_ret
         self.sacks = sacks
@@ -69,6 +70,7 @@ class DefensiveStats:
         self.fum_rec_yards = fum_rec_yards
         self.int_ret_yards = int_ret_yards
         self.total_tkls = total_tkls
+        self.total_sacks = total_sacks
 
 
     def __repr__(self):
@@ -103,6 +105,10 @@ class KickingStats:
         fg_made,
         number_punts,
         inside_twenty,
+        fg_pct,
+        xp_pct,
+        fg_50_plus_pct,
+        punt_avg
     ):
         self.fg_made_17_29 = fg_made_17_29
         self.fg_att_17_29 = fg_att_17_29
@@ -130,6 +136,10 @@ class KickingStats:
         self.fg_made = fg_made
         self.number_punts = number_punts
         self.inside_twenty = inside_twenty
+        self.fg_pct = fg_pct
+        self.xp_pct = xp_pct
+        self.fg_50_plus_pct = fg_50_plus_pct
+        self.punt_avg = punt_avg
 
     def __repr__(self):
         return f'Total FGs: {self.fg_made}, Total Punts: {self.number_punts}'
@@ -176,7 +186,8 @@ class ReceivingStats:
         drops,
         rec_yp_catch,
         rec_yp_game,
-        games_played
+        games_played,
+        year
 
     ):
         self.receptions = receptions
@@ -187,6 +198,7 @@ class ReceivingStats:
         self.rec_yp_catch = rec_yp_catch
         self.rec_yp_game = rec_yp_game
         self.games_played = games_played
+        self.year = year
 
     def __repr__(self):
         return f'Total Rec. Yards: {self.rec_yards}'
@@ -238,7 +250,8 @@ class RushingStats:
         twenty_plus_yd_runs,
         rush_yp_carry,
         rush_yp_game,
-        games_played
+        games_played,
+        year
     ):
         self.rush_att = rush_att
         self.rush_yards = rush_yards
@@ -250,6 +263,7 @@ class RushingStats:
         self.rush_yp_carry = rush_yp_carry
         self.rush_yp_game = rush_yp_game
         self.games_played = games_played
+        self.year = year
 
     def __repr__(self):
         return f'Total Rush Yards: {self.rush_yards}'

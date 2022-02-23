@@ -1,43 +1,23 @@
-from typing import List
+from src.blueprints.view_methods.stats import(
+    get_season_defense_stats_leaders,
+    get_season_kicking_stats_leaders,
+    get_season_passing_stats_leaders,
+    get_season_receiving_stats_leaders,
+    get_season_return_stats_leaders,
+    get_season_rushing_stats_leaders
+)
 
-from src.constants import (
-    defensive_stats_schema,
-    kicking_stats_schema,
-    passing_stat_schema,
-    passing_stats_schema,
-    receiving_stats_schema,
-    return_stats_schema,
-    rushing_stats_schema,
-    session
-)
-from src.data_models.DefensiveStatsData import DefensiveStatsData
-from src.data_models.KickingStatsData import KickingStatsData
-from src.data_models.OffensiveStatsData import OffensiveStatsData
-from src.data_models.PlayerInfoData import PlayerInfoData
-from src.data_models.ReturnStatsData import ReturnStatsData
-from src.data_models.WeekYearData import WeekYearData
-from src.helpers import(
-    _get_player_defensive_stats,
-    _get_player_kicking_stats,
-    _get_player_passing_stats,
-    _get_player_receiving_stats,
-    _get_player_return_stats,
-    _get_player_rushing_stats
-)
-from src.models.Stats import(
-    PlayerDefensiveStats,
-    PlayerKickingStats,
-    PlayerPassingStats,
-    PlayerReceivingStats,
-    PlayerReturnStats,
-    PlayerRushingStats
-)
 
 
 def get_season_records(request):
 
     response = {
-        
+        'defense': get_season_defense_stats_leaders(request, is_season_specific=False),
+        'kicking': get_season_kicking_stats_leaders(request, is_season_specific=False),
+        'passing': get_season_passing_stats_leaders(request, is_season_specific=False),
+        'receiving': get_season_receiving_stats_leaders(request, is_season_specific=False),
+        'return': get_season_return_stats_leaders(request, is_season_specific=False),
+        'rushing': get_season_rushing_stats_leaders(request, is_season_specific=False)
     }
 
     return response

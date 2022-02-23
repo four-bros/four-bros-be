@@ -28,6 +28,11 @@ If a new package was added to the virtual environment, run the following command
 pip freeze > requirements.txt
 ```
 
+To run the script to dump the data in the DB, run the following command:
+```
+PYTHONPATH="." python data/db.py
+```
+
 
 To run the app locally, use the following command from the app's home directory
 ```
