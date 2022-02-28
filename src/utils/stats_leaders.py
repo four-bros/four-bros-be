@@ -10,13 +10,20 @@ from src.constants import (
     rushing_stats_schema,
     session
 )
-from src.data_models.DefensiveStatsData import DefensiveStatsData
-from src.data_models.KickingStatsData import KickingStatsData
-from src.data_models.OffensiveStatsData import OffensiveStatsData
+from src.data_models.SeasonDefensiveStatsData import SeasonDefensiveStatsData
+from src.data_models.SeasonKickingStatsData import SeasonKickingStatsData
+from src.data_models.SeasonOffensiveStatsData import SeasonOffensiveStatsData
 from src.data_models.PlayerInfoData import PlayerInfoData
-from src.data_models.ReturnStatsData import ReturnStatsData
+from src.data_models.SeasonReturnStatsData import SeasonReturnStatsData
 from src.data_models.WeekYearData import WeekYearData
-from src.models.Stats import PlayerDefensiveStats, PlayerKickingStats, PlayerPassingStats, PlayerReceivingStats, PlayerReturnStats, PlayerRushingStats
+from src.models.Stats import (
+    PlayerDefensiveStats,
+    PlayerKickingStats,
+    PlayerPassingStats,
+    PlayerReceivingStats,
+    PlayerReturnStats,
+    PlayerRushingStats
+)
 from src.utils.player_stats import(
     _get_player_defensive_stats,
     _get_player_kicking_stats,
@@ -36,62 +43,62 @@ def _get_season_specific_defensive_stats_leaders():
     week_year: WeekYearData = session.query(WeekYearData).first()
     # Querying PlayerInfo first and DefensiveStats second will return 
     # a set or tuple to the players variable.
-    long_int_ret_data = session.query(PlayerInfoData, DefensiveStatsData).filter(
-        PlayerInfoData.id == DefensiveStatsData.player_id,
-        DefensiveStatsData.year == week_year.year
-        ).order_by(desc(DefensiveStatsData.long_int_ret)).limit(10)
-    sacks_data = session.query(PlayerInfoData, DefensiveStatsData).filter(
-        PlayerInfoData.id == DefensiveStatsData.player_id,
-        DefensiveStatsData.year == week_year.year
-        ).order_by(desc(DefensiveStatsData.sacks)).limit(10)
-    ff_data = session.query(PlayerInfoData, DefensiveStatsData).filter(
-        PlayerInfoData.id == DefensiveStatsData.player_id,
-        DefensiveStatsData.year == week_year.year
-        ).order_by(desc(DefensiveStatsData.forced_fumbles)).limit(10)
-    safeties_data = session.query(PlayerInfoData, DefensiveStatsData).filter(
-        PlayerInfoData.id == DefensiveStatsData.player_id,
-        DefensiveStatsData.year == week_year.year
-        ).order_by(desc(DefensiveStatsData.safeties)).limit(10)
-    pass_def_data = session.query(PlayerInfoData, DefensiveStatsData).filter(
-        PlayerInfoData.id == DefensiveStatsData.player_id,
-        DefensiveStatsData.year == week_year.year
-        ).order_by(desc(DefensiveStatsData.pass_def)).limit(10)
-    blocked_kicks_data = session.query(PlayerInfoData, DefensiveStatsData).filter(
-        PlayerInfoData.id == DefensiveStatsData.player_id,
-        DefensiveStatsData.year == week_year.year
-        ).order_by(desc(DefensiveStatsData.blocked_kicks)).limit(10)
-    tfl_data = session.query(PlayerInfoData, DefensiveStatsData).filter(
-        PlayerInfoData.id == DefensiveStatsData.player_id,
-        DefensiveStatsData.year == week_year.year
-        ).order_by(desc(DefensiveStatsData.tfl)).limit(10)
-    ints_made_data = session.query(PlayerInfoData, DefensiveStatsData).filter(
-        PlayerInfoData.id == DefensiveStatsData.player_id,
-        DefensiveStatsData.year == week_year.year
-        ).order_by(desc(DefensiveStatsData.forced_fumbles)).limit(10)
-    fr_data = session.query(PlayerInfoData, DefensiveStatsData).filter(
-        PlayerInfoData.id == DefensiveStatsData.player_id,
-        DefensiveStatsData.year == week_year.year
-        ).order_by(desc(DefensiveStatsData.fumbles_rec)).limit(10)
-    def_td_data = session.query(PlayerInfoData, DefensiveStatsData).filter(
-        PlayerInfoData.id == DefensiveStatsData.player_id,
-        DefensiveStatsData.year == week_year.year
-        ).order_by(desc(DefensiveStatsData.def_tds)).limit(10)
-    fr_yards_data = session.query(PlayerInfoData, DefensiveStatsData).filter(
-        PlayerInfoData.id == DefensiveStatsData.player_id,
-        DefensiveStatsData.year == week_year.year
-        ).order_by(desc(DefensiveStatsData.fum_rec_yards)).limit(10)
-    int_ret_yards_data = session.query(PlayerInfoData, DefensiveStatsData).filter(
-        PlayerInfoData.id == DefensiveStatsData.player_id,
-        DefensiveStatsData.year == week_year.year
-        ).order_by(desc(DefensiveStatsData.int_ret_yards)).limit(10)
-    total_tkls_data = session.query(PlayerInfoData, DefensiveStatsData).filter(
-        PlayerInfoData.id == DefensiveStatsData.player_id,
-        DefensiveStatsData.year == week_year.year
-        ).order_by(desc(DefensiveStatsData.total_tkls)).limit(10)
-    total_sacks_data = session.query(PlayerInfoData, DefensiveStatsData).filter(
-        PlayerInfoData.id == DefensiveStatsData.player_id,
-        DefensiveStatsData.year == week_year.year
-        ).order_by(desc(DefensiveStatsData.total_sacks)).limit(10)
+    long_int_ret_data = session.query(PlayerInfoData, SeasonDefensiveStatsData).filter(
+        PlayerInfoData.id == SeasonDefensiveStatsData.player_id,
+        SeasonDefensiveStatsData.year == week_year.year
+        ).order_by(desc(SeasonDefensiveStatsData.long_int_ret)).limit(10)
+    sacks_data = session.query(PlayerInfoData, SeasonDefensiveStatsData).filter(
+        PlayerInfoData.id == SeasonDefensiveStatsData.player_id,
+        SeasonDefensiveStatsData.year == week_year.year
+        ).order_by(desc(SeasonDefensiveStatsData.sacks)).limit(10)
+    ff_data = session.query(PlayerInfoData, SeasonDefensiveStatsData).filter(
+        PlayerInfoData.id == SeasonDefensiveStatsData.player_id,
+        SeasonDefensiveStatsData.year == week_year.year
+        ).order_by(desc(SeasonDefensiveStatsData.forced_fumbles)).limit(10)
+    safeties_data = session.query(PlayerInfoData, SeasonDefensiveStatsData).filter(
+        PlayerInfoData.id == SeasonDefensiveStatsData.player_id,
+        SeasonDefensiveStatsData.year == week_year.year
+        ).order_by(desc(SeasonDefensiveStatsData.safeties)).limit(10)
+    pass_def_data = session.query(PlayerInfoData, SeasonDefensiveStatsData).filter(
+        PlayerInfoData.id == SeasonDefensiveStatsData.player_id,
+        SeasonDefensiveStatsData.year == week_year.year
+        ).order_by(desc(SeasonDefensiveStatsData.pass_def)).limit(10)
+    blocked_kicks_data = session.query(PlayerInfoData, SeasonDefensiveStatsData).filter(
+        PlayerInfoData.id == SeasonDefensiveStatsData.player_id,
+        SeasonDefensiveStatsData.year == week_year.year
+        ).order_by(desc(SeasonDefensiveStatsData.blocked_kicks)).limit(10)
+    tfl_data = session.query(PlayerInfoData, SeasonDefensiveStatsData).filter(
+        PlayerInfoData.id == SeasonDefensiveStatsData.player_id,
+        SeasonDefensiveStatsData.year == week_year.year
+        ).order_by(desc(SeasonDefensiveStatsData.tfl)).limit(10)
+    ints_made_data = session.query(PlayerInfoData, SeasonDefensiveStatsData).filter(
+        PlayerInfoData.id == SeasonDefensiveStatsData.player_id,
+        SeasonDefensiveStatsData.year == week_year.year
+        ).order_by(desc(SeasonDefensiveStatsData.forced_fumbles)).limit(10)
+    fr_data = session.query(PlayerInfoData, SeasonDefensiveStatsData).filter(
+        PlayerInfoData.id == SeasonDefensiveStatsData.player_id,
+        SeasonDefensiveStatsData.year == week_year.year
+        ).order_by(desc(SeasonDefensiveStatsData.fumbles_rec)).limit(10)
+    def_td_data = session.query(PlayerInfoData, SeasonDefensiveStatsData).filter(
+        PlayerInfoData.id == SeasonDefensiveStatsData.player_id,
+        SeasonDefensiveStatsData.year == week_year.year
+        ).order_by(desc(SeasonDefensiveStatsData.def_tds)).limit(10)
+    fr_yards_data = session.query(PlayerInfoData, SeasonDefensiveStatsData).filter(
+        PlayerInfoData.id == SeasonDefensiveStatsData.player_id,
+        SeasonDefensiveStatsData.year == week_year.year
+        ).order_by(desc(SeasonDefensiveStatsData.fum_rec_yards)).limit(10)
+    int_ret_yards_data = session.query(PlayerInfoData, SeasonDefensiveStatsData).filter(
+        PlayerInfoData.id == SeasonDefensiveStatsData.player_id,
+        SeasonDefensiveStatsData.year == week_year.year
+        ).order_by(desc(SeasonDefensiveStatsData.int_ret_yards)).limit(10)
+    total_tkls_data = session.query(PlayerInfoData, SeasonDefensiveStatsData).filter(
+        PlayerInfoData.id == SeasonDefensiveStatsData.player_id,
+        SeasonDefensiveStatsData.year == week_year.year
+        ).order_by(desc(SeasonDefensiveStatsData.total_tkls)).limit(10)
+    total_sacks_data = session.query(PlayerInfoData, SeasonDefensiveStatsData).filter(
+        PlayerInfoData.id == SeasonDefensiveStatsData.player_id,
+        SeasonDefensiveStatsData.year == week_year.year
+        ).order_by(desc(SeasonDefensiveStatsData.total_sacks)).limit(10)
     
     # Convert data into models
     converted_long_int_ret: List[PlayerDefensiveStats] = [_get_player_defensive_stats(player) for player in long_int_ret_data]
@@ -150,48 +157,48 @@ def _get_season_all_time_defensive_stats_leaders():
 
     # Querying PlayerInfo first and DefensiveStats second will return 
     # a set or tuple to the players variable.
-    long_int_ret_data = session.query(PlayerInfoData, DefensiveStatsData).filter(
-        PlayerInfoData.id == DefensiveStatsData.player_id,
-        ).order_by(desc(DefensiveStatsData.long_int_ret)).limit(10)
-    sacks_data = session.query(PlayerInfoData, DefensiveStatsData).filter(
-        PlayerInfoData.id == DefensiveStatsData.player_id,
-        ).order_by(desc(DefensiveStatsData.sacks)).limit(10)
-    ff_data = session.query(PlayerInfoData, DefensiveStatsData).filter(
-        PlayerInfoData.id == DefensiveStatsData.player_id,
-        ).order_by(desc(DefensiveStatsData.forced_fumbles)).limit(10)
-    safeties_data = session.query(PlayerInfoData, DefensiveStatsData).filter(
-        PlayerInfoData.id == DefensiveStatsData.player_id,
-        ).order_by(desc(DefensiveStatsData.safeties)).limit(10)
-    pass_def_data = session.query(PlayerInfoData, DefensiveStatsData).filter(
-        PlayerInfoData.id == DefensiveStatsData.player_id,
-        ).order_by(desc(DefensiveStatsData.pass_def)).limit(10)
-    blocked_kicks_data = session.query(PlayerInfoData, DefensiveStatsData).filter(
-        PlayerInfoData.id == DefensiveStatsData.player_id,
-        ).order_by(desc(DefensiveStatsData.blocked_kicks)).limit(10)
-    tfl_data = session.query(PlayerInfoData, DefensiveStatsData).filter(
-        PlayerInfoData.id == DefensiveStatsData.player_id,
-        ).order_by(desc(DefensiveStatsData.tfl)).limit(10)
-    ints_made_data = session.query(PlayerInfoData, DefensiveStatsData).filter(
-        PlayerInfoData.id == DefensiveStatsData.player_id,
-        ).order_by(desc(DefensiveStatsData.forced_fumbles)).limit(10)
-    fr_data = session.query(PlayerInfoData, DefensiveStatsData).filter(
-        PlayerInfoData.id == DefensiveStatsData.player_id,
-        ).order_by(desc(DefensiveStatsData.fumbles_rec)).limit(10)
-    def_td_data = session.query(PlayerInfoData, DefensiveStatsData).filter(
-        PlayerInfoData.id == DefensiveStatsData.player_id,
-        ).order_by(desc(DefensiveStatsData.def_tds)).limit(10)
-    fr_yards_data = session.query(PlayerInfoData, DefensiveStatsData).filter(
-        PlayerInfoData.id == DefensiveStatsData.player_id,
-        ).order_by(desc(DefensiveStatsData.fum_rec_yards)).limit(10)
-    int_ret_yards_data = session.query(PlayerInfoData, DefensiveStatsData).filter(
-        PlayerInfoData.id == DefensiveStatsData.player_id,
-        ).order_by(desc(DefensiveStatsData.int_ret_yards)).limit(10)
-    total_tkls_data = session.query(PlayerInfoData, DefensiveStatsData).filter(
-        PlayerInfoData.id == DefensiveStatsData.player_id,
-        ).order_by(desc(DefensiveStatsData.total_tkls)).limit(10)
-    total_sacks_data = session.query(PlayerInfoData, DefensiveStatsData).filter(
-        PlayerInfoData.id == DefensiveStatsData.player_id,
-        ).order_by(desc(DefensiveStatsData.total_sacks)).limit(10)
+    long_int_ret_data = session.query(PlayerInfoData, SeasonDefensiveStatsData).filter(
+        PlayerInfoData.id == SeasonDefensiveStatsData.player_id,
+        ).order_by(desc(SeasonDefensiveStatsData.long_int_ret)).limit(10)
+    sacks_data = session.query(PlayerInfoData, SeasonDefensiveStatsData).filter(
+        PlayerInfoData.id == SeasonDefensiveStatsData.player_id,
+        ).order_by(desc(SeasonDefensiveStatsData.sacks)).limit(10)
+    ff_data = session.query(PlayerInfoData, SeasonDefensiveStatsData).filter(
+        PlayerInfoData.id == SeasonDefensiveStatsData.player_id,
+        ).order_by(desc(SeasonDefensiveStatsData.forced_fumbles)).limit(10)
+    safeties_data = session.query(PlayerInfoData, SeasonDefensiveStatsData).filter(
+        PlayerInfoData.id == SeasonDefensiveStatsData.player_id,
+        ).order_by(desc(SeasonDefensiveStatsData.safeties)).limit(10)
+    pass_def_data = session.query(PlayerInfoData, SeasonDefensiveStatsData).filter(
+        PlayerInfoData.id == SeasonDefensiveStatsData.player_id,
+        ).order_by(desc(SeasonDefensiveStatsData.pass_def)).limit(10)
+    blocked_kicks_data = session.query(PlayerInfoData, SeasonDefensiveStatsData).filter(
+        PlayerInfoData.id == SeasonDefensiveStatsData.player_id,
+        ).order_by(desc(SeasonDefensiveStatsData.blocked_kicks)).limit(10)
+    tfl_data = session.query(PlayerInfoData, SeasonDefensiveStatsData).filter(
+        PlayerInfoData.id == SeasonDefensiveStatsData.player_id,
+        ).order_by(desc(SeasonDefensiveStatsData.tfl)).limit(10)
+    ints_made_data = session.query(PlayerInfoData, SeasonDefensiveStatsData).filter(
+        PlayerInfoData.id == SeasonDefensiveStatsData.player_id,
+        ).order_by(desc(SeasonDefensiveStatsData.forced_fumbles)).limit(10)
+    fr_data = session.query(PlayerInfoData, SeasonDefensiveStatsData).filter(
+        PlayerInfoData.id == SeasonDefensiveStatsData.player_id,
+        ).order_by(desc(SeasonDefensiveStatsData.fumbles_rec)).limit(10)
+    def_td_data = session.query(PlayerInfoData, SeasonDefensiveStatsData).filter(
+        PlayerInfoData.id == SeasonDefensiveStatsData.player_id,
+        ).order_by(desc(SeasonDefensiveStatsData.def_tds)).limit(10)
+    fr_yards_data = session.query(PlayerInfoData, SeasonDefensiveStatsData).filter(
+        PlayerInfoData.id == SeasonDefensiveStatsData.player_id,
+        ).order_by(desc(SeasonDefensiveStatsData.fum_rec_yards)).limit(10)
+    int_ret_yards_data = session.query(PlayerInfoData, SeasonDefensiveStatsData).filter(
+        PlayerInfoData.id == SeasonDefensiveStatsData.player_id,
+        ).order_by(desc(SeasonDefensiveStatsData.int_ret_yards)).limit(10)
+    total_tkls_data = session.query(PlayerInfoData, SeasonDefensiveStatsData).filter(
+        PlayerInfoData.id == SeasonDefensiveStatsData.player_id,
+        ).order_by(desc(SeasonDefensiveStatsData.total_tkls)).limit(10)
+    total_sacks_data = session.query(PlayerInfoData, SeasonDefensiveStatsData).filter(
+        PlayerInfoData.id == SeasonDefensiveStatsData.player_id,
+        ).order_by(desc(SeasonDefensiveStatsData.total_sacks)).limit(10)
     
     # Convert data into models
     converted_long_int_ret: List[PlayerDefensiveStats] = [_get_player_defensive_stats(player) for player in long_int_ret_data]
@@ -254,54 +261,54 @@ def _get_season_specific_kicking_stats_leaders():
     week_year: WeekYearData = session.query(WeekYearData).first()
     # Querying PlayerInfo first and OffensiveStats second will return 
     # a set or tuple to the players variable.
-    fg_made_data = session.query(PlayerInfoData, KickingStatsData).filter(
-            KickingStatsData.player_id == PlayerInfoData.id,
-            KickingStatsData.year == week_year.year
-        ).order_by(desc(KickingStatsData.fg_made)).limit(10)
-    fg_att_data = session.query(PlayerInfoData, KickingStatsData).filter(
-            KickingStatsData.player_id == PlayerInfoData.id,
-            KickingStatsData.year == week_year.year
-        ).order_by(desc(KickingStatsData.fg_att)).limit(10)
-    fg_pct_data = session.query(PlayerInfoData, KickingStatsData).filter(
-            KickingStatsData.player_id == PlayerInfoData.id,
-            KickingStatsData.year == week_year.year
-        ).order_by(desc(KickingStatsData.fg_pct)).limit(10)
-    long_fg_data = session.query(PlayerInfoData, KickingStatsData).filter(
-            KickingStatsData.player_id == PlayerInfoData.id,
-            KickingStatsData.year == week_year.year
-        ).order_by(desc(KickingStatsData.long_fg)).limit(10)
-    fg_made_50_plus_data = session.query(PlayerInfoData, KickingStatsData).filter(
-            KickingStatsData.player_id == PlayerInfoData.id,
-            KickingStatsData.year == week_year.year
-        ).order_by(desc(KickingStatsData.fg_made_50_plus)).limit(10)
-    fg_50_plus_pct_data = session.query(PlayerInfoData, KickingStatsData).filter(
-            KickingStatsData.player_id == PlayerInfoData.id,
-            KickingStatsData.year == week_year.year
-        ).order_by(desc(KickingStatsData.fg_50_plus_pct)).limit(10)
-    long_punt_data = session.query(PlayerInfoData, KickingStatsData).filter(
-            KickingStatsData.player_id == PlayerInfoData.id,
-            KickingStatsData.year == week_year.year
-        ).order_by(desc(KickingStatsData.long_punt)).limit(10)
-    num_punts_data = session.query(PlayerInfoData, KickingStatsData).filter(
-            KickingStatsData.player_id == PlayerInfoData.id,
-            KickingStatsData.year == week_year.year
-        ).order_by(desc(KickingStatsData.number_punts)).limit(10)
-    total_punt_yards_data = session.query(PlayerInfoData, KickingStatsData).filter(
-            KickingStatsData.player_id == PlayerInfoData.id,
-            KickingStatsData.year == week_year.year
-        ).order_by(desc(KickingStatsData.total_punt_yards)).limit(10)
-    punt_avg_data = session.query(PlayerInfoData, KickingStatsData).filter(
-            KickingStatsData.player_id == PlayerInfoData.id,
-            KickingStatsData.year == week_year.year
-        ).order_by(desc(KickingStatsData.punt_avg)).limit(10)
-    net_punting_data = session.query(PlayerInfoData, KickingStatsData).filter(
-            KickingStatsData.player_id == PlayerInfoData.id,
-            KickingStatsData.year == week_year.year
-        ).order_by(desc(KickingStatsData.net_punting)).limit(10)
-    inside_twenty_data = session.query(PlayerInfoData, KickingStatsData).filter(
-            KickingStatsData.player_id == PlayerInfoData.id,
-            KickingStatsData.year == week_year.year
-        ).order_by(desc(KickingStatsData.inside_twenty)).limit(10)
+    fg_made_data = session.query(PlayerInfoData, SeasonKickingStatsData).filter(
+            SeasonKickingStatsData.player_id == PlayerInfoData.id,
+            SeasonKickingStatsData.year == week_year.year
+        ).order_by(desc(SeasonKickingStatsData.fg_made)).limit(10)
+    fg_att_data = session.query(PlayerInfoData, SeasonKickingStatsData).filter(
+            SeasonKickingStatsData.player_id == PlayerInfoData.id,
+            SeasonKickingStatsData.year == week_year.year
+        ).order_by(desc(SeasonKickingStatsData.fg_att)).limit(10)
+    fg_pct_data = session.query(PlayerInfoData, SeasonKickingStatsData).filter(
+            SeasonKickingStatsData.player_id == PlayerInfoData.id,
+            SeasonKickingStatsData.year == week_year.year
+        ).order_by(desc(SeasonKickingStatsData.fg_pct)).limit(10)
+    long_fg_data = session.query(PlayerInfoData, SeasonKickingStatsData).filter(
+            SeasonKickingStatsData.player_id == PlayerInfoData.id,
+            SeasonKickingStatsData.year == week_year.year
+        ).order_by(desc(SeasonKickingStatsData.long_fg)).limit(10)
+    fg_made_50_plus_data = session.query(PlayerInfoData, SeasonKickingStatsData).filter(
+            SeasonKickingStatsData.player_id == PlayerInfoData.id,
+            SeasonKickingStatsData.year == week_year.year
+        ).order_by(desc(SeasonKickingStatsData.fg_made_50_plus)).limit(10)
+    fg_50_plus_pct_data = session.query(PlayerInfoData, SeasonKickingStatsData).filter(
+            SeasonKickingStatsData.player_id == PlayerInfoData.id,
+            SeasonKickingStatsData.year == week_year.year
+        ).order_by(desc(SeasonKickingStatsData.fg_50_plus_pct)).limit(10)
+    long_punt_data = session.query(PlayerInfoData, SeasonKickingStatsData).filter(
+            SeasonKickingStatsData.player_id == PlayerInfoData.id,
+            SeasonKickingStatsData.year == week_year.year
+        ).order_by(desc(SeasonKickingStatsData.long_punt)).limit(10)
+    num_punts_data = session.query(PlayerInfoData, SeasonKickingStatsData).filter(
+            SeasonKickingStatsData.player_id == PlayerInfoData.id,
+            SeasonKickingStatsData.year == week_year.year
+        ).order_by(desc(SeasonKickingStatsData.number_punts)).limit(10)
+    total_punt_yards_data = session.query(PlayerInfoData, SeasonKickingStatsData).filter(
+            SeasonKickingStatsData.player_id == PlayerInfoData.id,
+            SeasonKickingStatsData.year == week_year.year
+        ).order_by(desc(SeasonKickingStatsData.total_punt_yards)).limit(10)
+    punt_avg_data = session.query(PlayerInfoData, SeasonKickingStatsData).filter(
+            SeasonKickingStatsData.player_id == PlayerInfoData.id,
+            SeasonKickingStatsData.year == week_year.year
+        ).order_by(desc(SeasonKickingStatsData.punt_avg)).limit(10)
+    net_punting_data = session.query(PlayerInfoData, SeasonKickingStatsData).filter(
+            SeasonKickingStatsData.player_id == PlayerInfoData.id,
+            SeasonKickingStatsData.year == week_year.year
+        ).order_by(desc(SeasonKickingStatsData.net_punting)).limit(10)
+    inside_twenty_data = session.query(PlayerInfoData, SeasonKickingStatsData).filter(
+            SeasonKickingStatsData.player_id == PlayerInfoData.id,
+            SeasonKickingStatsData.year == week_year.year
+        ).order_by(desc(SeasonKickingStatsData.inside_twenty)).limit(10)
 
     # Convert players to PlayerKickingStats model so they can be dumped to json
     converted_fg_made: List[PlayerKickingStats] = [_get_player_kicking_stats(player) for player in fg_made_data]
@@ -352,42 +359,42 @@ def _get_season_specific_kicking_stats_leaders():
 def _get_season_all_time_kicking_stats_leaders():
     # Querying PlayerInfo first and OffensiveStats second will return 
     # a set or tuple to the players variable.
-    fg_made_data = session.query(PlayerInfoData, KickingStatsData).filter(
-            KickingStatsData.player_id == PlayerInfoData.id,
-        ).order_by(desc(KickingStatsData.fg_made)).limit(10)
-    fg_att_data = session.query(PlayerInfoData, KickingStatsData).filter(
-            KickingStatsData.player_id == PlayerInfoData.id,
-        ).order_by(desc(KickingStatsData.fg_att)).limit(10)
-    fg_pct_data = session.query(PlayerInfoData, KickingStatsData).filter(
-            KickingStatsData.player_id == PlayerInfoData.id,
-        ).order_by(desc(KickingStatsData.fg_pct)).limit(10)
-    long_fg_data = session.query(PlayerInfoData, KickingStatsData).filter(
-            KickingStatsData.player_id == PlayerInfoData.id,
-        ).order_by(desc(KickingStatsData.long_fg)).limit(10)
-    fg_made_50_plus_data = session.query(PlayerInfoData, KickingStatsData).filter(
-            KickingStatsData.player_id == PlayerInfoData.id,
-        ).order_by(desc(KickingStatsData.fg_made_50_plus)).limit(10)
-    fg_50_plus_pct_data = session.query(PlayerInfoData, KickingStatsData).filter(
-            KickingStatsData.player_id == PlayerInfoData.id,
-        ).order_by(desc(KickingStatsData.fg_50_plus_pct)).limit(10)
-    long_punt_data = session.query(PlayerInfoData, KickingStatsData).filter(
-            KickingStatsData.player_id == PlayerInfoData.id,
-        ).order_by(desc(KickingStatsData.long_punt)).limit(10)
-    num_punts_data = session.query(PlayerInfoData, KickingStatsData).filter(
-            KickingStatsData.player_id == PlayerInfoData.id,
-        ).order_by(desc(KickingStatsData.number_punts)).limit(10)
-    total_punt_yards_data = session.query(PlayerInfoData, KickingStatsData).filter(
-            KickingStatsData.player_id == PlayerInfoData.id,
-        ).order_by(desc(KickingStatsData.total_punt_yards)).limit(10)
-    punt_avg_data = session.query(PlayerInfoData, KickingStatsData).filter(
-            KickingStatsData.player_id == PlayerInfoData.id,
-        ).order_by(desc(KickingStatsData.punt_avg)).limit(10)
-    net_punting_data = session.query(PlayerInfoData, KickingStatsData).filter(
-            KickingStatsData.player_id == PlayerInfoData.id,
-        ).order_by(desc(KickingStatsData.net_punting)).limit(10)
-    inside_twenty_data = session.query(PlayerInfoData, KickingStatsData).filter(
-            KickingStatsData.player_id == PlayerInfoData.id,
-        ).order_by(desc(KickingStatsData.inside_twenty)).limit(10)
+    fg_made_data = session.query(PlayerInfoData, SeasonKickingStatsData).filter(
+            SeasonKickingStatsData.player_id == PlayerInfoData.id,
+        ).order_by(desc(SeasonKickingStatsData.fg_made)).limit(10)
+    fg_att_data = session.query(PlayerInfoData, SeasonKickingStatsData).filter(
+            SeasonKickingStatsData.player_id == PlayerInfoData.id,
+        ).order_by(desc(SeasonKickingStatsData.fg_att)).limit(10)
+    fg_pct_data = session.query(PlayerInfoData, SeasonKickingStatsData).filter(
+            SeasonKickingStatsData.player_id == PlayerInfoData.id,
+        ).order_by(desc(SeasonKickingStatsData.fg_pct)).limit(10)
+    long_fg_data = session.query(PlayerInfoData, SeasonKickingStatsData).filter(
+            SeasonKickingStatsData.player_id == PlayerInfoData.id,
+        ).order_by(desc(SeasonKickingStatsData.long_fg)).limit(10)
+    fg_made_50_plus_data = session.query(PlayerInfoData, SeasonKickingStatsData).filter(
+            SeasonKickingStatsData.player_id == PlayerInfoData.id,
+        ).order_by(desc(SeasonKickingStatsData.fg_made_50_plus)).limit(10)
+    fg_50_plus_pct_data = session.query(PlayerInfoData, SeasonKickingStatsData).filter(
+            SeasonKickingStatsData.player_id == PlayerInfoData.id,
+        ).order_by(desc(SeasonKickingStatsData.fg_50_plus_pct)).limit(10)
+    long_punt_data = session.query(PlayerInfoData, SeasonKickingStatsData).filter(
+            SeasonKickingStatsData.player_id == PlayerInfoData.id,
+        ).order_by(desc(SeasonKickingStatsData.long_punt)).limit(10)
+    num_punts_data = session.query(PlayerInfoData, SeasonKickingStatsData).filter(
+            SeasonKickingStatsData.player_id == PlayerInfoData.id,
+        ).order_by(desc(SeasonKickingStatsData.number_punts)).limit(10)
+    total_punt_yards_data = session.query(PlayerInfoData, SeasonKickingStatsData).filter(
+            SeasonKickingStatsData.player_id == PlayerInfoData.id,
+        ).order_by(desc(SeasonKickingStatsData.total_punt_yards)).limit(10)
+    punt_avg_data = session.query(PlayerInfoData, SeasonKickingStatsData).filter(
+            SeasonKickingStatsData.player_id == PlayerInfoData.id,
+        ).order_by(desc(SeasonKickingStatsData.punt_avg)).limit(10)
+    net_punting_data = session.query(PlayerInfoData, SeasonKickingStatsData).filter(
+            SeasonKickingStatsData.player_id == PlayerInfoData.id,
+        ).order_by(desc(SeasonKickingStatsData.net_punting)).limit(10)
+    inside_twenty_data = session.query(PlayerInfoData, SeasonKickingStatsData).filter(
+            SeasonKickingStatsData.player_id == PlayerInfoData.id,
+        ).order_by(desc(SeasonKickingStatsData.inside_twenty)).limit(10)
 
     # Convert players to PlayerKickingStats model so they can be dumped to json
     converted_fg_made: List[PlayerKickingStats] = [_get_player_kicking_stats(player) for player in fg_made_data]
@@ -443,38 +450,38 @@ def _get_season_specific_passing_stats_leaders():
     week_year: WeekYearData = session.query(WeekYearData).first()
     # Querying PlayerInfo first and OffensiveStats second will return 
     # a set or tuple to the players variable.
-    completions_data = session.query(PlayerInfoData, OffensiveStatsData).filter(
-            PlayerInfoData.id == OffensiveStatsData.player_id,
-            OffensiveStatsData.year == week_year.year
-            ).order_by(desc(OffensiveStatsData.completions)).limit(10)
-    pass_att_data = session.query(PlayerInfoData, OffensiveStatsData).filter(
-            PlayerInfoData.id == OffensiveStatsData.player_id,
-            OffensiveStatsData.year == week_year.year
-            ).order_by(desc(OffensiveStatsData.pass_att)).limit(10)
-    long_pass_data = session.query(PlayerInfoData, OffensiveStatsData).filter(
-            PlayerInfoData.id == OffensiveStatsData.player_id,
-            OffensiveStatsData.year == week_year.year
-            ).order_by(desc(OffensiveStatsData.longest_pass)).limit(10)
-    pass_yards_data = session.query(PlayerInfoData, OffensiveStatsData).filter(
-            PlayerInfoData.id == OffensiveStatsData.player_id,
-            OffensiveStatsData.year == week_year.year
-            ).order_by(desc(OffensiveStatsData.pass_yards)).limit(10)
-    pass_tds_data = session.query(PlayerInfoData, OffensiveStatsData).filter(
-            PlayerInfoData.id == OffensiveStatsData.player_id,
-            OffensiveStatsData.year == week_year.year
-            ).order_by(desc(OffensiveStatsData.pass_tds)).limit(10)
-    ints_data = session.query(PlayerInfoData, OffensiveStatsData).filter(
-            PlayerInfoData.id == OffensiveStatsData.player_id,
-            OffensiveStatsData.year == week_year.year
-            ).order_by(desc(OffensiveStatsData.ints)).limit(10)
-    pass_yp_attempt_data = session.query(PlayerInfoData, OffensiveStatsData).filter(
-            PlayerInfoData.id == OffensiveStatsData.player_id,
-            OffensiveStatsData.year == week_year.year
-            ).order_by(desc(OffensiveStatsData.pass_yp_attempt)).limit(10)
-    pass_yp_game_data = session.query(PlayerInfoData, OffensiveStatsData).filter(
-            PlayerInfoData.id == OffensiveStatsData.player_id,
-            OffensiveStatsData.year == week_year.year
-            ).order_by(desc(OffensiveStatsData.pass_yp_game)).limit(10)
+    completions_data = session.query(PlayerInfoData, SeasonOffensiveStatsData).filter(
+            PlayerInfoData.id == SeasonOffensiveStatsData.player_id,
+            SeasonOffensiveStatsData.year == week_year.year
+            ).order_by(desc(SeasonOffensiveStatsData.completions)).limit(10)
+    pass_att_data = session.query(PlayerInfoData, SeasonOffensiveStatsData).filter(
+            PlayerInfoData.id == SeasonOffensiveStatsData.player_id,
+            SeasonOffensiveStatsData.year == week_year.year
+            ).order_by(desc(SeasonOffensiveStatsData.pass_att)).limit(10)
+    long_pass_data = session.query(PlayerInfoData, SeasonOffensiveStatsData).filter(
+            PlayerInfoData.id == SeasonOffensiveStatsData.player_id,
+            SeasonOffensiveStatsData.year == week_year.year
+            ).order_by(desc(SeasonOffensiveStatsData.longest_pass)).limit(10)
+    pass_yards_data = session.query(PlayerInfoData, SeasonOffensiveStatsData).filter(
+            PlayerInfoData.id == SeasonOffensiveStatsData.player_id,
+            SeasonOffensiveStatsData.year == week_year.year
+            ).order_by(desc(SeasonOffensiveStatsData.pass_yards)).limit(10)
+    pass_tds_data = session.query(PlayerInfoData, SeasonOffensiveStatsData).filter(
+            PlayerInfoData.id == SeasonOffensiveStatsData.player_id,
+            SeasonOffensiveStatsData.year == week_year.year
+            ).order_by(desc(SeasonOffensiveStatsData.pass_tds)).limit(10)
+    ints_data = session.query(PlayerInfoData, SeasonOffensiveStatsData).filter(
+            PlayerInfoData.id == SeasonOffensiveStatsData.player_id,
+            SeasonOffensiveStatsData.year == week_year.year
+            ).order_by(desc(SeasonOffensiveStatsData.ints)).limit(10)
+    pass_yp_attempt_data = session.query(PlayerInfoData, SeasonOffensiveStatsData).filter(
+            PlayerInfoData.id == SeasonOffensiveStatsData.player_id,
+            SeasonOffensiveStatsData.year == week_year.year
+            ).order_by(desc(SeasonOffensiveStatsData.pass_yp_attempt)).limit(10)
+    pass_yp_game_data = session.query(PlayerInfoData, SeasonOffensiveStatsData).filter(
+            PlayerInfoData.id == SeasonOffensiveStatsData.player_id,
+            SeasonOffensiveStatsData.year == week_year.year
+            ).order_by(desc(SeasonOffensiveStatsData.pass_yp_game)).limit(10)
 
     # Convert players to PlayerPassingStats model so they can be sorted
     converted_completions: List[PlayerPassingStats] = [_get_player_passing_stats(player) for player in completions_data]
@@ -513,30 +520,30 @@ def _get_season_specific_passing_stats_leaders():
 def _get_season_all_time_passing_stats_leaders():
     # Querying PlayerInfo first and OffensiveStats second will return 
     # a set or tuple to the players variable.
-    completions_data = session.query(PlayerInfoData, OffensiveStatsData).filter(
-            PlayerInfoData.id == OffensiveStatsData.player_id,
-            ).order_by(desc(OffensiveStatsData.completions)).limit(10)
-    pass_att_data = session.query(PlayerInfoData, OffensiveStatsData).filter(
-            PlayerInfoData.id == OffensiveStatsData.player_id,
-            ).order_by(desc(OffensiveStatsData.pass_att)).limit(10)
-    long_pass_data = session.query(PlayerInfoData, OffensiveStatsData).filter(
-            PlayerInfoData.id == OffensiveStatsData.player_id,
-            ).order_by(desc(OffensiveStatsData.longest_pass)).limit(10)
-    pass_yards_data = session.query(PlayerInfoData, OffensiveStatsData).filter(
-            PlayerInfoData.id == OffensiveStatsData.player_id,
-            ).order_by(desc(OffensiveStatsData.pass_yards)).limit(10)
-    pass_tds_data = session.query(PlayerInfoData, OffensiveStatsData).filter(
-            PlayerInfoData.id == OffensiveStatsData.player_id,
-            ).order_by(desc(OffensiveStatsData.pass_tds)).limit(10)
-    ints_data = session.query(PlayerInfoData, OffensiveStatsData).filter(
-            PlayerInfoData.id == OffensiveStatsData.player_id,
-            ).order_by(desc(OffensiveStatsData.ints)).limit(10)
-    pass_yp_attempt_data = session.query(PlayerInfoData, OffensiveStatsData).filter(
-            PlayerInfoData.id == OffensiveStatsData.player_id,
-            ).order_by(desc(OffensiveStatsData.pass_yp_attempt)).limit(10)
-    pass_yp_game_data = session.query(PlayerInfoData, OffensiveStatsData).filter(
-            PlayerInfoData.id == OffensiveStatsData.player_id,
-            ).order_by(desc(OffensiveStatsData.pass_yp_game)).limit(10)
+    completions_data = session.query(PlayerInfoData, SeasonOffensiveStatsData).filter(
+            PlayerInfoData.id == SeasonOffensiveStatsData.player_id,
+            ).order_by(desc(SeasonOffensiveStatsData.completions)).limit(10)
+    pass_att_data = session.query(PlayerInfoData, SeasonOffensiveStatsData).filter(
+            PlayerInfoData.id == SeasonOffensiveStatsData.player_id,
+            ).order_by(desc(SeasonOffensiveStatsData.pass_att)).limit(10)
+    long_pass_data = session.query(PlayerInfoData, SeasonOffensiveStatsData).filter(
+            PlayerInfoData.id == SeasonOffensiveStatsData.player_id,
+            ).order_by(desc(SeasonOffensiveStatsData.longest_pass)).limit(10)
+    pass_yards_data = session.query(PlayerInfoData, SeasonOffensiveStatsData).filter(
+            PlayerInfoData.id == SeasonOffensiveStatsData.player_id,
+            ).order_by(desc(SeasonOffensiveStatsData.pass_yards)).limit(10)
+    pass_tds_data = session.query(PlayerInfoData, SeasonOffensiveStatsData).filter(
+            PlayerInfoData.id == SeasonOffensiveStatsData.player_id,
+            ).order_by(desc(SeasonOffensiveStatsData.pass_tds)).limit(10)
+    ints_data = session.query(PlayerInfoData, SeasonOffensiveStatsData).filter(
+            PlayerInfoData.id == SeasonOffensiveStatsData.player_id,
+            ).order_by(desc(SeasonOffensiveStatsData.ints)).limit(10)
+    pass_yp_attempt_data = session.query(PlayerInfoData, SeasonOffensiveStatsData).filter(
+            PlayerInfoData.id == SeasonOffensiveStatsData.player_id,
+            ).order_by(desc(SeasonOffensiveStatsData.pass_yp_attempt)).limit(10)
+    pass_yp_game_data = session.query(PlayerInfoData, SeasonOffensiveStatsData).filter(
+            PlayerInfoData.id == SeasonOffensiveStatsData.player_id,
+            ).order_by(desc(SeasonOffensiveStatsData.pass_yp_game)).limit(10)
 
     # Convert players to PlayerPassingStats model so they can be sorted
     converted_completions: List[PlayerPassingStats] = [_get_player_passing_stats(player) for player in completions_data]
@@ -580,34 +587,34 @@ def _get_season_specific_rec_stats_leaders():
     week_year: WeekYearData = session.query(WeekYearData).first()
     # Querying PlayerInfo first and OffensiveStats second will return 
     # a set or tuple to the players variable.
-    receptions_data = session.query(PlayerInfoData, OffensiveStatsData).filter(
-            PlayerInfoData.id == OffensiveStatsData.player_id,
-            OffensiveStatsData.year == week_year.year
-            ).order_by(desc(OffensiveStatsData.receptions)).limit(10)
-    rec_yards_data = session.query(PlayerInfoData, OffensiveStatsData).filter(
-            PlayerInfoData.id == OffensiveStatsData.player_id,
-            OffensiveStatsData.year == week_year.year
-            ).order_by(desc(OffensiveStatsData.rec_yards)).limit(10)
-    rec_tds_data = session.query(PlayerInfoData, OffensiveStatsData).filter(
-            PlayerInfoData.id == OffensiveStatsData.player_id,
-            OffensiveStatsData.year == week_year.year
-            ).order_by(desc(OffensiveStatsData.rec_tds)).limit(10)
-    yac_data = session.query(PlayerInfoData, OffensiveStatsData).filter(
-            PlayerInfoData.id == OffensiveStatsData.player_id,
-            OffensiveStatsData.year == week_year.year
-            ).order_by(desc(OffensiveStatsData.yac)).limit(10)
-    drops_data = session.query(PlayerInfoData, OffensiveStatsData).filter(
-            PlayerInfoData.id == OffensiveStatsData.player_id,
-            OffensiveStatsData.year == week_year.year
-            ).order_by(desc(OffensiveStatsData.drops)).limit(10)
-    rec_yp_catch_data = session.query(PlayerInfoData, OffensiveStatsData).filter(
-            PlayerInfoData.id == OffensiveStatsData.player_id,
-            OffensiveStatsData.year == week_year.year
-            ).order_by(desc(OffensiveStatsData.rec_yp_catch)).limit(10)
-    rec_yp_game_data = session.query(PlayerInfoData, OffensiveStatsData).filter(
-            PlayerInfoData.id == OffensiveStatsData.player_id,
-            OffensiveStatsData.year == week_year.year
-            ).order_by(desc(OffensiveStatsData.rec_yp_game)).limit(10)
+    receptions_data = session.query(PlayerInfoData, SeasonOffensiveStatsData).filter(
+            PlayerInfoData.id == SeasonOffensiveStatsData.player_id,
+            SeasonOffensiveStatsData.year == week_year.year
+            ).order_by(desc(SeasonOffensiveStatsData.receptions)).limit(10)
+    rec_yards_data = session.query(PlayerInfoData, SeasonOffensiveStatsData).filter(
+            PlayerInfoData.id == SeasonOffensiveStatsData.player_id,
+            SeasonOffensiveStatsData.year == week_year.year
+            ).order_by(desc(SeasonOffensiveStatsData.rec_yards)).limit(10)
+    rec_tds_data = session.query(PlayerInfoData, SeasonOffensiveStatsData).filter(
+            PlayerInfoData.id == SeasonOffensiveStatsData.player_id,
+            SeasonOffensiveStatsData.year == week_year.year
+            ).order_by(desc(SeasonOffensiveStatsData.rec_tds)).limit(10)
+    yac_data = session.query(PlayerInfoData, SeasonOffensiveStatsData).filter(
+            PlayerInfoData.id == SeasonOffensiveStatsData.player_id,
+            SeasonOffensiveStatsData.year == week_year.year
+            ).order_by(desc(SeasonOffensiveStatsData.yac)).limit(10)
+    drops_data = session.query(PlayerInfoData, SeasonOffensiveStatsData).filter(
+            PlayerInfoData.id == SeasonOffensiveStatsData.player_id,
+            SeasonOffensiveStatsData.year == week_year.year
+            ).order_by(desc(SeasonOffensiveStatsData.drops)).limit(10)
+    rec_yp_catch_data = session.query(PlayerInfoData, SeasonOffensiveStatsData).filter(
+            PlayerInfoData.id == SeasonOffensiveStatsData.player_id,
+            SeasonOffensiveStatsData.year == week_year.year
+            ).order_by(desc(SeasonOffensiveStatsData.rec_yp_catch)).limit(10)
+    rec_yp_game_data = session.query(PlayerInfoData, SeasonOffensiveStatsData).filter(
+            PlayerInfoData.id == SeasonOffensiveStatsData.player_id,
+            SeasonOffensiveStatsData.year == week_year.year
+            ).order_by(desc(SeasonOffensiveStatsData.rec_yp_game)).limit(10)
 
     # Convert players to PlayerReceivingStats model so they can be sorted
     converted_receptions: List[PlayerReceivingStats] = [_get_player_receiving_stats(player) for player in receptions_data]
@@ -643,27 +650,27 @@ def _get_season_specific_rec_stats_leaders():
 def _get_season_all_time_rec_stats_leaders():
     # Querying PlayerInfo first and OffensiveStats second will return 
     # a set or tuple to the players variable.
-    receptions_data = session.query(PlayerInfoData, OffensiveStatsData).filter(
-            PlayerInfoData.id == OffensiveStatsData.player_id,
-            ).order_by(desc(OffensiveStatsData.receptions)).limit(10)
-    rec_yards_data = session.query(PlayerInfoData, OffensiveStatsData).filter(
-            PlayerInfoData.id == OffensiveStatsData.player_id,
-            ).order_by(desc(OffensiveStatsData.rec_yards)).limit(10)
-    rec_tds_data = session.query(PlayerInfoData, OffensiveStatsData).filter(
-            PlayerInfoData.id == OffensiveStatsData.player_id,
-            ).order_by(desc(OffensiveStatsData.rec_tds)).limit(10)
-    yac_data = session.query(PlayerInfoData, OffensiveStatsData).filter(
-            PlayerInfoData.id == OffensiveStatsData.player_id,
-            ).order_by(desc(OffensiveStatsData.yac)).limit(10)
-    drops_data = session.query(PlayerInfoData, OffensiveStatsData).filter(
-            PlayerInfoData.id == OffensiveStatsData.player_id,
-            ).order_by(desc(OffensiveStatsData.drops)).limit(10)
-    rec_yp_catch_data = session.query(PlayerInfoData, OffensiveStatsData).filter(
-            PlayerInfoData.id == OffensiveStatsData.player_id,
-            ).order_by(desc(OffensiveStatsData.rec_yp_catch)).limit(10)
-    rec_yp_game_data = session.query(PlayerInfoData, OffensiveStatsData).filter(
-            PlayerInfoData.id == OffensiveStatsData.player_id,
-            ).order_by(desc(OffensiveStatsData.rec_yp_game)).limit(10)
+    receptions_data = session.query(PlayerInfoData, SeasonOffensiveStatsData).filter(
+            PlayerInfoData.id == SeasonOffensiveStatsData.player_id,
+            ).order_by(desc(SeasonOffensiveStatsData.receptions)).limit(10)
+    rec_yards_data = session.query(PlayerInfoData, SeasonOffensiveStatsData).filter(
+            PlayerInfoData.id == SeasonOffensiveStatsData.player_id,
+            ).order_by(desc(SeasonOffensiveStatsData.rec_yards)).limit(10)
+    rec_tds_data = session.query(PlayerInfoData, SeasonOffensiveStatsData).filter(
+            PlayerInfoData.id == SeasonOffensiveStatsData.player_id,
+            ).order_by(desc(SeasonOffensiveStatsData.rec_tds)).limit(10)
+    yac_data = session.query(PlayerInfoData, SeasonOffensiveStatsData).filter(
+            PlayerInfoData.id == SeasonOffensiveStatsData.player_id,
+            ).order_by(desc(SeasonOffensiveStatsData.yac)).limit(10)
+    drops_data = session.query(PlayerInfoData, SeasonOffensiveStatsData).filter(
+            PlayerInfoData.id == SeasonOffensiveStatsData.player_id,
+            ).order_by(desc(SeasonOffensiveStatsData.drops)).limit(10)
+    rec_yp_catch_data = session.query(PlayerInfoData, SeasonOffensiveStatsData).filter(
+            PlayerInfoData.id == SeasonOffensiveStatsData.player_id,
+            ).order_by(desc(SeasonOffensiveStatsData.rec_yp_catch)).limit(10)
+    rec_yp_game_data = session.query(PlayerInfoData, SeasonOffensiveStatsData).filter(
+            PlayerInfoData.id == SeasonOffensiveStatsData.player_id,
+            ).order_by(desc(SeasonOffensiveStatsData.rec_yp_game)).limit(10)
 
     # Convert players to PlayerReceivingStats model so they can be sorted
     converted_receptions: List[PlayerReceivingStats] = [_get_player_receiving_stats(player) for player in receptions_data]
@@ -704,46 +711,46 @@ def _get_season_specific_return_stats_leaders():
     week_year: WeekYearData = session.query(WeekYearData).first()
     # Querying PlayerInfo first and OffensiveStats second will return 
     # a set or tuple to the players variable.
-    kick_returns_data = session.query(PlayerInfoData, ReturnStatsData).filter(
-            PlayerInfoData.id == ReturnStatsData.player_id,
-            ReturnStatsData.year == week_year.year
-            ).order_by(desc(ReturnStatsData.kick_returns)).limit(10)
-    long_kr_data = session.query(PlayerInfoData, ReturnStatsData).filter(
-            PlayerInfoData.id == ReturnStatsData.player_id,
-            ReturnStatsData.year == week_year.year
-            ).order_by(desc(ReturnStatsData.long_kr)).limit(10)
-    punt_returns_data = session.query(PlayerInfoData, ReturnStatsData).filter(
-            PlayerInfoData.id == ReturnStatsData.player_id,
-            ReturnStatsData.year == week_year.year
-            ).order_by(desc(ReturnStatsData.punt_returns)).limit(10)
-    long_pr_data = session.query(PlayerInfoData, ReturnStatsData).filter(
-            PlayerInfoData.id == ReturnStatsData.player_id,
-            ReturnStatsData.year == week_year.year
-            ).order_by(desc(ReturnStatsData.long_pr)).limit(10)
-    kr_tds_data = session.query(PlayerInfoData, ReturnStatsData).filter(
-            PlayerInfoData.id == ReturnStatsData.player_id,
-            ReturnStatsData.year == week_year.year
-            ).order_by(desc(ReturnStatsData.kr_tds)).limit(10)
-    pr_tds_data = session.query(PlayerInfoData, ReturnStatsData).filter(
-            PlayerInfoData.id == ReturnStatsData.player_id,
-            ReturnStatsData.year == week_year.year
-            ).order_by(desc(ReturnStatsData.pr_tds)).limit(10)
-    kr_yards_data = session.query(PlayerInfoData, ReturnStatsData).filter(
-            PlayerInfoData.id == ReturnStatsData.player_id,
-            ReturnStatsData.year == week_year.year
-            ).order_by(desc(ReturnStatsData.kr_yds)).limit(10)
-    pr_yards_data = session.query(PlayerInfoData, ReturnStatsData).filter(
-            PlayerInfoData.id == ReturnStatsData.player_id,
-            ReturnStatsData.year == week_year.year
-            ).order_by(desc(ReturnStatsData.pr_yds)).limit(10)
-    kr_avg_data = session.query(PlayerInfoData, ReturnStatsData).filter(
-            PlayerInfoData.id == ReturnStatsData.player_id,
-            ReturnStatsData.year == week_year.year
-            ).order_by(desc(ReturnStatsData.kr_avg)).limit(10)
-    pr_avg_data = session.query(PlayerInfoData, ReturnStatsData).filter(
-            PlayerInfoData.id == ReturnStatsData.player_id,
-            ReturnStatsData.year == week_year.year
-            ).order_by(desc(ReturnStatsData.pr_avg)).limit(10)
+    kick_returns_data = session.query(PlayerInfoData, SeasonReturnStatsData).filter(
+            PlayerInfoData.id == SeasonReturnStatsData.player_id,
+            SeasonReturnStatsData.year == week_year.year
+            ).order_by(desc(SeasonReturnStatsData.kick_returns)).limit(10)
+    long_kr_data = session.query(PlayerInfoData, SeasonReturnStatsData).filter(
+            PlayerInfoData.id == SeasonReturnStatsData.player_id,
+            SeasonReturnStatsData.year == week_year.year
+            ).order_by(desc(SeasonReturnStatsData.long_kr)).limit(10)
+    punt_returns_data = session.query(PlayerInfoData, SeasonReturnStatsData).filter(
+            PlayerInfoData.id == SeasonReturnStatsData.player_id,
+            SeasonReturnStatsData.year == week_year.year
+            ).order_by(desc(SeasonReturnStatsData.punt_returns)).limit(10)
+    long_pr_data = session.query(PlayerInfoData, SeasonReturnStatsData).filter(
+            PlayerInfoData.id == SeasonReturnStatsData.player_id,
+            SeasonReturnStatsData.year == week_year.year
+            ).order_by(desc(SeasonReturnStatsData.long_pr)).limit(10)
+    kr_tds_data = session.query(PlayerInfoData, SeasonReturnStatsData).filter(
+            PlayerInfoData.id == SeasonReturnStatsData.player_id,
+            SeasonReturnStatsData.year == week_year.year
+            ).order_by(desc(SeasonReturnStatsData.kr_tds)).limit(10)
+    pr_tds_data = session.query(PlayerInfoData, SeasonReturnStatsData).filter(
+            PlayerInfoData.id == SeasonReturnStatsData.player_id,
+            SeasonReturnStatsData.year == week_year.year
+            ).order_by(desc(SeasonReturnStatsData.pr_tds)).limit(10)
+    kr_yards_data = session.query(PlayerInfoData, SeasonReturnStatsData).filter(
+            PlayerInfoData.id == SeasonReturnStatsData.player_id,
+            SeasonReturnStatsData.year == week_year.year
+            ).order_by(desc(SeasonReturnStatsData.kr_yds)).limit(10)
+    pr_yards_data = session.query(PlayerInfoData, SeasonReturnStatsData).filter(
+            PlayerInfoData.id == SeasonReturnStatsData.player_id,
+            SeasonReturnStatsData.year == week_year.year
+            ).order_by(desc(SeasonReturnStatsData.pr_yds)).limit(10)
+    kr_avg_data = session.query(PlayerInfoData, SeasonReturnStatsData).filter(
+            PlayerInfoData.id == SeasonReturnStatsData.player_id,
+            SeasonReturnStatsData.year == week_year.year
+            ).order_by(desc(SeasonReturnStatsData.kr_avg)).limit(10)
+    pr_avg_data = session.query(PlayerInfoData, SeasonReturnStatsData).filter(
+            PlayerInfoData.id == SeasonReturnStatsData.player_id,
+            SeasonReturnStatsData.year == week_year.year
+            ).order_by(desc(SeasonReturnStatsData.pr_avg)).limit(10)
 
     # Convert players to PlayerKickingStats model so they can be sorted
     converted_kick_returns: List[PlayerReturnStats] = [_get_player_return_stats(player) for player in kick_returns_data]
@@ -788,36 +795,36 @@ def _get_season_specific_return_stats_leaders():
 def _get_season_all_time_return_stats_leaders():
     # Querying PlayerInfo first and OffensiveStats second will return 
     # a set or tuple to the players variable.
-    kick_returns_data = session.query(PlayerInfoData, ReturnStatsData).filter(
-            PlayerInfoData.id == ReturnStatsData.player_id,
-            ).order_by(desc(ReturnStatsData.kick_returns)).limit(10)
-    long_kr_data = session.query(PlayerInfoData, ReturnStatsData).filter(
-            PlayerInfoData.id == ReturnStatsData.player_id,
-            ).order_by(desc(ReturnStatsData.long_kr)).limit(10)
-    punt_returns_data = session.query(PlayerInfoData, ReturnStatsData).filter(
-            PlayerInfoData.id == ReturnStatsData.player_id,
-            ).order_by(desc(ReturnStatsData.punt_returns)).limit(10)
-    long_pr_data = session.query(PlayerInfoData, ReturnStatsData).filter(
-            PlayerInfoData.id == ReturnStatsData.player_id,
-            ).order_by(desc(ReturnStatsData.long_pr)).limit(10)
-    kr_tds_data = session.query(PlayerInfoData, ReturnStatsData).filter(
-            PlayerInfoData.id == ReturnStatsData.player_id,
-            ).order_by(desc(ReturnStatsData.kr_tds)).limit(10)
-    pr_tds_data = session.query(PlayerInfoData, ReturnStatsData).filter(
-            PlayerInfoData.id == ReturnStatsData.player_id,
-            ).order_by(desc(ReturnStatsData.pr_tds)).limit(10)
-    kr_yards_data = session.query(PlayerInfoData, ReturnStatsData).filter(
-            PlayerInfoData.id == ReturnStatsData.player_id,
-            ).order_by(desc(ReturnStatsData.kr_yds)).limit(10)
-    pr_yards_data = session.query(PlayerInfoData, ReturnStatsData).filter(
-            PlayerInfoData.id == ReturnStatsData.player_id,
-            ).order_by(desc(ReturnStatsData.pr_yds)).limit(10)
-    kr_avg_data = session.query(PlayerInfoData, ReturnStatsData).filter(
-            PlayerInfoData.id == ReturnStatsData.player_id,
-            ).order_by(desc(ReturnStatsData.kr_avg)).limit(10)
-    pr_avg_data = session.query(PlayerInfoData, ReturnStatsData).filter(
-            PlayerInfoData.id == ReturnStatsData.player_id,
-            ).order_by(desc(ReturnStatsData.pr_avg)).limit(10)
+    kick_returns_data = session.query(PlayerInfoData, SeasonReturnStatsData).filter(
+            PlayerInfoData.id == SeasonReturnStatsData.player_id,
+            ).order_by(desc(SeasonReturnStatsData.kick_returns)).limit(10)
+    long_kr_data = session.query(PlayerInfoData, SeasonReturnStatsData).filter(
+            PlayerInfoData.id == SeasonReturnStatsData.player_id,
+            ).order_by(desc(SeasonReturnStatsData.long_kr)).limit(10)
+    punt_returns_data = session.query(PlayerInfoData, SeasonReturnStatsData).filter(
+            PlayerInfoData.id == SeasonReturnStatsData.player_id,
+            ).order_by(desc(SeasonReturnStatsData.punt_returns)).limit(10)
+    long_pr_data = session.query(PlayerInfoData, SeasonReturnStatsData).filter(
+            PlayerInfoData.id == SeasonReturnStatsData.player_id,
+            ).order_by(desc(SeasonReturnStatsData.long_pr)).limit(10)
+    kr_tds_data = session.query(PlayerInfoData, SeasonReturnStatsData).filter(
+            PlayerInfoData.id == SeasonReturnStatsData.player_id,
+            ).order_by(desc(SeasonReturnStatsData.kr_tds)).limit(10)
+    pr_tds_data = session.query(PlayerInfoData, SeasonReturnStatsData).filter(
+            PlayerInfoData.id == SeasonReturnStatsData.player_id,
+            ).order_by(desc(SeasonReturnStatsData.pr_tds)).limit(10)
+    kr_yards_data = session.query(PlayerInfoData, SeasonReturnStatsData).filter(
+            PlayerInfoData.id == SeasonReturnStatsData.player_id,
+            ).order_by(desc(SeasonReturnStatsData.kr_yds)).limit(10)
+    pr_yards_data = session.query(PlayerInfoData, SeasonReturnStatsData).filter(
+            PlayerInfoData.id == SeasonReturnStatsData.player_id,
+            ).order_by(desc(SeasonReturnStatsData.pr_yds)).limit(10)
+    kr_avg_data = session.query(PlayerInfoData, SeasonReturnStatsData).filter(
+            PlayerInfoData.id == SeasonReturnStatsData.player_id,
+            ).order_by(desc(SeasonReturnStatsData.kr_avg)).limit(10)
+    pr_avg_data = session.query(PlayerInfoData, SeasonReturnStatsData).filter(
+            PlayerInfoData.id == SeasonReturnStatsData.player_id,
+            ).order_by(desc(SeasonReturnStatsData.pr_avg)).limit(10)
 
     # Convert players to PlayerKickingStats model so they can be sorted
     converted_kick_returns: List[PlayerReturnStats] = [_get_player_return_stats(player) for player in kick_returns_data]
@@ -867,38 +874,38 @@ def _get_season_specific_rush_stats_leaders():
     week_year: WeekYearData = session.query(WeekYearData).first()
     # Querying PlayerInfo first and OffensiveStats second will return 
     # a set or tuple to the players variable.
-    rush_att_data = session.query(PlayerInfoData, OffensiveStatsData).filter(
-            PlayerInfoData.id == OffensiveStatsData.player_id,
-            OffensiveStatsData.year == week_year.year,
-            ).order_by(desc(OffensiveStatsData.rush_att)).limit(10)
-    rush_yards_data = session.query(PlayerInfoData, OffensiveStatsData).filter(
-            PlayerInfoData.id == OffensiveStatsData.player_id,
-            OffensiveStatsData.year == week_year.year,
-            ).order_by(desc(OffensiveStatsData.rush_yards)).limit(10)
-    ya_contact_data = session.query(PlayerInfoData, OffensiveStatsData).filter(
-            PlayerInfoData.id == OffensiveStatsData.player_id,
-            OffensiveStatsData.year == week_year.year,
-            ).order_by(desc(OffensiveStatsData.ya_contact)).limit(10)
-    broke_tkls_data = session.query(PlayerInfoData, OffensiveStatsData).filter(
-            PlayerInfoData.id == OffensiveStatsData.player_id,
-            OffensiveStatsData.year == week_year.year,
-            ).order_by(desc(OffensiveStatsData.broke_tkls)).limit(10)
-    fumbles_data = session.query(PlayerInfoData, OffensiveStatsData).filter(
-            PlayerInfoData.id == OffensiveStatsData.player_id,
-            OffensiveStatsData.year == week_year.year,
-            ).order_by(desc(OffensiveStatsData.fumbles)).limit(10)
-    twenty_plus_yd_runs_data = session.query(PlayerInfoData, OffensiveStatsData).filter(
-            PlayerInfoData.id == OffensiveStatsData.player_id,
-            OffensiveStatsData.year == week_year.year,
-            ).order_by(desc(OffensiveStatsData.twenty_plus_yd_runs)).limit(10)
-    rush_yp_carry_data = session.query(PlayerInfoData, OffensiveStatsData).filter(
-            PlayerInfoData.id == OffensiveStatsData.player_id,
-            OffensiveStatsData.year == week_year.year,
-            ).order_by(desc(OffensiveStatsData.rush_yp_carry)).limit(10)
-    rush_yp_game_data = session.query(PlayerInfoData, OffensiveStatsData).filter(
-            PlayerInfoData.id == OffensiveStatsData.player_id,
-            OffensiveStatsData.year == week_year.year,
-            ).order_by(desc(OffensiveStatsData.rush_yp_game)).limit(10)
+    rush_att_data = session.query(PlayerInfoData, SeasonOffensiveStatsData).filter(
+            PlayerInfoData.id == SeasonOffensiveStatsData.player_id,
+            SeasonOffensiveStatsData.year == week_year.year,
+            ).order_by(desc(SeasonOffensiveStatsData.rush_att)).limit(10)
+    rush_yards_data = session.query(PlayerInfoData, SeasonOffensiveStatsData).filter(
+            PlayerInfoData.id == SeasonOffensiveStatsData.player_id,
+            SeasonOffensiveStatsData.year == week_year.year,
+            ).order_by(desc(SeasonOffensiveStatsData.rush_yards)).limit(10)
+    ya_contact_data = session.query(PlayerInfoData, SeasonOffensiveStatsData).filter(
+            PlayerInfoData.id == SeasonOffensiveStatsData.player_id,
+            SeasonOffensiveStatsData.year == week_year.year,
+            ).order_by(desc(SeasonOffensiveStatsData.ya_contact)).limit(10)
+    broke_tkls_data = session.query(PlayerInfoData, SeasonOffensiveStatsData).filter(
+            PlayerInfoData.id == SeasonOffensiveStatsData.player_id,
+            SeasonOffensiveStatsData.year == week_year.year,
+            ).order_by(desc(SeasonOffensiveStatsData.broke_tkls)).limit(10)
+    fumbles_data = session.query(PlayerInfoData, SeasonOffensiveStatsData).filter(
+            PlayerInfoData.id == SeasonOffensiveStatsData.player_id,
+            SeasonOffensiveStatsData.year == week_year.year,
+            ).order_by(desc(SeasonOffensiveStatsData.fumbles)).limit(10)
+    twenty_plus_yd_runs_data = session.query(PlayerInfoData, SeasonOffensiveStatsData).filter(
+            PlayerInfoData.id == SeasonOffensiveStatsData.player_id,
+            SeasonOffensiveStatsData.year == week_year.year,
+            ).order_by(desc(SeasonOffensiveStatsData.twenty_plus_yd_runs)).limit(10)
+    rush_yp_carry_data = session.query(PlayerInfoData, SeasonOffensiveStatsData).filter(
+            PlayerInfoData.id == SeasonOffensiveStatsData.player_id,
+            SeasonOffensiveStatsData.year == week_year.year,
+            ).order_by(desc(SeasonOffensiveStatsData.rush_yp_carry)).limit(10)
+    rush_yp_game_data = session.query(PlayerInfoData, SeasonOffensiveStatsData).filter(
+            PlayerInfoData.id == SeasonOffensiveStatsData.player_id,
+            SeasonOffensiveStatsData.year == week_year.year,
+            ).order_by(desc(SeasonOffensiveStatsData.rush_yp_game)).limit(10)
 
     # Convert players to PlayerRushingStats model so they can be sorted
     converted_rush_att: List[PlayerRushingStats] = [_get_player_rushing_stats(player) for player in rush_att_data]
@@ -937,30 +944,30 @@ def _get_season_specific_rush_stats_leaders():
 def _get_season_all_time_rush_stats_leaders():
     # Querying PlayerInfo first and OffensiveStats second will return 
     # a set or tuple to the players variable.
-    rush_att_data = session.query(PlayerInfoData, OffensiveStatsData).filter(
-            PlayerInfoData.id == OffensiveStatsData.player_id,
-            ).order_by(desc(OffensiveStatsData.rush_att)).limit(10)
-    rush_yards_data = session.query(PlayerInfoData, OffensiveStatsData).filter(
-            PlayerInfoData.id == OffensiveStatsData.player_id,
-            ).order_by(desc(OffensiveStatsData.rush_yards)).limit(10)
-    ya_contact_data = session.query(PlayerInfoData, OffensiveStatsData).filter(
-            PlayerInfoData.id == OffensiveStatsData.player_id,
-            ).order_by(desc(OffensiveStatsData.ya_contact)).limit(10)
-    broke_tkls_data = session.query(PlayerInfoData, OffensiveStatsData).filter(
-            PlayerInfoData.id == OffensiveStatsData.player_id,
-            ).order_by(desc(OffensiveStatsData.broke_tkls)).limit(10)
-    fumbles_data = session.query(PlayerInfoData, OffensiveStatsData).filter(
-            PlayerInfoData.id == OffensiveStatsData.player_id,
-            ).order_by(desc(OffensiveStatsData.fumbles)).limit(10)
-    twenty_plus_yd_runs_data = session.query(PlayerInfoData, OffensiveStatsData).filter(
-            PlayerInfoData.id == OffensiveStatsData.player_id,
-            ).order_by(desc(OffensiveStatsData.twenty_plus_yd_runs)).limit(10)
-    rush_yp_carry_data = session.query(PlayerInfoData, OffensiveStatsData).filter(
-            PlayerInfoData.id == OffensiveStatsData.player_id,
-            ).order_by(desc(OffensiveStatsData.rush_yp_carry)).limit(10)
-    rush_yp_game_data = session.query(PlayerInfoData, OffensiveStatsData).filter(
-            PlayerInfoData.id == OffensiveStatsData.player_id,
-            ).order_by(desc(OffensiveStatsData.rush_yp_game)).limit(10)
+    rush_att_data = session.query(PlayerInfoData, SeasonOffensiveStatsData).filter(
+            PlayerInfoData.id == SeasonOffensiveStatsData.player_id,
+            ).order_by(desc(SeasonOffensiveStatsData.rush_att)).limit(10)
+    rush_yards_data = session.query(PlayerInfoData, SeasonOffensiveStatsData).filter(
+            PlayerInfoData.id == SeasonOffensiveStatsData.player_id,
+            ).order_by(desc(SeasonOffensiveStatsData.rush_yards)).limit(10)
+    ya_contact_data = session.query(PlayerInfoData, SeasonOffensiveStatsData).filter(
+            PlayerInfoData.id == SeasonOffensiveStatsData.player_id,
+            ).order_by(desc(SeasonOffensiveStatsData.ya_contact)).limit(10)
+    broke_tkls_data = session.query(PlayerInfoData, SeasonOffensiveStatsData).filter(
+            PlayerInfoData.id == SeasonOffensiveStatsData.player_id,
+            ).order_by(desc(SeasonOffensiveStatsData.broke_tkls)).limit(10)
+    fumbles_data = session.query(PlayerInfoData, SeasonOffensiveStatsData).filter(
+            PlayerInfoData.id == SeasonOffensiveStatsData.player_id,
+            ).order_by(desc(SeasonOffensiveStatsData.fumbles)).limit(10)
+    twenty_plus_yd_runs_data = session.query(PlayerInfoData, SeasonOffensiveStatsData).filter(
+            PlayerInfoData.id == SeasonOffensiveStatsData.player_id,
+            ).order_by(desc(SeasonOffensiveStatsData.twenty_plus_yd_runs)).limit(10)
+    rush_yp_carry_data = session.query(PlayerInfoData, SeasonOffensiveStatsData).filter(
+            PlayerInfoData.id == SeasonOffensiveStatsData.player_id,
+            ).order_by(desc(SeasonOffensiveStatsData.rush_yp_carry)).limit(10)
+    rush_yp_game_data = session.query(PlayerInfoData, SeasonOffensiveStatsData).filter(
+            PlayerInfoData.id == SeasonOffensiveStatsData.player_id,
+            ).order_by(desc(SeasonOffensiveStatsData.rush_yp_game)).limit(10)
 
     # Convert players to PlayerRushingStats model so they can be sorted
     converted_rush_att: List[PlayerRushingStats] = [_get_player_rushing_stats(player) for player in rush_att_data]

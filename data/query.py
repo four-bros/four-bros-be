@@ -15,9 +15,9 @@ from src.constants import(
     engine,
     session
 )
-from src.data_models.DefensiveStatsData import DefensiveStatsData
+from src.data_models.SeasonDefensiveStatsData import SeasonDefensiveStatsData
 from src.data_models.PlayerInfoData import PlayerInfoData
-from src.data_models.OffensiveStatsData import OffensiveStatsData
+from src.data_models.SeasonOffensiveStatsData import SeasonOffensiveStatsData
 from src.data_models.TeamInfoData import TeamInfoData
 from src.data_models.WeekYearData import WeekYearData
 from src.models.Stats import PlayerDefensiveStats
@@ -33,10 +33,10 @@ players_schema = PlayerSchema(many=True)
 
 week_year: WeekYearData = session.query(WeekYearData).first()
 
-top_long_int_ret_data = session.query(PlayerInfoData, DefensiveStatsData).filter(
-        PlayerInfoData.id == DefensiveStatsData.player_id,
-        DefensiveStatsData.year == week_year.year
-        ).order_by(desc(DefensiveStatsData.long_int_ret)).limit(10)
+top_long_int_ret_data = session.query(PlayerInfoData, SeasonDefensiveStatsData).filter(
+        PlayerInfoData.id == SeasonDefensiveStatsData.player_id,
+        SeasonDefensiveStatsData.year == week_year.year
+        ).order_by(desc(SeasonDefensiveStatsData.long_int_ret)).limit(10)
 
 
 converted_players: List[PlayerDefensiveStats] = [_get_player_defensive_stats(player) for player in top_long_int_ret_data]

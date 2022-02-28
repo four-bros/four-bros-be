@@ -10,8 +10,8 @@ from src.constants import(
     team_details_schema,
     team_schema
 )
-from src.data_models.DefensiveStatsData import DefensiveStatsData
-from src.data_models.OffensiveStatsData import OffensiveStatsData
+from src.data_models.SeasonDefensiveStatsData import SeasonDefensiveStatsData
+from src.data_models.SeasonOffensiveStatsData import SeasonOffensiveStatsData
 from src.data_models.PlayerInfoData import PlayerInfoData
 from src.data_models.TeamInfoData import TeamInfoData
 from src.data_models.TeamStatsData import TeamStatsData
@@ -81,16 +81,16 @@ def get_team_stats_leaders(request, team_id):
     team: TeamInfoData = session.query(TeamInfoData).where(TeamInfoData.id == team_id).one()
 
     # Get defensive stats
-    defense_stats = session.query(PlayerInfoData, DefensiveStatsData).filter(
-        PlayerInfoData.id == DefensiveStatsData.player_id,
+    defense_stats = session.query(PlayerInfoData, SeasonDefensiveStatsData).filter(
+        PlayerInfoData.id == SeasonDefensiveStatsData.player_id,
         PlayerInfoData.team_id == team.id,
-        DefensiveStatsData.year == week_year.year
+        SeasonDefensiveStatsData.year == week_year.year
     ).all()
     # Get offensive stats
-    offense_stats = session.query(PlayerInfoData, OffensiveStatsData).filter(
-        PlayerInfoData.id == OffensiveStatsData.player_id,
+    offense_stats = session.query(PlayerInfoData, SeasonOffensiveStatsData).filter(
+        PlayerInfoData.id == SeasonOffensiveStatsData.player_id,
         PlayerInfoData.team_id == team.id,
-        OffensiveStatsData.year == week_year.year
+        SeasonOffensiveStatsData.year == week_year.year
         ).all()
     # Convert players to the appropriate models based on stat category
     converted_players_defense: List[PlayerDefensiveStats] = [_get_player_defensive_stats(player) for player in defense_stats]

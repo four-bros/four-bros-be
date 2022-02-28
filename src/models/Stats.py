@@ -29,6 +29,10 @@ class PlayerDetails:
         self.position = position
         self.hometown_desc = hometown_desc
 
+
+#################################################
+########### Individual Stats models #############
+#################################################
 class DefensiveStats:
     def __init__(
         self,
@@ -157,7 +161,8 @@ class PassingStats:
         pass_att,
         pass_yp_attempt,
         pass_yp_game,
-        pass_rating
+        pass_rating,
+        sacked
     ):      
 
         self.pass_yards = pass_yards
@@ -171,6 +176,7 @@ class PassingStats:
         self.pass_yp_attempt = pass_yp_attempt
         self.pass_yp_game = pass_yp_game
         self.pass_rating = pass_rating
+        self.sacked = sacked
 
     def __repr__(self):
         return f'Total Pass Yards: {self.pass_yards}'
@@ -187,7 +193,8 @@ class ReceivingStats:
         rec_yp_catch,
         rec_yp_game,
         games_played,
-        year
+        year,
+        longest_rec
 
     ):
         self.receptions = receptions
@@ -199,6 +206,7 @@ class ReceivingStats:
         self.rec_yp_game = rec_yp_game
         self.games_played = games_played
         self.year = year
+        self.longest_rec = longest_rec
 
     def __repr__(self):
         return f'Total Rec. Yards: {self.rec_yards}'
@@ -251,7 +259,8 @@ class RushingStats:
         rush_yp_carry,
         rush_yp_game,
         games_played,
-        year
+        year,
+        longest_run
     ):
         self.rush_att = rush_att
         self.rush_yards = rush_yards
@@ -264,11 +273,34 @@ class RushingStats:
         self.rush_yp_game = rush_yp_game
         self.games_played = games_played
         self.year = year
+        self.longest_run = longest_run
 
     def __repr__(self):
         return f'Total Rush Yards: {self.rush_yards}'
 
 
+############################################
+########## Total Stats models #############
+############################################
+class TotalStats:
+    def __init__(
+        self,
+        total_yards,
+        total_tds,
+        total_ypg,
+        games_played,
+        year
+    ):
+        self.total_yards = total_yards
+        self.total_tds = total_tds
+        self.total_ypg = total_ypg
+        self.games_played = games_played
+        self.year = year
+
+
+############################################
+########## Player Stats models #############
+############################################
 class PlayerDefensiveStats:
     def __init__(
         self,
@@ -328,3 +360,13 @@ class PlayerPassingStats:
 
         self.player_details = player_details
         self. passing_stats = passing_stats
+
+
+class PlayerTotalStats:
+    def __init__(
+        self,
+        player_details: PlayerDetails,
+        total_stats: TotalStats
+    ):
+        self.player_details = player_details
+        self.total_stats = total_stats
