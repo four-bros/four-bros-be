@@ -86,6 +86,7 @@ class PassingStatsSchema(Schema):
     pass_yp_attempt = fields.Float()
     pass_yp_game = fields.Float()
     pass_rating = fields.Float()
+    sacked = fields.Int()
 
 
 class ReceivingStatsSchema(Schema):
@@ -98,6 +99,7 @@ class ReceivingStatsSchema(Schema):
     rec_yp_game = fields.Float()
     games_played = fields.Int()
     year = fields.Str()
+    longest_rec = fields.Int()
 
 
 class ReturnStatsSchema(Schema):
@@ -125,6 +127,15 @@ class RushingStatsSchema(Schema):
     twenty_plus_yd_runs = fields.Int()
     rush_yp_carry = fields.Float()
     rush_yp_game = fields.Float()
+    games_played = fields.Int()
+    year = fields.Int()
+    longest_run = fields.Int()
+
+
+class TotalStatsSchema(Schema):
+    total_yards = fields.Int()
+    total_tds = fields.Int()
+    total_ypg = fields.Float()
     games_played = fields.Int()
     year = fields.Int()
 
@@ -160,3 +171,8 @@ class PlayerRushingStatsSchema(Schema):
 class PlayerPassingStatsSchema(Schema):
     player_details = fields.Nested(PlayerDetailsSchema)
     passing_stats = fields.Nested(PassingStatsSchema)
+
+
+class PlayerTotalStatsSchema(Schema):
+    player_details = fields.Nested(PlayerDetailsSchema)
+    total_stats = fields.Nested(TotalStatsSchema)

@@ -8,7 +8,6 @@ from src.blueprints.view_methods.stats import(
 )
 
 
-
 def get_season_records(request):
 
     response = {
@@ -19,5 +18,12 @@ def get_season_records(request):
         'return': get_season_return_stats_leaders(request, is_season_specific=False),
         'rushing': get_season_rushing_stats_leaders(request, is_season_specific=False)
     }
+
+    return response
+
+
+def get_career_records(request):
+    #TODO: Create method
+    response = {}
 
     return response

@@ -1,15 +1,15 @@
 
 from typing import List
 from src.constants import session
-from src.data_models.DefensiveStatsData import DefensiveStatsData
-from src.data_models.KickingStatsData import KickingStatsData
-from src.data_models.OffensiveStatsData import OffensiveStatsData
+from src.data_models.SeasonDefensiveStatsData import SeasonDefensiveStatsData
+from src.data_models.SeasonKickingStatsData import SeasonKickingStatsData
+from src.data_models.SeasonOffensiveStatsData import SeasonOffensiveStatsData
 from src.data_models.PlayerInfoData import PlayerInfoData
-from src.data_models.ReturnStatsData import ReturnStatsData
+from src.data_models.SeasonReturnStatsData import SeasonReturnStatsData
 from src.data_models.TeamInfoData import TeamInfoData
 from src.data_models.WeekYearData import WeekYearData
 from src.models.Player import PlayerAbilities, PlayerAbilitiesDetailsStats, PlayerDetails, PlayerSeasonAndCareerStats, PlayerStats
-from src.models.Stats import DefensiveStats, KickingStats, PassingStats, PlayerDefensiveStats, PlayerKickingStats, PlayerPassingStats, PlayerReceivingStats, PlayerReturnStats, PlayerRushingStats, ReceivingStats, ReturnStats, RushingStats
+from src.models.Stats import DefensiveStats, KickingStats, PassingStats, PlayerDefensiveStats, PlayerKickingStats, PlayerPassingStats, PlayerReceivingStats, PlayerReturnStats, PlayerRushingStats, ReceivingStats, ReturnStats, RushingStats, TotalStats
 
 
 ##################################################
@@ -108,17 +108,17 @@ def _get_player_details(player: PlayerInfoData) -> PlayerDetails:
 
 def _get_player_career_stats(player: PlayerInfoData) -> PlayerStats:
 
-    offensive_stats_data: List[OffensiveStatsData] = session.query(OffensiveStatsData).where(
-        OffensiveStatsData.player_id == player.id,
+    offensive_stats_data: List[SeasonOffensiveStatsData] = session.query(SeasonOffensiveStatsData).where(
+        SeasonOffensiveStatsData.player_id == player.id,
     ).all()
-    defensive_stats_data: List[DefensiveStatsData] = session.query(DefensiveStatsData).where(
-        DefensiveStatsData.player_id == player.id,
+    defensive_stats_data: List[SeasonDefensiveStatsData] = session.query(SeasonDefensiveStatsData).where(
+        SeasonDefensiveStatsData.player_id == player.id,
     ).all()
-    return_stats_data: List[ReturnStatsData] = session.query(ReturnStatsData).where(
-        ReturnStatsData.player_id == player.id,
+    return_stats_data: List[SeasonReturnStatsData] = session.query(SeasonReturnStatsData).where(
+        SeasonReturnStatsData.player_id == player.id,
     ).all()
-    kicking_stats_data: List[KickingStatsData] = session.query(KickingStatsData).where(
-        KickingStatsData.player_id == player.id,
+    kicking_stats_data: List[SeasonKickingStatsData] = session.query(SeasonKickingStatsData).where(
+        SeasonKickingStatsData.player_id == player.id,
     ).all()
 
     passing_stats: PassingStats = None
@@ -155,21 +155,21 @@ def _get_player_season_stats(player: PlayerInfoData) -> PlayerStats:
 
     week_year: WeekYearData = session.query(WeekYearData).first()
 
-    offensive_stats_data: OffensiveStatsData = session.query(OffensiveStatsData).where(
-        OffensiveStatsData.player_id == player.id,
-        OffensiveStatsData.year == week_year.year
+    offensive_stats_data: SeasonOffensiveStatsData = session.query(SeasonOffensiveStatsData).where(
+        SeasonOffensiveStatsData.player_id == player.id,
+        SeasonOffensiveStatsData.year == week_year.year
     ).scalar()
-    defensive_stats_data: DefensiveStatsData = session.query(DefensiveStatsData).where(
-        DefensiveStatsData.player_id == player.id,
-        DefensiveStatsData.year == week_year.year
+    defensive_stats_data: SeasonDefensiveStatsData = session.query(SeasonDefensiveStatsData).where(
+        SeasonDefensiveStatsData.player_id == player.id,
+        SeasonDefensiveStatsData.year == week_year.year
     ).scalar()
-    return_stats_data: ReturnStatsData = session.query(ReturnStatsData).where(
-        ReturnStatsData.player_id == player.id,
-        ReturnStatsData.year == week_year.year
+    return_stats_data: SeasonReturnStatsData = session.query(SeasonReturnStatsData).where(
+        SeasonReturnStatsData.player_id == player.id,
+        SeasonReturnStatsData.year == week_year.year
     ).scalar()
-    kicking_stats_data: KickingStatsData = session.query(KickingStatsData).where(
-        KickingStatsData.player_id == player.id,
-        KickingStatsData.year == week_year.year
+    kicking_stats_data: SeasonKickingStatsData = session.query(SeasonKickingStatsData).where(
+        SeasonKickingStatsData.player_id == player.id,
+        SeasonKickingStatsData.year == week_year.year
     ).scalar()
 
     passing_stats: PassingStats = None
@@ -205,7 +205,7 @@ def _get_player_season_stats(player: PlayerInfoData) -> PlayerStats:
 ################################################
 ######### Get player defensive stats ###########
 ################################################
-def _get_season_defensive_stats(defensive_stats: DefensiveStatsData) -> DefensiveStats:
+def _get_season_defensive_stats(defensive_stats: SeasonDefensiveStatsData) -> DefensiveStats:
 
     defensive_stats_all: DefensiveStats = DefensiveStats(
         long_int_ret=defensive_stats.long_int_ret,
@@ -235,10 +235,10 @@ def _get_season_defensive_stats(defensive_stats: DefensiveStatsData) -> Defensiv
 def _get_player_defensive_stats(player) -> PlayerDefensiveStats:
 
     player_info: PlayerInfoData = player[0]
-    def_stats: DefensiveStatsData = player[1]
+    def_stats: SeasonDefensiveStatsData = player[1]
 
     player_details: PlayerDetails = _get_player_details(player=player_info)
-    defensive_stats: DefensiveStatsData = _get_season_defensive_stats(defensive_stats=def_stats)
+    defensive_stats: SeasonDefensiveStatsData = _get_season_defensive_stats(defensive_stats=def_stats)
 
     player_defensive_stats: PlayerDefensiveStats = PlayerDefensiveStats(
         player_details=player_details,
@@ -248,7 +248,7 @@ def _get_player_defensive_stats(player) -> PlayerDefensiveStats:
     return player_defensive_stats
 
 
-def _get_career_defensive_stats(defensive_stats: List[DefensiveStatsData]) -> DefensiveStats:
+def _get_career_defensive_stats(defensive_stats: List[SeasonDefensiveStatsData]) -> DefensiveStats:
 
     yearly_def_stats: List[DefensiveStats] = [_get_season_defensive_stats(year) for year in defensive_stats]
     
@@ -299,7 +299,7 @@ def _get_career_defensive_stats(defensive_stats: List[DefensiveStatsData]) -> De
 ################################################
 ########## Get player kicking stats ############
 ################################################
-def _get_career_kicking_stats(kicking_stats: List[KickingStatsData]) -> KickingStats:
+def _get_career_kicking_stats(kicking_stats: List[SeasonKickingStatsData]) -> KickingStats:
 
     yearly_kick_stats: List[KickingStats] = [_get_season_kicking_stats(year) for year in kicking_stats]
     
@@ -328,10 +328,10 @@ def _get_career_kicking_stats(kicking_stats: List[KickingStatsData]) -> KickingS
     fg_made = sum([stats.fg_made for stats in yearly_kick_stats])
     number_punts = sum([stats.number_punts for stats in yearly_kick_stats])
     inside_twenty = sum([stats.inside_twenty for stats in yearly_kick_stats])
-    fg_pct = round(fg_made / fg_att * 100, 1)
-    xp_pct = round(xp_made / xp_att * 100, 1)
-    fg_50_plus_pct = round(fg_made_50_plus / fg_att_50_plus * 100, 1)
-    punt_avg = round(total_punt_yards / number_punts, 1)
+    fg_pct = 0 if fg_att == 0 else round(fg_made / fg_att * 100, 1)
+    xp_pct = 0 if xp_att == 0 else round(xp_made / xp_att * 100, 1)
+    fg_50_plus_pct = 0 if fg_att_50_plus == 0 else round(fg_made_50_plus / fg_att_50_plus * 100, 1)
+    punt_avg = 0 if number_punts == 0 else round(total_punt_yards / number_punts, 1)
     
     career_kicking_stats: KickingStats = KickingStats(
         fg_made_17_29=fg_made_17_29,
@@ -369,7 +369,7 @@ def _get_career_kicking_stats(kicking_stats: List[KickingStatsData]) -> KickingS
     return career_kicking_stats
 
 
-def _get_season_kicking_stats(kicking_stats: KickingStatsData) -> KickingStats:
+def _get_season_kicking_stats(kicking_stats: SeasonKickingStatsData) -> KickingStats:
 
     kicking_stats_all: KickingStats = KickingStats(
         fg_made_17_29=kicking_stats.fg_made_17_29,
@@ -410,7 +410,7 @@ def _get_season_kicking_stats(kicking_stats: KickingStatsData) -> KickingStats:
 def _get_player_kicking_stats(player) -> PlayerKickingStats:
 
     player_info: PlayerInfoData = player[0]
-    kicking_stats_data: KickingStatsData = player[1]
+    kicking_stats_data: SeasonKickingStatsData = player[1]
 
     player_details: PlayerDetails = _get_player_details(player=player_info)
     kicking_stats: KickingStats = _get_season_kicking_stats(kicking_stats=kicking_stats_data)
@@ -429,7 +429,7 @@ def _get_player_kicking_stats(player) -> PlayerKickingStats:
 def _get_player_passing_stats(player) -> PlayerPassingStats:
 
     player_info: PlayerInfoData = player[0]
-    off_stats: OffensiveStatsData = player[1]
+    off_stats: SeasonOffensiveStatsData = player[1]
 
     player_details: PlayerDetails = _get_player_details(player=player_info)
     passing_stats: PassingStats = _get_season_passing_stats(offensive_stats=off_stats)
@@ -442,7 +442,7 @@ def _get_player_passing_stats(player) -> PlayerPassingStats:
     return player_passing_stats
 
 
-def _get_season_passing_stats(offensive_stats: OffensiveStatsData) -> PassingStats:
+def _get_season_passing_stats(offensive_stats: SeasonOffensiveStatsData) -> PassingStats:
 
     passing_stats: PassingStats = PassingStats(
         pass_yards=offensive_stats.pass_yards,
@@ -455,13 +455,14 @@ def _get_season_passing_stats(offensive_stats: OffensiveStatsData) -> PassingSta
         pass_att=offensive_stats.pass_att,
         pass_yp_attempt=offensive_stats.pass_yp_attempt,
         pass_yp_game=offensive_stats.pass_yp_game,
-        pass_rating=offensive_stats.pass_rating
+        pass_rating=offensive_stats.pass_rating,
+        sacked=offensive_stats.sacked
     )
 
     return passing_stats
 
 
-def _get_career_passing_stats(offensive_stats: List[OffensiveStatsData]) -> PassingStats:
+def _get_career_passing_stats(offensive_stats: List[SeasonOffensiveStatsData]) -> PassingStats:
 
     yearly_passing_stats: List[PassingStats] = [_get_season_passing_stats(year) for year in offensive_stats]
     
@@ -483,6 +484,7 @@ def _get_career_passing_stats(offensive_stats: List[OffensiveStatsData]) -> Pass
         (100 * completions) - (200 * ints)) / pass_att
         )
     pass_rating = round(pass_rating_calc, 1)
+    sacked = sum([stats.sacked for stats in yearly_passing_stats])
     
     career_passing_stats: PassingStats = PassingStats(
         pass_yards=pass_yards,
@@ -495,7 +497,8 @@ def _get_career_passing_stats(offensive_stats: List[OffensiveStatsData]) -> Pass
         pass_yp_attempt=pass_yp_attempt,
         pass_yp_game=pass_yp_game,
         pass_rating=pass_rating,
-        year=None
+        year=None,
+        sacked=sacked
     )
     
     return career_passing_stats
@@ -504,7 +507,7 @@ def _get_career_passing_stats(offensive_stats: List[OffensiveStatsData]) -> Pass
 ##################################################
 ########## Get player receiving stats ############
 ##################################################
-def _get_season_receiving_stats(offensive_stats: OffensiveStatsData) -> ReceivingStats:
+def _get_season_receiving_stats(offensive_stats: SeasonOffensiveStatsData) -> ReceivingStats:
 
     receiving_stats: ReceivingStats = ReceivingStats(
         receptions=offensive_stats.receptions,
@@ -515,13 +518,14 @@ def _get_season_receiving_stats(offensive_stats: OffensiveStatsData) -> Receivin
         rec_yp_catch=offensive_stats.rec_yp_catch,
         rec_yp_game=offensive_stats.rec_yp_game,
         games_played=offensive_stats.games_played,
-        year=offensive_stats.year
+        year=offensive_stats.year,
+        longest_rec=offensive_stats.longest_rec
     )
 
     return receiving_stats
 
 
-def _get_career_receiving_stats(offensive_stats: List[OffensiveStatsData]) -> ReceivingStats:
+def _get_career_receiving_stats(offensive_stats: List[SeasonOffensiveStatsData]) -> ReceivingStats:
     
     yearly_rec_stats: List[ReceivingStats] = [_get_season_receiving_stats(year) for year in offensive_stats]
     
@@ -536,6 +540,7 @@ def _get_career_receiving_stats(offensive_stats: List[OffensiveStatsData]) -> Re
         1
     )
     rec_yp_game = round(rec_yards / games_played, 1)
+    longest_rec = max([stats.longest_rec for stats in yearly_rec_stats])
 
     
     career_receiving_stats: ReceivingStats = ReceivingStats(
@@ -547,7 +552,8 @@ def _get_career_receiving_stats(offensive_stats: List[OffensiveStatsData]) -> Re
         drops=drops,
         rec_yp_catch=rec_yp_catch,
         rec_yp_game=rec_yp_game,
-        year=None
+        year=None,
+        longest_rec=longest_rec
     )
     
     return career_receiving_stats
@@ -556,7 +562,7 @@ def _get_career_receiving_stats(offensive_stats: List[OffensiveStatsData]) -> Re
 def _get_player_receiving_stats(player) -> PlayerReceivingStats:
 
     player_info: PlayerInfoData = player[0]
-    offensive_stats: OffensiveStatsData = player[1]
+    offensive_stats: SeasonOffensiveStatsData = player[1]
 
     player_details: PlayerDetails = _get_player_details(player=player_info)
     receiving_stats: ReceivingStats = _get_season_receiving_stats(offensive_stats=offensive_stats)
@@ -572,7 +578,7 @@ def _get_player_receiving_stats(player) -> PlayerReceivingStats:
 ##############################################
 ######### Get player return stats ###########
 ##############################################
-def _get_season_return_stats(return_stats: ReturnStatsData) -> ReturnStats:
+def _get_season_return_stats(return_stats: SeasonReturnStatsData) -> ReturnStats:
 
     converted_return_stats: ReturnStats = ReturnStats(
         kick_returns=return_stats.kick_returns,
@@ -595,7 +601,7 @@ def _get_season_return_stats(return_stats: ReturnStatsData) -> ReturnStats:
 def _get_player_return_stats(player) -> PlayerReturnStats:
 
     player_info: PlayerInfoData = player[0]
-    return_stats_data: ReturnStatsData = player[1]
+    return_stats_data: SeasonReturnStatsData = player[1]
 
     player_details: PlayerDetails = _get_player_details(player=player_info)
     return_stats: ReturnStats = _get_season_return_stats(return_stats=return_stats_data)
@@ -608,7 +614,7 @@ def _get_player_return_stats(player) -> PlayerReturnStats:
     return player_kicking_stats
 
 
-def _get_career_return_stats(return_stats: List[ReturnStatsData]) -> ReturnStats:
+def _get_career_return_stats(return_stats: List[SeasonReturnStatsData]) -> ReturnStats:
     
     yearly_rec_stats: List[ReturnStats] = [_get_season_return_stats(year) for year in return_stats]
     
@@ -654,7 +660,7 @@ def _get_career_return_stats(return_stats: List[ReturnStatsData]) -> ReturnStats
 def _get_player_rushing_stats(player) -> PlayerRushingStats:
 
     player_info: PlayerInfoData = player[0]
-    offensive_stats: OffensiveStatsData = player[1]
+    offensive_stats: SeasonOffensiveStatsData = player[1]
 
     player_details: PlayerDetails = _get_player_details(player=player_info)
     rushing_stats: RushingStats = _get_season_rushing_stats(offensive_stats=offensive_stats)
@@ -667,7 +673,7 @@ def _get_player_rushing_stats(player) -> PlayerRushingStats:
     return player_rushing_stats
 
 
-def _get_season_rushing_stats(offensive_stats: OffensiveStatsData) -> RushingStats:
+def _get_season_rushing_stats(offensive_stats: SeasonOffensiveStatsData) -> RushingStats:
 
     rushing_stats: RushingStats = RushingStats(
         rush_att=offensive_stats.rush_att,
@@ -680,13 +686,14 @@ def _get_season_rushing_stats(offensive_stats: OffensiveStatsData) -> RushingSta
         rush_yp_carry=offensive_stats.rush_yp_carry,
         rush_yp_game=offensive_stats.rush_yp_game,
         games_played=offensive_stats.games_played,
-        year=offensive_stats.year
+        year=offensive_stats.year,
+        longest_run=offensive_stats.longest_run
     )
     
     return rushing_stats
 
 
-def _get_career_rushing_stats(offensive_stats: List[OffensiveStatsData]) -> RushingStats:
+def _get_career_rushing_stats(offensive_stats: List[SeasonOffensiveStatsData]) -> RushingStats:
     
     yearly_rush_stats: List[RushingStats] = [_get_season_rushing_stats(year) for year in offensive_stats]
     
@@ -698,12 +705,12 @@ def _get_career_rushing_stats(offensive_stats: List[OffensiveStatsData]) -> Rush
     broke_tkls = sum([stats.broke_tkls for stats in yearly_rush_stats])
     fumbles = sum([stats.fumbles for stats in yearly_rush_stats])
     twenty_plus_yd_runs = sum([stats.twenty_plus_yd_runs for stats in yearly_rush_stats])
-
     rush_yp_carry = round(
         rush_yards / rush_att if rush_att != 0 else 0,
         1
     )
     rush_yp_game = round(rush_yards / games_played, 1)
+    longest_run = max([stats.longest_run for stats in yearly_rush_stats])
 
     
     career_rushing_stats: RushingStats = RushingStats(
@@ -717,7 +724,47 @@ def _get_career_rushing_stats(offensive_stats: List[OffensiveStatsData]) -> Rush
         twenty_plus_yd_runs=twenty_plus_yd_runs,
         rush_yp_carry=rush_yp_carry,
         rush_yp_game=rush_yp_game,
-        year=None
+        year=None,
+        longest_run=longest_run
     )
     
     return career_rushing_stats
+
+
+###############################################
+########## Get player total stats ############
+###############################################
+def _get_season_total_stats(offensive_stats: SeasonOffensiveStatsData) -> TotalStats:
+
+    total_stats: TotalStats = TotalStats(
+        total_yards=offensive_stats.total_yards,
+        total_tds=offensive_stats.total_tds,
+        total_ypg=offensive_stats.total_ypg,
+        games_played=offensive_stats.games_played,
+        year=offensive_stats.year
+    )
+
+    return total_stats
+
+
+def _get_career_total_stats(offensive_stats: List[SeasonOffensiveStatsData]) -> TotalStats:
+    
+    yearly_total_stats: List[TotalStats] = [_get_season_total_stats(year) for year in offensive_stats]
+    
+    total_yards = sum([stats.total_yards for stats in yearly_total_stats])
+    total_tds = sum([stats.total_tds for stats in yearly_total_stats])
+    games_played = sum([stats.games_played for stats in yearly_total_stats])
+    total_ypg = round(
+        total_yards / games_played if games_played != 0 else 0,
+        1
+    )
+
+    career_total_stats: TotalStats = TotalStats(
+        total_yards=total_yards,
+        total_tds=total_tds,
+        total_ypg=total_ypg,
+        games_played=games_played,
+        year=None
+    )
+    
+    return career_total_stats
