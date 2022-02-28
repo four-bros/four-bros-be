@@ -19,7 +19,10 @@ from scripts.career_db_scripts import (
     insert_career_return_stats_into_db
 )
 from scripts.game_db_scripts import (
-    insert_game_off_stats_into_db
+    insert_game_def_stats_into_db,
+    insert_game_kick_stats_into_db,
+    insert_game_off_stats_into_db,
+    insert_game_return_stats_into_db
 )
 from scripts.misc_scripts import (
     insert_commits_into_db,
@@ -39,11 +42,20 @@ from scripts.team_db_scripts import (
 
 
 def main():
-    # Drop DB tables if necessary (typically only necessary if updating table structure)
+    ########################################################
+    ############ Drop DB tables if necessary ###############
+    # typically only necessary if updating table structure #
+    ########################################################
     # Base.metadata.drop_all(engine)
-    # Create all DB tables
+
+    ########################
+    # Create all DB tables #
+    ########################
     Base.metadata.create_all(engine)
-    # Insert all data to DB tables
+
+    ################################
+    # Insert all data to DB tables #
+    ################################
     insert_week_year_into_db(week_year)
     insert_team_info_into_db(team_info)
     insert_commits_into_db(commits)
@@ -57,6 +69,9 @@ def main():
     insert_career_def_stats_into_db()
     insert_career_kicking_stats_into_db()
     insert_career_off_stats_into_db()
+    insert_game_def_stats_into_db()
+    insert_game_kick_stats_into_db()
     insert_game_off_stats_into_db()
+    insert_game_return_stats_into_db()
 
 main()
