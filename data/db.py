@@ -26,13 +26,13 @@ from scripts.game_db_scripts import (
 )
 from scripts.misc_scripts import (
     insert_commits_into_db,
+    insert_player_info_into_db,
     insert_week_year_into_db
 )
 from scripts.season_db_scripts import (
     insert_season_def_stats_into_db,
     insert_season_kicking_stats_into_db,
     insert_season_off_stats_into_db,
-    insert_player_info_into_db,
     insert_season_return_stats_into_db,
 )
 from scripts.team_db_scripts import (
@@ -43,15 +43,16 @@ from scripts.team_db_scripts import (
 
 def main():
     ########################################################
-    ############ Drop DB tables if necessary ###############
-    # typically only necessary if updating table structure #
+    ############ Drop DB tables if necessary. ##############
+    ############ typically only necessary if  ##############
+    ############ updating table structure     ##############
     ########################################################
     # Base.metadata.drop_all(engine)
 
     ########################
     # Create all DB tables #
     ########################
-    Base.metadata.create_all(engine)
+    # Base.metadata.create_all(engine)
 
     ################################
     # Insert all data to DB tables #

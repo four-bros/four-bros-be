@@ -1,5 +1,4 @@
 from typing import List
-import ncaa_dynasty
 from sqlalchemy.sql.expression import update
 from uuid import uuid4
 
@@ -17,17 +16,14 @@ from src.models.Stats import (
     RushingStats,
     TotalStats
 )
-from src.utils.helpers import(
-    _convert_stats_year
-)
-from src.utils.player_stats import (
-    _get_career_defensive_stats,
-    _get_career_kicking_stats,
-    _get_career_passing_stats,
-    _get_career_receiving_stats,
-    _get_career_return_stats,
-    _get_career_rushing_stats,
-    _get_career_total_stats
+from src.utils.career_stats import (
+    _compile_career_defensive_stats,
+    _compile_career_kicking_stats,
+    _compile_career_passing_stats,
+    _compile_career_receiving_stats,
+    _compile_career_return_stats,
+    _compile_career_rushing_stats,
+    _compile_career_total_stats
 )
 from src.data_models.SeasonDefensiveStatsData import SeasonDefensiveStatsData
 from src.data_models.SeasonKickingStatsData import SeasonKickingStatsData
@@ -51,7 +47,7 @@ def insert_career_def_stats_into_db():
         if not defensive_stats_data:
             continue
 
-        career_defensive_stats: DefensiveStats = _get_career_defensive_stats(defensive_stats_data)
+        career_defensive_stats: DefensiveStats = _compile_career_defensive_stats(defensive_stats_data)
         
         new_id = str(uuid4())
         
@@ -133,7 +129,7 @@ def insert_career_kicking_stats_into_db():
         if not kicking_stats_data:
             continue
 
-        career_kicking_stats: KickingStats = _get_career_kicking_stats(kicking_stats_data)
+        career_kicking_stats: KickingStats = _compile_career_kicking_stats(kicking_stats_data)
         
         new_id = str(uuid4())
 
@@ -233,12 +229,14 @@ def insert_career_off_stats_into_db():
         if not off_stats_data:
             continue
 
-        career_pass_stats: PassingStats = _get_career_passing_stats(off_stats_data)
-        career_rec_stats: ReceivingStats = _get_career_receiving_stats(off_stats_data)
-        career_rush_stats: RushingStats = _get_career_rushing_stats(off_stats_data)
-        career_total_stats: TotalStats = _get_career_total_stats(off_stats_data)
+        career_pass_stats: PassingStats = _compile_career_passing_stats(off_stats_data)
+        career_rec_stats: ReceivingStats = _compile_career_receiving_stats(off_stats_data)
+        career_rush_stats: RushingStats = _compile_career_rushing_stats(off_stats_data)
+        career_total_stats: TotalStats = _compile_career_total_stats(off_stats_data)
         
         new_id = str(uuid4())
+
+        games_played = sum([stats.games_played for stats in off_stats_data])
 
         new_player = CareerOffensiveStatsData(
             id=new_id,
@@ -254,7 +252,7 @@ def insert_career_off_stats_into_db():
             rush_yards=career_rush_stats.rush_yards,
             yac=career_rec_stats.yac,
             pass_tds=career_pass_stats.pass_tds,
-            games_played=career_pass_stats.games_played,
+            games_played=games_played,
             rec_tds=career_rec_stats.rec_tds,
             rush_tds=career_rush_stats.rush_tds,
             ya_contact=career_rush_stats.ya_contact,
@@ -345,7 +343,7 @@ def insert_career_return_stats_into_db():
         if not return_stats_data:
             continue
             
-        career_return_stats: ReturnStats = _get_career_return_stats(return_stats_data)
+        career_return_stats: ReturnStats = _compile_career_return_stats(return_stats_data)
 
         new_id = str(uuid4())
 

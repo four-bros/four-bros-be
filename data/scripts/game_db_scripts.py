@@ -23,14 +23,16 @@ from src.models.Stats import (
     RushingStats,
     TotalStats
 )
-from src.utils.player_stats import (
-    _get_career_defensive_stats,
-    _get_career_kicking_stats,
-    _get_career_passing_stats,
-    _get_career_receiving_stats,
-    _get_career_return_stats,
-    _get_career_rushing_stats,
-    _get_career_total_stats,
+from src.utils.career_stats import (
+    _compile_career_defensive_stats,
+    _compile_career_kicking_stats,
+    _compile_career_passing_stats,
+    _compile_career_receiving_stats,
+    _compile_career_return_stats,
+    _compile_career_rushing_stats,
+    _compile_career_total_stats,
+)
+from src.utils.season_stats import (
     _get_season_defensive_stats,
     _get_season_kicking_stats,
     _get_season_passing_stats,
@@ -102,7 +104,7 @@ def insert_game_def_stats_into_db():
 
         else:
 
-            prior_def_stats: DefensiveStats = _get_career_defensive_stats(prior_def_stats_data)
+            prior_def_stats: DefensiveStats = _compile_career_defensive_stats(prior_def_stats_data)
 
             long_int_ret = season_defense_stats.long_int_ret - prior_def_stats.long_int_ret
             sacks = season_defense_stats.sacks - prior_def_stats.sacks
@@ -229,7 +231,7 @@ def insert_game_kick_stats_into_db():
 
         else:
 
-            prior_kick_stats: KickingStats = _get_career_kicking_stats(prior_kick_stats_data)
+            prior_kick_stats: KickingStats = _compile_career_kicking_stats(prior_kick_stats_data)
 
             fg_made_17_29 = season_kicking_stats.fg_made_17_29 - prior_kick_stats.fg_made_17_29
             fg_att_17_29 = season_kicking_stats.fg_att_17_29 - prior_kick_stats.fg_att_17_29
@@ -322,7 +324,10 @@ def insert_game_kick_stats_into_db():
 def insert_game_off_stats_into_db():
 
     players: List[PlayerInfoData] = session.query(PlayerInfoData).all()
-    week_year: WeekYearData = session.query(WeekYearData).first()
+    week_year: WeekYearData = session.query(WeekYearData).order_by(
+        desc(WeekYearData.year),
+        desc(WeekYearData.week)
+    ).first()
 
     for player in players:
 
@@ -393,10 +398,10 @@ def insert_game_off_stats_into_db():
 
         else:
 
-            prior_pass_stats: PassingStats = _get_career_passing_stats(prior_off_stats_data)
-            prior_rec_stats: ReceivingStats = _get_career_receiving_stats(prior_off_stats_data)
-            prior_rush_stats: RushingStats = _get_career_rushing_stats(prior_off_stats_data)
-            prior_total_stats: TotalStats = _get_career_total_stats(prior_off_stats_data)
+            prior_pass_stats: PassingStats = _compile_career_passing_stats(prior_off_stats_data)
+            prior_rec_stats: ReceivingStats = _compile_career_receiving_stats(prior_off_stats_data)
+            prior_rush_stats: RushingStats = _compile_career_rushing_stats(prior_off_stats_data)
+            prior_total_stats: TotalStats = _compile_career_total_stats(prior_off_stats_data)
 
             pass_yards = season_pass_stats.pass_yards - prior_pass_stats.pass_yards
             longest_rec = season_rec_stats.longest_rec - prior_rec_stats.longest_rec
@@ -543,7 +548,7 @@ def insert_game_return_stats_into_db():
 
         else:
 
-            prior_kick_stats: ReturnStats = _get_career_kicking_stats(prior_return_stats_data)
+            prior_kick_stats: ReturnStats = _compile_career_return_stats(prior_return_stats_data)
 
             kick_returns = season_return_stats.kick_returns - prior_kick_stats.kick_returns
             long_kr = season_return_stats.long_kr - prior_kick_stats.long_kr
