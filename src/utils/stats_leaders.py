@@ -40,7 +40,9 @@ from src.utils.player_stats import(
 def _get_season_specific_defensive_stats_leaders():
 
     # Query the year to filter out irrelevant years
-    week_year: WeekYearData = session.query(WeekYearData).first()
+    week_year: WeekYearData = session.query(WeekYearData).order_by(
+        desc(WeekYearData.year)
+    ).first()
     # Querying PlayerInfo first and DefensiveStats second will return 
     # a set or tuple to the players variable.
     long_int_ret_data = session.query(PlayerInfoData, SeasonDefensiveStatsData).filter(
@@ -258,7 +260,9 @@ def _get_season_all_time_defensive_stats_leaders():
 #################################################
 def _get_season_specific_kicking_stats_leaders():
     # Query the year to filter out irrelevant years
-    week_year: WeekYearData = session.query(WeekYearData).first()
+    week_year: WeekYearData = session.query(WeekYearData).order_by(
+        desc(WeekYearData.year)
+    ).first()
     # Querying PlayerInfo first and OffensiveStats second will return 
     # a set or tuple to the players variable.
     fg_made_data = session.query(PlayerInfoData, SeasonKickingStatsData).filter(
@@ -447,7 +451,9 @@ def _get_season_all_time_kicking_stats_leaders():
 #################################################   
 def _get_season_specific_passing_stats_leaders():
     # Query the year to filter out irrelevant years
-    week_year: WeekYearData = session.query(WeekYearData).first()
+    week_year: WeekYearData = session.query(WeekYearData).order_by(
+        desc(WeekYearData.year)
+    ).first()
     # Querying PlayerInfo first and OffensiveStats second will return 
     # a set or tuple to the players variable.
     completions_data = session.query(PlayerInfoData, SeasonOffensiveStatsData).filter(
@@ -584,7 +590,9 @@ def _get_season_all_time_passing_stats_leaders():
 ###################################################
 def _get_season_specific_rec_stats_leaders():
     # Query the year to filter out irrelevant years
-    week_year: WeekYearData = session.query(WeekYearData).first()
+    week_year: WeekYearData = session.query(WeekYearData).order_by(
+        desc(WeekYearData.year)
+    ).first()
     # Querying PlayerInfo first and OffensiveStats second will return 
     # a set or tuple to the players variable.
     receptions_data = session.query(PlayerInfoData, SeasonOffensiveStatsData).filter(
@@ -708,7 +716,9 @@ def _get_season_all_time_rec_stats_leaders():
 ###################################################
 def _get_season_specific_return_stats_leaders():
     # Query the year to filter out irrelevant years
-    week_year: WeekYearData = session.query(WeekYearData).first()
+    week_year: WeekYearData = session.query(WeekYearData).order_by(
+        desc(WeekYearData.year)
+    ).first()
     # Querying PlayerInfo first and OffensiveStats second will return 
     # a set or tuple to the players variable.
     kick_returns_data = session.query(PlayerInfoData, SeasonReturnStatsData).filter(
