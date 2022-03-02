@@ -30,7 +30,6 @@ from src.data_models.SeasonKickingStatsData import SeasonKickingStatsData
 from src.data_models.SeasonOffensiveStatsData import SeasonOffensiveStatsData
 from src.data_models.PlayerInfoData import PlayerInfoData
 from src.data_models.SeasonReturnStatsData import SeasonReturnStatsData
-from src.data_models.WeekYearData import WeekYearData
 
 
 def insert_career_def_stats_into_db():
@@ -78,13 +77,13 @@ def insert_career_def_stats_into_db():
 
         # Query table to determine if player has a record or not
         player: CareerDefensiveStatsData = session.query(CareerDefensiveStatsData).where(
-            CareerDefensiveStatsData.player_id == new_player.id).scalar()
+            CareerDefensiveStatsData.player_id == new_player.player_id).scalar()
 
         if not player:
             session.add(new_player)
             session.flush()
         else:
-            update(CareerDefensiveStatsData).where(CareerDefensiveStatsData.player_id == new_player.id).values(
+            update(CareerDefensiveStatsData).where(CareerDefensiveStatsData.player_id == new_player.player_id).values(
                 player_id=new_player.player_id,
                 long_int_ret=new_player.long_int_ret,
                 sacks=new_player.sacks,

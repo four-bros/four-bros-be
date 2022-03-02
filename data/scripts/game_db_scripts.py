@@ -33,13 +33,13 @@ from src.utils.career_stats import (
     _compile_career_total_stats,
 )
 from src.utils.season_stats import (
-    _get_season_defensive_stats,
-    _get_season_kicking_stats,
-    _get_season_passing_stats,
-    _get_season_receiving_stats,
-    _get_season_return_stats,
-    _get_season_rushing_stats,
-    _get_season_total_stats
+    _get_defensive_stats,
+    _get_kicking_stats,
+    _get_passing_stats,
+    _get_receiving_stats,
+    _get_return_stats,
+    _get_rushing_stats,
+    _get_total_stats
 )
 
 
@@ -62,7 +62,7 @@ def insert_game_def_stats_into_db():
         if not def_stats_data:
             continue
 
-        season_defense_stats: DefensiveStats = _get_season_defensive_stats(def_stats_data)
+        season_defense_stats: DefensiveStats = _get_defensive_stats(def_stats_data)
         
         new_id = str(uuid4())
 
@@ -179,7 +179,7 @@ def insert_game_kick_stats_into_db():
         if not kicking_stats_data:
             continue
 
-        season_kicking_stats: KickingStats = _get_season_kicking_stats(kicking_stats_data)
+        season_kicking_stats: KickingStats = _get_kicking_stats(kicking_stats_data)
         
         new_id = str(uuid4())
 
@@ -340,10 +340,10 @@ def insert_game_off_stats_into_db():
         if not off_stats_data:
             continue
 
-        season_pass_stats: PassingStats = _get_season_passing_stats(off_stats_data)
-        season_rec_stats: ReceivingStats = _get_season_receiving_stats(off_stats_data)
-        season_rush_stats: RushingStats = _get_season_rushing_stats(off_stats_data)
-        season_total_stats: TotalStats = _get_season_total_stats(off_stats_data)
+        season_pass_stats: PassingStats = _get_passing_stats(off_stats_data)
+        season_rec_stats: ReceivingStats = _get_receiving_stats(off_stats_data)
+        season_rush_stats: RushingStats = _get_rushing_stats(off_stats_data)
+        season_total_stats: TotalStats = _get_total_stats(off_stats_data)
         
         new_id = str(uuid4())
 
@@ -513,7 +513,7 @@ def insert_game_return_stats_into_db():
         if not return_stats_data:
             continue
 
-        season_return_stats: ReturnStats = _get_season_return_stats(return_stats_data)
+        season_return_stats: ReturnStats = _get_return_stats(return_stats_data)
         
         new_id = str(uuid4())
 

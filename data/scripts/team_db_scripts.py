@@ -10,7 +10,7 @@ from src.constants import(
 from src.utils.helpers import(
     _convert_stats_year
 )
-from src.utils.player_stats import (
+from src.utils.player import (
     _get_player_defensive_stats,
     _get_player_kicking_stats,
     _get_player_passing_stats,
