@@ -31,7 +31,8 @@ def insert_season_def_stats_into_db(def_stats):
         readable_year = _convert_stats_year(record.fields['Year'])
         
         total_tackles = record.fields['Solo Tkls'] + record.fields['Asst. Tkls']
-        total_sacks = record.fields['Half A Sack'] + record.fields['Sacks']
+        half_a_sack = round(record.fields['Half A Sack'] / 2, 1)
+        total_sacks = half_a_sack + record.fields['Sacks']
 
         new_id = str(uuid4())
         
@@ -50,7 +51,7 @@ def insert_season_def_stats_into_db(def_stats):
             ints_made=record.fields['INTs Made'],
             games_played=record.fields['Games Played'],
             fumbles_rec=record.fields['Fumbles Rec.'],
-            half_a_sack=record.fields['Half A Sack'],
+            half_a_sack=half_a_sack,
             asst_tkls=record.fields['Asst. Tkls'],
             def_tds=record.fields['Def. TDs'],
             fum_rec_yards=record.fields['Fum. Rec. Yards'],
@@ -62,7 +63,7 @@ def insert_season_def_stats_into_db(def_stats):
         # Query table to determine if player has a record or not
         player: SeasonDefensiveStatsData = session.query(SeasonDefensiveStatsData).where(
             SeasonDefensiveStatsData.player_id == new_player.player_id,
-            SeasonDefensiveStatsData.year == current_year
+            SeasonDefensiveStatsData.year == new_player.year
         ).scalar()
 
         if not player:
@@ -72,7 +73,7 @@ def insert_season_def_stats_into_db(def_stats):
             update(SeasonDefensiveStatsData)\
                 .where(
                     SeasonDefensiveStatsData.player_id == new_player.player_id,
-                    SeasonDefensiveStatsData.year == current_year)\
+                    SeasonDefensiveStatsData.year == new_player.year)\
                 .values(
                 long_int_ret=new_player.long_int_ret,
                 sacks=new_player.sacks,
@@ -170,7 +171,7 @@ def insert_season_kicking_stats_into_db(kicking_stats):
 
         player: SeasonKickingStatsData = session.query(SeasonKickingStatsData).where(
             SeasonKickingStatsData.player_id == new_player.player_id,
-            SeasonKickingStatsData.year == current_year
+            SeasonKickingStatsData.year == new_player.year
         ).scalar()
         
         if not player:
@@ -271,7 +272,7 @@ def insert_season_off_stats_into_db(off_stats):
         # get ReturnStats for total stats purposes (yards, TDs, etc)
         return_stats: SeasonReturnStatsData = session.query(SeasonReturnStatsData).where(
             SeasonReturnStatsData.player_id == record.fields['Player ID'],
-            SeasonReturnStatsData.year == current_year
+            SeasonReturnStatsData.year == readable_year
         ).scalar()
 
         # Calculate total stats
@@ -440,7 +441,7 @@ def insert_season_return_stats_into_db(return_stats):
 
         player: SeasonReturnStatsData = session.query(SeasonReturnStatsData).where(
             SeasonReturnStatsData.player_id == new_player.player_id,
-            SeasonReturnStatsData.year == current_year
+            SeasonReturnStatsData.year == new_player.year
         ).scalar()
         
         if not player:
@@ -450,7 +451,7 @@ def insert_season_return_stats_into_db(return_stats):
         else:
             update(SeasonReturnStatsData).where(
                 SeasonReturnStatsData.player_id == new_player.player_id,
-                SeasonReturnStatsData.year == current_year)\
+                SeasonReturnStatsData.year == new_player.year)\
             .values(
                 player_id=new_player.player_id,
                 kick_returns=new_player.kick_returns,

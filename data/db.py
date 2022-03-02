@@ -1,7 +1,3 @@
-from src.constants import(
-    Base,
-    engine
-)
 from data import (
     def_stats,
     kicking_stats,

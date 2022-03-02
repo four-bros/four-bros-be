@@ -23,7 +23,7 @@ from src.data_models.WeekYearData import WeekYearData
 from src.models.Stats import PlayerDefensiveStats
 from src.responses.Stats import PassingStatsSchema
 from src.responses.Players import PlayerSchema
-from src.utils.player_stats import _get_player_defensive_stats
+from src.utils.player import _get_player_defensive_stats
 
 
 passing_stat_schema = PassingStatsSchema()
