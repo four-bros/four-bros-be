@@ -5,6 +5,10 @@ from src.data_models.CareerDefensiveStatsData import CareerDefensiveStatsData
 from src.data_models.CareerKickingStatsData import CareerKickingStatsData
 from src.data_models.CareerOffensiveStatsData import CareerOffensiveStatsData
 from src.data_models.CareerReturnStatsData import CareerReturnStatsData
+from src.data_models.GameDefensiveStatsData import GameDefensiveStatsData
+from src.data_models.GameKickingStatsData import GameKickingStatsData
+from src.data_models.GameOffensiveStatsData import GameOffensiveStatsData
+from src.data_models.GameReturnStatsData import GameReturnStatsData
 from src.data_models.SeasonDefensiveStatsData import SeasonDefensiveStatsData
 from src.data_models.SeasonKickingStatsData import SeasonKickingStatsData
 from src.data_models.SeasonOffensiveStatsData import SeasonOffensiveStatsData
@@ -80,7 +84,9 @@ def _get_player_season_stats(player: PlayerInfoData) -> PlayerStats:
 ################################################
 ######### Get player defensive stats ###########
 ################################################
-def _get_defensive_stats(defensive_stats: Union[SeasonDefensiveStatsData, CareerDefensiveStatsData]) -> DefensiveStats:
+def _get_defensive_stats(
+    defensive_stats: Union[CareerDefensiveStatsData, GameDefensiveStatsData, SeasonDefensiveStatsData]
+    ) -> DefensiveStats:
 
     defensive_stats_all: DefensiveStats = DefensiveStats(
         long_int_ret=defensive_stats.long_int_ret,
@@ -107,7 +113,9 @@ def _get_defensive_stats(defensive_stats: Union[SeasonDefensiveStatsData, Career
     return defensive_stats_all
 
 
-def _get_kicking_stats(kicking_stats: Union[SeasonKickingStatsData, CareerKickingStatsData]) -> KickingStats:
+def _get_kicking_stats(
+    kicking_stats: Union[CareerKickingStatsData, GameKickingStatsData, SeasonKickingStatsData]
+    ) -> KickingStats:
 
     kicking_stats_all: KickingStats = KickingStats(
         fg_made_17_29=kicking_stats.fg_made_17_29,
@@ -145,7 +153,9 @@ def _get_kicking_stats(kicking_stats: Union[SeasonKickingStatsData, CareerKickin
     return kicking_stats_all
 
 
-def _get_passing_stats(offensive_stats: Union[SeasonOffensiveStatsData, CareerOffensiveStatsData]) -> PassingStats:
+def _get_passing_stats(
+    offensive_stats: Union[CareerOffensiveStatsData, GameOffensiveStatsData, SeasonOffensiveStatsData]
+    ) -> PassingStats:
 
     passing_stats: PassingStats = PassingStats(
         pass_yards=offensive_stats.pass_yards,
@@ -165,7 +175,9 @@ def _get_passing_stats(offensive_stats: Union[SeasonOffensiveStatsData, CareerOf
     return passing_stats
 
 
-def _get_receiving_stats(offensive_stats: Union[SeasonOffensiveStatsData, CareerOffensiveStatsData]) -> ReceivingStats:
+def _get_receiving_stats(
+    offensive_stats: Union[CareerOffensiveStatsData, GameOffensiveStatsData, SeasonOffensiveStatsData]
+    ) -> ReceivingStats:
 
     receiving_stats: ReceivingStats = ReceivingStats(
         receptions=offensive_stats.receptions,
@@ -183,7 +195,9 @@ def _get_receiving_stats(offensive_stats: Union[SeasonOffensiveStatsData, Career
     return receiving_stats
 
 
-def _get_return_stats(return_stats: Union[SeasonReturnStatsData, CareerReturnStatsData]) -> ReturnStats:
+def _get_return_stats(
+    return_stats: Union[CareerReturnStatsData, GameReturnStatsData, SeasonReturnStatsData]
+    ) -> ReturnStats:
 
     converted_return_stats: ReturnStats = ReturnStats(
         kick_returns=return_stats.kick_returns,
@@ -203,7 +217,9 @@ def _get_return_stats(return_stats: Union[SeasonReturnStatsData, CareerReturnSta
     return converted_return_stats
 
 
-def _get_rushing_stats(offensive_stats: Union[SeasonOffensiveStatsData, CareerOffensiveStatsData]) -> RushingStats:
+def _get_rushing_stats(
+    offensive_stats: Union[CareerOffensiveStatsData, GameOffensiveStatsData, SeasonOffensiveStatsData]
+    ) -> RushingStats:
 
     rushing_stats: RushingStats = RushingStats(
         rush_att=offensive_stats.rush_att,
@@ -223,7 +239,9 @@ def _get_rushing_stats(offensive_stats: Union[SeasonOffensiveStatsData, CareerOf
     return rushing_stats
 
 
-def _get_total_stats(offensive_stats: Union[SeasonOffensiveStatsData, CareerOffensiveStatsData]) -> TotalStats:
+def _get_total_stats(
+    offensive_stats: Union[CareerOffensiveStatsData, GameOffensiveStatsData, SeasonOffensiveStatsData]
+    ) -> TotalStats:
 
     total_stats: TotalStats = TotalStats(
         total_yards=offensive_stats.total_yards,
