@@ -82,7 +82,7 @@ def get_team_by_team_id(request, team_id) -> TeamDetailsSchema:
     return response
 
 
-def get_team_stats_leaders(request, team_id):
+def get_team_player_stats(request, team_id):
     # Query the year to filter out irrelevant years
     week_year: WeekYearData = session.query(WeekYearData).first()
     # Query the team to get the team_id
@@ -100,11 +100,13 @@ def get_team_stats_leaders(request, team_id):
         PlayerInfoData.team_id == team.id,
         SeasonOffensiveStatsData.year == week_year.year
         ).all()
+    # Get kicking stats
     kicking_stats = session.query(PlayerInfoData, SeasonKickingStatsData).filter(
         PlayerInfoData.id == SeasonKickingStatsData.player_id,
         PlayerInfoData.team_id == team.id,
         SeasonKickingStatsData.year == week_year.year
     ).all()
+    # Get return stats
     return_stats = session.query(PlayerInfoData, SeasonReturnStatsData).filter(
         PlayerInfoData.id == SeasonReturnStatsData.player_id,
         PlayerInfoData.team_id == team.id,
@@ -168,14 +170,14 @@ def get_team_stats_leaders(request, team_id):
             'rushing': rushing_stats_json,
         },
         'stats_leaders': {
-            'defense_leaders': defensive_leaders_json,
+            'defense': defensive_leaders_json,
             'kicking': kicking_leaders_json,
             'kick_return': kick_return_leaders_json,
-            'passing_leaders': passing_leaders_json,
+            'passing': passing_leaders_json,
             'punting': punting_leaders_json,
             'punt_return': punt_return_leaders_json,
-            'receiving_leaders': receiving_leaders_json,
-            'rushing_leaders': rushing_leaders_json
+            'receiving': receiving_leaders_json,
+            'rushing': rushing_leaders_json
         }
     }
 

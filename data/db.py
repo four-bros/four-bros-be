@@ -71,4 +71,5 @@ def main():
     insert_game_off_stats_into_db()
     insert_game_return_stats_into_db()
 
+
 main()
