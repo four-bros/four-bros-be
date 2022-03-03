@@ -131,42 +131,32 @@ class PlayerAbilities:
 class PlayerStats:
     def __init__(
         self,
-        passing_stats: PassingStats,
-        rushing_stats: RushingStats,
-        receiving_stats: ReceivingStats,
-        defensive_stats: DefensiveStats,
-        return_stats: ReturnStats,
-        kicking_stats: KickingStats
+        passing: PassingStats,
+        rushing: RushingStats,
+        receiving: ReceivingStats,
+        defensive: DefensiveStats,
+        kick_return: ReturnStats,
+        kicking: KickingStats
     ):
-        self.passing_stats = passing_stats
-        self.rushing_stats = rushing_stats
-        self.receiving_stats = receiving_stats
-        self.defensive_stats = defensive_stats
-        self.return_stats = return_stats
-        self.kicking_stats = kicking_stats
+        self.passing = passing
+        self.rushing = rushing
+        self.receiving = receiving
+        self.defensive = defensive
+        self.kick_return = kick_return
+        self.kicking = kicking
 
     def __repr__(self):
         return f'passing stats: {self.passing_stats}, rushing stats: {self.rushing_stats}, rec stats {self.receiving_stats}'
-
-class PlayerSeasonAndCareerStats:
-    def __init__(
-        self,
-        season: PlayerStats,
-        career: PlayerStats
-    ):
-        self.season = season
-        self.career = career
-
-    def __repr__(self):
-        return f'season passing: {self.season.passing_stats}, career passing: {self.career.passing_stats}'
 
 class PlayerAbilitiesDetailsStats:
     def __init__(
         self,
         details: PlayerDetails,
         abilities: PlayerAbilities,
-        stats: PlayerSeasonAndCareerStats
+        career_stats: PlayerStats,
+        season_stats: PlayerStats
     ):
         self.details = details
         self.abilities = abilities
-        self.stats = stats
+        self.career_stats = career_stats
+        self.season_stats = season_stats

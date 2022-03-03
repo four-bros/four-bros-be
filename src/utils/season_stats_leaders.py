@@ -41,7 +41,9 @@ def _get_season_defensive_stats_leaders(is_season_specific: bool):
     # If season specific, filter by year to get current season leaders
     if is_season_specific:
         # Query the year to filter out irrelevant years
-        week_year: WeekYearData = session.query(WeekYearData).order_by(desc(WeekYearData.year)).first()
+        week_year: WeekYearData = session.query(WeekYearData).order_by(
+            desc(WeekYearData.year)
+        ).first()
         # Querying PlayerInfo first and DefensiveStats second will return 
         # a set or tuple to the players variable.
         long_int_ret_data = session.query(PlayerInfoData, SeasonDefensiveStatsData).filter(
@@ -981,7 +983,9 @@ def _get_season_rushing_stats_leaders(is_season_specific: bool):
     if is_season_specific:
 
         # Query the year to filter out irrelevant years
-        week_year: WeekYearData = session.query(WeekYearData).first()
+        week_year: WeekYearData = session.query(WeekYearData).order_by(
+            desc(WeekYearData.year)
+        ).first()
         # Querying PlayerInfo first and OffensiveStats second will return 
         # a set or tuple to the players variable.
         rush_att_data = session.query(PlayerInfoData, SeasonOffensiveStatsData).filter(
