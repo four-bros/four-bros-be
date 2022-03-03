@@ -80,6 +80,110 @@ class DefensiveStats:
     def __repr__(self):
         return f'Total Tackles: {self.total_tkls}'
 
+
+################################################
+########### Offensive Stats models #############
+################################################
+class PassingStats:
+    def __init__(
+        self,
+        pass_yards,
+        longest_pass,
+        year,
+        pass_tds,
+        games_played,
+        completions,
+        ints,
+        pass_att,
+        pass_yp_attempt,
+        pass_yp_game,
+        pass_rating,
+        sacked
+    ):      
+
+        self.pass_yards = pass_yards
+        self.longest_pass = longest_pass
+        self.year = year
+        self.pass_tds = pass_tds
+        self.games_played = games_played
+        self.completions = completions
+        self.ints = ints
+        self.pass_att = pass_att
+        self.pass_yp_attempt = pass_yp_attempt
+        self.pass_yp_game = pass_yp_game
+        self.pass_rating = pass_rating
+        self.sacked = sacked
+
+    def __repr__(self):
+        return f'Total Pass Yards: {self.pass_yards}'
+
+
+class ReceivingStats:
+    def __init__(
+        self,
+        receptions,
+        rec_yards,
+        rec_tds,
+        yac,
+        drops,
+        rec_yp_catch,
+        rec_yp_game,
+        games_played,
+        year,
+        longest_rec
+
+    ):
+        self.receptions = receptions
+        self.rec_yards = rec_yards
+        self.rec_tds = rec_tds
+        self.yac = yac
+        self.drops = drops
+        self.rec_yp_catch = rec_yp_catch
+        self.rec_yp_game = rec_yp_game
+        self.games_played = games_played
+        self.year = year
+        self.longest_rec = longest_rec
+
+    def __repr__(self):
+        return f'Total Rec. Yards: {self.rec_yards}'
+
+
+class RushingStats:
+    def __init__(
+        self,
+        rush_att,
+        rush_yards,
+        rush_tds,
+        ya_contact,
+        broke_tkls,
+        fumbles,
+        twenty_plus_yd_runs,
+        rush_yp_carry,
+        rush_yp_game,
+        games_played,
+        year,
+        longest_run
+    ):
+        self.rush_att = rush_att
+        self.rush_yards = rush_yards
+        self.rush_tds = rush_tds
+        self.ya_contact = ya_contact
+        self.broke_tkls = broke_tkls
+        self.fumbles = fumbles
+        self.twenty_plus_yd_runs = twenty_plus_yd_runs
+        self.rush_yp_carry = rush_yp_carry
+        self.rush_yp_game = rush_yp_game
+        self.games_played = games_played
+        self.year = year
+        self.longest_run = longest_run
+
+    def __repr__(self):
+        return f'Total Rush Yards: {self.rush_yards}'
+
+
+####################################################
+########### Special Teams Stats models #############
+####################################################
 class KickingStats:
     def __init__(
         self,
@@ -148,68 +252,8 @@ class KickingStats:
     def __repr__(self):
         return f'Total FGs: {self.fg_made}, Total Punts: {self.number_punts}'
 
-class PassingStats:
-    def __init__(
-        self,
-        pass_yards,
-        longest_pass,
-        year,
-        pass_tds,
-        games_played,
-        completions,
-        ints,
-        pass_att,
-        pass_yp_attempt,
-        pass_yp_game,
-        pass_rating,
-        sacked
-    ):      
-
-        self.pass_yards = pass_yards
-        self.longest_pass = longest_pass
-        self.year = year
-        self.pass_tds = pass_tds
-        self.games_played = games_played
-        self.completions = completions
-        self.ints = ints
-        self.pass_att = pass_att
-        self.pass_yp_attempt = pass_yp_attempt
-        self.pass_yp_game = pass_yp_game
-        self.pass_rating = pass_rating
-        self.sacked = sacked
-
-    def __repr__(self):
-        return f'Total Pass Yards: {self.pass_yards}'
 
 
-class ReceivingStats:
-    def __init__(
-        self,
-        receptions,
-        rec_yards,
-        rec_tds,
-        yac,
-        drops,
-        rec_yp_catch,
-        rec_yp_game,
-        games_played,
-        year,
-        longest_rec
-
-    ):
-        self.receptions = receptions
-        self.rec_yards = rec_yards
-        self.rec_tds = rec_tds
-        self.yac = yac
-        self.drops = drops
-        self.rec_yp_catch = rec_yp_catch
-        self.rec_yp_game = rec_yp_game
-        self.games_played = games_played
-        self.year = year
-        self.longest_rec = longest_rec
-
-    def __repr__(self):
-        return f'Total Rec. Yards: {self.rec_yards}'
 
 
 class ReturnStats:
@@ -244,39 +288,6 @@ class ReturnStats:
 
     def __repr__(self):
         return f'Total Ret. TDS: {self.kr_tds + self.pr_tds}'
-
-
-class RushingStats:
-    def __init__(
-        self,
-        rush_att,
-        rush_yards,
-        rush_tds,
-        ya_contact,
-        broke_tkls,
-        fumbles,
-        twenty_plus_yd_runs,
-        rush_yp_carry,
-        rush_yp_game,
-        games_played,
-        year,
-        longest_run
-    ):
-        self.rush_att = rush_att
-        self.rush_yards = rush_yards
-        self.rush_tds = rush_tds
-        self.ya_contact = ya_contact
-        self.broke_tkls = broke_tkls
-        self.fumbles = fumbles
-        self.twenty_plus_yd_runs = twenty_plus_yd_runs
-        self.rush_yp_carry = rush_yp_carry
-        self.rush_yp_game = rush_yp_game
-        self.games_played = games_played
-        self.year = year
-        self.longest_run = longest_run
-
-    def __repr__(self):
-        return f'Total Rush Yards: {self.rush_yards}'
 
 
 ############################################

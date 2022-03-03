@@ -56,7 +56,13 @@ def insert_player_info_into_db(player_info):
         
         record = player_info[i]
         # Skip over players from duplicate teams
+        # Skip over players from duplicate or FCS teams 
         if (
+            record.fields['Team ID'] == 160 or
+            record.fields['Team ID'] == 161 or
+            record.fields['Team ID'] == 162 or
+            record.fields['Team ID'] == 163 or
+            record.fields['Team ID'] == 164 or
             record.fields['Team ID'] == 300 or
             record.fields['Team ID'] == 400 or
             record.fields['Team ID'] == 1023

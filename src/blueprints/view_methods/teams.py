@@ -47,7 +47,11 @@ from src.responses.Teams import TeamDetailsSchema, TeamInfoSchema
 
 def get_all_teams(request):
     
-    teams: List[TeamInfoData] = session.query(TeamInfoData).order_by(desc(TeamInfoData.is_user)).all()
+    teams: List[TeamInfoData] = session.query(TeamInfoData).order_by(
+        desc(TeamInfoData.is_user),
+        TeamInfoData.team_name
+    ).all()
+    
     teams_json = team_details_schema.dump(teams)
     
     response = {
