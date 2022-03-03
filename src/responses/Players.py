@@ -69,20 +69,16 @@ class PlayerAbilitiesSchema(Schema):
 
 
 class PlayerStatsSchema(Schema):
-    passing_stats = fields.Nested(PassingStatsSchema)
-    rushing_stats = fields.Nested(RushingStatsSchema)
-    receiving_stats = fields.Nested(ReceivingStatsSchema)
-    defensive_stats = fields.Nested(DefensiveStatsSchema)
-    return_stats = fields.Nested(ReturnStatsSchema)
-    kicking_stats = fields.Nested(KickingStatsSchema)
-
-
-class PlayerSeasonAndCareerStatsSchema(Schema):
-    season = fields.Nested(PlayerStatsSchema)
-    career = fields.Nested(PlayerStatsSchema)
+    passing = fields.Nested(PassingStatsSchema)
+    rushing = fields.Nested(RushingStatsSchema)
+    receiving = fields.Nested(ReceivingStatsSchema)
+    defensive = fields.Nested(DefensiveStatsSchema)
+    kick_return = fields.Nested(ReturnStatsSchema)
+    kicking = fields.Nested(KickingStatsSchema)
 
 
 class PlayerSchema(Schema):
     details = fields.Nested(PlayerDetailsSchema)
     abilities = fields.Nested(PlayerAbilitiesSchema)
-    stats = fields.Nested(PlayerSeasonAndCareerStatsSchema)
+    career_stats = fields.Nested(PlayerStatsSchema)
+    season_stats = fields.Nested(PlayerStatsSchema)

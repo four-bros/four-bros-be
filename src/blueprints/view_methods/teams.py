@@ -63,9 +63,7 @@ def get_team_by_team_id(request, team_id) -> TeamDetailsSchema:
     team_stats_data: TeamStatsData = session.query(TeamStatsData).where(TeamStatsData.id == team_id).one()
 
     players: List[PlayerInfoData] = session.query(PlayerInfoData).where(
-        PlayerInfoData.team_id == team_id).all()
-
-    players.sort(key=lambda p: p.overall, reverse=True)
+        PlayerInfoData.team_id == team_id).order_by(desc(PlayerInfoData.overall)).all()
 
     team_details: TeamDetails = _get_team_details(team_info=team_info_data, players=players)
     team_roster: TeamRoster = [_get_team_roster(player) for player in players]
@@ -84,7 +82,10 @@ def get_team_by_team_id(request, team_id) -> TeamDetailsSchema:
 
 def get_team_player_stats(request, team_id):
     # Query the year to filter out irrelevant years
-    week_year: WeekYearData = session.query(WeekYearData).first()
+    week_year: WeekYearData = session.query(WeekYearData).order_by(
+        desc(WeekYearData.year),
+        desc(WeekYearData.week)
+    ).first()
     # Query the team to get the team_id
     team: TeamInfoData = session.query(TeamInfoData).where(TeamInfoData.id == team_id).one()
 

@@ -9,7 +9,6 @@ from src.models.Player import (
     PlayerAbilities,
     PlayerAbilitiesDetailsStats,
     PlayerDetails,
-    PlayerSeasonAndCareerStats,
     PlayerStats
 )
 from src.models.Stats import (
@@ -48,16 +47,12 @@ def _get_player_abilities_details_stats(player: PlayerInfoData) -> PlayerAbiliti
     player_abilities: PlayerAbilities = _get_player_abilities(player=player)
     season_stats: PlayerStats = _get_player_season_stats(player=player)
     career_stats: PlayerStats = _get_player_career_stats(player=player)
-    
-    stats: PlayerSeasonAndCareerStats = PlayerSeasonAndCareerStats(
-        season=season_stats,
-        career=career_stats
-    )
 
     player_abilities_details_stats: PlayerAbilitiesDetailsStats = PlayerAbilitiesDetailsStats(
         details=player_details,
         abilities=player_abilities,
-        stats=stats
+        career_stats=career_stats,
+        season_stats=season_stats
     )
 
     return player_abilities_details_stats
@@ -200,9 +195,6 @@ def _get_player_receiving_stats(player) -> PlayerReceivingStats:
     return player_receiving_stats
 
 
-##############################################
-######### Get player return stats ###########
-##############################################
 def _get_player_return_stats(player) -> PlayerReturnStats:
 
     player_info: PlayerInfoData = player[0]

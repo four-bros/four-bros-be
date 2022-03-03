@@ -44,8 +44,8 @@ from scripts.team_db_scripts import (
 def main():
     ########################################################
     ############ Drop DB tables if necessary. ##############
-    ############ typically only necessary if  ##############
-    ############ updating table structure     ##############
+    ############ typically only necessary if ###############
+    ############ updating table structure ##################
     ########################################################
     # Base.metadata.drop_all(engine)
 

@@ -70,12 +70,12 @@ def _get_player_season_stats(player: PlayerInfoData) -> PlayerStats:
         kicking_stats = _get_kicking_stats(kicking_stats_data)
     
     player_stats: PlayerStats = PlayerStats(
-        passing_stats=passing_stats,
-        rushing_stats=rushing_stats,
-        receiving_stats=receiving_stats,
-        defensive_stats=defensive_stats,
-        return_stats=return_stats,
-        kicking_stats=kicking_stats
+        passing=passing_stats,
+        rushing=rushing_stats,
+        receiving=receiving_stats,
+        defensive=defensive_stats,
+        kick_return=return_stats,
+        kicking=kicking_stats
     )
 
     return player_stats
