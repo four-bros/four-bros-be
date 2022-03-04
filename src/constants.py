@@ -92,8 +92,8 @@ class Positions():
     RE = 'RE'
     LE = 'LE'
     DT = 'DT'
-    LOLB = 'LOLB'
-    ROLB = 'ROLB'
+    LLB = 'LLB'
+    RLB = 'RLB'
     MLB = 'MLB'
     CB = 'CB'
     FS = 'FS'
@@ -106,7 +106,7 @@ class Positions():
     ]
 
     defense_positions = [
-        RE, LE, DT, LOLB, ROLB, MLB, CB, FS, SS
+        RE, LE, DT, LLB, RLB, MLB, CB, FS, SS
     ]
 
     sp_teams_positions = [
