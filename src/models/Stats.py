@@ -419,9 +419,6 @@ class ReturnStats:
         return f'Total Ret. TDS: {self.kr_tds + self.pr_tds}'
 
 
-
-
-
 ############################################
 ########## Total Stats models #############
 ############################################
@@ -458,10 +455,20 @@ class PlayerKickingStats:
     def __init__(
         self,
         player_details: PlayerDetails,
-        kicking_stats: KickingStats
+        kicking_stats: KickStats
     ):
         self.player_details = player_details
         self.kicking_stats = kicking_stats
+
+
+class PlayerKickReturnStats:
+    def __init__(
+        self,
+        player_details: PlayerDetails,
+        kick_return_stats: KickReturnStats
+    ):
+        self.player_details = player_details
+        self.kick_return_stats = kick_return_stats   
 
 
 class PlayerReceivingStats:
@@ -503,6 +510,26 @@ class PlayerPassingStats:
 
         self.player_details = player_details
         self. passing_stats = passing_stats
+
+
+class PlayerPuntingStats:
+    def __init__(
+        self,
+        player_details: PlayerDetails,
+        punting_stats: PuntingStats
+    ):
+        self.player_details = player_details
+        self.punting_stats = punting_stats
+
+
+class PlayerPuntReturnStats:
+    def __init__(
+        self,
+        player_details: PlayerDetails,
+        punt_return_stats: PuntReturnStats
+    ):
+        self.player_details = player_details
+        self.punt_return_stats = punt_return_stats  
 
 
 class PlayerTotalStats:
