@@ -12,8 +12,12 @@ from src.data_models.SeasonReturnStatsData import SeasonReturnStatsData
 from src.models.Player import PlayerStats
 from src.models.Stats import (
     DefensiveStats,
+    KickReturnStats,
+    KickStats,
     KickingStats,
     PassingStats,
+    PuntReturnStats,
+    PuntingStats,
     ReceivingStats,
     ReturnStats,
     RushingStats,
@@ -22,7 +26,10 @@ from src.models.Stats import (
 from src.utils.season_stats import (
     _get_defensive_stats,
     _get_kicking_stats,
+    _get_kick_return_stats,
     _get_passing_stats,
+    _get_punting_stats,
+    _get_punt_return_stats,
     _get_receiving_stats,
     _get_return_stats,
     _get_rushing_stats,
@@ -394,8 +401,10 @@ def _get_player_career_stats(player: PlayerInfoData) -> PlayerStats:
     receiving_stats: ReceivingStats = None
     rushing_stats: RushingStats = None
     defensive_stats: DefensiveStats = None
-    return_stats: ReturnStats = None
-    kicking_stats: KickingStats = None
+    kicking_stats: KickStats = None
+    kick_return_stats: KickReturnStats = None
+    punting_stats: PuntingStats = None
+    punt_return_stats: PuntReturnStats = None
 
     if offensive_stats_data:
         passing_stats = _get_passing_stats(offensive_stats_data)
@@ -404,17 +413,21 @@ def _get_player_career_stats(player: PlayerInfoData) -> PlayerStats:
     if defensive_stats_data:
         defensive_stats = _get_defensive_stats(defensive_stats_data)
     if return_stats_data:
-        return_stats = _get_return_stats(return_stats_data)
+        kick_return_stats = _get_kick_return_stats(return_stats_data)
+        punt_return_stats = _get_punt_return_stats(return_stats_data)
     if kicking_stats_data:
         kicking_stats = _get_kicking_stats(kicking_stats_data)
+        punting_stats = _get_punting_stats(kicking_stats_data)
     
     player_stats: PlayerStats = PlayerStats(
         passing=passing_stats,
         rushing=rushing_stats,
         receiving=receiving_stats,
         defensive=defensive_stats,
-        kick_return=return_stats,
-        kicking=kicking_stats
+        kicking=kicking_stats,
+        kick_return=kick_return_stats,
+        punting=punting_stats,
+        punt_return=punt_return_stats
     )
 
     return player_stats

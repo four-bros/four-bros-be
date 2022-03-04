@@ -1,3 +1,4 @@
+from sqlalchemy import desc
 from sqlalchemy.sql.expression import update
 from uuid import uuid4
 
@@ -12,6 +13,11 @@ from src.data_models.WeekYearData import WeekYearData
 
 
 def insert_commits_into_db(commits):
+
+    week_year: WeekYearData = session.query(WeekYearData).order_by(
+        desc(WeekYearData.year),
+        desc(WeekYearData.week)
+    ).first()
     
     for i, value in enumerate(commits):
         record = commits[i]
@@ -21,9 +27,10 @@ def insert_commits_into_db(commits):
             name=record.fields['Name'],
             position=record.fields['Position'],
             rank=record.fields['Rank'],
-            school=record.fields['School']
+            school=record.fields['School'],
+            week=week_year.week,
+            year=week_year.year
         )
-        session.flush()
 
         commit = session.query(CommitsData).where(
             CommitsData.name == new_commit.name).scalar()
@@ -32,15 +39,6 @@ def insert_commits_into_db(commits):
             session.add(new_commit)
             session.flush()
             
-        else:
-            update(CommitsData).where(CommitsData.name == new_commit.name).values(
-                stars=new_commit.stars,
-                name=new_commit.name,
-                position=new_commit.position,
-                rank=new_commit.rank,
-                school=new_commit.school
-            )
-            session.flush()
     try:
         session.commit()
     except:

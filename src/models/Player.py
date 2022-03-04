@@ -1,7 +1,11 @@
 from src.models.Stats import(
     DefensiveStats,
     KickingStats,
+    KickReturnStats,
+    KickStats,
     PassingStats,
+    PuntingStats,
+    PuntReturnStats,
     ReceivingStats,
     ReturnStats,
     RushingStats
@@ -135,18 +139,22 @@ class PlayerStats:
         rushing: RushingStats,
         receiving: ReceivingStats,
         defensive: DefensiveStats,
-        kick_return: ReturnStats,
-        kicking: KickingStats
+        kicking: KickStats,
+        kick_return: KickReturnStats,
+        punting: PuntingStats,
+        punt_return: PuntReturnStats
     ):
         self.passing = passing
         self.rushing = rushing
         self.receiving = receiving
         self.defensive = defensive
-        self.kick_return = kick_return
         self.kicking = kicking
+        self.kick_return = kick_return
+        self.punting = punting
+        self.punt_return = punt_return
 
     def __repr__(self):
-        return f'passing stats: {self.passing_stats}, rushing stats: {self.rushing_stats}, rec stats {self.receiving_stats}'
+        return f'passing stats: {self.passing}, rushing stats: {self.rushing}, rec stats {self.receiving}'
 
 class PlayerAbilitiesDetailsStats:
     def __init__(

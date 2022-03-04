@@ -41,8 +41,16 @@ from src.models.Stats import (
     PlayerReturnStats,
     PlayerRushingStats
 )
-from src.models.Teams import TeamDetails, TeamInfo, TeamRoster, TeamStats
-from src.responses.Teams import TeamDetailsSchema, TeamInfoSchema
+from src.models.Teams import (
+    TeamDetails,
+    TeamInfo,
+    TeamRoster,
+    TeamStats
+)
+from src.responses.Teams import (
+    TeamDetailsSchema,
+    TeamInfoSchema
+)
 
 
 def get_all_teams(request):
@@ -51,7 +59,7 @@ def get_all_teams(request):
         desc(TeamInfoData.is_user),
         TeamInfoData.team_name
     ).all()
-    
+
     teams_json = team_details_schema.dump(teams)
     
     response = {

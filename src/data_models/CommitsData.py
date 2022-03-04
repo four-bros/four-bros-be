@@ -17,3 +17,5 @@ class CommitsData(Base):
     position = Column(String(50))
     rank = Column(Integer)
     school = Column(String(50))
+    week = Column(Integer)
+    year = Column(Integer)
