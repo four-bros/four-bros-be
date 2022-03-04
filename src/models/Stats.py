@@ -253,7 +253,136 @@ class KickingStats:
         return f'Total FGs: {self.fg_made}, Total Punts: {self.number_punts}'
 
 
+class KickStats:
+    def __init__(
+        self,
+        fg_made_17_29,
+        fg_att_17_29,
+        long_fg,
+        ko_touchbacks,
+        xp_att,
+        year,
+        fg_att,
+        xp_blocked,
+        fg_blocked,
+        fg_att_40_49,
+        fg_made_40_49,
+        fg_att_30_39,
+        fg_made_30_39,
+        fg_att_50_plus,
+        fg_made_50_plus,
+        games_played,
+        kickoffs,
+        xp_made,
+        fg_made,
+        fg_pct,
+        xp_pct,
+        fg_50_plus_pct
+    ):
+        self.fg_made_17_29 = fg_made_17_29
+        self.fg_att_17_29 = fg_att_17_29
+        self.long_fg = long_fg
+        self.ko_touchbacks = ko_touchbacks
+        self.xp_att = xp_att
+        self.year = year
+        self.fg_att = fg_att
+        self.xp_blocked = xp_blocked
+        self.fg_blocked = fg_blocked
+        self.fg_att_40_49 = fg_att_40_49
+        self.fg_made_40_49 = fg_made_40_49
+        self.fg_att_30_39 = fg_att_30_39
+        self.fg_made_30_39 = fg_made_30_39
+        self.fg_att_50_plus = fg_att_50_plus
+        self.fg_made_50_plus = fg_made_50_plus
+        self.games_played = games_played
+        self.kickoffs = kickoffs
+        self.xp_made = xp_made
+        self.fg_made = fg_made
+        self.fg_pct = fg_pct
+        self.xp_pct = xp_pct
+        self.fg_50_plus_pct = fg_50_plus_pct
 
+    def __repr__(self):
+        return f'Total FGs: {self.fg_made}, Total Punts: {self.number_punts}'
+
+
+class KickReturnStats:
+    def __init__(
+        self,
+        kick_returns,
+        year,
+        long_kr,
+        games_played,
+        kr_tds,
+        kr_yds,
+        kr_avg
+    ):
+
+        self.kick_returns = kick_returns
+        self.year = year
+        self.long_kr = long_kr
+        self.games_played = games_played
+        self.kr_tds = kr_tds
+        self.kr_yds = kr_yds
+        self.kr_avg = kr_avg
+
+    def __repr__(self):
+        return f'Total KR TDs and YDs: {self.kr_tds + self.kr_yds}'
+
+
+class PuntingStats:
+    def __init__(
+        self,
+        number_punts,
+        total_punt_yards,
+        punt_avg,
+        net_punting,
+        long_punt,
+        year,
+        games_played,
+        punts_blocked,
+        inside_twenty,
+        punt_touchbacks
+        
+    ):
+        self.number_punts = number_punts
+        self.total_punt_yards = total_punt_yards
+        self.punt_avg = punt_avg
+        self.net_punting = net_punting
+        self.long_punt = long_punt
+        self.year = year
+        self.games_played = games_played
+        self.punts_blocked = punts_blocked
+        self.inside_twenty = inside_twenty
+        self.punt_touchbacks = punt_touchbacks
+        
+
+    def __repr__(self):
+        return f'Total FGs: {self.fg_made}, Total Punts: {self.number_punts}'
+
+
+class PuntReturnStats:
+    def __init__(
+        self,
+        year,
+        punt_returns,
+        long_pr,
+        games_played,
+        pr_tds,
+        pr_yds,
+        pr_avg
+    ):
+
+        self.year = year
+        self.punt_returns = punt_returns
+        self.long_pr = long_pr
+        self.games_played = games_played
+        self.pr_tds = pr_tds
+        self.pr_yds = pr_yds
+        self.pr_avg = pr_avg
+
+    def __repr__(self):
+        return f'Total PR TDs and YDs: {self.pr_tds + self.pr_tds}'
 
 
 class ReturnStats:
@@ -288,6 +417,9 @@ class ReturnStats:
 
     def __repr__(self):
         return f'Total Ret. TDS: {self.kr_tds + self.pr_tds}'
+
+
+
 
 
 ############################################
