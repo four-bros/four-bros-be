@@ -12,14 +12,21 @@ from src.models.Player import (
     PlayerStats
 )
 from src.models.Stats import (
+    KickReturnStats,
+    KickStats,
     KickingStats,
     PassingStats,
     PlayerDefensiveStats,
     PlayerKickingStats,
+    PlayerKickReturnStats,
     PlayerPassingStats,
+    PlayerPuntingStats,
+    PlayerPuntReturnStats,
     PlayerReceivingStats,
     PlayerReturnStats,
     PlayerRushingStats,
+    PuntReturnStats,
+    PuntingStats,
     ReceivingStats,
     ReturnStats,
     RushingStats
@@ -31,7 +38,10 @@ from src.utils.season_stats import (
     _get_player_season_stats,
     _get_defensive_stats,
     _get_kicking_stats,
+    _get_kick_return_stats,
     _get_passing_stats,
+    _get_punting_stats,
+    _get_punt_return_stats,
     _get_receiving_stats,
     _get_return_stats,
     _get_rushing_stats
@@ -147,22 +157,6 @@ def _get_player_defensive_stats(player) -> PlayerDefensiveStats:
     return player_defensive_stats
 
 
-def _get_player_kicking_stats(player) -> PlayerKickingStats:
-
-    player_info: PlayerInfoData = player[0]
-    kicking_stats_data: SeasonKickingStatsData = player[1]
-
-    player_details: PlayerDetails = _get_player_details(player=player_info)
-    kicking_stats: KickingStats = _get_kicking_stats(kicking_stats=kicking_stats_data)
-
-    player_kicking_stats: PlayerKickingStats = PlayerKickingStats(
-        player_details=player_details,
-        kicking_stats=kicking_stats
-    )
-
-    return player_kicking_stats
-
-
 def _get_player_passing_stats(player) -> PlayerPassingStats:
 
     player_info: PlayerInfoData = player[0]
@@ -177,6 +171,8 @@ def _get_player_passing_stats(player) -> PlayerPassingStats:
     )
 
     return player_passing_stats
+
+
 
 
 def _get_player_receiving_stats(player) -> PlayerReceivingStats:
@@ -225,3 +221,67 @@ def _get_player_rushing_stats(player) -> PlayerRushingStats:
     )
 
     return player_rushing_stats
+
+
+def _get_player_kicking_stats(player) -> PlayerKickingStats:
+
+    player_info: PlayerInfoData = player[0]
+    kicking_stats_data: SeasonKickingStatsData = player[1]
+
+    player_details: PlayerDetails = _get_player_details(player=player_info)
+    kicking_stats: KickStats = _get_kicking_stats(kicking_stats=kicking_stats_data)
+
+    player_kicking_stats: PlayerKickingStats = PlayerKickingStats(
+        player_details=player_details,
+        kicking_stats=kicking_stats
+    )
+
+    return player_kicking_stats
+
+
+def _get_player_kick_return_stats(player) -> PlayerReturnStats:
+
+    player_info: PlayerInfoData = player[0]
+    return_stats_data: SeasonReturnStatsData = player[1]
+
+    player_details: PlayerDetails = _get_player_details(player=player_info)
+    return_stats: KickReturnStats = _get_kick_return_stats(return_stats=return_stats_data)
+
+    player_kick_return_stats: PlayerKickReturnStats = PlayerKickReturnStats(
+        player_details=player_details,
+        kick_return_stats=return_stats
+    )
+
+    return player_kick_return_stats
+
+
+def _get_player_punting_stats(player) -> PlayerPuntingStats:
+
+    player_info: PlayerInfoData = player[0]
+    kicking_stats_data: SeasonKickingStatsData = player[1]
+
+    player_details: PlayerDetails = _get_player_details(player=player_info)
+    punting_stats: PuntingStats = _get_punting_stats(kicking_stats=kicking_stats_data)
+
+    player_punting_stats: PlayerPuntingStats = PlayerPuntingStats(
+        player_details=player_details,
+        punting_stats=punting_stats
+    )
+
+    return player_punting_stats
+
+
+def _get_player_punt_return_stats(player) -> PlayerReturnStats:
+
+    player_info: PlayerInfoData = player[0]
+    return_stats_data: SeasonReturnStatsData = player[1]
+
+    player_details: PlayerDetails = _get_player_details(player=player_info)
+    return_stats: PuntReturnStats = _get_punt_return_stats(return_stats=return_stats_data)
+
+    player_punt_return_stats: PlayerPuntReturnStats = PlayerPuntReturnStats(
+        player_details=player_details,
+        punt_return_stats=return_stats
+    )
+
+    return player_punt_return_stats
