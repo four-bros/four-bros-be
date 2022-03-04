@@ -11,7 +11,10 @@ from src.responses.Stats import(
     PlayerDefensiveStatsSchema,
     PlayerDetailsSchema,
     PlayerKickingStatsSchema,
+    PlayerKickReturnStatsSchema,
     PlayerPassingStatsSchema,
+    PlayerPuntingStatsSchema,
+    PlayerPuntReturnStatsSchema,
     PlayerReceivingStatsSchema,
     PlayerReturnStatsSchema,
     PlayerRushingStatsSchema,
@@ -50,12 +53,18 @@ defensive_stat_schema = PlayerDefensiveStatsSchema()
 defensive_stats_schema = PlayerDefensiveStatsSchema(many=True)
 kicking_stat_schema = PlayerKickingStatsSchema()
 kicking_stats_schema = PlayerKickingStatsSchema(many=True)
+kick_return_stat_schema = PlayerKickReturnStatsSchema()
+kick_return_stats_schema = PlayerKickReturnStatsSchema(many=True)
 passing_stat_schema = PlayerPassingStatsSchema()
 passing_stats_schema = PlayerPassingStatsSchema(many=True)
 player_details_schema_single = PlayerDetailsSchema()
 player_details_schema_list = PlayerDetailsSchema(many=True)
 player_schema_single = PlayerSchema()
 player_schema_list = PlayerSchema(many=True)
+punt_return_stat_schema = PlayerPuntReturnStatsSchema()
+punt_return_stats_schema = PlayerPuntReturnStatsSchema(many=True)
+punting_stat_schema = PlayerPuntingStatsSchema()
+punting_stats_schema = PlayerPuntingStatsSchema(many=True)
 receiving_stat_schema = PlayerReceivingStatsSchema()
 receiving_stats_schema = PlayerReceivingStatsSchema(many=True)
 return_stat_schema = PlayerReturnStatsSchema()

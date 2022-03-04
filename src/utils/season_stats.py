@@ -18,8 +18,12 @@ from src.data_models.WeekYearData import WeekYearData
 from src.models.Player import PlayerStats
 from src.models.Stats import (
     DefensiveStats,
+    KickStats,
+    KickReturnStats,
     KickingStats,
     PassingStats,
+    PuntingStats,
+    PuntReturnStats,
     ReceivingStats,
     ReturnStats,
     RushingStats,
@@ -55,8 +59,10 @@ def _get_player_season_stats(player: PlayerInfoData) -> PlayerStats:
     receiving_stats: ReceivingStats = None
     rushing_stats: RushingStats = None
     defensive_stats: DefensiveStats = None
-    return_stats: ReturnStats = None
-    kicking_stats: KickingStats = None
+    kicking_stats: KickStats = None
+    kick_return_stats: KickReturnStats = None
+    punting_stats: PuntingStats = None
+    punt_return_stats: PuntReturnStats = None
 
     if offensive_stats_data:
         passing_stats = _get_passing_stats(offensive_stats_data)
@@ -66,16 +72,21 @@ def _get_player_season_stats(player: PlayerInfoData) -> PlayerStats:
         defensive_stats = _get_defensive_stats(defensive_stats_data)
     if return_stats_data:
         return_stats = _get_return_stats(return_stats_data)
+        kick_return_stats = _get_kick_return_stats(return_stats_data)
+        punt_return_stats = _get_punt_return_stats(return_stats_data)
     if kicking_stats_data:
         kicking_stats = _get_kicking_stats(kicking_stats_data)
+        punting_stats = _get_punting_stats(kicking_stats_data)
     
     player_stats: PlayerStats = PlayerStats(
         passing=passing_stats,
         rushing=rushing_stats,
         receiving=receiving_stats,
         defensive=defensive_stats,
-        kick_return=return_stats,
-        kicking=kicking_stats
+        kicking=kicking_stats,
+        kick_return=kick_return_stats,
+        punting=punting_stats,
+        punt_return=punt_return_stats
     )
 
     return player_stats
@@ -113,21 +124,21 @@ def _get_defensive_stats(
     return defensive_stats_all
 
 
+################################################
+####### Get player special teams stats #########
+################################################
 def _get_kicking_stats(
     kicking_stats: Union[CareerKickingStatsData, GameKickingStatsData, SeasonKickingStatsData]
-    ) -> KickingStats:
+    ) -> KickStats:
 
-    kicking_stats_all: KickingStats = KickingStats(
+    kicking_stats_all: KickStats = KickStats(
         fg_made_17_29=kicking_stats.fg_made_17_29,
         fg_att_17_29=kicking_stats.fg_att_17_29,
         long_fg=kicking_stats.long_fg,
         ko_touchbacks=kicking_stats.ko_touchbacks,
-        long_punt=kicking_stats.long_punt,
         xp_att=kicking_stats.xp_att,
         year=kicking_stats.year,
-        punts_blocked=kicking_stats.punts_blocked,
         fg_att=kicking_stats.fg_att,
-        total_punt_yards=kicking_stats.total_punt_yards,
         xp_blocked=kicking_stats.xp_blocked,
         fg_blocked=kicking_stats.fg_blocked,
         fg_att_40_49=kicking_stats.fg_att_40_49,
@@ -136,23 +147,97 @@ def _get_kicking_stats(
         fg_made_30_39=kicking_stats.fg_made_30_39,
         fg_att_50_plus=kicking_stats.fg_att_50_plus,
         fg_made_50_plus=kicking_stats.fg_made_50_plus,
-        punt_touchbacks=kicking_stats.punt_touchbacks,
         games_played=kicking_stats.games_played,
         kickoffs=kicking_stats.kickoffs,
         xp_made=kicking_stats.xp_made,
-        net_punting=kicking_stats.net_punting,
         fg_made=kicking_stats.fg_made,
-        number_punts=kicking_stats.number_punts,
-        inside_twenty=kicking_stats.inside_twenty,
         fg_pct=kicking_stats.fg_pct,
         xp_pct=kicking_stats.xp_pct,
-        fg_50_plus_pct=kicking_stats.fg_50_plus_pct,
-        punt_avg=kicking_stats.punt_avg
+        fg_50_plus_pct=kicking_stats.fg_50_plus_pct
     )
 
     return kicking_stats_all
 
 
+def _get_kick_return_stats(
+    return_stats: Union[CareerReturnStatsData, GameReturnStatsData, SeasonReturnStatsData]
+    ) -> KickReturnStats:
+
+    kick_return_stats: KickReturnStats = KickReturnStats(
+        kick_returns=return_stats.kick_returns,
+        year=return_stats.year,
+        long_kr=return_stats.long_kr,
+        games_played=return_stats.games_played,
+        kr_tds=return_stats.kr_tds,
+        kr_yds=return_stats.kr_yds,
+        kr_avg=return_stats.kr_avg
+    )
+
+    return kick_return_stats
+
+
+def _get_return_stats(
+    return_stats: Union[CareerReturnStatsData, GameReturnStatsData, SeasonReturnStatsData]
+    ) -> ReturnStats:
+
+    converted_return_stats: ReturnStats = ReturnStats(
+        kick_returns=return_stats.kick_returns,
+        year=return_stats.year,
+        long_kr=return_stats.long_kr,
+        punt_returns=return_stats.punt_returns,
+        long_pr=return_stats.long_pr,
+        games_played=return_stats.games_played,
+        kr_tds=return_stats.kr_tds,
+        pr_tds=return_stats.pr_tds,
+        kr_yds=return_stats.kr_yds,
+        pr_yds=return_stats.pr_yds,
+        kr_avg=return_stats.kr_avg,
+        pr_avg=return_stats.pr_avg
+    )
+
+    return converted_return_stats
+
+
+def _get_punting_stats(
+    kicking_stats: Union[CareerKickingStatsData, GameKickingStatsData, SeasonKickingStatsData]
+    ) -> PuntingStats:
+
+    punting_stats: PuntingStats = PuntingStats(
+        long_punt=kicking_stats.long_punt,
+        year=kicking_stats.year,
+        punts_blocked=kicking_stats.punts_blocked,
+        total_punt_yards=kicking_stats.total_punt_yards,
+        punt_touchbacks=kicking_stats.punt_touchbacks,
+        games_played=kicking_stats.games_played,
+        net_punting=kicking_stats.net_punting,
+        number_punts=kicking_stats.number_punts,
+        inside_twenty=kicking_stats.inside_twenty,
+        punt_avg=kicking_stats.punt_avg
+    )
+
+    return punting_stats
+
+
+def _get_punt_return_stats(
+    return_stats: Union[CareerReturnStatsData, GameReturnStatsData, SeasonReturnStatsData]
+    ) -> PuntReturnStats:
+
+    punt_return_stats: PuntReturnStats = PuntReturnStats(
+        year=return_stats.year,
+        punt_returns=return_stats.punt_returns,
+        long_pr=return_stats.long_pr,
+        games_played=return_stats.games_played,
+        pr_tds=return_stats.pr_tds,
+        pr_yds=return_stats.pr_yds,
+        pr_avg=return_stats.pr_avg
+    )
+
+    return punt_return_stats
+
+
+################################################
+######### Get player offensive stats ###########
+################################################
 def _get_passing_stats(
     offensive_stats: Union[CareerOffensiveStatsData, GameOffensiveStatsData, SeasonOffensiveStatsData]
     ) -> PassingStats:
@@ -193,28 +278,6 @@ def _get_receiving_stats(
     )
 
     return receiving_stats
-
-
-def _get_return_stats(
-    return_stats: Union[CareerReturnStatsData, GameReturnStatsData, SeasonReturnStatsData]
-    ) -> ReturnStats:
-
-    converted_return_stats: ReturnStats = ReturnStats(
-        kick_returns=return_stats.kick_returns,
-        year=return_stats.year,
-        long_kr=return_stats.long_kr,
-        punt_returns=return_stats.punt_returns,
-        long_pr=return_stats.long_pr,
-        games_played=return_stats.games_played,
-        kr_tds=return_stats.kr_tds,
-        pr_tds=return_stats.pr_tds,
-        kr_yds=return_stats.kr_yds,
-        pr_yds=return_stats.pr_yds,
-        kr_avg=return_stats.kr_avg,
-        pr_avg=return_stats.pr_avg
-    )
-
-    return converted_return_stats
 
 
 def _get_rushing_stats(
