@@ -136,16 +136,17 @@ def _compile_career_defensive_stats(defensive_stats: List[SeasonDefensiveStatsDa
 def _compile_career_kicking_stats(kicking_stats: List[SeasonKickingStatsData]) -> KickingStats:
 
     yearly_kick_stats: List[KickingStats] = [_get_kicking_stats(year) for year in kicking_stats]
+    yearly_punt_stats: List[PuntingStats] = [_get_punting_stats(year) for year in kicking_stats]
     
     fg_made_17_29 = sum([stats.fg_made_17_29 for stats in yearly_kick_stats])
     fg_att_17_29 = sum([stats.fg_att_17_29 for stats in yearly_kick_stats])
     long_fg = max([stats.long_fg for stats in yearly_kick_stats])
     ko_touchbacks = sum([stats.ko_touchbacks for stats in yearly_kick_stats])
-    long_punt = max([stats.long_punt for stats in yearly_kick_stats])
+    long_punt = max([stats.long_punt for stats in yearly_punt_stats])
     xp_att = sum([stats.xp_att for stats in yearly_kick_stats])
-    punts_blocked = sum([stats.punts_blocked for stats in yearly_kick_stats])
+    punts_blocked = sum([stats.punts_blocked for stats in yearly_punt_stats])
     fg_att = sum([stats.fg_att for stats in yearly_kick_stats])
-    total_punt_yards = sum([stats.total_punt_yards for stats in yearly_kick_stats])
+    total_punt_yards = sum([stats.total_punt_yards for stats in yearly_punt_stats])
     xp_blocked = sum([stats.xp_blocked for stats in yearly_kick_stats])
     fg_blocked = sum([stats.fg_blocked for stats in yearly_kick_stats])
     fg_att_40_49 = sum([stats.fg_att_40_49 for stats in yearly_kick_stats])
@@ -154,14 +155,14 @@ def _compile_career_kicking_stats(kicking_stats: List[SeasonKickingStatsData]) -
     fg_made_30_39 = sum([stats.fg_made_30_39 for stats in yearly_kick_stats])
     fg_att_50_plus = sum([stats.fg_att_50_plus for stats in yearly_kick_stats])
     fg_made_50_plus = sum([stats.fg_made_50_plus for stats in yearly_kick_stats])
-    punt_touchbacks = sum([stats.punt_touchbacks for stats in yearly_kick_stats])
+    punt_touchbacks = sum([stats.punt_touchbacks for stats in yearly_punt_stats])
     games_played = sum([stats.games_played for stats in yearly_kick_stats])
     kickoffs = sum([stats.kickoffs for stats in yearly_kick_stats])
     xp_made = sum([stats.xp_made for stats in yearly_kick_stats])
-    net_punting = sum([stats.net_punting for stats in yearly_kick_stats])
+    net_punting = sum([stats.net_punting for stats in yearly_punt_stats])
     fg_made = sum([stats.fg_made for stats in yearly_kick_stats])
-    number_punts = sum([stats.number_punts for stats in yearly_kick_stats])
-    inside_twenty = sum([stats.inside_twenty for stats in yearly_kick_stats])
+    number_punts = sum([stats.number_punts for stats in yearly_punt_stats])
+    inside_twenty = sum([stats.inside_twenty for stats in yearly_punt_stats])
     fg_pct = 0 if fg_att == 0 else round(fg_made / fg_att * 100, 1)
     xp_pct = 0 if xp_att == 0 else round(xp_made / xp_att * 100, 1)
     fg_50_plus_pct = 0 if fg_att_50_plus == 0 else round(fg_made_50_plus / fg_att_50_plus * 100, 1)
@@ -281,17 +282,18 @@ def _compile_career_receiving_stats(offensive_stats: List[SeasonOffensiveStatsDa
 
 def _compile_career_return_stats(return_stats: List[SeasonReturnStatsData]) -> ReturnStats:
     
-    yearly_rec_stats: List[ReturnStats] = [_get_return_stats(year) for year in return_stats]
+    yearly_kr_stats: List[KickReturnStats] = [_get_kick_return_stats(year) for year in return_stats]
+    yearly_pr_stats: List[PuntReturnStats] = [_get_punt_return_stats(year) for year in return_stats]
     
-    kick_returns = sum([stats.kick_returns for stats in yearly_rec_stats])
-    long_kr = max([stats.long_kr for stats in yearly_rec_stats])
-    punt_returns = sum([stats.punt_returns for stats in yearly_rec_stats])
-    long_pr = max([stats.long_pr for stats in yearly_rec_stats])
-    games_played = sum([stats.games_played for stats in yearly_rec_stats])
-    kr_tds = sum([stats.kr_tds for stats in yearly_rec_stats])
-    pr_tds = sum([stats.pr_tds for stats in yearly_rec_stats])
-    kr_yds = sum([stats.kr_yds for stats in yearly_rec_stats])
-    pr_yds = sum([stats.pr_yds for stats in yearly_rec_stats])
+    kick_returns = sum([stats.kick_returns for stats in yearly_kr_stats])
+    long_kr = max([stats.long_kr for stats in yearly_kr_stats])
+    punt_returns = sum([stats.punt_returns for stats in yearly_pr_stats])
+    long_pr = max([stats.long_pr for stats in yearly_pr_stats])
+    games_played = sum([stats.games_played for stats in yearly_kr_stats])
+    kr_tds = sum([stats.kr_tds for stats in yearly_kr_stats])
+    pr_tds = sum([stats.pr_tds for stats in yearly_pr_stats])
+    kr_yds = sum([stats.kr_yds for stats in yearly_kr_stats])
+    pr_yds = sum([stats.pr_yds for stats in yearly_pr_stats])
     kr_avg = round(
         kr_yds / kick_returns if kick_returns != 0 else 0,
         1
