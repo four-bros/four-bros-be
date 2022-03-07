@@ -17,7 +17,10 @@ from src.data_models.WeekYearData import WeekYearData
 from src.models.Stats import (
     DefensiveStats,
     KickingStats,
+    KickReturnStats,
     PassingStats,
+    PuntingStats,
+    PuntReturnStats,
     ReceivingStats,
     ReturnStats,
     RushingStats,
@@ -35,7 +38,10 @@ from src.utils.career_stats import (
 from src.utils.season_stats import (
     _get_defensive_stats,
     _get_kicking_stats,
+    _get_kick_return_stats,
     _get_passing_stats,
+    _get_punting_stats,
+    _get_punt_return_stats,
     _get_receiving_stats,
     _get_return_stats,
     _get_rushing_stats,
@@ -180,6 +186,7 @@ def insert_game_kick_stats_into_db():
             continue
 
         season_kicking_stats: KickingStats = _get_kicking_stats(kicking_stats_data)
+        season_punting_stats: PuntingStats = _get_punting_stats(kicking_stats_data)
         
         new_id = str(uuid4())
 
@@ -201,11 +208,11 @@ def insert_game_kick_stats_into_db():
                 fg_att_17_29=season_kicking_stats.fg_att_17_29,
                 long_fg=season_kicking_stats.long_fg,
                 ko_touchbacks=season_kicking_stats.ko_touchbacks,
-                long_punt=season_kicking_stats.long_punt,
+                long_punt=season_punting_stats.long_punt,
                 xp_att=season_kicking_stats.xp_att,
-                punts_blocked=season_kicking_stats.punts_blocked,
+                punts_blocked=season_punting_stats.punts_blocked,
                 fg_att=season_kicking_stats.fg_att,
-                total_punt_yards=season_kicking_stats.total_punt_yards,
+                total_punt_yards=season_punting_stats.total_punt_yards,
                 xp_blocked=season_kicking_stats.xp_blocked,
                 fg_blocked=season_kicking_stats.fg_blocked,
                 fg_att_40_49=season_kicking_stats.fg_att_40_49,
@@ -214,17 +221,17 @@ def insert_game_kick_stats_into_db():
                 fg_made_30_39=season_kicking_stats.fg_made_30_39,
                 fg_att_50_plus=season_kicking_stats.fg_att_50_plus,
                 fg_made_50_plus=season_kicking_stats.fg_made_50_plus,
-                punt_touchbacks=season_kicking_stats.punt_touchbacks,
+                punt_touchbacks=season_punting_stats.punt_touchbacks,
                 kickoffs=season_kicking_stats.kickoffs,
                 xp_made=season_kicking_stats.xp_made,
-                net_punting=season_kicking_stats.net_punting,
+                net_punting=season_punting_stats.net_punting,
                 fg_made=season_kicking_stats.fg_made,
-                number_punts=season_kicking_stats.number_punts,
-                inside_twenty=season_kicking_stats.inside_twenty,
+                number_punts=season_punting_stats.number_punts,
+                inside_twenty=season_punting_stats.inside_twenty,
                 fg_pct=season_kicking_stats.fg_pct,
                 xp_pct=season_kicking_stats.xp_pct,
                 fg_50_plus_pct=season_kicking_stats.fg_50_plus_pct,
-                punt_avg=season_kicking_stats.punt_avg
+                punt_avg=season_punting_stats.punt_avg
             )
             session.add(game_stats)
             session.flush()
@@ -237,11 +244,11 @@ def insert_game_kick_stats_into_db():
             fg_att_17_29 = season_kicking_stats.fg_att_17_29 - prior_kick_stats.fg_att_17_29
             long_fg = season_kicking_stats.long_fg - prior_kick_stats.long_fg
             ko_touchbacks = season_kicking_stats.ko_touchbacks - prior_kick_stats.ko_touchbacks
-            long_punt = season_kicking_stats.long_punt - prior_kick_stats.long_punt
+            long_punt = season_punting_stats.long_punt - prior_kick_stats.long_punt
             xp_att = season_kicking_stats.xp_att - prior_kick_stats.xp_att
-            punts_blocked = season_kicking_stats.punts_blocked - prior_kick_stats.punts_blocked
+            punts_blocked = season_punting_stats.punts_blocked - prior_kick_stats.punts_blocked
             fg_att = season_kicking_stats.fg_att - prior_kick_stats.fg_att
-            total_punt_yards = season_kicking_stats.total_punt_yards - prior_kick_stats.total_punt_yards
+            total_punt_yards = season_punting_stats.total_punt_yards - prior_kick_stats.total_punt_yards
             xp_blocked = season_kicking_stats.xp_blocked - prior_kick_stats.xp_blocked
             fg_blocked = season_kicking_stats.fg_blocked - prior_kick_stats.fg_blocked
             fg_att_40_49 = season_kicking_stats.fg_att_40_49 - prior_kick_stats.fg_att_40_49
@@ -250,13 +257,13 @@ def insert_game_kick_stats_into_db():
             fg_made_30_39 = season_kicking_stats.fg_made_30_39 - prior_kick_stats.fg_made_30_39
             fg_att_50_plus = season_kicking_stats.fg_att_50_plus - prior_kick_stats.fg_att_50_plus
             fg_made_50_plus = season_kicking_stats.fg_made_50_plus - prior_kick_stats.fg_made_50_plus
-            punt_touchbacks = season_kicking_stats.punt_touchbacks - prior_kick_stats.punt_touchbacks
+            punt_touchbacks = season_punting_stats.punt_touchbacks - prior_kick_stats.punt_touchbacks
             kickoffs = season_kicking_stats.kickoffs - prior_kick_stats.kickoffs
             xp_made = season_kicking_stats.xp_made - prior_kick_stats.xp_made
-            net_punting = season_kicking_stats.net_punting - prior_kick_stats.net_punting
+            net_punting = season_punting_stats.net_punting - prior_kick_stats.net_punting
             fg_made = season_kicking_stats.fg_made - prior_kick_stats.fg_made
-            number_punts = season_kicking_stats.number_punts - prior_kick_stats.number_punts
-            inside_twenty = season_kicking_stats.inside_twenty - prior_kick_stats.inside_twenty
+            number_punts = season_punting_stats.number_punts - prior_kick_stats.number_punts
+            inside_twenty = season_punting_stats.inside_twenty - prior_kick_stats.inside_twenty
             fg_pct = round(
                 0 if fg_att == 0 else \
                     fg_made / fg_att, 1
@@ -513,7 +520,8 @@ def insert_game_return_stats_into_db():
         if not return_stats_data:
             continue
 
-        season_return_stats: ReturnStats = _get_return_stats(return_stats_data)
+        season_kr_stats: KickReturnStats = _get_kick_return_stats(return_stats_data)
+        season_pr_stats: PuntReturnStats = _get_punt_return_stats(return_stats_data)
         
         new_id = str(uuid4())
 
@@ -532,16 +540,16 @@ def insert_game_return_stats_into_db():
                 week=week_year.week,
                 year=week_year.year,
                 games_played=1,
-                kick_returns=season_return_stats.kick_returns,
-                long_kr=season_return_stats.long_kr,
-                punt_returns=season_return_stats.punt_returns,
-                long_pr=season_return_stats.long_pr,
-                kr_tds=season_return_stats.kr_tds,
-                pr_tds=season_return_stats.pr_tds,
-                kr_yds=season_return_stats.kr_yds,
-                pr_yds=season_return_stats.pr_yds,
-                kr_avg=season_return_stats.kr_avg,
-                pr_avg=season_return_stats.pr_avg
+                kick_returns=season_kr_stats.kick_returns,
+                long_kr=season_kr_stats.long_kr,
+                punt_returns=season_pr_stats.punt_returns,
+                long_pr=season_pr_stats.long_pr,
+                kr_tds=season_kr_stats.kr_tds,
+                pr_tds=season_pr_stats.pr_tds,
+                kr_yds=season_kr_stats.kr_yds,
+                pr_yds=season_pr_stats.pr_yds,
+                kr_avg=season_kr_stats.kr_avg,
+                pr_avg=season_pr_stats.pr_avg
             )
             session.add(game_stats)
             session.flush()
@@ -550,16 +558,16 @@ def insert_game_return_stats_into_db():
 
             prior_kick_stats: ReturnStats = _compile_career_return_stats(prior_return_stats_data)
 
-            kick_returns = season_return_stats.kick_returns - prior_kick_stats.kick_returns
-            long_kr = season_return_stats.long_kr - prior_kick_stats.long_kr
-            punt_returns = season_return_stats.punt_returns - prior_kick_stats.punt_returns
-            long_pr = season_return_stats.long_pr - prior_kick_stats.long_pr
-            kr_tds = season_return_stats.kr_tds - prior_kick_stats.kr_tds
-            pr_tds = season_return_stats.pr_tds - prior_kick_stats.pr_tds
-            kr_yds = season_return_stats.kr_yds - prior_kick_stats.kr_yds
-            pr_yds = season_return_stats.pr_yds - prior_kick_stats.pr_yds
-            kr_avg = season_return_stats.kr_avg - prior_kick_stats.kr_avg
-            pr_avg = season_return_stats.pr_avg - prior_kick_stats.pr_avg
+            kick_returns = season_kr_stats.kick_returns - prior_kick_stats.kick_returns
+            long_kr = season_kr_stats.long_kr - prior_kick_stats.long_kr
+            punt_returns = season_pr_stats.punt_returns - prior_kick_stats.punt_returns
+            long_pr = season_pr_stats.long_pr - prior_kick_stats.long_pr
+            kr_tds = season_kr_stats.kr_tds - prior_kick_stats.kr_tds
+            pr_tds = season_pr_stats.pr_tds - prior_kick_stats.pr_tds
+            kr_yds = season_kr_stats.kr_yds - prior_kick_stats.kr_yds
+            pr_yds = season_pr_stats.pr_yds - prior_kick_stats.pr_yds
+            kr_avg = season_kr_stats.kr_avg - prior_kick_stats.kr_avg
+            pr_avg = season_pr_stats.pr_avg - prior_kick_stats.pr_avg
 
             game_stats = GameReturnStatsData(
                 id=new_id,
