@@ -1,4 +1,5 @@
 from typing import List
+from sqlalchemy import desc
 from sqlalchemy.sql.expression import update
 from uuid import uuid4
 
@@ -108,7 +109,9 @@ def insert_team_stats_into_db():
 
     all_teams_info: List[TeamInfoData] = session.query(TeamInfoData).all()
     # Query the year to filter out irrelevant years
-    week_year: WeekYearData = session.query(WeekYearData).first()
+    week_year: WeekYearData = session.query(WeekYearData).order_by(
+        desc(WeekYearData.year)
+    ).first()
 
     for team in all_teams_info:
         # Skip over players from duplicate teams
