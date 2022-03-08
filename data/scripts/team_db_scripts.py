@@ -113,6 +113,11 @@ def insert_team_stats_into_db():
     for team in all_teams_info:
         # Skip over players from duplicate teams
         if (
+            team.id == 160 or
+            team.id == 161 or
+            team.id == 162 or
+            team.id == 163 or
+            team.id == 164 or
             team.id == 300 or
             team.id == 400 or
             team.id == 1023
@@ -128,9 +133,7 @@ def insert_team_stats_into_db():
         off_data = session.query(PlayerInfoData, SeasonOffensiveStatsData).filter(
             PlayerInfoData.team_id == team.id,
             PlayerInfoData.id == SeasonOffensiveStatsData.player_id,
-            SeasonOffensiveStatsData.year == week_year.year,
-            # filter out incorrect data
-            SeasonOffensiveStatsData.rush_yards < 16000
+            SeasonOffensiveStatsData.year == week_year.year
             ).all()
         ret_data = session.query(PlayerInfoData, SeasonReturnStatsData).filter(
                 PlayerInfoData.team_id == team.id,
