@@ -13,8 +13,8 @@ from src.models.Player import PlayerStats
 from src.models.Stats import (
     DefensiveStats,
     KickReturnStats,
-    KickStats,
     KickingStats,
+    KickingAndPuntingStats,
     PassingStats,
     PuntReturnStats,
     PuntingStats,
@@ -59,7 +59,7 @@ def _compile_player_career_stats(player: PlayerInfoData) -> PlayerStats:
     rushing_stats: RushingStats = None
     defensive_stats: DefensiveStats = None
     return_stats: ReturnStats = None
-    kicking_stats: KickingStats = None
+    kicking_stats: KickingAndPuntingStats = None
 
     if len(offensive_stats_data) > 0:
         passing_stats = _compile_career_passing_stats(offensive_stats_data)
@@ -132,7 +132,7 @@ def _compile_career_defensive_stats(defensive_stats: List[SeasonDefensiveStatsDa
     return career_def_stats
 
 
-def _compile_career_kicking_stats(kicking_stats: List[SeasonKickingStatsData]) -> KickingStats:
+def _compile_career_kicking_stats(kicking_stats: List[SeasonKickingStatsData]) -> KickingAndPuntingStats:
 
     yearly_kick_stats: List[KickingStats] = [_get_kicking_stats(year) for year in kicking_stats]
     yearly_punt_stats: List[PuntingStats] = [_get_punting_stats(year) for year in kicking_stats]
@@ -166,8 +166,9 @@ def _compile_career_kicking_stats(kicking_stats: List[SeasonKickingStatsData]) -
     xp_pct = 0 if xp_att == 0 else round(xp_made / xp_att * 100, 1)
     fg_50_plus_pct = 0 if fg_att_50_plus == 0 else round(fg_made_50_plus / fg_att_50_plus * 100, 1)
     punt_avg = 0 if number_punts == 0 else round(total_punt_yards / number_punts, 1)
+    net_avg = 0 if number_punts == 0 else round(net_punting / number_punts, 1)
     
-    career_kicking_stats: KickingStats = KickingStats(
+    career_kicking_stats: KickingAndPuntingStats = KickingAndPuntingStats(
         fg_made_17_29=fg_made_17_29,
         fg_att_17_29=fg_att_17_29,
         long_fg=long_fg,
@@ -197,7 +198,8 @@ def _compile_career_kicking_stats(kicking_stats: List[SeasonKickingStatsData]) -
         fg_pct=fg_pct,
         xp_pct=xp_pct,
         fg_50_plus_pct=fg_50_plus_pct,
-        punt_avg=punt_avg
+        punt_avg=punt_avg,
+        net_avg=net_avg
     )
     
     return career_kicking_stats
@@ -368,13 +370,15 @@ def _compile_career_total_stats(offensive_stats: List[SeasonOffensiveStatsData])
         total_yards / games_played if games_played != 0 else 0,
         1
     )
+    turnovers = sum([stats.turnovers for stats in yearly_total_stats])
 
     career_total_stats: TotalStats = TotalStats(
         total_yards=total_yards,
         total_tds=total_tds,
         total_ypg=total_ypg,
         games_played=games_played,
-        year=None
+        year=None,
+        turnovers=turnovers
     )
     
     return career_total_stats
@@ -402,7 +406,7 @@ def _get_player_career_stats(player: PlayerInfoData) -> PlayerStats:
     receiving_stats: ReceivingStats = None
     rushing_stats: RushingStats = None
     defensive_stats: DefensiveStats = None
-    kicking_stats: KickStats = None
+    kicking_stats: KickingStats = None
     kick_return_stats: KickReturnStats = None
     punting_stats: PuntingStats = None
     punt_return_stats: PuntReturnStats = None

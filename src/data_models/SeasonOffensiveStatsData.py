@@ -50,6 +50,7 @@ class SeasonOffensiveStatsData(Base):
     total_yards = Column(Integer)
     total_ypg = Column(Float)
     total_tds = Column(Integer)
+    turnovers = Column(Integer)
 
     
     def __repr__(self) -> str:

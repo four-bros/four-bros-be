@@ -184,7 +184,7 @@ class RushingStats:
 ####################################################
 ########### Special Teams Stats models #############
 ####################################################
-class KickingStats:
+class KickingAndPuntingStats:
     def __init__(
         self,
         fg_made_17_29,
@@ -216,7 +216,8 @@ class KickingStats:
         fg_pct,
         xp_pct,
         fg_50_plus_pct,
-        punt_avg
+        punt_avg,
+        net_avg
     ):
         self.fg_made_17_29 = fg_made_17_29
         self.fg_att_17_29 = fg_att_17_29
@@ -248,12 +249,13 @@ class KickingStats:
         self.xp_pct = xp_pct
         self.fg_50_plus_pct = fg_50_plus_pct
         self.punt_avg = punt_avg
+        self.net_avg = net_avg
 
     def __repr__(self):
         return f'Total FGs: {self.fg_made}, Total Punts: {self.number_punts}'
 
 
-class KickStats:
+class KickingStats:
     def __init__(
         self,
         fg_made_17_29,
@@ -342,7 +344,8 @@ class PuntingStats:
         games_played,
         punts_blocked,
         inside_twenty,
-        punt_touchbacks
+        punt_touchbacks,
+        net_avg
         
     ):
         self.number_punts = number_punts
@@ -355,10 +358,11 @@ class PuntingStats:
         self.punts_blocked = punts_blocked
         self.inside_twenty = inside_twenty
         self.punt_touchbacks = punt_touchbacks
+        self.net_avg = net_avg
         
 
     def __repr__(self):
-        return f'Total FGs: {self.fg_made}, Total Punts: {self.number_punts}'
+        return f'Punt AVG: {self.punt_avg}, Total Punts: {self.number_punts}'
 
 
 class PuntReturnStats:
@@ -429,13 +433,15 @@ class TotalStats:
         total_tds,
         total_ypg,
         games_played,
-        year
+        year,
+        turnovers
     ):
         self.total_yards = total_yards
         self.total_tds = total_tds
         self.total_ypg = total_ypg
         self.games_played = games_played
         self.year = year
+        self.turnovers = turnovers
 
 
 ############################################
@@ -455,7 +461,7 @@ class PlayerKickingStats:
     def __init__(
         self,
         player_details: PlayerDetails,
-        kicking_stats: KickStats
+        kicking_stats: KickingStats
     ):
         self.player_details = player_details
         self.kicking_stats = kicking_stats
