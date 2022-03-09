@@ -1,13 +1,17 @@
 from typing import List
 from sqlalchemy import desc
+
 from src.constants import (
     defensive_stats_schema,
+    kick_return_stats_schema,
     kicking_stats_schema,
     passing_stat_schema,
     passing_stats_schema,
+    punt_return_stats_schema,
+    punting_stats_schema,
     receiving_stats_schema,
-    return_stats_schema,
     rushing_stats_schema,
+    total_stats_schema,
     session
 )
 from src.data_models.SeasonDefensiveStatsData import SeasonDefensiveStatsData
@@ -18,19 +22,25 @@ from src.data_models.SeasonReturnStatsData import SeasonReturnStatsData
 from src.data_models.WeekYearData import WeekYearData
 from src.models.Stats import (
     PlayerDefensiveStats,
+    PlayerKickReturnStats,
     PlayerKickingStats,
     PlayerPassingStats,
+    PlayerPuntReturnStats,
+    PlayerPuntingStats,
     PlayerReceivingStats,
-    PlayerReturnStats,
-    PlayerRushingStats
+    PlayerRushingStats,
+    PlayerTotalStats
 )
 from src.utils.player import(
     _get_player_defensive_stats,
+    _get_player_kick_return_stats,
     _get_player_kicking_stats,
     _get_player_passing_stats,
+    _get_player_punt_return_stats,
+    _get_player_punting_stats,
     _get_player_receiving_stats,
-    _get_player_return_stats,
-    _get_player_rushing_stats
+    _get_player_rushing_stats,
+    _get_player_total_off_stats
 )
 
 
@@ -280,6 +290,117 @@ def _get_season_defensive_stats_leaders(is_season_specific: bool):
         return response
 
 
+####################################################
+######### Get kick return stats leaders ############
+####################################################
+def _get_season_kick_return_stats_leaders(is_season_specific: bool):
+    # If season specific, filter by year to get current season leaders
+    if is_season_specific:
+        # Query the year to filter out irrelevant years
+        week_year: WeekYearData = session.query(WeekYearData).order_by(
+            desc(WeekYearData.year)
+        ).first()
+
+        # Querying PlayerInfo first and SeasonReturnStatsData second will return 
+        # a set or tuple to the players variable.
+        kick_returns_data = session.query(PlayerInfoData, SeasonReturnStatsData).filter(
+                PlayerInfoData.id == SeasonReturnStatsData.player_id,
+                SeasonReturnStatsData.year == week_year.year
+                ).order_by(desc(SeasonReturnStatsData.kick_returns)).limit(10)
+
+        long_kr_data = session.query(PlayerInfoData, SeasonReturnStatsData).filter(
+                PlayerInfoData.id == SeasonReturnStatsData.player_id,
+                SeasonReturnStatsData.year == week_year.year
+                ).order_by(desc(SeasonReturnStatsData.long_kr)).limit(10)
+
+        kr_tds_data = session.query(PlayerInfoData, SeasonReturnStatsData).filter(
+                PlayerInfoData.id == SeasonReturnStatsData.player_id,
+                SeasonReturnStatsData.year == week_year.year
+                ).order_by(desc(SeasonReturnStatsData.kr_tds)).limit(10)
+
+        kr_yards_data = session.query(PlayerInfoData, SeasonReturnStatsData).filter(
+                PlayerInfoData.id == SeasonReturnStatsData.player_id,
+                SeasonReturnStatsData.year == week_year.year
+                ).order_by(desc(SeasonReturnStatsData.kr_yds)).limit(10)
+
+        kr_avg_data = session.query(PlayerInfoData, SeasonReturnStatsData).filter(
+                PlayerInfoData.id == SeasonReturnStatsData.player_id,
+                SeasonReturnStatsData.year == week_year.year
+                ).order_by(desc(SeasonReturnStatsData.kr_avg)).limit(10)
+
+        # Convert players to PlayerKickingStats model so they can be sorted
+        converted_kick_returns: List[PlayerKickReturnStats] = [_get_player_kick_return_stats(player) for player in kick_returns_data]
+        converted_long_kr: List[PlayerKickReturnStats] = [_get_player_kick_return_stats(player) for player in long_kr_data]
+        converted_kr_tds: List[PlayerKickReturnStats] = [_get_player_kick_return_stats(player) for player in kr_tds_data]
+        converted_kr_yards: List[PlayerKickReturnStats] = [_get_player_kick_return_stats(player) for player in kr_yards_data]
+        converted_kr_avg_data: List[PlayerKickReturnStats] = [_get_player_kick_return_stats(player) for player in kr_avg_data]
+
+        # Convert top ten lists to json
+        kick_return_leaders_json = kick_return_stats_schema.dump(converted_kick_returns)
+        long_kr_leaders_json = kick_return_stats_schema.dump(converted_long_kr)
+        kr_tds_leaders_json = kick_return_stats_schema.dump(converted_kr_tds)
+        kr_yds_leaders_json = kick_return_stats_schema.dump(converted_kr_yards)
+        kr_avg_leaders_json = kick_return_stats_schema.dump(converted_kr_avg_data)
+
+        response = {
+            'kick_returns': kick_return_leaders_json,
+            'long_kr': long_kr_leaders_json,
+            'kr_tds': kr_tds_leaders_json,
+            'kr_yards': kr_yds_leaders_json,
+            'kr_avg': kr_avg_leaders_json,
+        }
+
+        return response
+
+    # If not season specific, don't filter by year to get all time season records
+    else:
+        # Querying PlayerInfo first and SeasonReturnStatsData second will return 
+        # a set or tuple to the players variable.
+        kick_returns_data = session.query(PlayerInfoData, SeasonReturnStatsData).filter(
+                PlayerInfoData.id == SeasonReturnStatsData.player_id,
+                ).order_by(desc(SeasonReturnStatsData.kick_returns)).limit(10)
+
+        long_kr_data = session.query(PlayerInfoData, SeasonReturnStatsData).filter(
+                PlayerInfoData.id == SeasonReturnStatsData.player_id,
+                ).order_by(desc(SeasonReturnStatsData.long_kr)).limit(10)
+
+        kr_tds_data = session.query(PlayerInfoData, SeasonReturnStatsData).filter(
+                PlayerInfoData.id == SeasonReturnStatsData.player_id,
+                ).order_by(desc(SeasonReturnStatsData.kr_tds)).limit(10)
+
+        kr_yards_data = session.query(PlayerInfoData, SeasonReturnStatsData).filter(
+                PlayerInfoData.id == SeasonReturnStatsData.player_id,
+                ).order_by(desc(SeasonReturnStatsData.kr_yds)).limit(10)
+
+        kr_avg_data = session.query(PlayerInfoData, SeasonReturnStatsData).filter(
+                PlayerInfoData.id == SeasonReturnStatsData.player_id,
+                ).order_by(desc(SeasonReturnStatsData.kr_avg)).limit(10)
+
+        # Convert players to PlayerKickingStats model so they can be sorted
+        converted_kick_returns: List[PlayerKickReturnStats] = [_get_player_kick_return_stats(player) for player in kick_returns_data]
+        converted_long_kr: List[PlayerKickReturnStats] = [_get_player_kick_return_stats(player) for player in long_kr_data]
+        converted_kr_tds: List[PlayerKickReturnStats] = [_get_player_kick_return_stats(player) for player in kr_tds_data]
+        converted_kr_yards: List[PlayerKickReturnStats] = [_get_player_kick_return_stats(player) for player in kr_yards_data]
+        converted_kr_avg_data: List[PlayerKickReturnStats] = [_get_player_kick_return_stats(player) for player in kr_avg_data]
+
+        # Convert top ten lists to json
+        kick_return_leaders_json = kick_return_stats_schema.dump(converted_kick_returns)
+        long_kr_leaders_json = kick_return_stats_schema.dump(converted_long_kr)
+        kr_tds_leaders_json = kick_return_stats_schema.dump(converted_kr_tds)
+        kr_yds_leaders_json = kick_return_stats_schema.dump(converted_kr_yards)
+        kr_avg_leaders_json = kick_return_stats_schema.dump(converted_kr_avg_data)
+
+        response = {
+            'kick_returns': kick_return_leaders_json,
+            'long_kr': long_kr_leaders_json,
+            'kr_tds': kr_tds_leaders_json,
+            'kr_yards': kr_yds_leaders_json,
+            'kr_avg': kr_avg_leaders_json,
+        }
+
+        return response
+
+
 #################################################
 ########## Get kicking stats leaders ############
 #################################################
@@ -322,36 +443,6 @@ def _get_season_kicking_stats_leaders(is_season_specific: bool):
                 SeasonKickingStatsData.year == week_year.year
             ).order_by(desc(SeasonKickingStatsData.fg_50_plus_pct)).limit(10)
 
-        long_punt_data = session.query(PlayerInfoData, SeasonKickingStatsData).filter(
-                SeasonKickingStatsData.player_id == PlayerInfoData.id,
-                SeasonKickingStatsData.year == week_year.year
-            ).order_by(desc(SeasonKickingStatsData.long_punt)).limit(10)
-
-        num_punts_data = session.query(PlayerInfoData, SeasonKickingStatsData).filter(
-                SeasonKickingStatsData.player_id == PlayerInfoData.id,
-                SeasonKickingStatsData.year == week_year.year
-            ).order_by(desc(SeasonKickingStatsData.number_punts)).limit(10)
-
-        total_punt_yards_data = session.query(PlayerInfoData, SeasonKickingStatsData).filter(
-                SeasonKickingStatsData.player_id == PlayerInfoData.id,
-                SeasonKickingStatsData.year == week_year.year
-            ).order_by(desc(SeasonKickingStatsData.total_punt_yards)).limit(10)
-
-        punt_avg_data = session.query(PlayerInfoData, SeasonKickingStatsData).filter(
-                SeasonKickingStatsData.player_id == PlayerInfoData.id,
-                SeasonKickingStatsData.year == week_year.year
-            ).order_by(desc(SeasonKickingStatsData.punt_avg)).limit(10)
-
-        net_punting_data = session.query(PlayerInfoData, SeasonKickingStatsData).filter(
-                SeasonKickingStatsData.player_id == PlayerInfoData.id,
-                SeasonKickingStatsData.year == week_year.year
-            ).order_by(desc(SeasonKickingStatsData.net_punting)).limit(10)
-
-        inside_twenty_data = session.query(PlayerInfoData, SeasonKickingStatsData).filter(
-                SeasonKickingStatsData.player_id == PlayerInfoData.id,
-                SeasonKickingStatsData.year == week_year.year
-            ).order_by(desc(SeasonKickingStatsData.inside_twenty)).limit(10)
-
         # Convert players to PlayerKickingStats model so they can be dumped to json
         converted_fg_made: List[PlayerKickingStats] = [_get_player_kicking_stats(player) for player in fg_made_data]
         converted_fg_att: List[PlayerKickingStats] = [_get_player_kicking_stats(player) for player in fg_att_data]
@@ -359,12 +450,6 @@ def _get_season_kicking_stats_leaders(is_season_specific: bool):
         converted_long_fg: List[PlayerKickingStats] = [_get_player_kicking_stats(player) for player in long_fg_data]
         converted_fg_made_50_plus: List[PlayerKickingStats] = [_get_player_kicking_stats(player) for player in fg_made_50_plus_data]
         converted_fg_50_plus_pct: List[PlayerKickingStats] = [_get_player_kicking_stats(player) for player in fg_50_plus_pct_data]
-        converted_long_punt: List[PlayerKickingStats] = [_get_player_kicking_stats(player) for player in long_punt_data]
-        converted_num_punts: List[PlayerKickingStats] = [_get_player_kicking_stats(player) for player in num_punts_data]
-        converted_total_punt_yards: List[PlayerKickingStats] = [_get_player_kicking_stats(player) for player in total_punt_yards_data]
-        converted_punt_avg: List[PlayerKickingStats] = [_get_player_kicking_stats(player) for player in punt_avg_data]
-        converted_net_punting: List[PlayerKickingStats] = [_get_player_kicking_stats(player) for player in net_punting_data]
-        converted_inside_twenty: List[PlayerKickingStats] = [_get_player_kicking_stats(player) for player in inside_twenty_data]
 
         # Convert top ten lists into json
         fg_made_leaders_json = kicking_stats_schema.dump(converted_fg_made)
@@ -373,12 +458,6 @@ def _get_season_kicking_stats_leaders(is_season_specific: bool):
         long_fg_leaders_json = kicking_stats_schema.dump(converted_long_fg)
         fg_made_50_plus_leaders_json = kicking_stats_schema.dump(converted_fg_made_50_plus)
         fg_50_plus_pct_json = kicking_stats_schema.dump(converted_fg_50_plus_pct)
-        long_punt_leaders_json = kicking_stats_schema.dump(converted_long_punt)
-        number_punts_leaders_json = kicking_stats_schema.dump(converted_num_punts)
-        total_punt_yards_json = kicking_stats_schema.dump(converted_total_punt_yards)
-        punt_avg_json = kicking_stats_schema.dump(converted_punt_avg)
-        net_punting_leaders_json = kicking_stats_schema.dump(converted_net_punting)
-        inside_twenty_leaders_json = kicking_stats_schema.dump(converted_inside_twenty)
 
         response = {
             'fg_made': fg_made_leaders_json,
@@ -387,12 +466,6 @@ def _get_season_kicking_stats_leaders(is_season_specific: bool):
             'long_fg': long_fg_leaders_json,
             'fg_50_plus_made': fg_made_50_plus_leaders_json,
             'fg_50_plus_pct': fg_50_plus_pct_json,
-            'long_punt': long_punt_leaders_json,
-            'total_punt_yards': total_punt_yards_json,
-            'number_punts': number_punts_leaders_json,
-            'punt_avg': punt_avg_json,
-            'net_punting': net_punting_leaders_json,
-            'inside_twenty': inside_twenty_leaders_json,
         }
 
         return response
@@ -423,30 +496,6 @@ def _get_season_kicking_stats_leaders(is_season_specific: bool):
                 SeasonKickingStatsData.player_id == PlayerInfoData.id,
             ).order_by(desc(SeasonKickingStatsData.fg_50_plus_pct)).limit(10)
 
-        long_punt_data = session.query(PlayerInfoData, SeasonKickingStatsData).filter(
-                SeasonKickingStatsData.player_id == PlayerInfoData.id,
-            ).order_by(desc(SeasonKickingStatsData.long_punt)).limit(10)
-
-        num_punts_data = session.query(PlayerInfoData, SeasonKickingStatsData).filter(
-                SeasonKickingStatsData.player_id == PlayerInfoData.id,
-            ).order_by(desc(SeasonKickingStatsData.number_punts)).limit(10)
-
-        total_punt_yards_data = session.query(PlayerInfoData, SeasonKickingStatsData).filter(
-                SeasonKickingStatsData.player_id == PlayerInfoData.id,
-            ).order_by(desc(SeasonKickingStatsData.total_punt_yards)).limit(10)
-
-        punt_avg_data = session.query(PlayerInfoData, SeasonKickingStatsData).filter(
-                SeasonKickingStatsData.player_id == PlayerInfoData.id,
-            ).order_by(desc(SeasonKickingStatsData.punt_avg)).limit(10)
-
-        net_punting_data = session.query(PlayerInfoData, SeasonKickingStatsData).filter(
-                SeasonKickingStatsData.player_id == PlayerInfoData.id,
-            ).order_by(desc(SeasonKickingStatsData.net_punting)).limit(10)
-
-        inside_twenty_data = session.query(PlayerInfoData, SeasonKickingStatsData).filter(
-                SeasonKickingStatsData.player_id == PlayerInfoData.id,
-            ).order_by(desc(SeasonKickingStatsData.inside_twenty)).limit(10)
-
         # Convert players to PlayerKickingStats model so they can be dumped to json
         converted_fg_made: List[PlayerKickingStats] = [_get_player_kicking_stats(player) for player in fg_made_data]
         converted_fg_att: List[PlayerKickingStats] = [_get_player_kicking_stats(player) for player in fg_att_data]
@@ -454,12 +503,6 @@ def _get_season_kicking_stats_leaders(is_season_specific: bool):
         converted_long_fg: List[PlayerKickingStats] = [_get_player_kicking_stats(player) for player in long_fg_data]
         converted_fg_made_50_plus: List[PlayerKickingStats] = [_get_player_kicking_stats(player) for player in fg_made_50_plus_data]
         converted_fg_50_plus_pct: List[PlayerKickingStats] = [_get_player_kicking_stats(player) for player in fg_50_plus_pct_data]
-        converted_long_punt: List[PlayerKickingStats] = [_get_player_kicking_stats(player) for player in long_punt_data]
-        converted_num_punts: List[PlayerKickingStats] = [_get_player_kicking_stats(player) for player in num_punts_data]
-        converted_total_punt_yards: List[PlayerKickingStats] = [_get_player_kicking_stats(player) for player in total_punt_yards_data]
-        converted_punt_avg: List[PlayerKickingStats] = [_get_player_kicking_stats(player) for player in punt_avg_data]
-        converted_net_punting: List[PlayerKickingStats] = [_get_player_kicking_stats(player) for player in net_punting_data]
-        converted_inside_twenty: List[PlayerKickingStats] = [_get_player_kicking_stats(player) for player in inside_twenty_data]
 
         # Convert top ten lists into json
         fg_made_leaders_json = kicking_stats_schema.dump(converted_fg_made)
@@ -468,12 +511,6 @@ def _get_season_kicking_stats_leaders(is_season_specific: bool):
         long_fg_leaders_json = kicking_stats_schema.dump(converted_long_fg)
         fg_made_50_plus_leaders_json = kicking_stats_schema.dump(converted_fg_made_50_plus)
         fg_50_plus_pct_json = kicking_stats_schema.dump(converted_fg_50_plus_pct)
-        long_punt_leaders_json = kicking_stats_schema.dump(converted_long_punt)
-        number_punts_leaders_json = kicking_stats_schema.dump(converted_num_punts)
-        total_punt_yards_json = kicking_stats_schema.dump(converted_total_punt_yards)
-        punt_avg_json = kicking_stats_schema.dump(converted_punt_avg)
-        net_punting_leaders_json = kicking_stats_schema.dump(converted_net_punting)
-        inside_twenty_leaders_json = kicking_stats_schema.dump(converted_inside_twenty)
 
         response = {
             'fg_made': fg_made_leaders_json,
@@ -482,12 +519,6 @@ def _get_season_kicking_stats_leaders(is_season_specific: bool):
             'long_fg': long_fg_leaders_json,
             'fg_50_plus_made': fg_made_50_plus_leaders_json,
             'fg_50_plus_pct': fg_50_plus_pct_json,
-            'long_punt': long_punt_leaders_json,
-            'total_punt_yards': total_punt_yards_json,
-            'number_punts': number_punts_leaders_json,
-            'punt_avg': punt_avg_json,
-            'net_punting': net_punting_leaders_json,
-            'inside_twenty': inside_twenty_leaders_json,
         }
 
         return response
@@ -648,6 +679,243 @@ def _get_season_passing_stats_leaders(is_season_specific: bool):
         return response
 
 
+####################################################
+######### Get punt return stats leaders ############
+####################################################
+def _get_season_punt_return_stats_leaders(is_season_specific: bool):
+    # If season specific, filter by year to get current season leaders
+    if is_season_specific:
+        # Query the year to filter out irrelevant years
+        week_year: WeekYearData = session.query(WeekYearData).order_by(
+            desc(WeekYearData.year)
+        ).first()
+
+        # Querying PlayerInfo first and SeasonReturnStatsData second will return 
+        # a set or tuple to the players variable.
+
+        punt_returns_data = session.query(PlayerInfoData, SeasonReturnStatsData).filter(
+                PlayerInfoData.id == SeasonReturnStatsData.player_id,
+                SeasonReturnStatsData.year == week_year.year
+                ).order_by(desc(SeasonReturnStatsData.punt_returns)).limit(10)
+
+        long_pr_data = session.query(PlayerInfoData, SeasonReturnStatsData).filter(
+                PlayerInfoData.id == SeasonReturnStatsData.player_id,
+                SeasonReturnStatsData.year == week_year.year
+                ).order_by(desc(SeasonReturnStatsData.long_pr)).limit(10)
+
+        pr_tds_data = session.query(PlayerInfoData, SeasonReturnStatsData).filter(
+                PlayerInfoData.id == SeasonReturnStatsData.player_id,
+                SeasonReturnStatsData.year == week_year.year
+                ).order_by(desc(SeasonReturnStatsData.pr_tds)).limit(10)
+
+        pr_yards_data = session.query(PlayerInfoData, SeasonReturnStatsData).filter(
+                PlayerInfoData.id == SeasonReturnStatsData.player_id,
+                SeasonReturnStatsData.year == week_year.year
+                ).order_by(desc(SeasonReturnStatsData.pr_yds)).limit(10)
+
+        pr_avg_data = session.query(PlayerInfoData, SeasonReturnStatsData).filter(
+                PlayerInfoData.id == SeasonReturnStatsData.player_id,
+                SeasonReturnStatsData.year == week_year.year
+                ).order_by(desc(SeasonReturnStatsData.pr_avg)).limit(10)
+
+        # Convert players to PlayerKickingStats model so they can be sorted
+        converted_punt_returns: List[PlayerPuntReturnStats] = [_get_player_punt_return_stats(player) for player in punt_returns_data]
+        converted_long_pr: List[PlayerPuntReturnStats] = [_get_player_punt_return_stats(player) for player in long_pr_data]
+        converted_pr_tds: List[PlayerPuntReturnStats] = [_get_player_punt_return_stats(player) for player in pr_tds_data]
+        converted_pr_yards: List[PlayerPuntReturnStats] = [_get_player_punt_return_stats(player) for player in pr_yards_data]
+        converted_pr_avg_data: List[PlayerPuntReturnStats] = [_get_player_punt_return_stats(player) for player in pr_avg_data]
+
+        # Convert top ten lists to json
+        punt_returns_leaders_json = punt_return_stats_schema.dump(converted_punt_returns)
+        long_pr_leaders_json = punt_return_stats_schema.dump(converted_long_pr)
+        pr_tds_leaders_json = punt_return_stats_schema.dump(converted_pr_tds)
+        pr_yds_leaders_json = punt_return_stats_schema.dump(converted_pr_yards)
+        pr_avg_leaders_json = punt_return_stats_schema.dump(converted_pr_avg_data)
+
+        response = {
+            'punt_returns': punt_returns_leaders_json,
+            'long_pr': long_pr_leaders_json,
+            'pr_tds': pr_tds_leaders_json,
+            'pr_yards': pr_yds_leaders_json,
+            'pr_avg': pr_avg_leaders_json
+        }
+
+        return response
+
+    # If not season specific, don't filter by year to get all time season records
+    else:
+        # Querying PlayerInfo first and SeasonReturnStatsData second will return 
+        # a set or tuple to the players variable.
+
+        punt_returns_data = session.query(PlayerInfoData, SeasonReturnStatsData).filter(
+                PlayerInfoData.id == SeasonReturnStatsData.player_id,
+                ).order_by(desc(SeasonReturnStatsData.punt_returns)).limit(10)
+
+        long_pr_data = session.query(PlayerInfoData, SeasonReturnStatsData).filter(
+                PlayerInfoData.id == SeasonReturnStatsData.player_id,
+                ).order_by(desc(SeasonReturnStatsData.long_pr)).limit(10)
+
+        pr_tds_data = session.query(PlayerInfoData, SeasonReturnStatsData).filter(
+                PlayerInfoData.id == SeasonReturnStatsData.player_id,
+                ).order_by(desc(SeasonReturnStatsData.pr_tds)).limit(10)
+
+        pr_yards_data = session.query(PlayerInfoData, SeasonReturnStatsData).filter(
+                PlayerInfoData.id == SeasonReturnStatsData.player_id,
+                ).order_by(desc(SeasonReturnStatsData.pr_yds)).limit(10)
+
+        pr_avg_data = session.query(PlayerInfoData, SeasonReturnStatsData).filter(
+                PlayerInfoData.id == SeasonReturnStatsData.player_id,
+                ).order_by(desc(SeasonReturnStatsData.pr_avg)).limit(10)
+
+        # Convert players to PlayerKickingStats model so they can be sorted
+        converted_punt_returns: List[PlayerPuntReturnStats] = [_get_player_punt_return_stats(player) for player in punt_returns_data]
+        converted_long_pr: List[PlayerPuntReturnStats] = [_get_player_punt_return_stats(player) for player in long_pr_data]
+        converted_pr_tds: List[PlayerPuntReturnStats] = [_get_player_punt_return_stats(player) for player in pr_tds_data]
+        converted_pr_yards: List[PlayerPuntReturnStats] = [_get_player_punt_return_stats(player) for player in pr_yards_data]
+        converted_pr_avg_data: List[PlayerPuntReturnStats] = [_get_player_punt_return_stats(player) for player in pr_avg_data]
+
+        # Convert top ten lists to json
+        punt_returns_leaders_json = punt_return_stats_schema.dump(converted_punt_returns)
+        long_pr_leaders_json = punt_return_stats_schema.dump(converted_long_pr)
+        pr_tds_leaders_json = punt_return_stats_schema.dump(converted_pr_tds)
+        pr_yds_leaders_json = punt_return_stats_schema.dump(converted_pr_yards)
+        pr_avg_leaders_json = punt_return_stats_schema.dump(converted_pr_avg_data)
+
+        response = {
+            'punt_returns': punt_returns_leaders_json,
+            'long_pr': long_pr_leaders_json,
+            'pr_tds': pr_tds_leaders_json,
+            'pr_yards': pr_yds_leaders_json,
+            'pr_avg': pr_avg_leaders_json
+        }
+
+        return response
+
+
+#################################################
+########## Get punting stats leaders ############
+################################################# 
+def _get_season_punting_stats_leaders(is_season_specific: bool):
+    # If season specific, filter by year to get current season leaders
+    if is_season_specific:
+        # Query the year to filter out irrelevant years
+        week_year: WeekYearData = session.query(WeekYearData).order_by(
+            desc(WeekYearData.year)
+        ).first()
+        # Querying PlayerInfo first and OffensiveStats second will return 
+        # a set or tuple to the players variable.
+        long_punt_data = session.query(PlayerInfoData, SeasonKickingStatsData).filter(
+                SeasonKickingStatsData.player_id == PlayerInfoData.id,
+                SeasonKickingStatsData.year == week_year.year
+            ).order_by(desc(SeasonKickingStatsData.long_punt)).limit(10)
+
+        num_punts_data = session.query(PlayerInfoData, SeasonKickingStatsData).filter(
+                SeasonKickingStatsData.player_id == PlayerInfoData.id,
+                SeasonKickingStatsData.year == week_year.year
+            ).order_by(desc(SeasonKickingStatsData.number_punts)).limit(10)
+
+        total_punt_yards_data = session.query(PlayerInfoData, SeasonKickingStatsData).filter(
+                SeasonKickingStatsData.player_id == PlayerInfoData.id,
+                SeasonKickingStatsData.year == week_year.year
+            ).order_by(desc(SeasonKickingStatsData.total_punt_yards)).limit(10)
+
+        punt_avg_data = session.query(PlayerInfoData, SeasonKickingStatsData).filter(
+                SeasonKickingStatsData.player_id == PlayerInfoData.id,
+                SeasonKickingStatsData.year == week_year.year
+            ).order_by(desc(SeasonKickingStatsData.punt_avg)).limit(10)
+
+        net_punting_data = session.query(PlayerInfoData, SeasonKickingStatsData).filter(
+                SeasonKickingStatsData.player_id == PlayerInfoData.id,
+                SeasonKickingStatsData.year == week_year.year
+            ).order_by(desc(SeasonKickingStatsData.net_punting)).limit(10)
+
+        inside_twenty_data = session.query(PlayerInfoData, SeasonKickingStatsData).filter(
+                SeasonKickingStatsData.player_id == PlayerInfoData.id,
+                SeasonKickingStatsData.year == week_year.year
+            ).order_by(desc(SeasonKickingStatsData.inside_twenty)).limit(10)
+
+        # Convert players to PlayerPuntingStats model so they can be dumped to json
+        converted_long_punt: List[PlayerPuntingStats] = [_get_player_punting_stats(player) for player in long_punt_data]
+        converted_num_punts: List[PlayerPuntingStats] = [_get_player_punting_stats(player) for player in num_punts_data]
+        converted_total_punt_yards: List[PlayerPuntingStats] = [_get_player_punting_stats(player) for player in total_punt_yards_data]
+        converted_punt_avg: List[PlayerPuntingStats] = [_get_player_punting_stats(player) for player in punt_avg_data]
+        converted_net_punting: List[PlayerPuntingStats] = [_get_player_punting_stats(player) for player in net_punting_data]
+        converted_inside_twenty: List[PlayerPuntingStats] = [_get_player_punting_stats(player) for player in inside_twenty_data]
+
+        # Convert top ten lists into json
+        long_punt_leaders_json = punting_stats_schema.dump(converted_long_punt)
+        number_punts_leaders_json = punting_stats_schema.dump(converted_num_punts)
+        total_punt_yards_json = punting_stats_schema.dump(converted_total_punt_yards)
+        punt_avg_json = punting_stats_schema.dump(converted_punt_avg)
+        net_punting_leaders_json = punting_stats_schema.dump(converted_net_punting)
+        inside_twenty_leaders_json = punting_stats_schema.dump(converted_inside_twenty)
+
+        response = {
+            'long_punt': long_punt_leaders_json,
+            'total_punt_yards': total_punt_yards_json,
+            'number_punts': number_punts_leaders_json,
+            'punt_avg': punt_avg_json,
+            'net_punting': net_punting_leaders_json,
+            'inside_twenty': inside_twenty_leaders_json,
+        }
+
+        return response
+
+    # If not season specific, don't filter by year to get all time season records
+    else:
+
+        long_punt_data = session.query(PlayerInfoData, SeasonKickingStatsData).filter(
+                SeasonKickingStatsData.player_id == PlayerInfoData.id,
+            ).order_by(desc(SeasonKickingStatsData.long_punt)).limit(10)
+
+        num_punts_data = session.query(PlayerInfoData, SeasonKickingStatsData).filter(
+                SeasonKickingStatsData.player_id == PlayerInfoData.id,
+            ).order_by(desc(SeasonKickingStatsData.number_punts)).limit(10)
+
+        total_punt_yards_data = session.query(PlayerInfoData, SeasonKickingStatsData).filter(
+                SeasonKickingStatsData.player_id == PlayerInfoData.id,
+            ).order_by(desc(SeasonKickingStatsData.total_punt_yards)).limit(10)
+
+        punt_avg_data = session.query(PlayerInfoData, SeasonKickingStatsData).filter(
+                SeasonKickingStatsData.player_id == PlayerInfoData.id,
+            ).order_by(desc(SeasonKickingStatsData.punt_avg)).limit(10)
+
+        net_punting_data = session.query(PlayerInfoData, SeasonKickingStatsData).filter(
+                SeasonKickingStatsData.player_id == PlayerInfoData.id,
+            ).order_by(desc(SeasonKickingStatsData.net_punting)).limit(10)
+
+        inside_twenty_data = session.query(PlayerInfoData, SeasonKickingStatsData).filter(
+                SeasonKickingStatsData.player_id == PlayerInfoData.id,
+            ).order_by(desc(SeasonKickingStatsData.inside_twenty)).limit(10)
+
+        # Convert players to PlayerKickingStats model so they can be dumped to json
+        converted_long_punt: List[PlayerPuntingStats] = [_get_player_punting_stats(player) for player in long_punt_data]
+        converted_num_punts: List[PlayerPuntingStats] = [_get_player_punting_stats(player) for player in num_punts_data]
+        converted_total_punt_yards: List[PlayerPuntingStats] = [_get_player_punting_stats(player) for player in total_punt_yards_data]
+        converted_punt_avg: List[PlayerPuntingStats] = [_get_player_punting_stats(player) for player in punt_avg_data]
+        converted_net_punting: List[PlayerPuntingStats] = [_get_player_punting_stats(player) for player in net_punting_data]
+        converted_inside_twenty: List[PlayerPuntingStats] = [_get_player_punting_stats(player) for player in inside_twenty_data]
+
+        # Convert top ten lists into json
+        long_punt_leaders_json = punting_stats_schema.dump(converted_long_punt)
+        number_punts_leaders_json = punting_stats_schema.dump(converted_num_punts)
+        total_punt_yards_json = punting_stats_schema.dump(converted_total_punt_yards)
+        punt_avg_json = punting_stats_schema.dump(converted_punt_avg)
+        net_punting_leaders_json = punting_stats_schema.dump(converted_net_punting)
+        inside_twenty_leaders_json = punting_stats_schema.dump(converted_inside_twenty)
+
+        response = {
+            'long_punt': long_punt_leaders_json,
+            'total_punt_yards': total_punt_yards_json,
+            'number_punts': number_punts_leaders_json,
+            'punt_avg': punt_avg_json,
+            'net_punting': net_punting_leaders_json,
+            'inside_twenty': inside_twenty_leaders_json,
+        }
+
+        return response
+
+
 ###################################################
 ########## Get receiving stats leaders ############
 ###################################################
@@ -784,192 +1052,6 @@ def _get_season_rec_stats_leaders(is_season_specific: bool):
             'drops': drops_leaders_json,
             'rec_yp_catch': rec_yp_catch_leaders_json,
             'rec_yp_game': rec_yp_game_leaders_json
-        }
-
-        return response
-
-
-###################################################
-########### Get return stats leaders ##############
-###################################################
-def _get_season_return_stats_leaders(is_season_specific: bool):
-    # If season specific, filter by year to get current season leaders
-    if is_season_specific:
-        # Query the year to filter out irrelevant years
-        week_year: WeekYearData = session.query(WeekYearData).order_by(
-            desc(WeekYearData.year)
-        ).first()
-
-        # Querying PlayerInfo first and SeasonReturnStatsData second will return 
-        # a set or tuple to the players variable.
-        kick_returns_data = session.query(PlayerInfoData, SeasonReturnStatsData).filter(
-                PlayerInfoData.id == SeasonReturnStatsData.player_id,
-                SeasonReturnStatsData.year == week_year.year
-                ).order_by(desc(SeasonReturnStatsData.kick_returns)).limit(10)
-
-        long_kr_data = session.query(PlayerInfoData, SeasonReturnStatsData).filter(
-                PlayerInfoData.id == SeasonReturnStatsData.player_id,
-                SeasonReturnStatsData.year == week_year.year
-                ).order_by(desc(SeasonReturnStatsData.long_kr)).limit(10)
-
-        punt_returns_data = session.query(PlayerInfoData, SeasonReturnStatsData).filter(
-                PlayerInfoData.id == SeasonReturnStatsData.player_id,
-                SeasonReturnStatsData.year == week_year.year
-                ).order_by(desc(SeasonReturnStatsData.punt_returns)).limit(10)
-
-        long_pr_data = session.query(PlayerInfoData, SeasonReturnStatsData).filter(
-                PlayerInfoData.id == SeasonReturnStatsData.player_id,
-                SeasonReturnStatsData.year == week_year.year
-                ).order_by(desc(SeasonReturnStatsData.long_pr)).limit(10)
-
-        kr_tds_data = session.query(PlayerInfoData, SeasonReturnStatsData).filter(
-                PlayerInfoData.id == SeasonReturnStatsData.player_id,
-                SeasonReturnStatsData.year == week_year.year
-                ).order_by(desc(SeasonReturnStatsData.kr_tds)).limit(10)
-
-        pr_tds_data = session.query(PlayerInfoData, SeasonReturnStatsData).filter(
-                PlayerInfoData.id == SeasonReturnStatsData.player_id,
-                SeasonReturnStatsData.year == week_year.year
-                ).order_by(desc(SeasonReturnStatsData.pr_tds)).limit(10)
-
-        kr_yards_data = session.query(PlayerInfoData, SeasonReturnStatsData).filter(
-                PlayerInfoData.id == SeasonReturnStatsData.player_id,
-                SeasonReturnStatsData.year == week_year.year
-                ).order_by(desc(SeasonReturnStatsData.kr_yds)).limit(10)
-
-        pr_yards_data = session.query(PlayerInfoData, SeasonReturnStatsData).filter(
-                PlayerInfoData.id == SeasonReturnStatsData.player_id,
-                SeasonReturnStatsData.year == week_year.year
-                ).order_by(desc(SeasonReturnStatsData.pr_yds)).limit(10)
-
-        kr_avg_data = session.query(PlayerInfoData, SeasonReturnStatsData).filter(
-                PlayerInfoData.id == SeasonReturnStatsData.player_id,
-                SeasonReturnStatsData.year == week_year.year
-                ).order_by(desc(SeasonReturnStatsData.kr_avg)).limit(10)
-
-        pr_avg_data = session.query(PlayerInfoData, SeasonReturnStatsData).filter(
-                PlayerInfoData.id == SeasonReturnStatsData.player_id,
-                SeasonReturnStatsData.year == week_year.year
-                ).order_by(desc(SeasonReturnStatsData.pr_avg)).limit(10)
-
-        # Convert players to PlayerKickingStats model so they can be sorted
-        converted_kick_returns: List[PlayerReturnStats] = [_get_player_return_stats(player) for player in kick_returns_data]
-        converted_long_kr: List[PlayerReturnStats] = [_get_player_return_stats(player) for player in long_kr_data]
-        converted_punt_returns: List[PlayerReturnStats] = [_get_player_return_stats(player) for player in punt_returns_data]
-        converted_long_pr: List[PlayerReturnStats] = [_get_player_return_stats(player) for player in long_pr_data]
-        converted_kr_tds: List[PlayerReturnStats] = [_get_player_return_stats(player) for player in kr_tds_data]
-        converted_pr_tds: List[PlayerReturnStats] = [_get_player_return_stats(player) for player in pr_tds_data]
-        converted_kr_yards: List[PlayerReturnStats] = [_get_player_return_stats(player) for player in kr_yards_data]
-        converted_pr_yards: List[PlayerReturnStats] = [_get_player_return_stats(player) for player in pr_yards_data]
-        converted_kr_avg_data: List[PlayerReturnStats] = [_get_player_return_stats(player) for player in kr_avg_data]
-        converted_pr_avg_data: List[PlayerReturnStats] = [_get_player_return_stats(player) for player in pr_avg_data]
-
-        # Convert top ten lists to json
-        kick_return_leaders_json = return_stats_schema.dump(converted_kick_returns)
-        long_kr_leaders_json = return_stats_schema.dump(converted_long_kr)
-        punt_returns_leaders_json = return_stats_schema.dump(converted_punt_returns)
-        long_pr_leaders_json = return_stats_schema.dump(converted_long_pr)
-        kr_tds_leaders_json = return_stats_schema.dump(converted_kr_tds)
-        pr_tds_leaders_json = return_stats_schema.dump(converted_pr_tds)
-        kr_yds_leaders_json = return_stats_schema.dump(converted_kr_yards)
-        pr_yds_leaders_json = return_stats_schema.dump(converted_pr_yards)
-        kr_avg_leaders_json = return_stats_schema.dump(converted_kr_avg_data)
-        pr_avg_leaders_json = return_stats_schema.dump(converted_pr_avg_data)
-
-        response = {
-            'kick_returns': kick_return_leaders_json,
-            'long_kr': long_kr_leaders_json,
-            'punt_returns': punt_returns_leaders_json,
-            'long_pr': long_pr_leaders_json,
-            'kr_tds': kr_tds_leaders_json,
-            'pr_tds': pr_tds_leaders_json,
-            'kr_yards': kr_yds_leaders_json,
-            'pr_yards': pr_yds_leaders_json,
-            'kr_avg': kr_avg_leaders_json,
-            'pr_avg': pr_avg_leaders_json
-        }
-
-        return response
-
-    # If not season specific, don't filter by year to get all time season records
-    else:
-        # Querying PlayerInfo first and SeasonReturnStatsData second will return 
-        # a set or tuple to the players variable.
-        kick_returns_data = session.query(PlayerInfoData, SeasonReturnStatsData).filter(
-                PlayerInfoData.id == SeasonReturnStatsData.player_id,
-                ).order_by(desc(SeasonReturnStatsData.kick_returns)).limit(10)
-
-        long_kr_data = session.query(PlayerInfoData, SeasonReturnStatsData).filter(
-                PlayerInfoData.id == SeasonReturnStatsData.player_id,
-                ).order_by(desc(SeasonReturnStatsData.long_kr)).limit(10)
-
-        punt_returns_data = session.query(PlayerInfoData, SeasonReturnStatsData).filter(
-                PlayerInfoData.id == SeasonReturnStatsData.player_id,
-                ).order_by(desc(SeasonReturnStatsData.punt_returns)).limit(10)
-
-        long_pr_data = session.query(PlayerInfoData, SeasonReturnStatsData).filter(
-                PlayerInfoData.id == SeasonReturnStatsData.player_id,
-                ).order_by(desc(SeasonReturnStatsData.long_pr)).limit(10)
-
-        kr_tds_data = session.query(PlayerInfoData, SeasonReturnStatsData).filter(
-                PlayerInfoData.id == SeasonReturnStatsData.player_id,
-                ).order_by(desc(SeasonReturnStatsData.kr_tds)).limit(10)
-
-        pr_tds_data = session.query(PlayerInfoData, SeasonReturnStatsData).filter(
-                PlayerInfoData.id == SeasonReturnStatsData.player_id,
-                ).order_by(desc(SeasonReturnStatsData.pr_tds)).limit(10)
-
-        kr_yards_data = session.query(PlayerInfoData, SeasonReturnStatsData).filter(
-                PlayerInfoData.id == SeasonReturnStatsData.player_id,
-                ).order_by(desc(SeasonReturnStatsData.kr_yds)).limit(10)
-
-        pr_yards_data = session.query(PlayerInfoData, SeasonReturnStatsData).filter(
-                PlayerInfoData.id == SeasonReturnStatsData.player_id,
-                ).order_by(desc(SeasonReturnStatsData.pr_yds)).limit(10)
-
-        kr_avg_data = session.query(PlayerInfoData, SeasonReturnStatsData).filter(
-                PlayerInfoData.id == SeasonReturnStatsData.player_id,
-                ).order_by(desc(SeasonReturnStatsData.kr_avg)).limit(10)
-
-        pr_avg_data = session.query(PlayerInfoData, SeasonReturnStatsData).filter(
-                PlayerInfoData.id == SeasonReturnStatsData.player_id,
-                ).order_by(desc(SeasonReturnStatsData.pr_avg)).limit(10)
-
-        # Convert players to PlayerKickingStats model so they can be sorted
-        converted_kick_returns: List[PlayerReturnStats] = [_get_player_return_stats(player) for player in kick_returns_data]
-        converted_long_kr: List[PlayerReturnStats] = [_get_player_return_stats(player) for player in long_kr_data]
-        converted_punt_returns: List[PlayerReturnStats] = [_get_player_return_stats(player) for player in punt_returns_data]
-        converted_long_pr: List[PlayerReturnStats] = [_get_player_return_stats(player) for player in long_pr_data]
-        converted_kr_tds: List[PlayerReturnStats] = [_get_player_return_stats(player) for player in kr_tds_data]
-        converted_pr_tds: List[PlayerReturnStats] = [_get_player_return_stats(player) for player in pr_tds_data]
-        converted_kr_yards: List[PlayerReturnStats] = [_get_player_return_stats(player) for player in kr_yards_data]
-        converted_pr_yards: List[PlayerReturnStats] = [_get_player_return_stats(player) for player in pr_yards_data]
-        converted_kr_avg_data: List[PlayerReturnStats] = [_get_player_return_stats(player) for player in kr_avg_data]
-        converted_pr_avg_data: List[PlayerReturnStats] = [_get_player_return_stats(player) for player in pr_avg_data]
-
-        # Convert top ten lists to json
-        kick_return_leaders_json = return_stats_schema.dump(converted_kick_returns)
-        long_kr_leaders_json = return_stats_schema.dump(converted_long_kr)
-        punt_returns_leaders_json = return_stats_schema.dump(converted_punt_returns)
-        long_pr_leaders_json = return_stats_schema.dump(converted_long_pr)
-        kr_tds_leaders_json = return_stats_schema.dump(converted_kr_tds)
-        pr_tds_leaders_json = return_stats_schema.dump(converted_pr_tds)
-        kr_yds_leaders_json = return_stats_schema.dump(converted_kr_yards)
-        pr_yds_leaders_json = return_stats_schema.dump(converted_pr_yards)
-        kr_avg_leaders_json = return_stats_schema.dump(converted_kr_avg_data)
-        pr_avg_leaders_json = return_stats_schema.dump(converted_pr_avg_data)
-
-        response = {
-            'kick_returns': kick_return_leaders_json,
-            'long_kr': long_kr_leaders_json,
-            'punt_returns': punt_returns_leaders_json,
-            'long_pr': long_pr_leaders_json,
-            'kr_tds': kr_tds_leaders_json,
-            'pr_tds': pr_tds_leaders_json,
-            'kr_yards': kr_yds_leaders_json,
-            'pr_yards': pr_yds_leaders_json,
-            'kr_avg': kr_avg_leaders_json,
-            'pr_avg': pr_avg_leaders_json
         }
 
         return response
@@ -1126,6 +1208,86 @@ def _get_season_rushing_stats_leaders(is_season_specific: bool):
             'twenty_plus_runs': twenty_plus_yd_runs_leaders_json,
             'rush_yp_carry': rush_yp_carry_leaders_json,
             'rush_yp_game': rush_yp_game_leaders_json
+        }
+
+        return response
+
+
+def _get_season_total_stats_leaders(is_season_specific: bool):
+    # If season specific, filter by year to get current season leaders
+    if is_season_specific:
+
+        # Query the year to filter out irrelevant years
+        week_year: WeekYearData = session.query(WeekYearData).order_by(
+            desc(WeekYearData.year)
+        ).first()
+
+        # Querying PlayerInfo first and OffensiveStats second will return 
+        # a set or tuple to the players variable.
+        total_yards_data = session.query(PlayerInfoData, SeasonOffensiveStatsData).filter(
+            PlayerInfoData.id == SeasonOffensiveStatsData.player_id,
+            SeasonOffensiveStatsData.year == week_year.year
+            ).order_by(desc(SeasonOffensiveStatsData.total_yards)).limit(10)
+        
+        total_tds_data = session.query(PlayerInfoData, SeasonOffensiveStatsData).filter(
+            PlayerInfoData.id == SeasonOffensiveStatsData.player_id,
+            SeasonOffensiveStatsData.year == week_year.year
+            ).order_by(desc(SeasonOffensiveStatsData.total_tds)).limit(10)
+
+        total_ypg_data = session.query(PlayerInfoData, SeasonOffensiveStatsData).filter(
+            PlayerInfoData.id == SeasonOffensiveStatsData.player_id,
+            SeasonOffensiveStatsData.year == week_year.year
+            ).order_by(desc(SeasonOffensiveStatsData.total_ypg)).limit(10)
+        
+        # Convert players to PlayerRushingStats model so they can be sorted
+        converted_total_yards: List[PlayerTotalStats] = [_get_player_total_off_stats(player) for player in total_yards_data]
+        converted_total_tds: List[PlayerTotalStats] = [_get_player_total_off_stats(player) for player in total_tds_data]
+        converted_total_ypg: List[PlayerTotalStats] = [_get_player_total_off_stats(player) for player in total_ypg_data]
+
+        # Convert top ten lists to json
+        total_yards_leaders_json = total_stats_schema.dump(converted_total_yards)
+        total_tds_leaders_json = total_stats_schema.dump(converted_total_tds)
+        total_ypg_leaders_json = total_stats_schema.dump(converted_total_ypg)
+
+        response = {
+            'yards': total_yards_leaders_json,
+            'tds': total_tds_leaders_json,
+            'ypg': total_ypg_leaders_json,
+        }
+
+        return response
+    
+    # If not season specific, don't filter by year to get all time season records
+    else:
+
+        # Querying PlayerInfo first and OffensiveStats second will return 
+        # a set or tuple to the players variable.
+        total_yards_data = session.query(PlayerInfoData, SeasonOffensiveStatsData).filter(
+            PlayerInfoData.id == SeasonOffensiveStatsData.player_id,
+            ).order_by(desc(SeasonOffensiveStatsData.total_yards)).limit(10)
+        
+        total_tds_data = session.query(PlayerInfoData, SeasonOffensiveStatsData).filter(
+            PlayerInfoData.id == SeasonOffensiveStatsData.player_id,
+            ).order_by(desc(SeasonOffensiveStatsData.total_tds)).limit(10)
+
+        total_ypg_data = session.query(PlayerInfoData, SeasonOffensiveStatsData).filter(
+            PlayerInfoData.id == SeasonOffensiveStatsData.player_id,
+            ).order_by(desc(SeasonOffensiveStatsData.total_ypg)).limit(10)
+        
+        # Convert players to PlayerRushingStats model so they can be sorted
+        converted_total_yards: List[PlayerTotalStats] = [_get_player_total_off_stats(player) for player in total_yards_data]
+        converted_total_tds: List[PlayerTotalStats] = [_get_player_total_off_stats(player) for player in total_tds_data]
+        converted_total_ypg: List[PlayerTotalStats] = [_get_player_total_off_stats(player) for player in total_ypg_data]
+
+        # Convert top ten lists to json
+        total_yards_leaders_json = total_stats_schema.dump(converted_total_yards)
+        total_tds_leaders_json = total_stats_schema.dump(converted_total_tds)
+        total_ypg_leaders_json = total_stats_schema.dump(converted_total_ypg)
+
+        response = {
+            'yards': total_yards_leaders_json,
+            'tds': total_tds_leaders_json,
+            'ypg': total_ypg_leaders_json,
         }
 
         return response

@@ -25,11 +25,12 @@ from src.models.Stats import (
     PlayerReceivingStats,
     PlayerReturnStats,
     PlayerRushingStats,
+    PlayerTotalStats,
     PuntReturnStats,
     PuntingStats,
     ReceivingStats,
-    ReturnStats,
-    RushingStats
+    RushingStats,
+    TotalStats
 )
 from src.utils.career_stats import (
     _get_player_career_stats
@@ -43,8 +44,8 @@ from src.utils.season_stats import (
     _get_punting_stats,
     _get_punt_return_stats,
     _get_receiving_stats,
-    _get_return_stats,
-    _get_rushing_stats
+    _get_rushing_stats,
+    _get_total_stats
 )
 
 
@@ -191,22 +192,6 @@ def _get_player_receiving_stats(player) -> PlayerReceivingStats:
     return player_receiving_stats
 
 
-def _get_player_return_stats(player) -> PlayerReturnStats:
-
-    player_info: PlayerInfoData = player[0]
-    return_stats_data: SeasonReturnStatsData = player[1]
-
-    player_details: PlayerDetails = _get_player_details(player=player_info)
-    return_stats: ReturnStats = _get_return_stats(return_stats=return_stats_data)
-
-    player_kicking_stats: PlayerReturnStats = PlayerReturnStats(
-        player_details=player_details,
-        return_stats=return_stats
-    )
-
-    return player_kicking_stats
-
-
 def _get_player_rushing_stats(player) -> PlayerRushingStats:
 
     player_info: PlayerInfoData = player[0]
@@ -282,6 +267,22 @@ def _get_player_punt_return_stats(player) -> PlayerReturnStats:
     player_punt_return_stats: PlayerPuntReturnStats = PlayerPuntReturnStats(
         player_details=player_details,
         punt_return_stats=return_stats
+    )
+
+    return player_punt_return_stats
+
+
+def _get_player_total_off_stats(player) -> PlayerTotalStats:
+
+    player_info: PlayerInfoData = player[0]
+    off_stats_data: SeasonOffensiveStatsData = player[1]
+
+    player_details: PlayerDetails = _get_player_details(player=player_info)
+    total_stats: TotalStats = _get_total_stats(offensive_stats=off_stats_data)
+
+    player_punt_return_stats: PlayerTotalStats = PlayerTotalStats(
+        player_details=player_details,
+        total_stats=total_stats
     )
 
     return player_punt_return_stats

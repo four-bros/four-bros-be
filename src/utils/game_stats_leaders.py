@@ -28,7 +28,6 @@ from src.utils.player import(
     _get_player_kicking_stats,
     _get_player_passing_stats,
     _get_player_receiving_stats,
-    _get_player_return_stats,
     _get_player_rushing_stats
 )
 

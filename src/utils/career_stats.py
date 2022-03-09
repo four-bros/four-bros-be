@@ -31,7 +31,6 @@ from src.utils.season_stats import (
     _get_punting_stats,
     _get_punt_return_stats,
     _get_receiving_stats,
-    _get_return_stats,
     _get_rushing_stats,
     _get_total_stats
 )
@@ -407,11 +406,13 @@ def _get_player_career_stats(player: PlayerInfoData) -> PlayerStats:
     kick_return_stats: KickReturnStats = None
     punting_stats: PuntingStats = None
     punt_return_stats: PuntReturnStats = None
+    total_stats: TotalStats = None
 
     if offensive_stats_data:
         passing_stats = _get_passing_stats(offensive_stats_data)
         receiving_stats = _get_receiving_stats(offensive_stats_data)
         rushing_stats = _get_rushing_stats(offensive_stats_data)
+        total_stats = _get_total_stats(offensive_stats_data)
     if defensive_stats_data:
         defensive_stats = _get_defensive_stats(defensive_stats_data)
     if return_stats_data:
@@ -429,7 +430,8 @@ def _get_player_career_stats(player: PlayerInfoData) -> PlayerStats:
         kicking=kicking_stats,
         kick_return=kick_return_stats,
         punting=punting_stats,
-        punt_return=punt_return_stats
+        punt_return=punt_return_stats,
+        total=total_stats
     )
 
     return player_stats

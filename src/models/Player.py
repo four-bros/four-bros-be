@@ -8,7 +8,8 @@ from src.models.Stats import(
     PuntReturnStats,
     ReceivingStats,
     ReturnStats,
-    RushingStats
+    RushingStats,
+    TotalStats
 )
 
 
@@ -142,7 +143,8 @@ class PlayerStats:
         kicking: KickStats,
         kick_return: KickReturnStats,
         punting: PuntingStats,
-        punt_return: PuntReturnStats
+        punt_return: PuntReturnStats,
+        total: TotalStats
     ):
         self.passing = passing
         self.rushing = rushing
@@ -152,6 +154,7 @@ class PlayerStats:
         self.kick_return = kick_return
         self.punting = punting
         self.punt_return = punt_return
+        self.total = total
 
     def __repr__(self):
         return f'passing stats: {self.passing}, rushing stats: {self.rushing}, rec stats {self.receiving}'

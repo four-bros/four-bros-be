@@ -18,6 +18,7 @@ from src.responses.Stats import(
     PlayerReceivingStatsSchema,
     PlayerReturnStatsSchema,
     PlayerRushingStatsSchema,
+    PlayerTotalStatsSchema,
 )
 from src.responses.Teams import(
     TeamInfoSchema,
@@ -75,6 +76,8 @@ team_details_schema = TeamDetailsSchema(many=True)
 team_schema = TeamInfoSchema()
 teams_schema = TeamInfoSchema(many=True)
 team_roster_schema = TeamRosterSchema(many=True)
+total_stat_schema = PlayerTotalStatsSchema()
+total_stats_schema = PlayerTotalStatsSchema(many=True)
 
 
 # String Enums
