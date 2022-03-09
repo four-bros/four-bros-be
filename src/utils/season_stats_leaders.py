@@ -1284,7 +1284,7 @@ def _get_season_total_stats_leaders(is_season_specific: bool):
         
         to_data = session.query(PlayerInfoData, SeasonOffensiveStatsData).filter(
             PlayerInfoData.id == SeasonOffensiveStatsData.player_id,
-            ).order_by(desc(SeasonOffensiveStatsData.total_ypg)).limit(10)
+            ).order_by(desc(SeasonOffensiveStatsData.turnovers)).limit(10)
 
         # Convert players to PlayerRushingStats model so they can be sorted
         converted_total_yards: List[PlayerTotalStats] = [_get_player_total_off_stats(player) for player in total_yards_data]
