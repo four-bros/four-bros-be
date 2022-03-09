@@ -9,11 +9,11 @@ from src.constants import(
     punting_stats_schema,
     punt_return_stats_schema,
     receiving_stats_schema,
-    return_stats_schema,
     rushing_stats_schema,
     session,
     team_details_schema,
-    team_schema
+    team_schema,
+    total_stats_schema
 )
 from src.data_models.SeasonDefensiveStatsData import SeasonDefensiveStatsData
 from src.data_models.SeasonKickingStatsData import SeasonKickingStatsData
@@ -31,8 +31,8 @@ from src.utils.player import (
     _get_player_punting_stats,
     _get_player_punt_return_stats,
     _get_player_receiving_stats,
-    _get_player_return_stats,
-    _get_player_rushing_stats
+    _get_player_rushing_stats,
+    _get_player_total_off_stats
 )
 from src.utils.team_stats import (
     _get_team_details,
@@ -46,8 +46,8 @@ from src.models.Stats import (
     PlayerPuntReturnStats,
     PlayerPuntingStats,
     PlayerReceivingStats,
-    PlayerReturnStats,
-    PlayerRushingStats
+    PlayerRushingStats,
+    PlayerTotalStats
 )
 from src.models.Teams import (
     TeamDetails,
@@ -139,6 +139,13 @@ def get_team_player_stats(request, team_id):
         SeasonOffensiveStatsData.rush_att > 0
     ).order_by(desc(SeasonOffensiveStatsData.rush_yards)).all()
 
+    total_off_data = session.query(PlayerInfoData, SeasonOffensiveStatsData).filter(
+        PlayerInfoData.id == SeasonOffensiveStatsData.player_id,
+        PlayerInfoData.team_id == team.id,
+        SeasonOffensiveStatsData.year == week_year.year,
+        SeasonOffensiveStatsData.total_yards > 0
+    ).order_by(desc(SeasonOffensiveStatsData.total_yards)).all()
+
     # Get kicking stats
     kicking_data = session.query(PlayerInfoData, SeasonKickingStatsData).filter(
         PlayerInfoData.id == SeasonKickingStatsData.player_id,
@@ -178,6 +185,7 @@ def get_team_player_stats(request, team_id):
     punt_stats: List[PlayerPuntingStats] = [_get_player_punting_stats(player) for player in punting_data]
     receiving_stats: List[PlayerReceivingStats] = [_get_player_receiving_stats(player) for player in receiving_data]
     rushing_stats: List[PlayerRushingStats] = [_get_player_rushing_stats(player) for player in rushing_data]
+    total_off_stats: List[PlayerTotalStats] = [_get_player_total_off_stats(player) for player in total_off_data]
 
     # Convert players to json for response
     defensive_stats_json = defensive_stats_schema.dump(defensive_stats)
@@ -188,6 +196,7 @@ def get_team_player_stats(request, team_id):
     punting_stats_json = punting_stats_schema.dump(punt_stats)
     receiving_stats_json = receiving_stats_schema.dump(receiving_stats)
     rushing_stats_json = rushing_stats_schema.dump(rushing_stats)
+    total_stats_json = total_stats_schema.dump(total_off_stats)
 
     response = {
         'defense': defensive_stats_json,
@@ -197,7 +206,8 @@ def get_team_player_stats(request, team_id):
         'punting': punting_stats_json,
         'punt_return': punt_return_json,
         'receiving': receiving_stats_json,
-        'rushing': rushing_stats_json
+        'rushing': rushing_stats_json,
+        'total': total_stats_json
     }
 
     return response

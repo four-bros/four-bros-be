@@ -8,8 +8,8 @@ from src.responses.Stats import(
     PuntReturnStatsSchema,
     PuntingStatsSchema,
     ReceivingStatsSchema,
-    ReturnStatsSchema,
-    RushingStatsSchema
+    RushingStatsSchema,
+    TotalStatsSchema
 )
 
 
@@ -80,6 +80,7 @@ class PlayerStatsSchema(Schema):
     kicking = fields.Nested(KickingStatsSchema)
     punting = fields.Nested(PuntingStatsSchema)
     punt_return = fields.Nested(PuntReturnStatsSchema)
+    total = fields.Nested(TotalStatsSchema)
 
 
 class PlayerSchema(Schema):

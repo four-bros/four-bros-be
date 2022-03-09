@@ -172,12 +172,7 @@ def insert_team_stats_into_db():
         kick_points = sum([fgs * 3, xps])
         
         # calculate total points, ppg
-        def_stats_sorted_by_gp: List[PlayerDefensiveStats] = sorted(def_stats, key=lambda p: p.defensive_stats.games_played, reverse=True)
-        games_played = 1
-        if len(def_stats_sorted_by_gp) > 0:
-            games_played = def_stats_sorted_by_gp[0].defensive_stats.games_played
-        if games_played is 0:
-            games_played += 1
+        games_played = team.wins + team.losses
         total_points = sum([td_points, kick_points])
         ppg = round(total_points / games_played, 1)
         
