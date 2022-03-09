@@ -13,8 +13,8 @@ from src.models.Player import (
 )
 from src.models.Stats import (
     KickReturnStats,
-    KickStats,
     KickingStats,
+    KickingAndPuntingStats,
     PassingStats,
     PlayerDefensiveStats,
     PlayerKickingStats,
@@ -214,7 +214,7 @@ def _get_player_kicking_stats(player) -> PlayerKickingStats:
     kicking_stats_data: SeasonKickingStatsData = player[1]
 
     player_details: PlayerDetails = _get_player_details(player=player_info)
-    kicking_stats: KickStats = _get_kicking_stats(kicking_stats=kicking_stats_data)
+    kicking_stats: KickingStats = _get_kicking_stats(kicking_stats=kicking_stats_data)
 
     player_kicking_stats: PlayerKickingStats = PlayerKickingStats(
         player_details=player_details,
@@ -246,7 +246,7 @@ def _get_player_punting_stats(player) -> PlayerPuntingStats:
     kicking_stats_data: SeasonKickingStatsData = player[1]
 
     player_details: PlayerDetails = _get_player_details(player=player_info)
-    punting_stats: PuntingStats = _get_punting_stats(kicking_stats=kicking_stats_data)
+    punting_stats: PuntingStats = _get_punting_stats(punting_stats=kicking_stats_data)
 
     player_punting_stats: PlayerPuntingStats = PlayerPuntingStats(
         player_details=player_details,

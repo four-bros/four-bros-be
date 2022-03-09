@@ -46,3 +46,4 @@ class CareerKickingStatsData(Base):
     punt_touchbacks = Column(Integer)
     net_punting = Column(Integer)
     inside_twenty = Column(Integer)
+    net_avg = Column(Float)

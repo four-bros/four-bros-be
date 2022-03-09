@@ -94,6 +94,7 @@ class TotalStatsSchema(Schema):
     total_ypg = fields.Float()
     games_played = fields.Int()
     year = fields.Int()
+    turnovers = fields.Int()
 
 
 ###########################################

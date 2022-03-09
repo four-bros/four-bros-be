@@ -22,7 +22,6 @@ def insert_season_def_stats_into_db(def_stats):
         desc(WeekYearData.year),
         desc(WeekYearData.week)
     ).first()
-    current_year = week_year.year
 
     for i, value in enumerate(def_stats):
 
@@ -36,7 +35,7 @@ def insert_season_def_stats_into_db(def_stats):
 
         new_id = str(uuid4())
         
-        new_player = SeasonDefensiveStatsData(
+        player_def_stats = SeasonDefensiveStatsData(
             id=new_id,
             player_id=record.fields['Player ID'],
             long_int_ret=record.fields['Long INT Ret'],
@@ -61,38 +60,38 @@ def insert_season_def_stats_into_db(def_stats):
         )
 
         # Query table to determine if player has a record or not
-        player: SeasonDefensiveStatsData = session.query(SeasonDefensiveStatsData).where(
-            SeasonDefensiveStatsData.player_id == new_player.player_id,
-            SeasonDefensiveStatsData.year == new_player.year
+        player_query: SeasonDefensiveStatsData = session.query(SeasonDefensiveStatsData).where(
+            SeasonDefensiveStatsData.player_id == player_def_stats.player_id,
+            SeasonDefensiveStatsData.year == player_def_stats.year
         ).scalar()
 
-        if not player:
-            session.add(new_player)
+        if not player_query:
+            session.add(player_def_stats)
             session.flush()
         else:
             update(SeasonDefensiveStatsData)\
                 .where(
-                    SeasonDefensiveStatsData.player_id == new_player.player_id,
-                    SeasonDefensiveStatsData.year == new_player.year)\
+                    SeasonDefensiveStatsData.player_id == player_def_stats.player_id,
+                    SeasonDefensiveStatsData.year == player_def_stats.year)\
                 .values(
-                long_int_ret=new_player.long_int_ret,
-                sacks=new_player.sacks,
-                year=new_player.year,
-                forced_fumbles=new_player.forced_fumbles,
-                solo_tkls=new_player.solo_tkls,
-                safeties=new_player.safeties,
-                pass_def=new_player.pass_def,
-                blocked_kicks=new_player.blocked_kicks,
-                tfl=new_player.tfl,
-                ints_made=new_player.ints_made,
-                games_played=new_player.games_played,
-                fumbles_rec=new_player.fumbles_rec,
-                half_a_sack=new_player.half_a_sack,
-                asst_tkls=new_player.asst_tkls,
-                def_tds=new_player.def_tds,
-                fum_rec_yards=new_player.fum_rec_yards,
-                int_ret_yards=new_player.int_ret_yards,
-                total_tkls=new_player.total_tkls
+                long_int_ret=player_def_stats.long_int_ret,
+                sacks=player_def_stats.sacks,
+                year=player_def_stats.year,
+                forced_fumbles=player_def_stats.forced_fumbles,
+                solo_tkls=player_def_stats.solo_tkls,
+                safeties=player_def_stats.safeties,
+                pass_def=player_def_stats.pass_def,
+                blocked_kicks=player_def_stats.blocked_kicks,
+                tfl=player_def_stats.tfl,
+                ints_made=player_def_stats.ints_made,
+                games_played=player_def_stats.games_played,
+                fumbles_rec=player_def_stats.fumbles_rec,
+                half_a_sack=player_def_stats.half_a_sack,
+                asst_tkls=player_def_stats.asst_tkls,
+                def_tds=player_def_stats.def_tds,
+                fum_rec_yards=player_def_stats.fum_rec_yards,
+                int_ret_yards=player_def_stats.int_ret_yards,
+                total_tkls=player_def_stats.total_tkls
             )
             session.flush()
     try:
@@ -110,7 +109,6 @@ def insert_season_kicking_stats_into_db(kicking_stats):
         desc(WeekYearData.year),
         desc(WeekYearData.week)
     ).first()
-    current_year = week_year.year
     
     for i, value in enumerate(kicking_stats):
 
@@ -133,8 +131,12 @@ def insert_season_kicking_stats_into_db(kicking_stats):
             record.fields['Total Punt Yards'] / record.fields['# Punts']\
                 if record.fields['# Punts'] != 0 else 0, 
             1)
+        net_avg = round(
+            record.fields['Net Punting'] / record.fields['# Punts']\
+                if record.fields['# Punts'] != 0 else 0, 
+            1)
         
-        new_player = SeasonKickingStatsData(
+        player_kicking_stats = SeasonKickingStatsData(
             id=new_id,
             player_id=record.fields['Player ID'],
             fg_made_17_29=record.fields['FG Made 17-29'],
@@ -166,48 +168,50 @@ def insert_season_kicking_stats_into_db(kicking_stats):
             fg_pct=fg_pct,
             xp_pct=xp_pct,
             fg_50_plus_pct=fg_50_plus_pct,
-            punt_avg=punt_avg
+            punt_avg=punt_avg,
+            net_avg=net_avg
         )
 
-        player: SeasonKickingStatsData = session.query(SeasonKickingStatsData).where(
-            SeasonKickingStatsData.player_id == new_player.player_id,
-            SeasonKickingStatsData.year == new_player.year
+        player_query: SeasonKickingStatsData = session.query(SeasonKickingStatsData).where(
+            SeasonKickingStatsData.player_id == player_kicking_stats.player_id,
+            SeasonKickingStatsData.year == player_kicking_stats.year
         ).scalar()
         
-        if not player:
-            session.add(new_player)
+        if not player_query:
+            session.add(player_kicking_stats)
             session.flush()
         else:
             update(SeasonKickingStatsData).where(
-                SeasonKickingStatsData.player_id == new_player.player_id,
-                SeasonKickingStatsData.year == current_year)\
+                SeasonKickingStatsData.player_id == player_kicking_stats.player_id,
+                SeasonKickingStatsData.year == player_kicking_stats.year)\
             .values(
-                fg_made_17_29=new_player.fg_made_17_29,
-                fg_att_17_29=new_player.fg_att_17_29,
-                long_fg=new_player.long_fg,
-                ko_touchdowns=new_player.ko_touchbacks,
-                long_punt=new_player.long_punt,
-                xp_att=new_player.xp_att,
-                year=new_player.year,
-                punts_blocked=new_player.punts_blocked,
-                fg_att=new_player.fg_att,
-                total_punt_yards=new_player.total_punt_yards,
-                xp_blocked=new_player.xp_blocked,
-                fg_blocked=new_player.fg_blocked,
-                fg_att_40_49=new_player.fg_att_40_49,
-                fg_made_40_49=new_player.fg_made_40_49,
-                fg_att_30_39=new_player.fg_att_30_39,
-                fg_made_30_39=new_player.fg_made_30_39,
-                fg_att_50_plus=new_player.fg_att_50_plus,
-                fg_made_50_plus=new_player.fg_made_50_plus,
-                punt_touchbacks=new_player.punt_touchbacks,
-                games_played=new_player.games_played,
-                kickoffs=new_player.kickoffs,
-                xp_made=new_player.xp_made,
-                net_punting=new_player.net_punting,
-                fg_made=new_player.fg_made,
-                number_punts=new_player.number_punts,
-                inside_twenty=new_player.inside_twenty
+                fg_made_17_29=player_kicking_stats.fg_made_17_29,
+                fg_att_17_29=player_kicking_stats.fg_att_17_29,
+                long_fg=player_kicking_stats.long_fg,
+                ko_touchdowns=player_kicking_stats.ko_touchbacks,
+                long_punt=player_kicking_stats.long_punt,
+                xp_att=player_kicking_stats.xp_att,
+                year=player_kicking_stats.year,
+                punts_blocked=player_kicking_stats.punts_blocked,
+                fg_att=player_kicking_stats.fg_att,
+                total_punt_yards=player_kicking_stats.total_punt_yards,
+                xp_blocked=player_kicking_stats.xp_blocked,
+                fg_blocked=player_kicking_stats.fg_blocked,
+                fg_att_40_49=player_kicking_stats.fg_att_40_49,
+                fg_made_40_49=player_kicking_stats.fg_made_40_49,
+                fg_att_30_39=player_kicking_stats.fg_att_30_39,
+                fg_made_30_39=player_kicking_stats.fg_made_30_39,
+                fg_att_50_plus=player_kicking_stats.fg_att_50_plus,
+                fg_made_50_plus=player_kicking_stats.fg_made_50_plus,
+                punt_touchbacks=player_kicking_stats.punt_touchbacks,
+                games_played=player_kicking_stats.games_played,
+                kickoffs=player_kicking_stats.kickoffs,
+                xp_made=player_kicking_stats.xp_made,
+                net_punting=player_kicking_stats.net_punting,
+                fg_made=player_kicking_stats.fg_made,
+                number_punts=player_kicking_stats.number_punts,
+                inside_twenty=player_kicking_stats.inside_twenty,
+                net_avg=player_kicking_stats.net_avg
             )
             session.flush()
     try:
@@ -225,7 +229,6 @@ def insert_season_off_stats_into_db(off_stats):
         desc(WeekYearData.year),
         desc(WeekYearData.week)
     ).first()
-    current_year = week_year.year
 
     for i, value in enumerate(off_stats):
         record = off_stats[i]
@@ -269,6 +272,8 @@ def insert_season_off_stats_into_db(off_stats):
             )
         pass_rating = round(pass_rating_calc, 1)
 
+        turnovers = record.fields['INTs'] + record.fields['Fumbles']
+
         # get ReturnStats for total stats purposes (yards, TDs, etc)
         return_stats: SeasonReturnStatsData = session.query(SeasonReturnStatsData).where(
             SeasonReturnStatsData.player_id == record.fields['Player ID'],
@@ -305,7 +310,7 @@ def insert_season_off_stats_into_db(off_stats):
                     else total_yards / record.fields['Games Played'],
                 1)
 
-        new_player = SeasonOffensiveStatsData(
+        player_off_stats = SeasonOffensiveStatsData(
             id=new_id,
             player_id=record.fields['Player ID'],
             pass_yards=record.fields['Pass. Yards'],
@@ -340,53 +345,55 @@ def insert_season_off_stats_into_db(off_stats):
             pass_rating=pass_rating,
             total_yards=total_yards,
             total_tds=total_tds,
-            total_ypg=total_ypg
+            total_ypg=total_ypg,
+            turnovers=turnovers
         )
         
         player: SeasonOffensiveStatsData = session.query(SeasonOffensiveStatsData).where(
-            SeasonOffensiveStatsData.player_id == new_player.player_id,
-            SeasonOffensiveStatsData.year == new_player.year
+            SeasonOffensiveStatsData.player_id == player_off_stats.player_id,
+            SeasonOffensiveStatsData.year == player_off_stats.year
         ).scalar()
 
         if not player:
-            session.add(new_player)
+            session.add(player_off_stats)
             session.flush()
         else:
             update(SeasonOffensiveStatsData).where(
-                        SeasonOffensiveStatsData.player_id == new_player.player_id,
-                        SeasonOffensiveStatsData.year == new_player.year).values(
-                pass_yards=new_player.pass_yards,
-                longest_rec=new_player.longest_rec,
-                longest_pass=new_player.longest_pass,
-                longest_run=new_player.longest_run,
-                year=new_player.year,
-                receptions=new_player.receptions,
-                sacked=new_player.sacked,
-                rec_yards=new_player.rec_yards,
-                rush_yards=new_player.rush_yards,
-                yac=new_player.yac,
-                pass_tds=new_player.pass_tds,
-                games_played=new_player.games_played,
-                rec_tds=new_player.rec_tds,
-                rush_tds=new_player.rush_tds,
-                ya_contact=new_player.ya_contact,
-                completions=new_player.completions,
-                ints=new_player.ints,
-                drops=new_player.drops,
-                pass_att=new_player.pass_att,
-                rush_att=new_player.rush_att,
-                broke_tkls=new_player.broke_tkls,
-                fumbles=new_player.fumbles,
-                twenty_plus_yd_runs=new_player.twenty_plus_yd_runs,
-                pass_yp_attempt=new_player.pass_yp_attempt,
-                pass_yp_game=new_player.pass_yp_game,
-                rush_yp_carry=new_player.rush_yp_carry,
-                rush_yp_game=new_player.rush_yp_game,
-                rec_yp_catch=new_player.rec_yp_catch,
-                rec_yp_game=new_player.rec_yp_game,
-                total_yards=new_player.total_yards,
-                total_tds=new_player.total_tds,
-                total_ypg=new_player.total_ypg
+                        SeasonOffensiveStatsData.player_id == player_off_stats.player_id,
+                        SeasonOffensiveStatsData.year == player_off_stats.year).values(
+                pass_yards=player_off_stats.pass_yards,
+                longest_rec=player_off_stats.longest_rec,
+                longest_pass=player_off_stats.longest_pass,
+                longest_run=player_off_stats.longest_run,
+                year=player_off_stats.year,
+                receptions=player_off_stats.receptions,
+                sacked=player_off_stats.sacked,
+                rec_yards=player_off_stats.rec_yards,
+                rush_yards=player_off_stats.rush_yards,
+                yac=player_off_stats.yac,
+                pass_tds=player_off_stats.pass_tds,
+                games_played=player_off_stats.games_played,
+                rec_tds=player_off_stats.rec_tds,
+                rush_tds=player_off_stats.rush_tds,
+                ya_contact=player_off_stats.ya_contact,
+                completions=player_off_stats.completions,
+                ints=player_off_stats.ints,
+                drops=player_off_stats.drops,
+                pass_att=player_off_stats.pass_att,
+                rush_att=player_off_stats.rush_att,
+                broke_tkls=player_off_stats.broke_tkls,
+                fumbles=player_off_stats.fumbles,
+                twenty_plus_yd_runs=player_off_stats.twenty_plus_yd_runs,
+                pass_yp_attempt=player_off_stats.pass_yp_attempt,
+                pass_yp_game=player_off_stats.pass_yp_game,
+                rush_yp_carry=player_off_stats.rush_yp_carry,
+                rush_yp_game=player_off_stats.rush_yp_game,
+                rec_yp_catch=player_off_stats.rec_yp_catch,
+                rec_yp_game=player_off_stats.rec_yp_game,
+                total_yards=player_off_stats.total_yards,
+                total_tds=player_off_stats.total_tds,
+                total_ypg=player_off_stats.total_ypg,
+                turnovers=player_off_stats.turnovers
             )
             session.flush()
     try:
@@ -404,7 +411,6 @@ def insert_season_return_stats_into_db(return_stats):
         desc(WeekYearData.year),
         desc(WeekYearData.week)
     ).first()
-    current_year = week_year.year
     
     for i, value in enumerate(return_stats):
         record = return_stats[i]
@@ -422,7 +428,7 @@ def insert_season_return_stats_into_db(return_stats):
             1
             )
         
-        new_player = SeasonReturnStatsData(
+        player_return_stats = SeasonReturnStatsData(
             id=new_id,
             player_id=record.fields['Player ID'],
             kick_returns=record.fields['Kick Returns'],
@@ -440,32 +446,32 @@ def insert_season_return_stats_into_db(return_stats):
         )
 
         player: SeasonReturnStatsData = session.query(SeasonReturnStatsData).where(
-            SeasonReturnStatsData.player_id == new_player.player_id,
-            SeasonReturnStatsData.year == new_player.year
+            SeasonReturnStatsData.player_id == player_return_stats.player_id,
+            SeasonReturnStatsData.year == player_return_stats.year
         ).scalar()
         
         if not player:
-            session.add(new_player)
+            session.add(player_return_stats)
             session.flush()
             
         else:
             update(SeasonReturnStatsData).where(
-                SeasonReturnStatsData.player_id == new_player.player_id,
-                SeasonReturnStatsData.year == new_player.year)\
+                SeasonReturnStatsData.player_id == player_return_stats.player_id,
+                SeasonReturnStatsData.year == player_return_stats.year)\
             .values(
-                player_id=new_player.player_id,
-                kick_returns=new_player.kick_returns,
-                year=new_player.year,
-                long_kr=new_player.long_kr,
-                punt_returns=new_player.punt_returns,
-                long_pr=new_player.long_pr,
-                games_played=new_player.games_played,
-                kr_tds=new_player.kr_tds,
-                pr_tds=new_player.pr_tds,
-                kr_yds=new_player.kr_yds,
-                pr_yds=new_player.pr_yds,
-                kr_avg=new_player.kr_avg,
-                pr_avg=new_player.pr_avg
+                player_id=player_return_stats.player_id,
+                kick_returns=player_return_stats.kick_returns,
+                year=player_return_stats.year,
+                long_kr=player_return_stats.long_kr,
+                punt_returns=player_return_stats.punt_returns,
+                long_pr=player_return_stats.long_pr,
+                games_played=player_return_stats.games_played,
+                kr_tds=player_return_stats.kr_tds,
+                pr_tds=player_return_stats.pr_tds,
+                kr_yds=player_return_stats.kr_yds,
+                pr_yds=player_return_stats.pr_yds,
+                kr_avg=player_return_stats.kr_avg,
+                pr_avg=player_return_stats.pr_avg
             )
             session.flush()
 

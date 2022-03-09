@@ -1238,21 +1238,29 @@ def _get_season_total_stats_leaders(is_season_specific: bool):
             PlayerInfoData.id == SeasonOffensiveStatsData.player_id,
             SeasonOffensiveStatsData.year == week_year.year
             ).order_by(desc(SeasonOffensiveStatsData.total_ypg)).limit(10)
+
+        to_data = session.query(PlayerInfoData, SeasonOffensiveStatsData).filter(
+            PlayerInfoData.id == SeasonOffensiveStatsData.player_id,
+            SeasonOffensiveStatsData.year == week_year.year
+            ).order_by(desc(SeasonOffensiveStatsData.total_ypg)).limit(10)
         
         # Convert players to PlayerRushingStats model so they can be sorted
         converted_total_yards: List[PlayerTotalStats] = [_get_player_total_off_stats(player) for player in total_yards_data]
         converted_total_tds: List[PlayerTotalStats] = [_get_player_total_off_stats(player) for player in total_tds_data]
         converted_total_ypg: List[PlayerTotalStats] = [_get_player_total_off_stats(player) for player in total_ypg_data]
+        converted_to_data: List[PlayerTotalStats] = [_get_player_total_off_stats(player) for player in to_data]
 
         # Convert top ten lists to json
         total_yards_leaders_json = total_stats_schema.dump(converted_total_yards)
         total_tds_leaders_json = total_stats_schema.dump(converted_total_tds)
         total_ypg_leaders_json = total_stats_schema.dump(converted_total_ypg)
+        to_leaders_json = total_stats_schema.dump(converted_to_data)
 
         response = {
             'yards': total_yards_leaders_json,
             'tds': total_tds_leaders_json,
             'ypg': total_ypg_leaders_json,
+            'turnovers': to_leaders_json
         }
 
         return response
@@ -1274,20 +1282,27 @@ def _get_season_total_stats_leaders(is_season_specific: bool):
             PlayerInfoData.id == SeasonOffensiveStatsData.player_id,
             ).order_by(desc(SeasonOffensiveStatsData.total_ypg)).limit(10)
         
+        to_data = session.query(PlayerInfoData, SeasonOffensiveStatsData).filter(
+            PlayerInfoData.id == SeasonOffensiveStatsData.player_id,
+            ).order_by(desc(SeasonOffensiveStatsData.total_ypg)).limit(10)
+
         # Convert players to PlayerRushingStats model so they can be sorted
         converted_total_yards: List[PlayerTotalStats] = [_get_player_total_off_stats(player) for player in total_yards_data]
         converted_total_tds: List[PlayerTotalStats] = [_get_player_total_off_stats(player) for player in total_tds_data]
         converted_total_ypg: List[PlayerTotalStats] = [_get_player_total_off_stats(player) for player in total_ypg_data]
+        converted_to_data: List[PlayerTotalStats] = [_get_player_total_off_stats(player) for player in to_data]
 
         # Convert top ten lists to json
         total_yards_leaders_json = total_stats_schema.dump(converted_total_yards)
         total_tds_leaders_json = total_stats_schema.dump(converted_total_tds)
         total_ypg_leaders_json = total_stats_schema.dump(converted_total_ypg)
+        to_leaders_json = total_stats_schema.dump(converted_to_data)
 
         response = {
             'yards': total_yards_leaders_json,
             'tds': total_tds_leaders_json,
             'ypg': total_ypg_leaders_json,
+            'turnovers': to_leaders_json
         }
 
         return response

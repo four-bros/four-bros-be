@@ -16,7 +16,7 @@ from src.data_models.SeasonReturnStatsData import SeasonReturnStatsData
 from src.data_models.WeekYearData import WeekYearData
 from src.models.Stats import (
     DefensiveStats,
-    KickingStats,
+    KickingAndPuntingStats,
     KickReturnStats,
     PassingStats,
     PuntingStats,
@@ -43,7 +43,6 @@ from src.utils.season_stats import (
     _get_punting_stats,
     _get_punt_return_stats,
     _get_receiving_stats,
-    _get_return_stats,
     _get_rushing_stats,
     _get_total_stats
 )
@@ -52,6 +51,7 @@ from src.utils.season_stats import (
 def insert_game_def_stats_into_db():
 
     players: List[PlayerInfoData] = session.query(PlayerInfoData).all()
+
     week_year: WeekYearData = session.query(WeekYearData).order_by(
         desc(WeekYearData.year),
         desc(WeekYearData.week)
@@ -76,7 +76,6 @@ def insert_game_def_stats_into_db():
         prior_def_stats_data: GameDefensiveStatsData = session.query(GameDefensiveStatsData).where(
             GameDefensiveStatsData.player_id == player.id,
             GameDefensiveStatsData.year == week_year.year
-            
         ).all()
 
         if not prior_def_stats_data and def_stats_data:
@@ -169,6 +168,7 @@ def insert_game_def_stats_into_db():
 def insert_game_kick_stats_into_db():
 
     players: List[PlayerInfoData] = session.query(PlayerInfoData).all()
+    
     week_year: WeekYearData = session.query(WeekYearData).order_by(
         desc(WeekYearData.year),
         desc(WeekYearData.week)
@@ -185,7 +185,7 @@ def insert_game_kick_stats_into_db():
         if not kicking_stats_data:
             continue
 
-        season_kicking_stats: KickingStats = _get_kicking_stats(kicking_stats_data)
+        season_kicking_stats: KickingAndPuntingStats = _get_kicking_stats(kicking_stats_data)
         season_punting_stats: PuntingStats = _get_punting_stats(kicking_stats_data)
         
         new_id = str(uuid4())
@@ -238,7 +238,7 @@ def insert_game_kick_stats_into_db():
 
         else:
 
-            prior_kick_stats: KickingStats = _compile_career_kicking_stats(prior_kick_stats_data)
+            prior_kick_stats: KickingAndPuntingStats = _compile_career_kicking_stats(prior_kick_stats_data)
 
             fg_made_17_29 = season_kicking_stats.fg_made_17_29 - prior_kick_stats.fg_made_17_29
             fg_att_17_29 = season_kicking_stats.fg_att_17_29 - prior_kick_stats.fg_att_17_29
