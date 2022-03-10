@@ -1,12 +1,10 @@
 from flask import Blueprint
+from src.blueprints.home import home_bp
 from src.blueprints.players import players_bp
 from src.blueprints.records import records_bp
 from src.blueprints.stats import stats_bp
 from src.blueprints.teams import teams_bp
 from src.constants import app
-
-
-home_bp = Blueprint('', __name__)
 
 
 blueprints = [
