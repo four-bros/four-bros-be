@@ -1,0 +1,39 @@
+from typing import List
+from sqlalchemy import desc
+from src.constants import (
+    session,
+    team_details_schema,
+    week_year_schema
+)
+from src.data_models.WeekYearData import WeekYearData
+from src.data_models.TeamInfoData import TeamInfoData
+from src.models.Teams import TeamDetails
+from src.models.WeekYear import WeekYear
+from src.utils.team_stats import _get_team_details
+
+
+def get_home_data(request):
+
+    week_year: WeekYearData = session.query(WeekYearData).order_by(
+        desc(WeekYearData.year),
+        desc(WeekYearData.week)
+    ).first()
+
+    user_teams: List[TeamInfoData] = session.query(TeamInfoData).where(TeamInfoData.is_user).all()
+
+    # convert data models to objects
+    current_week_year: WeekYear = WeekYear(
+        week=week_year.week,
+        year=week_year.year
+    )
+
+    # dump objects to JSON
+    week_year_json = week_year_schema.dump(current_week_year)
+    user_teams_json = team_details_schema.dump(user_teams)
+
+    response = {
+        'week_year': week_year_json,
+        'user_teams': user_teams_json
+    }
+
+    return response

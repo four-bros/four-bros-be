@@ -7,7 +7,7 @@ from sqlalchemy.orm import(
 )
 
 from src.responses.Players import PlayerSchema
-from src.responses.Stats import(
+from src.responses.Stats import (
     PlayerDefensiveStatsSchema,
     PlayerDetailsSchema,
     PlayerKickingStatsSchema,
@@ -20,10 +20,13 @@ from src.responses.Stats import(
     PlayerRushingStatsSchema,
     PlayerTotalStatsSchema,
 )
-from src.responses.Teams import(
+from src.responses.Teams import (
     TeamInfoSchema,
     TeamRosterSchema,
     TeamDetailsSchema
+)
+from src.responses.WeekYear import (
+    WeekYearSchema
 )
 
 
@@ -78,6 +81,7 @@ teams_schema = TeamInfoSchema(many=True)
 team_roster_schema = TeamRosterSchema(many=True)
 total_stat_schema = PlayerTotalStatsSchema()
 total_stats_schema = PlayerTotalStatsSchema(many=True)
+week_year_schema = WeekYearSchema()
 
 
 # String Enums
