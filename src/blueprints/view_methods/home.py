@@ -7,7 +7,6 @@ from src.constants import (
 )
 from src.data_models.WeekYearData import WeekYearData
 from src.data_models.TeamInfoData import TeamInfoData
-from src.models.Teams import TeamDetails
 from src.models.WeekYear import WeekYear
 from src.utils.team_stats import _get_team_details
 
