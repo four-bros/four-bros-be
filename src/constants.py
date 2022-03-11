@@ -6,6 +6,7 @@ from sqlalchemy.orm import(
     sessionmaker
 )
 
+from src.responses.Commits import CommitsSchema
 from src.responses.Players import PlayerSchema
 from src.responses.Stats import (
     PlayerDefensiveStatsSchema,
@@ -53,6 +54,8 @@ Base = declarative_base()
 
 
 # Schema constants
+commit_schema = CommitsSchema()
+commits_schema = CommitsSchema(many=True)
 defensive_stat_schema = PlayerDefensiveStatsSchema()
 defensive_stats_schema = PlayerDefensiveStatsSchema(many=True)
 kicking_stat_schema = PlayerKickingStatsSchema()
