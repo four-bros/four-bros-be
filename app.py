@@ -1,4 +1,4 @@
-from flask import Blueprint
+from src.blueprints.commits import commits_bp
 from src.blueprints.home import home_bp
 from src.blueprints.players import players_bp
 from src.blueprints.rankings import rankings_bp
@@ -9,6 +9,7 @@ from src.constants import app
 
 
 blueprints = [
+    commits_bp,
     home_bp,
     players_bp,
     rankings_bp,
