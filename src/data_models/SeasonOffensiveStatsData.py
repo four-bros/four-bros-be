@@ -8,7 +8,7 @@ from sqlalchemy import (
 from sqlalchemy.sql.schema import ForeignKey
 from sqlalchemy.sql.sqltypes import String
 
-from  src.constants import Base
+from src.constants import Base
 
 
 @dataclass

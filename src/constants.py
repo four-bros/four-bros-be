@@ -17,7 +17,7 @@ from src.responses.Stats import (
     PlayerPuntingStatsSchema,
     PlayerPuntReturnStatsSchema,
     PlayerReceivingStatsSchema,
-    PlayerReturnStatsSchema,
+    PlayerKickReturnAndPuntReturnStatsSchema,
     PlayerRushingStatsSchema,
     PlayerTotalStatsSchema,
 )
@@ -74,8 +74,8 @@ punting_stat_schema = PlayerPuntingStatsSchema()
 punting_stats_schema = PlayerPuntingStatsSchema(many=True)
 receiving_stat_schema = PlayerReceivingStatsSchema()
 receiving_stats_schema = PlayerReceivingStatsSchema(many=True)
-return_stat_schema = PlayerReturnStatsSchema()
-return_stats_schema = PlayerReturnStatsSchema(many=True)
+return_stat_schema = PlayerKickReturnAndPuntReturnStatsSchema()
+return_stats_schema = PlayerKickReturnAndPuntReturnStatsSchema(many=True)
 rushing_stat_schema = PlayerRushingStatsSchema()
 rushing_stats_schema = PlayerRushingStatsSchema(many=True)
 team_details_schema = TeamDetailsSchema(many=True)

@@ -1,3 +1,4 @@
+from typing import List
 from src.blueprints.commits import commits_bp
 from src.blueprints.home import home_bp
 from src.blueprints.players import players_bp
@@ -25,9 +26,37 @@ for bp in blueprints:
 
 @app.route('/', methods=['GET'])
 def index():
-    response = {
-        'hello': 'how are you?'
+
+    records_endpoints: List[str] = [
+        'career',
+        'game',
+        'season'
+    ]
+
+    players_endpoints: List[str] = [
+        '<player_id>'
+    ]
+
+    teams_endpoints: List[str] = [
+        '/',
+        '<team_id>',
+        '<team_id>/stats'
+    ]
+
+    backend_endpoints = {
+        'commits': '/',
+        'home': '/',
+        'players': players_endpoints,
+        'rankings': '/',
+        'records': records_endpoints,
+        'stats': 'season/leaders',
+        'teams': teams_endpoints,
     }
+
+    response = {
+        'backend_endpoints': backend_endpoints
+    }
+
     return response
 
 
