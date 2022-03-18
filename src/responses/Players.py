@@ -3,7 +3,7 @@ from marshmallow import Schema, fields
 from src.responses.Stats import(
     DefensiveStatsSchema,
     KickReturnStatsSchema,
-    KickingStatsSchema,
+    KickingAndPuntingStatsSchema,
     PassingStatsSchema,
     PuntReturnStatsSchema,
     PuntingStatsSchema,
@@ -77,7 +77,7 @@ class PlayerStatsSchema(Schema):
     receiving = fields.Nested(ReceivingStatsSchema)
     defensive = fields.Nested(DefensiveStatsSchema)
     kick_return = fields.Nested(KickReturnStatsSchema)
-    kicking = fields.Nested(KickingStatsSchema)
+    kicking = fields.Nested(KickingAndPuntingStatsSchema)
     punting = fields.Nested(PuntingStatsSchema)
     punt_return = fields.Nested(PuntReturnStatsSchema)
     total = fields.Nested(TotalStatsSchema)

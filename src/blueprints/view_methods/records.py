@@ -14,10 +14,12 @@ from src.utils.career_stats_leaders import (
 )
 from src.utils.game_stats_leaders import (
     _get_game_defensive_stats_leaders,
+    _get_game_kick_return_stats_leaders,
     _get_game_kicking_stats_leaders,
     _get_game_passing_stats_leaders,
+    _get_game_punt_return_stats_leaders,
+    _get_game_punting_stats_leaders,
     _get_game_rec_stats_leaders,
-    _get_game_return_stats_leaders,
     _get_game_rush_stats_leaders
 )
 
@@ -43,10 +45,12 @@ def get_game_records(request):
 
     response = {
         'defense': _get_game_defensive_stats_leaders(),
+        'kick_return': _get_career_kick_return_stats_leaders(),
         'kicking': _get_game_kicking_stats_leaders(),
         'passing': _get_game_passing_stats_leaders(),
+        'punt_return': _get_game_punt_return_stats_leaders(),
+        'punting': _get_game_punting_stats_leaders(),
         'receiving': _get_game_rec_stats_leaders(),
-        'return': _get_game_return_stats_leaders(),
         'rushing': _get_game_rush_stats_leaders()
     }
 
@@ -58,6 +62,3 @@ def get_season_records(request):
     response = get_season_stats_leaders(request, is_season_specific=False)
 
     return response
-
-
-

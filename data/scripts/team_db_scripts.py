@@ -80,7 +80,7 @@ def insert_team_info_into_db(team_info):
         team: TeamInfoData = session.query(TeamInfoData).filter(
             TeamInfoData.id == new_team.id).scalar()
         
-        if team is None:
+        if not team:
             session.add(new_team)
             session.flush()
         else:

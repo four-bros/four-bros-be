@@ -105,54 +105,6 @@ class KickingStatsSchema(Schema):
     fg_att_17_29 = fields.Int()
     long_fg = fields.Int()
     ko_touchbacks = fields.Int()
-    long_punt = fields.Int()
-    xp_att = fields.Int()
-    year = fields.Str()
-    punts_blocked = fields.Int()
-    fg_att = fields.Int()
-    total_punt_yards = fields.Int()
-    xp_blocked = fields.Int()
-    fg_blocked = fields.Int()
-    fg_att_40_49 = fields.Int()
-    fg_made_40_49 = fields.Int()
-    fg_att_30_39 = fields.Int()
-    fg_made_30_39 = fields.Int()
-    fg_att_50_plus = fields.Int()
-    fg_made_50_plus = fields.Int()
-    punt_touchbacks = fields.Int()
-    games_played = fields.Int()
-    kickoffs = fields.Int()
-    xp_made = fields.Int()
-    net_punting = fields.Int()
-    fg_made = fields.Int()
-    number_punts = fields.Int()
-    inside_twenty = fields.Int()
-    fg_pct = fields.Float()
-    xp_pct = fields.Float()
-    fg_50_plus_pct = fields.Float()
-    punt_avg = fields.Float()
-
-
-class ReturnStatsSchema(Schema):
-    kick_returns = fields.Int()
-    year = fields.Str()
-    long_kr = fields.Int()
-    punt_returns = fields.Int()
-    long_pr = fields.Int()
-    games_played = fields.Int()
-    kr_tds = fields.Int()
-    pr_tds = fields.Int()
-    kr_yds = fields.Int()
-    pr_yds = fields.Int()
-    kr_avg = fields.Float()
-    pr_avg = fields.Float()
-
-
-class KickStatsSchema(Schema):
-    fg_made_17_29 = fields.Int()
-    fg_att_17_29 = fields.Int()
-    long_fg = fields.Int()
-    ko_touchbacks = fields.Int()
     xp_att = fields.Int()
     year = fields.Str()
     fg_att = fields.Int()
@@ -216,7 +168,7 @@ class PlayerDefensiveStatsSchema(Schema):
 
 class PlayerKickingStatsSchema(Schema):
     player_details = fields.Nested(PlayerDetailsSchema)
-    kicking_stats = fields.Nested(KickStatsSchema)
+    kicking_stats = fields.Nested(KickingStatsSchema)
 
 
 class PlayerKickReturnStatsSchema(Schema):
@@ -241,12 +193,7 @@ class PlayerPuntReturnStatsSchema(Schema):
 
 class PlayerReceivingStatsSchema(Schema):
     player_details = fields.Nested(PlayerDetailsSchema)
-    receiving_stats = fields.Nested(ReceivingStatsSchema)
-
-
-class PlayerReturnStatsSchema(Schema):
-    player_details = fields.Nested(PlayerDetailsSchema)
-    return_stats = fields.Nested(ReturnStatsSchema)    
+    receiving_stats = fields.Nested(ReceivingStatsSchema)   
 
 
 class PlayerRushingStatsSchema(Schema):
@@ -257,3 +204,59 @@ class PlayerRushingStatsSchema(Schema):
 class PlayerTotalStatsSchema(Schema):
     player_details = fields.Nested(PlayerDetailsSchema)
     total_stats = fields.Nested(TotalStatsSchema)
+
+
+##########################
+### Deprecated Schemas ###
+##########################
+class KickingAndPuntingStatsSchema(Schema):
+    fg_made_17_29 = fields.Int()
+    fg_att_17_29 = fields.Int()
+    long_fg = fields.Int()
+    ko_touchbacks = fields.Int()
+    long_punt = fields.Int()
+    xp_att = fields.Int()
+    year = fields.Str()
+    punts_blocked = fields.Int()
+    fg_att = fields.Int()
+    total_punt_yards = fields.Int()
+    xp_blocked = fields.Int()
+    fg_blocked = fields.Int()
+    fg_att_40_49 = fields.Int()
+    fg_made_40_49 = fields.Int()
+    fg_att_30_39 = fields.Int()
+    fg_made_30_39 = fields.Int()
+    fg_att_50_plus = fields.Int()
+    fg_made_50_plus = fields.Int()
+    punt_touchbacks = fields.Int()
+    games_played = fields.Int()
+    kickoffs = fields.Int()
+    xp_made = fields.Int()
+    net_punting = fields.Int()
+    fg_made = fields.Int()
+    number_punts = fields.Int()
+    inside_twenty = fields.Int()
+    fg_pct = fields.Float()
+    xp_pct = fields.Float()
+    fg_50_plus_pct = fields.Float()
+    punt_avg = fields.Float()
+
+
+class KickReturnAndPuntReturnStatsSchema(Schema):
+    kick_returns = fields.Int()
+    year = fields.Str()
+    long_kr = fields.Int()
+    punt_returns = fields.Int()
+    long_pr = fields.Int()
+    games_played = fields.Int()
+    kr_tds = fields.Int()
+    pr_tds = fields.Int()
+    kr_yds = fields.Int()
+    pr_yds = fields.Int()
+    kr_avg = fields.Float()
+    pr_avg = fields.Float()
+
+
+class PlayerKickReturnAndPuntReturnStatsSchema(Schema):
+    player_details = fields.Nested(PlayerDetailsSchema)
+    return_stats = fields.Nested(KickReturnAndPuntReturnStatsSchema) 
