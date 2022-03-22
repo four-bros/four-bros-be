@@ -138,7 +138,7 @@ def insert_player_info_into_db(player_info):
             
         else:
             update(PlayerInfoData).where(PlayerInfoData.id == new_player.id).values(
-                player_id=new_player.id,
+                id=new_player.id,
                 team_id=new_player.team_id,
                 first_name=new_player.first_name,
                 last_name=new_player.last_name,
