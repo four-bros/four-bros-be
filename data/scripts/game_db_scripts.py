@@ -362,6 +362,8 @@ def insert_game_off_stats_into_db():
 
         if not prior_off_stats_data and off_stats_data:
 
+            turnovers = season_pass_stats.ints + season_rush_stats.fumbles
+
             game_stats: GameOffensiveStatsData = GameOffensiveStatsData(
                 id = new_id,
                 player_id=player.id,
@@ -398,7 +400,8 @@ def insert_game_off_stats_into_db():
                 rush_yp_game=season_rush_stats.rush_yards,
                 rec_yp_catch=season_rec_stats.rec_yp_catch,
                 rec_yp_game=season_rec_stats.rec_yards,
-                pass_rating=season_pass_stats.pass_rating
+                pass_rating=season_pass_stats.pass_rating,
+                turnovers=turnovers
             )
             session.add(game_stats)
             session.flush()
@@ -450,6 +453,7 @@ def insert_game_off_stats_into_db():
             pass_rating = round(pass_rating_calc, 1)
             total_yards = season_total_stats.total_yards - prior_total_stats.total_yards
             total_tds = season_total_stats.total_tds - prior_total_stats.total_tds
+            turnovers = ints + fumbles
 
             game_stats = GameOffensiveStatsData(
                 id=new_id,
@@ -487,7 +491,8 @@ def insert_game_off_stats_into_db():
                 pass_rating=pass_rating,
                 total_yards=total_yards,
                 total_tds=total_tds,
-                total_ypg=total_yards
+                total_ypg=total_yards,
+                turnovers=turnovers
             )
 
             session.add(game_stats)
