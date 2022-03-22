@@ -4,12 +4,10 @@ from src.constants import (
     defensive_stats_schema,
     kick_return_stats_schema,
     kicking_stats_schema,
-    passing_stat_schema,
     passing_stats_schema,
     punt_return_stats_schema,
     punting_stats_schema,
     receiving_stats_schema,
-    return_stats_schema,
     rushing_stats_schema,
     session
 )
@@ -26,7 +24,6 @@ from src.models.Stats import (
     PlayerPuntReturnStats,
     PlayerPuntingStats,
     PlayerReceivingStats,
-    PlayerReturnStats,
     PlayerRushingStats
 )
 from src.utils.player import(
@@ -202,8 +199,8 @@ def _get_game_passing_stats_leaders():
 
     # Convert top ten lists into json
     completions_leaders_json = passing_stats_schema.dump(converted_completions)
-    pass_att_leaders_jason = passing_stat_schema.dump(converted_pass_att)
-    longest_pass_leaders_jason = passing_stat_schema.dump(converted_long_pass)
+    pass_att_leaders_jason = passing_stats_schema.dump(converted_pass_att)
+    longest_pass_leaders_jason = passing_stats_schema.dump(converted_long_pass)
     pass_yard_leaders_json = passing_stats_schema.dump(converted_pass_yards)
     pass_td_leaders_json = passing_stats_schema.dump(converted_pass_tds)
     int_leaders_json = passing_stats_schema.dump(converted_ints)
