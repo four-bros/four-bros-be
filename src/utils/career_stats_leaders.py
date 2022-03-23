@@ -314,8 +314,8 @@ def _get_career_passing_stats_leaders():
 
     # Convert top ten lists into json
     completions_leaders_json = passing_stats_schema.dump(converted_completions)
-    pass_att_leaders_jason = passing_stat_schema.dump(converted_pass_att)
-    longest_pass_leaders_jason = passing_stat_schema.dump(converted_long_pass)
+    pass_att_leaders_jason = passing_stats_schema.dump(converted_pass_att)
+    longest_pass_leaders_jason = passing_stats_schema.dump(converted_long_pass)
     pass_yard_leaders_json = passing_stats_schema.dump(converted_pass_yards)
     pass_td_leaders_json = passing_stats_schema.dump(converted_pass_tds)
     int_leaders_json = passing_stats_schema.dump(converted_ints)
