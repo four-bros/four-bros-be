@@ -77,7 +77,7 @@ def insert_team_info_into_db(team_info):
             coachs_poll_points=record.fields["Coach's Poll Points"],
         )
 
-        team: TeamInfoData = session.query(TeamInfoData).filter(
+        team: TeamInfoData = session.query(TeamInfoData).where(
             TeamInfoData.id == new_team.id).scalar()
         
         if not team:
@@ -98,6 +98,7 @@ def insert_team_info_into_db(team_info):
                 media_poll_points=new_team.media_poll_points,
                 coachs_poll_points=new_team.coachs_poll_points,
             )
+            session.flush()
         
         try:
             session.commit()
@@ -241,6 +242,7 @@ def insert_team_stats_into_db():
         
         if team_query is None:
             session.add(team_stats)
+            session.flush()
         else:
             update(TeamStatsData).where(TeamStatsData.id == team_stats.id).values(
                 id=team_stats.id,
@@ -267,6 +269,7 @@ def insert_team_stats_into_db():
                 pr_yds=team_stats.pr_yds,
                 pr_tds=team_stats.pr_tds
             )
+            session.flush()
     try:
         session.commit()
     except:
