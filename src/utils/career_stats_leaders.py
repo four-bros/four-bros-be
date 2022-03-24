@@ -4,7 +4,6 @@ from src.constants import (
     defensive_stats_schema,
     kicking_stats_schema,
     kick_return_stats_schema,
-    passing_stat_schema,
     passing_stats_schema,
     punting_stats_schema,
     punt_return_stats_schema,
@@ -141,20 +140,20 @@ def _get_career_defensive_stats_leaders():
     total_sacks_leaders_json = defensive_stats_schema.dump(converted_total_sacks)
 
     response = {
-        'long_int_ret_leaders': long_int_ret_leaders_json,
-        'sacks_leaders': sacks_leaders_json,
-        'forced_fumbles_leaders': forced_fumbles_leaders_json,
-        'safeties_leaders': safeties_leaders_json,
-        'pass_def_leaders': pass_def_leaders_json,
-        'blocked_kicks_leaders': blocked_kicks_leaders_json,
-        'tfl_leaders': tfl_leaders_json,
-        'ints_made_leaders': ints_made_leaders_json,
-        'fumbles_rec_leaders': fumbles_rec_leaders_json,
-        'def_tds_leaders': def_tds_leaders_json,
-        'fum_rec_yards_leaders': fum_rec_yards_leaders_json,
-        'int_ret_yards_leaders': int_ret_yards_leaders_json,
-        'total_tkls_leaders': total_tkls_leaders_json,
-        'total_sack_leaders': total_sacks_leaders_json
+        'long_int_ret': long_int_ret_leaders_json,
+        'sacks': sacks_leaders_json,
+        'forced_fumbles': forced_fumbles_leaders_json,
+        'safeties': safeties_leaders_json,
+        'pass_def': pass_def_leaders_json,
+        'blocked_kicks': blocked_kicks_leaders_json,
+        'tfl': tfl_leaders_json,
+        'ints_made': ints_made_leaders_json,
+        'fumbles_rec': fumbles_rec_leaders_json,
+        'def_tds': def_tds_leaders_json,
+        'fum_rec_yards': fum_rec_yards_leaders_json,
+        'int_ret_yards': int_ret_yards_leaders_json,
+        'total_tkls': total_tkls_leaders_json,
+        'total_sack': total_sacks_leaders_json
     }
 
     return response
@@ -212,8 +211,8 @@ def _get_career_kicking_stats_leaders():
         'fg_att': fg_att_leaders_json,
         'fg_pct': fg_pct_leaders_json,
         'long_fg': long_fg_leaders_json,
-        'fg_50_plus_made': fg_made_50_plus_leaders_json,
-        'fg_50_plus_pct': fg_50_plus_pct_json,
+        'fg_made_50_plus': fg_made_50_plus_leaders_json,
+        'fg_made_50_plus_pct': fg_50_plus_pct_json,
     }
 
     return response
@@ -240,6 +239,7 @@ def _get_career_kick_return_stats_leaders():
 
     kr_avg_data = session.query(PlayerInfoData, CareerReturnStatsData).filter(
             PlayerInfoData.id == CareerReturnStatsData.player_id,
+            CareerReturnStatsData.kick_returns > 10
             ).order_by(desc(CareerReturnStatsData.kr_avg)).limit(10)
 
     # Convert players to PlayerKickingStats model so they can be sorted
@@ -296,11 +296,18 @@ def _get_career_passing_stats_leaders():
 
     pass_yp_attempt_data = session.query(PlayerInfoData, CareerOffensiveStatsData).filter(
             PlayerInfoData.id == CareerOffensiveStatsData.player_id,
+            CareerOffensiveStatsData.pass_att > 100,
             ).order_by(desc(CareerOffensiveStatsData.pass_yp_attempt)).limit(10)
 
     pass_yp_game_data = session.query(PlayerInfoData, CareerOffensiveStatsData).filter(
             PlayerInfoData.id == CareerOffensiveStatsData.player_id,
+            CareerOffensiveStatsData.pass_att > 100,
             ).order_by(desc(CareerOffensiveStatsData.pass_yp_game)).limit(10)
+
+    pass_rating_data = session.query(PlayerInfoData, CareerOffensiveStatsData).filter(
+            PlayerInfoData.id == CareerOffensiveStatsData.player_id,
+            CareerOffensiveStatsData.pass_att > 100,
+            ).order_by(desc(CareerOffensiveStatsData.pass_rating)).limit(10)
 
     # Convert players to PlayerPassingStats model so they can be sorted
     converted_completions: List[PlayerPassingStats] = [_get_player_passing_stats(player) for player in completions_data]
@@ -311,6 +318,7 @@ def _get_career_passing_stats_leaders():
     converted_ints: List[PlayerPassingStats] = [_get_player_passing_stats(player) for player in ints_data]
     converted_pass_yp_attempt: List[PlayerPassingStats] = [_get_player_passing_stats(player) for player in pass_yp_attempt_data]
     converted_pass_yp_game: List[PlayerPassingStats] = [_get_player_passing_stats(player) for player in pass_yp_game_data]
+    converted_pass_rating: List[PlayerPassingStats] = [_get_player_passing_stats(player) for player in pass_rating_data]
 
     # Convert top ten lists into json
     completions_leaders_json = passing_stats_schema.dump(converted_completions)
@@ -321,6 +329,7 @@ def _get_career_passing_stats_leaders():
     int_leaders_json = passing_stats_schema.dump(converted_ints)
     pass_yp_attempt_leaders_json = passing_stats_schema.dump(converted_pass_yp_attempt)
     pass_yp_game_leaders_json = passing_stats_schema.dump(converted_pass_yp_game)
+    pass_rating_leaders_json = passing_stats_schema.dump(converted_pass_rating)
 
     response = {
         'completions': completions_leaders_json,
@@ -330,7 +339,8 @@ def _get_career_passing_stats_leaders():
         'pass_tds': pass_td_leaders_json,
         'interceptions': int_leaders_json,
         'pass_yp_attempt': pass_yp_attempt_leaders_json,
-        'pass_yp_game': pass_yp_game_leaders_json
+        'pass_yp_game': pass_yp_game_leaders_json,
+        'pass_rating': pass_rating_leaders_json
     }
 
     return response
@@ -353,6 +363,7 @@ def _get_career_punting_stats_leaders():
 
     punt_avg_data = session.query(PlayerInfoData, CareerKickingStatsData).filter(
             CareerKickingStatsData.player_id == PlayerInfoData.id,
+            CareerKickingStatsData.number_punts > 10
         ).order_by(desc(CareerKickingStatsData.punt_avg)).limit(10)
 
     net_punting_data = session.query(PlayerInfoData, CareerKickingStatsData).filter(
@@ -363,6 +374,11 @@ def _get_career_punting_stats_leaders():
             CareerKickingStatsData.player_id == PlayerInfoData.id,
         ).order_by(desc(CareerKickingStatsData.inside_twenty)).limit(10)
 
+    net_avg_data = session.query(PlayerInfoData, CareerKickingStatsData).filter(
+            CareerKickingStatsData.player_id == PlayerInfoData.id,
+            CareerKickingStatsData.number_punts > 10
+        ).order_by(desc(CareerKickingStatsData.net_avg)).limit(10)
+
     # Convert players to PlayerKickingStats model so they can be dumped to json
     converted_long_punt: List[PlayerPuntingStats] = [_get_player_punting_stats(player) for player in long_punt_data]
     converted_num_punts: List[PlayerPuntingStats] = [_get_player_punting_stats(player) for player in num_punts_data]
@@ -370,6 +386,7 @@ def _get_career_punting_stats_leaders():
     converted_punt_avg: List[PlayerPuntingStats] = [_get_player_punting_stats(player) for player in punt_avg_data]
     converted_net_punting: List[PlayerPuntingStats] = [_get_player_punting_stats(player) for player in net_punting_data]
     converted_inside_twenty: List[PlayerPuntingStats] = [_get_player_punting_stats(player) for player in inside_twenty_data]
+    converted_net_avg: List[PlayerPuntingStats] = [_get_player_punting_stats(player) for player in net_avg_data]
 
     # Convert top ten lists into json
     long_punt_leaders_json = punting_stats_schema.dump(converted_long_punt)
@@ -378,6 +395,7 @@ def _get_career_punting_stats_leaders():
     punt_avg_json = punting_stats_schema.dump(converted_punt_avg)
     net_punting_leaders_json = punting_stats_schema.dump(converted_net_punting)
     inside_twenty_leaders_json = punting_stats_schema.dump(converted_inside_twenty)
+    net_avg_leaders_json = punting_stats_schema.dump(converted_net_avg)
 
     response = {
         'long_punt': long_punt_leaders_json,
@@ -386,6 +404,7 @@ def _get_career_punting_stats_leaders():
         'punt_avg': punt_avg_json,
         'net_punting': net_punting_leaders_json,
         'inside_twenty': inside_twenty_leaders_json,
+        'net_avg': net_avg_leaders_json
     }
 
     return response
@@ -412,6 +431,7 @@ def _get_career_punt_return_stats_leaders():
 
     pr_avg_data = session.query(PlayerInfoData, CareerReturnStatsData).filter(
             PlayerInfoData.id == CareerReturnStatsData.player_id,
+            CareerReturnStatsData.punt_returns > 10
             ).order_by(desc(CareerReturnStatsData.pr_avg)).limit(10)
 
     # Convert players to PlayerKickingStats model so they can be sorted
@@ -464,10 +484,12 @@ def _get_career_rec_stats_leaders():
 
     rec_yp_catch_data = session.query(PlayerInfoData, CareerOffensiveStatsData).filter(
             PlayerInfoData.id == CareerOffensiveStatsData.player_id,
+            CareerOffensiveStatsData.receptions > 50
             ).order_by(desc(CareerOffensiveStatsData.rec_yp_catch)).limit(10)
 
     rec_yp_game_data = session.query(PlayerInfoData, CareerOffensiveStatsData).filter(
             PlayerInfoData.id == CareerOffensiveStatsData.player_id,
+            CareerOffensiveStatsData.receptions > 50
             ).order_by(desc(CareerOffensiveStatsData.rec_yp_game)).limit(10)
 
     # Convert players to PlayerReceivingStats model so they can be sorted
@@ -534,7 +556,13 @@ def _get_career_rush_stats_leaders():
 
     rush_yp_game_data = session.query(PlayerInfoData, CareerOffensiveStatsData).filter(
             PlayerInfoData.id == CareerOffensiveStatsData.player_id,
+            CareerOffensiveStatsData.rush_att > 50
             ).order_by(desc(CareerOffensiveStatsData.rush_yp_game)).limit(10)
+    
+    rush_tds_data = session.query(PlayerInfoData, CareerOffensiveStatsData).filter(
+            PlayerInfoData.id == CareerOffensiveStatsData.player_id,
+            CareerOffensiveStatsData.rush_att > 50
+            ).order_by(desc(CareerOffensiveStatsData.rush_tds)).limit(10)
 
     # Convert players to PlayerRushingStats model so they can be sorted
     converted_rush_att: List[PlayerRushingStats] = [_get_player_rushing_stats(player) for player in rush_att_data]
@@ -545,6 +573,7 @@ def _get_career_rush_stats_leaders():
     converted_twenty_plus_yd_runs: List[PlayerRushingStats] = [_get_player_rushing_stats(player) for player in twenty_plus_yd_runs_data]
     converted_rush_yp_carry: List[PlayerRushingStats] = [_get_player_rushing_stats(player) for player in rush_yp_carry_data]
     converted_rush_yp_game: List[PlayerRushingStats] = [_get_player_rushing_stats(player) for player in rush_yp_game_data]
+    converted_rush_tds: List[PlayerRushingStats] = [_get_player_rushing_stats(player) for player in rush_tds_data]
 
     # Convert top ten lists to json
     rush_att_leaders_json = rushing_stats_schema.dump(converted_rush_att)
@@ -555,6 +584,7 @@ def _get_career_rush_stats_leaders():
     twenty_plus_yd_runs_leaders_json = rushing_stats_schema.dump(converted_twenty_plus_yd_runs)
     rush_yp_carry_leaders_json = rushing_stats_schema.dump(converted_rush_yp_carry)
     rush_yp_game_leaders_json = rushing_stats_schema.dump(converted_rush_yp_game)
+    rush_tds_leaders_json = rushing_stats_schema.dump(converted_rush_tds)
 
     response = {
         'rush_att': rush_att_leaders_json,
@@ -564,7 +594,8 @@ def _get_career_rush_stats_leaders():
         'fumbles': fumbles_leaders_json,
         'twenty_plus_runs': twenty_plus_yd_runs_leaders_json,
         'rush_yp_carry': rush_yp_carry_leaders_json,
-        'rush_yp_game': rush_yp_game_leaders_json
+        'rush_yp_game': rush_yp_game_leaders_json,
+        'tds': rush_tds_leaders_json
     }
 
     return response
