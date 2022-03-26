@@ -67,7 +67,7 @@ def insert_player_info_into_db(player_info):
         ):
             continue
         
-        # Convert unintelligble values to readable values
+        # Convert unintelligible values to readable values
         readable_position = ncaa_dynasty.position_number_to_text(record.fields['Position'])
         readable_height = ncaa_dynasty.height_converter(record.fields['Height'])
         readable_weight = ncaa_dynasty.weight_converter(record.fields['Weight'])
@@ -75,7 +75,7 @@ def insert_player_info_into_db(player_info):
         
         is_redshirt = False if record.fields['Redshirt'] == 0 else True
         
-        new_player = PlayerInfoData(
+        player = PlayerInfoData(
             id=record.fields['Player ID'],
             team_id=record.fields['Team ID'],
             first_name=record.fields['First Name'],
@@ -129,66 +129,66 @@ def insert_player_info_into_db(player_info):
             juke_move=record.fields['Juke Move'],
         )
 
-        player: PlayerInfoData = session.query(PlayerInfoData).filter(
-            PlayerInfoData.id == new_player.id).scalar()
+        player_query: PlayerInfoData = session.query(PlayerInfoData).where(
+            PlayerInfoData.id == player.id).scalar()
 
-        if not player:
-            session.add(new_player)
+        if not player_query:
+            session.add(player)
             session.flush()
             
         else:
-            update(PlayerInfoData).where(PlayerInfoData.id == new_player.id).values(
-                id=new_player.id,
-                team_id=new_player.team_id,
-                first_name=new_player.first_name,
-                last_name=new_player.last_name,
-                hometown_desc=new_player.hometown_desc,
-                play_recognition=new_player.play_recognition,
-                press=new_player.press,
-                power_moves=new_player.power_moves,
-                kick_accuracy=new_player.kick_accuracy,
-                redshirt=new_player.redshirt,
-                player_year=new_player.player_year,
-                jersey_number=new_player.jersey_number,
-                throwing_power=new_player.throwing_power,
-                throwing_accuracy=new_player.throwing_accuracy,
-                overall=new_player.overall,
-                agility=new_player.agility,
-                stamina=new_player.stamina,
-                acceleration=new_player.acceleration,
-                pursuit=new_player.pursuit,
-                route_running=new_player.route_running,
-                speed=new_player.speed,
-                trucking=new_player.trucking,
-                ball_carrier_vision=new_player.ball_carrier_vision,
-                catch_in_traffic=new_player.catch_in_traffic,
-                block_shedding=new_player.block_shedding,
-                strength=new_player.strength,
-                catch=new_player.catch,
-                injury=new_player.injury,
-                tackling=new_player.tackling,
-                pass_blocking=new_player.pass_blocking,
-                run_blocking=new_player.run_blocking,
-                break_tackle=new_player.break_tackle,
-                impact_blocking=new_player.impact_blocking,
-                jump=new_player.jump,
-                carry=new_player.carry,
-                stiff_arm=new_player.stiff_arm,
-                kick_power=new_player.kick_power,
-                awareness=new_player.awareness,
-                release=new_player.release,
-                position=new_player.position,
-                spec_catch=new_player.spec_catch,
-                elusiveness=new_player.elusiveness,
-                height=new_player.height,
-                spin_move=new_player.spin_move,
-                weight=new_player.weight,
-                hit_power=new_player.hit_power,
-                kick_return=new_player.kick_return,
-                man_coverage=new_player.man_coverage,
-                zone_coverage=new_player.zone_coverage,
-                finesse_moves=new_player.finesse_moves,
-                juke_move=new_player.juke_move,
+            update(PlayerInfoData).where(PlayerInfoData.id == player.id).values(
+                id=player.id,
+                team_id=player.team_id,
+                first_name=player.first_name,
+                last_name=player.last_name,
+                hometown_desc=player.hometown_desc,
+                play_recognition=player.play_recognition,
+                press=player.press,
+                power_moves=player.power_moves,
+                kick_accuracy=player.kick_accuracy,
+                redshirt=player.redshirt,
+                player_year=player.player_year,
+                jersey_number=player.jersey_number,
+                throwing_power=player.throwing_power,
+                throwing_accuracy=player.throwing_accuracy,
+                overall=player.overall,
+                agility=player.agility,
+                stamina=player.stamina,
+                acceleration=player.acceleration,
+                pursuit=player.pursuit,
+                route_running=player.route_running,
+                speed=player.speed,
+                trucking=player.trucking,
+                ball_carrier_vision=player.ball_carrier_vision,
+                catch_in_traffic=player.catch_in_traffic,
+                block_shedding=player.block_shedding,
+                strength=player.strength,
+                catch=player.catch,
+                injury=player.injury,
+                tackling=player.tackling,
+                pass_blocking=player.pass_blocking,
+                run_blocking=player.run_blocking,
+                break_tackle=player.break_tackle,
+                impact_blocking=player.impact_blocking,
+                jump=player.jump,
+                carry=player.carry,
+                stiff_arm=player.stiff_arm,
+                kick_power=player.kick_power,
+                awareness=player.awareness,
+                release=player.release,
+                position=player.position,
+                spec_catch=player.spec_catch,
+                elusiveness=player.elusiveness,
+                height=player.height,
+                spin_move=player.spin_move,
+                weight=player.weight,
+                hit_power=player.hit_power,
+                kick_return=player.kick_return,
+                man_coverage=player.man_coverage,
+                zone_coverage=player.zone_coverage,
+                finesse_moves=player.finesse_moves,
+                juke_move=player.juke_move,
             )
             session.flush()
 
