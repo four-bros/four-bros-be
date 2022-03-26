@@ -20,6 +20,6 @@ def teams_get_by_team_id(team_id: int):
     return get_team_by_team_id(request, team_id)
 
 
-@teams_bp.route('/<team_id>/stats')
+@teams_bp.route('/<team_id>/stats', methods=['GET'])
 def teams_get_player_stats(team_id: int):
     return get_team_player_stats(request, team_id)
