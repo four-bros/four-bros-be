@@ -84,7 +84,7 @@ class RushingStatsSchema(Schema):
     rush_yp_carry = fields.Float()
     rush_yp_game = fields.Float()
     games_played = fields.Int()
-    year = fields.Int()
+    year = fields.Str()
     longest_run = fields.Int()
 
 
@@ -93,7 +93,7 @@ class TotalStatsSchema(Schema):
     total_tds = fields.Int()
     total_ypg = fields.Float()
     games_played = fields.Int()
-    year = fields.Int()
+    year = fields.Str()
     turnovers = fields.Int()
 
 

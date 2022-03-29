@@ -13,7 +13,7 @@ from  src.constants import Base
 @dataclass
 class GameKickingStatsData(Base):
     __tablename__ = 'game_kicking_stats'
-    __table_args__ = {'extend_existing': True}
+    # __table_args__ = {'extend_existing': True}
     id = Column(String(50), primary_key=True)
     player_id = Column(Integer, ForeignKey('player_info.id'))
     week = Column(Integer)

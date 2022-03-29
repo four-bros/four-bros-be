@@ -32,12 +32,11 @@ def insert_commits_into_db(commits):
             year=week_year.year
         )
 
-        commit = session.query(CommitsData).where(
+        commit_query = session.query(CommitsData).where(
             CommitsData.name == new_commit.name).scalar()
         
-        if commit is None:
+        if commit_query is None:
             session.add(new_commit)
-            session.flush()
             
     try:
         session.commit()
@@ -134,63 +133,58 @@ def insert_player_info_into_db(player_info):
 
         if not player_query:
             session.add(player)
-            session.flush()
             
         else:
-            update(PlayerInfoData).where(PlayerInfoData.id == player.id).values(
-                id=player.id,
-                team_id=player.team_id,
-                first_name=player.first_name,
-                last_name=player.last_name,
-                hometown_desc=player.hometown_desc,
-                play_recognition=player.play_recognition,
-                press=player.press,
-                power_moves=player.power_moves,
-                kick_accuracy=player.kick_accuracy,
-                redshirt=player.redshirt,
-                player_year=player.player_year,
-                jersey_number=player.jersey_number,
-                throwing_power=player.throwing_power,
-                throwing_accuracy=player.throwing_accuracy,
-                overall=player.overall,
-                agility=player.agility,
-                stamina=player.stamina,
-                acceleration=player.acceleration,
-                pursuit=player.pursuit,
-                route_running=player.route_running,
-                speed=player.speed,
-                trucking=player.trucking,
-                ball_carrier_vision=player.ball_carrier_vision,
-                catch_in_traffic=player.catch_in_traffic,
-                block_shedding=player.block_shedding,
-                strength=player.strength,
-                catch=player.catch,
-                injury=player.injury,
-                tackling=player.tackling,
-                pass_blocking=player.pass_blocking,
-                run_blocking=player.run_blocking,
-                break_tackle=player.break_tackle,
-                impact_blocking=player.impact_blocking,
-                jump=player.jump,
-                carry=player.carry,
-                stiff_arm=player.stiff_arm,
-                kick_power=player.kick_power,
-                awareness=player.awareness,
-                release=player.release,
-                position=player.position,
-                spec_catch=player.spec_catch,
-                elusiveness=player.elusiveness,
-                height=player.height,
-                spin_move=player.spin_move,
-                weight=player.weight,
-                hit_power=player.hit_power,
-                kick_return=player.kick_return,
-                man_coverage=player.man_coverage,
-                zone_coverage=player.zone_coverage,
-                finesse_moves=player.finesse_moves,
-                juke_move=player.juke_move,
-            )
-            session.flush()
+
+            player_query.first_name=player.first_name
+            player_query.last_name=player.last_name
+            player_query.position=player.position
+            player_query.hometown_desc=player.hometown_desc
+            player_query.play_recognition=player.play_recognition
+            player_query.press=player.press
+            player_query.power_moves=player.power_moves
+            player_query.kick_accuracy=player.kick_accuracy
+            player_query.redshirt=player.redshirt
+            player_query.player_year=player.player_year
+            player_query.jersey_number=player.jersey_number
+            player_query.throwing_power=player.throwing_power
+            player_query.throwing_accuracy=player.throwing_accuracy
+            player_query.overall=player.overall
+            player_query.agility=player.agility
+            player_query.stamina=player.stamina
+            player_query.acceleration=player.acceleration
+            player_query.pursuit=player.pursuit
+            player_query.route_running=player.route_running
+            player_query.speed=player.speed
+            player_query.trucking=player.trucking
+            player_query.ball_carrier_vision=player.ball_carrier_vision
+            player_query.catch_in_traffic=player.catch_in_traffic
+            player_query.block_shedding=player.block_shedding
+            player_query.strength=player.strength
+            player_query.catch=player.catch
+            player_query.injury=player.injury
+            player_query.tackling=player.tackling
+            player_query.pass_blocking=player.pass_blocking
+            player_query.run_blocking=player.run_blocking
+            player_query.break_tackle=player.break_tackle
+            player_query.impact_blocking=player.impact_blocking
+            player_query.jump=player.jump
+            player_query.carry=player.carry
+            player_query.stiff_arm=player.stiff_arm
+            player_query.kick_power=player.kick_power
+            player_query.awareness=player.awareness
+            player_query.release=player.release
+            player_query.spec_catch=player.spec_catch
+            player_query.elusiveness=player.elusiveness
+            player_query.height=player.height
+            player_query.spin_move=player.spin_move
+            player_query.weight=player.weight
+            player_query.hit_power=player.hit_power
+            player_query.kick_return=player.kick_return
+            player_query.man_coverage=player.man_coverage
+            player_query.zone_coverage=player.zone_coverage
+            player_query.finesse_moves=player.finesse_moves
+            player_query.juke_move=player.juke_move
 
     try:
         session.commit()

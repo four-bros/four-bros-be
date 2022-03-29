@@ -105,7 +105,6 @@ def insert_game_def_stats_into_db():
                 total_sacks=season_defense_stats.total_sacks
             )
             session.add(game_stats)
-            session.flush()
 
         else:
 
@@ -155,7 +154,7 @@ def insert_game_def_stats_into_db():
             )
 
             session.add(game_stats)
-            session.flush()
+
     try:
         session.commit()
     except:
@@ -234,7 +233,6 @@ def insert_game_kick_stats_into_db():
                 punt_avg=season_punting_stats.punt_avg
             )
             session.add(game_stats)
-            session.flush()
 
         else:
 
@@ -318,7 +316,7 @@ def insert_game_kick_stats_into_db():
             )
 
             session.add(game_stats)
-            session.flush()
+
     try:
         session.commit()
     except:
@@ -404,7 +402,6 @@ def insert_game_off_stats_into_db():
                 turnovers=turnovers
             )
             session.add(game_stats)
-            session.flush()
 
         else:
 
@@ -496,7 +493,7 @@ def insert_game_off_stats_into_db():
             )
 
             session.add(game_stats)
-            session.flush()
+
     try:
         session.commit()
     except:
@@ -557,7 +554,6 @@ def insert_game_return_stats_into_db():
                 pr_avg=season_pr_stats.pr_avg
             )
             session.add(game_stats)
-            session.flush()
 
         else:
 
@@ -593,7 +589,7 @@ def insert_game_return_stats_into_db():
             )
 
             session.add(game_stats)
-            session.flush()
+
     try:
         session.commit()
     except:

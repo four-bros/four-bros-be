@@ -39,8 +39,6 @@ from scripts.team_db_scripts import (
     insert_team_info_into_db,
     insert_team_stats_into_db
 )
-from src.data_models.PlayerInfoData import PlayerInfoData
-from src.data_models.TeamInfoData import TeamInfoData
 
 
 def main():

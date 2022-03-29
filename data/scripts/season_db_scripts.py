@@ -69,31 +69,26 @@ def insert_season_def_stats_into_db(def_stats):
             session.add(player_def_stats)
             session.flush()
         else:
-            update(SeasonDefensiveStatsData)\
-                .where(
-                    SeasonDefensiveStatsData.player_id == player_def_stats.player_id,
-                    SeasonDefensiveStatsData.year == player_def_stats.year)\
-                .values(
-                long_int_ret=player_def_stats.long_int_ret,
-                sacks=player_def_stats.sacks,
-                year=player_def_stats.year,
-                forced_fumbles=player_def_stats.forced_fumbles,
-                solo_tkls=player_def_stats.solo_tkls,
-                safeties=player_def_stats.safeties,
-                pass_def=player_def_stats.pass_def,
-                blocked_kicks=player_def_stats.blocked_kicks,
-                tfl=player_def_stats.tfl,
-                ints_made=player_def_stats.ints_made,
-                games_played=player_def_stats.games_played,
-                fumbles_rec=player_def_stats.fumbles_rec,
-                half_a_sack=player_def_stats.half_a_sack,
-                asst_tkls=player_def_stats.asst_tkls,
-                def_tds=player_def_stats.def_tds,
-                fum_rec_yards=player_def_stats.fum_rec_yards,
-                int_ret_yards=player_def_stats.int_ret_yards,
-                total_tkls=player_def_stats.total_tkls
-            )
-            session.flush()
+
+            player_query.long_int_ret=player_def_stats.long_int_ret
+            player_query.sacks=player_def_stats.sacks
+            player_query.year=player_def_stats.year
+            player_query.forced_fumbles=player_def_stats.forced_fumbles
+            player_query.solo_tkls=player_def_stats.solo_tkls
+            player_query.safeties=player_def_stats.safeties
+            player_query.pass_def=player_def_stats.pass_def
+            player_query.blocked_kicks=player_def_stats.blocked_kicks
+            player_query.tfl=player_def_stats.tfl
+            player_query.ints_made=player_def_stats.ints_made
+            player_query.games_played=player_def_stats.games_played
+            player_query.fumbles_rec=player_def_stats.fumbles_rec
+            player_query.half_a_sack=player_def_stats.half_a_sack
+            player_query.asst_tkls=player_def_stats.asst_tkls
+            player_query.def_tds=player_def_stats.def_tds
+            player_query.fum_rec_yards=player_def_stats.fum_rec_yards
+            player_query.int_ret_yards=player_def_stats.int_ret_yards
+            player_query.total_tkls=player_def_stats.total_tkls
+
     try:
         session.commit()
     except:
@@ -181,39 +176,35 @@ def insert_season_kicking_stats_into_db(kicking_stats):
             session.add(player_kicking_stats)
             session.flush()
         else:
-            update(SeasonKickingStatsData).where(
-                SeasonKickingStatsData.player_id == player_kicking_stats.player_id,
-                SeasonKickingStatsData.year == player_kicking_stats.year)\
-            .values(
-                fg_made_17_29=player_kicking_stats.fg_made_17_29,
-                fg_att_17_29=player_kicking_stats.fg_att_17_29,
-                long_fg=player_kicking_stats.long_fg,
-                ko_touchdowns=player_kicking_stats.ko_touchbacks,
-                long_punt=player_kicking_stats.long_punt,
-                xp_att=player_kicking_stats.xp_att,
-                year=player_kicking_stats.year,
-                punts_blocked=player_kicking_stats.punts_blocked,
-                fg_att=player_kicking_stats.fg_att,
-                total_punt_yards=player_kicking_stats.total_punt_yards,
-                xp_blocked=player_kicking_stats.xp_blocked,
-                fg_blocked=player_kicking_stats.fg_blocked,
-                fg_att_40_49=player_kicking_stats.fg_att_40_49,
-                fg_made_40_49=player_kicking_stats.fg_made_40_49,
-                fg_att_30_39=player_kicking_stats.fg_att_30_39,
-                fg_made_30_39=player_kicking_stats.fg_made_30_39,
-                fg_att_50_plus=player_kicking_stats.fg_att_50_plus,
-                fg_made_50_plus=player_kicking_stats.fg_made_50_plus,
-                punt_touchbacks=player_kicking_stats.punt_touchbacks,
-                games_played=player_kicking_stats.games_played,
-                kickoffs=player_kicking_stats.kickoffs,
-                xp_made=player_kicking_stats.xp_made,
-                net_punting=player_kicking_stats.net_punting,
-                fg_made=player_kicking_stats.fg_made,
-                number_punts=player_kicking_stats.number_punts,
-                inside_twenty=player_kicking_stats.inside_twenty,
-                net_avg=player_kicking_stats.net_avg
-            )
-            session.flush()
+
+            player_query.fg_made_17_29=player_kicking_stats.fg_made_17_29
+            player_query.fg_att_17_29=player_kicking_stats.fg_att_17_29
+            player_query.long_fg=player_kicking_stats.long_fg
+            player_query.ko_touchbacks=player_kicking_stats.ko_touchbacks
+            player_query.long_punt=player_kicking_stats.long_punt
+            player_query.xp_att=player_kicking_stats.xp_att
+            player_query.year=player_kicking_stats.year
+            player_query.punts_blocked=player_kicking_stats.punts_blocked
+            player_query.fg_att=player_kicking_stats.fg_att
+            player_query.total_punt_yards=player_kicking_stats.total_punt_yards
+            player_query.xp_blocked=player_kicking_stats.xp_blocked
+            player_query.fg_blocked=player_kicking_stats.fg_blocked
+            player_query.fg_att_40_49=player_kicking_stats.fg_att_40_49
+            player_query.fg_made_40_49=player_kicking_stats.fg_made_40_49
+            player_query.fg_att_30_39=player_kicking_stats.fg_att_30_39
+            player_query.fg_made_30_39=player_kicking_stats.fg_made_30_39
+            player_query.fg_att_50_plus=player_kicking_stats.fg_att_50_plus
+            player_query.fg_made_50_plus=player_kicking_stats.fg_made_50_plus
+            player_query.punt_touchbacks=player_kicking_stats.punt_touchbacks
+            player_query.games_played=player_kicking_stats.games_played
+            player_query.kickoffs=player_kicking_stats.kickoffs
+            player_query.xp_made=player_kicking_stats.xp_made
+            player_query.net_punting=player_kicking_stats.net_punting
+            player_query.fg_made=player_kicking_stats.fg_made
+            player_query.number_punts=player_kicking_stats.number_punts
+            player_query.inside_twenty=player_kicking_stats.inside_twenty
+            player_query.net_avg=player_kicking_stats.net_avg
+
     try:
         session.commit()
     except:
@@ -224,11 +215,6 @@ def insert_season_kicking_stats_into_db(kicking_stats):
 
 
 def insert_season_off_stats_into_db(off_stats):
-
-    week_year: WeekYearData = session.query(WeekYearData).order_by(
-        desc(WeekYearData.year),
-        desc(WeekYearData.week)
-    ).first()
 
     for i, value in enumerate(off_stats):
         record = off_stats[i]
@@ -349,53 +335,50 @@ def insert_season_off_stats_into_db(off_stats):
             turnovers=turnovers
         )
         
-        player: SeasonOffensiveStatsData = session.query(SeasonOffensiveStatsData).where(
+        player_query: SeasonOffensiveStatsData = session.query(SeasonOffensiveStatsData).where(
             SeasonOffensiveStatsData.player_id == player_off_stats.player_id,
             SeasonOffensiveStatsData.year == player_off_stats.year
         ).scalar()
 
-        if not player:
+        if not player_query:
             session.add(player_off_stats)
-            session.flush()
+
         else:
-            update(SeasonOffensiveStatsData).where(
-                        SeasonOffensiveStatsData.player_id == player_off_stats.player_id,
-                        SeasonOffensiveStatsData.year == player_off_stats.year).values(
-                pass_yards=player_off_stats.pass_yards,
-                longest_rec=player_off_stats.longest_rec,
-                longest_pass=player_off_stats.longest_pass,
-                longest_run=player_off_stats.longest_run,
-                year=player_off_stats.year,
-                receptions=player_off_stats.receptions,
-                sacked=player_off_stats.sacked,
-                rec_yards=player_off_stats.rec_yards,
-                rush_yards=player_off_stats.rush_yards,
-                yac=player_off_stats.yac,
-                pass_tds=player_off_stats.pass_tds,
-                games_played=player_off_stats.games_played,
-                rec_tds=player_off_stats.rec_tds,
-                rush_tds=player_off_stats.rush_tds,
-                ya_contact=player_off_stats.ya_contact,
-                completions=player_off_stats.completions,
-                ints=player_off_stats.ints,
-                drops=player_off_stats.drops,
-                pass_att=player_off_stats.pass_att,
-                rush_att=player_off_stats.rush_att,
-                broke_tkls=player_off_stats.broke_tkls,
-                fumbles=player_off_stats.fumbles,
-                twenty_plus_yd_runs=player_off_stats.twenty_plus_yd_runs,
-                pass_yp_attempt=player_off_stats.pass_yp_attempt,
-                pass_yp_game=player_off_stats.pass_yp_game,
-                rush_yp_carry=player_off_stats.rush_yp_carry,
-                rush_yp_game=player_off_stats.rush_yp_game,
-                rec_yp_catch=player_off_stats.rec_yp_catch,
-                rec_yp_game=player_off_stats.rec_yp_game,
-                total_yards=player_off_stats.total_yards,
-                total_tds=player_off_stats.total_tds,
-                total_ypg=player_off_stats.total_ypg,
-                turnovers=player_off_stats.turnovers
-            )
-            session.flush()
+
+            player_query.pass_yards=player_off_stats.pass_yards
+            player_query.longest_rec=player_off_stats.longest_rec
+            player_query.longest_pass=player_off_stats.longest_pass
+            player_query.longest_run=player_off_stats.longest_run
+            player_query.year=player_off_stats.year
+            player_query.receptions=player_off_stats.receptions
+            player_query.sacked=player_off_stats.sacked
+            player_query.rec_yards=player_off_stats.rec_yards
+            player_query.rush_yards=player_off_stats.rush_yards
+            player_query.yac=player_off_stats.yac
+            player_query.pass_tds=player_off_stats.pass_tds
+            player_query.games_played=player_off_stats.games_played
+            player_query.rec_tds=player_off_stats.rec_tds
+            player_query.rush_tds=player_off_stats.rush_tds
+            player_query.ya_contact=player_off_stats.ya_contact
+            player_query.completions=player_off_stats.completions
+            player_query.ints=player_off_stats.ints
+            player_query.drops=player_off_stats.drops
+            player_query.pass_att=player_off_stats.pass_att
+            player_query.rush_att=player_off_stats.rush_att
+            player_query.broke_tkls=player_off_stats.broke_tkls
+            player_query.fumbles=player_off_stats.fumbles
+            player_query.twenty_plus_yd_runs=player_off_stats.twenty_plus_yd_runs
+            player_query.pass_yp_attempt=player_off_stats.pass_yp_attempt
+            player_query.pass_yp_game=player_off_stats.pass_yp_game
+            player_query.rush_yp_carry=player_off_stats.rush_yp_carry
+            player_query.rush_yp_game=player_off_stats.rush_yp_game
+            player_query.rec_yp_catch=player_off_stats.rec_yp_catch
+            player_query.rec_yp_game=player_off_stats.rec_yp_game
+            player_query.total_yards=player_off_stats.total_yards
+            player_query.total_tds=player_off_stats.total_tds
+            player_query.total_ypg=player_off_stats.total_ypg
+            player_query.turnovers=player_off_stats.turnovers
+
     try:
         session.commit()
     except:
@@ -445,35 +428,28 @@ def insert_season_return_stats_into_db(return_stats):
             pr_avg=pr_avg
         )
 
-        player: SeasonReturnStatsData = session.query(SeasonReturnStatsData).where(
+        player_query: SeasonReturnStatsData = session.query(SeasonReturnStatsData).where(
             SeasonReturnStatsData.player_id == player_return_stats.player_id,
             SeasonReturnStatsData.year == player_return_stats.year
         ).scalar()
         
-        if not player:
+        if not player_query:
             session.add(player_return_stats)
-            session.flush()
             
         else:
-            update(SeasonReturnStatsData).where(
-                SeasonReturnStatsData.player_id == player_return_stats.player_id,
-                SeasonReturnStatsData.year == player_return_stats.year)\
-            .values(
-                player_id=player_return_stats.player_id,
-                kick_returns=player_return_stats.kick_returns,
-                year=player_return_stats.year,
-                long_kr=player_return_stats.long_kr,
-                punt_returns=player_return_stats.punt_returns,
-                long_pr=player_return_stats.long_pr,
-                games_played=player_return_stats.games_played,
-                kr_tds=player_return_stats.kr_tds,
-                pr_tds=player_return_stats.pr_tds,
-                kr_yds=player_return_stats.kr_yds,
-                pr_yds=player_return_stats.pr_yds,
-                kr_avg=player_return_stats.kr_avg,
-                pr_avg=player_return_stats.pr_avg
-            )
-            session.flush()
+
+            player_query.kick_returns=player_return_stats.kick_returns
+            player_query.year=player_return_stats.year
+            player_query.long_kr=player_return_stats.long_kr
+            player_query.punt_returns=player_return_stats.punt_returns
+            player_query.long_pr=player_return_stats.long_pr
+            player_query.games_played=player_return_stats.games_played
+            player_query.kr_tds=player_return_stats.kr_tds
+            player_query.pr_tds=player_return_stats.pr_tds
+            player_query.kr_yds=player_return_stats.kr_yds
+            player_query.pr_yds=player_return_stats.pr_yds
+            player_query.kr_avg=player_return_stats.kr_avg
+            player_query.pr_avg=player_return_stats.pr_avg
 
     try:
         session.commit()
