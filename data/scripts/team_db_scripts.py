@@ -256,6 +256,7 @@ def insert_team_stats_into_db():
             team_query.ints=team_stats.ints
             team_query.ff=team_stats.ff
             team_query.fr=team_stats.fr
+            team_query.turnovers=team_stats.turnovers
             team_query.pass_def=team_stats.pass_def
             team_query.safeties=team_stats.safeties
             team_query.def_tds=team_stats.def_tds
