@@ -13,7 +13,7 @@ from src.constants import Base
 @dataclass
 class PlayerInfoData(Base):
     __tablename__ = 'player_info'
-    __table_args__ = {'extend_existing': True}
+    # __table_args__ = {'extend_existing': True}
     id = Column(Integer, primary_key=True)
     team_id = Column(Integer, ForeignKey('team_info.id'))
     first_name = Column(String(50))

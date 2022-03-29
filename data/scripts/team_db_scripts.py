@@ -35,9 +35,7 @@ from src.models.Stats import(
     PlayerKickingStats,
     PlayerPassingStats,
     PlayerPuntReturnStats,
-    PlayerPuntingStats,
     PlayerReceivingStats,
-    PlayerReturnStats,
     PlayerRushingStats
 )
 
@@ -77,35 +75,33 @@ def insert_team_info_into_db(team_info):
             coachs_poll_points=record.fields["Coach's Poll Points"],
         )
 
-        team: TeamInfoData = session.query(TeamInfoData).where(
+        team_query: TeamInfoData = session.query(TeamInfoData).where(
             TeamInfoData.id == new_team.id).scalar()
         
-        if not team:
+        if not team_query:
             session.add(new_team)
-            session.flush()
+
         else:
-            update(TeamInfoData).where(TeamInfoData.id == new_team.id).values(
-                id=new_team.id,
-                team_name=new_team.team_name,
-                team_short_name=new_team.team_short_name,
-                coachs_poll_1st_votes=new_team.coachs_poll_1st_votes,
-                nickname=new_team.nickname,
-                wins=new_team.wins,
-                bcs_rank=new_team.bcs_rank,
-                coachs_poll_rank=new_team.coachs_poll_rank,
-                media_poll_rank=new_team.media_poll_rank,
-                losses=new_team.losses,
-                media_poll_points=new_team.media_poll_points,
-                coachs_poll_points=new_team.coachs_poll_points,
-            )
-            session.flush()
+            # Update the existing team with the new data
+            team_query.team_name=new_team.team_name
+            team_query.team_short_name=new_team.team_short_name
+            team_query.coachs_poll_1st_votes=new_team.coachs_poll_1st_votes
+            team_query.nickname=new_team.nickname
+            team_query.is_user = new_team.is_user
+            team_query.wins=new_team.wins
+            team_query.bcs_rank=new_team.bcs_rank
+            team_query.coachs_poll_rank=new_team.coachs_poll_rank
+            team_query.media_poll_rank=new_team.media_poll_rank
+            team_query.losses=new_team.losses
+            team_query.media_poll_points=new_team.media_poll_points
+            team_query.coachs_poll_points=new_team.coachs_poll_points
         
-        try:
-            session.commit()
-        except:
-            session.rollback()
-        finally:
-            session.close()
+            try:
+                session.commit()
+            except:
+                session.rollback()
+            finally:
+                session.close()
 
 
 ################################################
@@ -240,36 +236,34 @@ def insert_team_stats_into_db():
         team_query: TeamStatsData = session.query(TeamStatsData).filter(
             TeamStatsData.id == team_stats.id).scalar()
         
-        if team_query is None:
+        if not team_query:
             session.add(team_stats)
-            session.flush()
+
         else:
-            update(TeamStatsData).where(TeamStatsData.id == team_stats.id).values(
-                id=team_stats.id,
-                total_points=team_stats.total_points,
-                ppg=team_stats.ppg,
-                pass_yds=team_stats.pass_yds,
-                pass_ypg=team_stats.pass_ypg,
-                pass_tds=team_stats.pass_tds,
-                rush_yds=team_stats.rush_yds,
-                rush_ypg=team_stats.rush_ypg,
-                rush_tds=team_stats.rush_tds,
-                rec_yds=team_stats.rec_yds,
-                rec_ypg=team_stats.rec_ypg,
-                rec_tds=team_stats.rec_tds,
-                sacks=team_stats.sacks,
-                ints=team_stats.ints,
-                ff=team_stats.ff,
-                fr=team_stats.fr,
-                pass_def=team_stats.pass_def,
-                safeties=team_stats.safeties,
-                def_tds=team_stats.def_tds,
-                kr_yds=team_stats.kr_yds,
-                kr_tds=team_stats.kr_tds,
-                pr_yds=team_stats.pr_yds,
-                pr_tds=team_stats.pr_tds
-            )
-            session.flush()
+
+            team_query.total_points=team_stats.total_points
+            team_query.ppg=team_stats.ppg
+            team_query.pass_yds=team_stats.pass_yds
+            team_query.pass_ypg=team_stats.pass_ypg
+            team_query.pass_tds=team_stats.pass_tds
+            team_query.rush_yds=team_stats.rush_yds
+            team_query.rush_ypg=team_stats.rush_ypg
+            team_query.rush_tds=team_stats.rush_tds
+            team_query.rec_yds=team_stats.rec_yds
+            team_query.rec_ypg=team_stats.rec_ypg
+            team_query.rec_tds=team_stats.rec_tds
+            team_query.sacks=team_stats.sacks
+            team_query.ints=team_stats.ints
+            team_query.ff=team_stats.ff
+            team_query.fr=team_stats.fr
+            team_query.pass_def=team_stats.pass_def
+            team_query.safeties=team_stats.safeties
+            team_query.def_tds=team_stats.def_tds
+            team_query.kr_yds=team_stats.kr_yds
+            team_query.kr_tds=team_stats.kr_tds
+            team_query.pr_yds=team_stats.pr_yds
+            team_query.pr_tds=team_stats.pr_tds
+
     try:
         session.commit()
     except:

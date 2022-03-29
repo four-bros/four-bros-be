@@ -13,10 +13,10 @@ from src.constants import Base
 @dataclass
 class CareerReturnStatsData(Base):
     __tablename__ = 'career_return_stats'
-    __table_args__ = {'extend_existing': True}
+    # __table_args__ = {'extend_existing': True}
     id = Column(String(50), primary_key=True)
     player_id = Column(Integer, ForeignKey('player_info.id'))
-    year = Column(String(10))
+    year = Column(String(20))
     games_played = Column(Integer)
     kick_returns = Column(Integer)
     kr_yds = Column(Integer)

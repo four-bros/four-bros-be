@@ -87,6 +87,10 @@ def _compile_player_career_stats(player: PlayerInfoData) -> PlayerStats:
 def _compile_career_defensive_stats(defensive_stats: List[SeasonDefensiveStatsData]) -> DefensiveStats:
 
     yearly_def_stats: List[DefensiveStats] = [_get_defensive_stats(year) for year in defensive_stats]
+
+    min_year = min([stats.year for stats in defensive_stats])
+    max_year = max([stats.year for stats in defensive_stats])
+    years = f'{min_year} - {max_year}'
     
     long_int_ret = max([stats.long_int_ret for stats in yearly_def_stats])
     sacks = sum([stats.sacks for stats in yearly_def_stats])
@@ -125,7 +129,7 @@ def _compile_career_defensive_stats(defensive_stats: List[SeasonDefensiveStatsDa
         fum_rec_yards=fum_rec_yards,
         int_ret_yards=int_ret_yards,
         total_tkls=total_tkls,
-        year=None,
+        year=years,
         total_sacks=total_sacks
     )
     
@@ -136,6 +140,10 @@ def _compile_career_kicking_stats(kicking_stats: List[SeasonKickingStatsData]) -
 
     yearly_kick_stats: List[KickingStats] = [_get_kicking_stats(year) for year in kicking_stats]
     yearly_punt_stats: List[PuntingStats] = [_get_punting_stats(year) for year in kicking_stats]
+
+    min_year = min([stats.year for stats in kicking_stats])
+    max_year = max([stats.year for stats in kicking_stats])
+    years = f'{min_year} - {max_year}'
     
     fg_made_17_29 = sum([stats.fg_made_17_29 for stats in yearly_kick_stats])
     fg_att_17_29 = sum([stats.fg_att_17_29 for stats in yearly_kick_stats])
@@ -194,7 +202,7 @@ def _compile_career_kicking_stats(kicking_stats: List[SeasonKickingStatsData]) -
         fg_made=fg_made,
         number_punts=number_punts,
         inside_twenty=inside_twenty,
-        year=None,
+        year=years,
         fg_pct=fg_pct,
         xp_pct=xp_pct,
         fg_50_plus_pct=fg_50_plus_pct,
@@ -208,6 +216,10 @@ def _compile_career_kicking_stats(kicking_stats: List[SeasonKickingStatsData]) -
 def _compile_career_passing_stats(offensive_stats: List[SeasonOffensiveStatsData]) -> PassingStats:
 
     yearly_passing_stats: List[PassingStats] = [_get_passing_stats(year) for year in offensive_stats]
+
+    min_year = min([stats.year for stats in offensive_stats])
+    max_year = max([stats.year for stats in offensive_stats])
+    years = f'{min_year} - {max_year}'
     
     pass_yards = sum([stats.pass_yards for stats in yearly_passing_stats])
     longest_pass = max([stats.longest_pass for stats in yearly_passing_stats])
@@ -240,7 +252,7 @@ def _compile_career_passing_stats(offensive_stats: List[SeasonOffensiveStatsData
         pass_yp_attempt=pass_yp_attempt,
         pass_yp_game=pass_yp_game,
         pass_rating=pass_rating,
-        year=None,
+        year=years,
         sacked=sacked
     )
     
@@ -250,6 +262,10 @@ def _compile_career_passing_stats(offensive_stats: List[SeasonOffensiveStatsData
 def _compile_career_receiving_stats(offensive_stats: List[SeasonOffensiveStatsData]) -> ReceivingStats:
     
     yearly_rec_stats: List[ReceivingStats] = [_get_receiving_stats(year) for year in offensive_stats]
+
+    min_year = min([stats.year for stats in offensive_stats])
+    max_year = max([stats.year for stats in offensive_stats])
+    years = f'{min_year} - {max_year}'
     
     receptions = sum([stats.receptions for stats in yearly_rec_stats])
     rec_yards = sum([stats.rec_yards for stats in yearly_rec_stats])
@@ -274,7 +290,7 @@ def _compile_career_receiving_stats(offensive_stats: List[SeasonOffensiveStatsDa
         drops=drops,
         rec_yp_catch=rec_yp_catch,
         rec_yp_game=rec_yp_game,
-        year=None,
+        year=years,
         longest_rec=longest_rec
     )
     
@@ -285,6 +301,10 @@ def _compile_career_return_stats(return_stats: List[SeasonReturnStatsData]) -> R
     
     yearly_kr_stats: List[KickReturnStats] = [_get_kick_return_stats(year) for year in return_stats]
     yearly_pr_stats: List[PuntReturnStats] = [_get_punt_return_stats(year) for year in return_stats]
+
+    min_year = min([stats.year for stats in return_stats])
+    max_year = max([stats.year for stats in return_stats])
+    years = f'{min_year} - {max_year}'
     
     kick_returns = sum([stats.kick_returns for stats in yearly_kr_stats])
     long_kr = max([stats.long_kr for stats in yearly_kr_stats])
@@ -316,7 +336,7 @@ def _compile_career_return_stats(return_stats: List[SeasonReturnStatsData]) -> R
         pr_yds=pr_yds,
         kr_avg=kr_avg,
         pr_avg=pr_avg,
-        year=None
+        year=years
     )
     
     return career_return_stats
@@ -325,6 +345,10 @@ def _compile_career_return_stats(return_stats: List[SeasonReturnStatsData]) -> R
 def _compile_career_rushing_stats(offensive_stats: List[SeasonOffensiveStatsData]) -> RushingStats:
     
     yearly_rush_stats: List[RushingStats] = [_get_rushing_stats(year) for year in offensive_stats]
+
+    min_year = min([stats.year for stats in offensive_stats])
+    max_year = max([stats.year for stats in offensive_stats])
+    years = f'{min_year} - {max_year}'
     
     rush_att = sum([stats.rush_att for stats in yearly_rush_stats])
     rush_yards = sum([stats.rush_yards for stats in yearly_rush_stats])
@@ -352,7 +376,7 @@ def _compile_career_rushing_stats(offensive_stats: List[SeasonOffensiveStatsData
         twenty_plus_yd_runs=twenty_plus_yd_runs,
         rush_yp_carry=rush_yp_carry,
         rush_yp_game=rush_yp_game,
-        year=None,
+        year=years,
         longest_run=longest_run
     )
     
@@ -362,6 +386,10 @@ def _compile_career_rushing_stats(offensive_stats: List[SeasonOffensiveStatsData
 def _compile_career_total_stats(offensive_stats: List[SeasonOffensiveStatsData]) -> TotalStats:
     
     yearly_total_stats: List[TotalStats] = [_get_total_stats(year) for year in offensive_stats]
+
+    min_year = min([stats.year for stats in offensive_stats])
+    max_year = max([stats.year for stats in offensive_stats])
+    years = f'{min_year} - {max_year}'
     
     total_yards = sum([stats.total_yards for stats in yearly_total_stats])
     total_tds = sum([stats.total_tds for stats in yearly_total_stats])
@@ -377,7 +405,7 @@ def _compile_career_total_stats(offensive_stats: List[SeasonOffensiveStatsData])
         total_tds=total_tds,
         total_ypg=total_ypg,
         games_played=games_played,
-        year=None,
+        year=years,
         turnovers=turnovers
     )
     
