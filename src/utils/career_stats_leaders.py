@@ -552,6 +552,7 @@ def _get_career_rush_stats_leaders():
 
     rush_yp_carry_data = session.query(PlayerInfoData, CareerOffensiveStatsData).filter(
             PlayerInfoData.id == CareerOffensiveStatsData.player_id,
+            CareerOffensiveStatsData.rush_att > 50
             ).order_by(desc(CareerOffensiveStatsData.rush_yp_carry)).limit(10)
 
     rush_yp_game_data = session.query(PlayerInfoData, CareerOffensiveStatsData).filter(
