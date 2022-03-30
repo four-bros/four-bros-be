@@ -3,6 +3,7 @@ from sqlalchemy.sql.expression import update
 from uuid import uuid4
 
 from src.constants import session
+from src.data_models.PlayerInfoData import PlayerInfoData
 from src.utils.helpers import(
     _convert_stats_year
 )
@@ -34,10 +35,21 @@ def insert_season_def_stats_into_db(def_stats):
         total_sacks = half_a_sack + record.fields['Sacks']
 
         new_id = str(uuid4())
+
+        player_name: PlayerInfoData = session.query(PlayerInfoData).where(
+            PlayerInfoData.roster_id == record.fields['Player ID']
+        ).scalar()
+
+        player_id: str = ''
+
+        if player_name:
+            player_id: str = str(record.fields['Player ID']) + player_name.first_name + player_name.last_name
+        else:
+            player_id = str(record.fields['Player ID'])
         
         player_def_stats = SeasonDefensiveStatsData(
             id=new_id,
-            player_id=record.fields['Player ID'],
+            player_id=player_id,
             long_int_ret=record.fields['Long INT Ret'],
             sacks=record.fields['Sacks'],
             year=readable_year,
@@ -67,9 +79,8 @@ def insert_season_def_stats_into_db(def_stats):
 
         if not player_query:
             session.add(player_def_stats)
-            session.flush()
-        else:
 
+        else:
             player_query.long_int_ret=player_def_stats.long_int_ret
             player_query.sacks=player_def_stats.sacks
             player_query.year=player_def_stats.year
@@ -131,9 +142,20 @@ def insert_season_kicking_stats_into_db(kicking_stats):
                 if record.fields['# Punts'] != 0 else 0, 
             1)
         
+        player_name: PlayerInfoData = session.query(PlayerInfoData).where(
+            PlayerInfoData.roster_id == record.fields['Player ID']
+        ).scalar()
+
+        player_id: str = ''
+
+        if player_name:
+            player_id: str = str(record.fields['Player ID']) + player_name.first_name + player_name.last_name
+        else:
+            player_id = str(record.fields['Player ID'])
+        
         player_kicking_stats = SeasonKickingStatsData(
             id=new_id,
-            player_id=record.fields['Player ID'],
+            player_id=player_id,
             fg_made_17_29=record.fields['FG Made 17-29'],
             fg_att_17_29=record.fields['FG Att. 17-29'],
             long_fg=record.fields['Long FG'],
@@ -174,9 +196,8 @@ def insert_season_kicking_stats_into_db(kicking_stats):
         
         if not player_query:
             session.add(player_kicking_stats)
-            session.flush()
-        else:
 
+        else:
             player_query.fg_made_17_29=player_kicking_stats.fg_made_17_29
             player_query.fg_att_17_29=player_kicking_stats.fg_att_17_29
             player_query.long_fg=player_kicking_stats.long_fg
@@ -295,10 +316,21 @@ def insert_season_off_stats_into_db(off_stats):
                 0 if record.fields['Games Played'] == 0\
                     else total_yards / record.fields['Games Played'],
                 1)
+        
+        player_name: PlayerInfoData = session.query(PlayerInfoData).where(
+            PlayerInfoData.roster_id == record.fields['Player ID']
+        ).scalar()
+
+        player_id: str = ''
+
+        if player_name:
+            player_id: str = str(record.fields['Player ID']) + player_name.first_name + player_name.last_name
+        else:
+            player_id = str(record.fields['Player ID'])
 
         player_off_stats = SeasonOffensiveStatsData(
             id=new_id,
-            player_id=record.fields['Player ID'],
+            player_id=player_id,
             pass_yards=record.fields['Pass. Yards'],
             longest_rec=record.fields['Longest Rec.'],
             longest_pass=record.fields['Longest Pass'],
@@ -344,7 +376,6 @@ def insert_season_off_stats_into_db(off_stats):
             session.add(player_off_stats)
 
         else:
-
             player_query.pass_yards=player_off_stats.pass_yards
             player_query.longest_rec=player_off_stats.longest_rec
             player_query.longest_pass=player_off_stats.longest_pass
@@ -410,10 +441,21 @@ def insert_season_return_stats_into_db(return_stats):
                 if record.fields['Punt Returns'] != 0 else 0,
             1
             )
+
+        player_name: PlayerInfoData = session.query(PlayerInfoData).where(
+            PlayerInfoData.roster_id == record.fields['Player ID']
+        ).scalar()
+
+        player_id: str = ''
+
+        if player_name:
+            player_id: str = str(record.fields['Player ID']) + player_name.first_name + player_name.last_name
+        else:
+            player_id = str(record.fields['Player ID'])
         
         player_return_stats = SeasonReturnStatsData(
             id=new_id,
-            player_id=record.fields['Player ID'],
+            player_id=player_id,
             kick_returns=record.fields['Kick Returns'],
             year=readable_year,
             long_kr=record.fields['Long KR'],

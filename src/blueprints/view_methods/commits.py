@@ -1,7 +1,8 @@
 from typing import List
 from src.constants import(
     commits_schema,
-    session
+    session,
+    user_teams
 )
 from src.data_models.CommitsData import CommitsData
 

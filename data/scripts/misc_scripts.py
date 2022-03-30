@@ -73,9 +73,12 @@ def insert_player_info_into_db(player_info):
         readable_year = ncaa_dynasty.player_year_converter(record.fields['Year'])
         
         is_redshirt = False if record.fields['Redshirt'] == 0 else True
+
+        player_id: str = str(record.fields['Player ID']) + record.fields['First Name'] + record.fields['Last Name']
         
         player = PlayerInfoData(
-            id=record.fields['Player ID'],
+            id=player_id,
+            roster_id=record.fields['Player ID'],
             team_id=record.fields['Team ID'],
             first_name=record.fields['First Name'],
             last_name=record.fields['Last Name'],
@@ -129,7 +132,8 @@ def insert_player_info_into_db(player_info):
         )
 
         player_query: PlayerInfoData = session.query(PlayerInfoData).where(
-            PlayerInfoData.id == player.id).scalar()
+                PlayerInfoData.id == player.id
+            ).scalar()
 
         if not player_query:
             session.add(player)
