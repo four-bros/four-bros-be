@@ -3,7 +3,7 @@ from marshmallow import Schema, fields
 
 # Create Player Details Schema to avoid circular import
 class PlayerDetailsSchema(Schema):
-    id = fields.Int()
+    id = fields.Str()
     team_id = fields.Int()
     team_name = fields.Str()
     first_name = fields.Str()
