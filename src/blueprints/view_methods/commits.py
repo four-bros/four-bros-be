@@ -14,10 +14,9 @@ def get_all_commits(request):
         CommitsData.rank
     ).all()
 
-    commits_json = commits_schema.dump(commits_data)
+    response = {}
 
-    response = {
-        'commits': commits_json
-    }
+    for team in user_teams:
+        response[team] = commits_schema.dump([commit for commit in commits_data if commit.school == team])
 
     return response
