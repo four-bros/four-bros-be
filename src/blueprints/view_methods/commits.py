@@ -17,6 +17,7 @@ def get_all_commits(request):
     response = {}
 
     for team in user_teams:
-        response[team] = commits_schema.dump([commit for commit in commits_data if commit.school == team])
+        key = team.replace(' ', '_').lower()
+        response[key] = commits_schema.dump([commit for commit in commits_data if commit.school == team])
 
     return response
