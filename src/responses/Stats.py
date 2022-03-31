@@ -146,6 +146,7 @@ class PuntingStatsSchema(Schema):
     number_punts = fields.Int()
     inside_twenty = fields.Int()
     punt_avg = fields.Float()
+    net_avg = fields.Float()
 
 
 class PuntReturnStatsSchema(Schema):
