@@ -465,8 +465,8 @@ def _get_season_kicking_stats_leaders(is_season_specific: bool):
             'fg_att': fg_att_leaders_json,
             'fg_pct': fg_pct_leaders_json,
             'long_fg': long_fg_leaders_json,
-            'fg_50_plus_made': fg_made_50_plus_leaders_json,
-            'fg_50_plus_pct': fg_50_plus_pct_json,
+            'fg_made_50_plus': fg_made_50_plus_leaders_json,
+            'fg_made_50_plus_pct': fg_50_plus_pct_json,
         }
 
         return response
