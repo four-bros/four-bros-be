@@ -5,7 +5,6 @@ from src.constants import (
     defensive_stats_schema,
     kick_return_stats_schema,
     kicking_stats_schema,
-    passing_stat_schema,
     passing_stats_schema,
     punt_return_stats_schema,
     punting_stats_schema,
@@ -94,7 +93,7 @@ def _get_season_defensive_stats_leaders(is_season_specific: bool):
         ints_made_data = session.query(PlayerInfoData, SeasonDefensiveStatsData).filter(
             PlayerInfoData.id == SeasonDefensiveStatsData.player_id,
             SeasonDefensiveStatsData.year == week_year.year
-            ).order_by(desc(SeasonDefensiveStatsData.forced_fumbles)).limit(10)
+            ).order_by(desc(SeasonDefensiveStatsData.ints_made)).limit(10)
 
         fr_data = session.query(PlayerInfoData, SeasonDefensiveStatsData).filter(
             PlayerInfoData.id == SeasonDefensiveStatsData.player_id,
