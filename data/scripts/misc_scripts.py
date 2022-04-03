@@ -139,7 +139,6 @@ def insert_player_info_into_db(player_info):
             session.add(player)
             
         else:
-
             player_query.first_name=player.first_name
             player_query.last_name=player.last_name
             player_query.position=player.position
