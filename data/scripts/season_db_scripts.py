@@ -1,5 +1,4 @@
 from sqlalchemy import desc
-from sqlalchemy.sql.expression import update
 from uuid import uuid4
 
 from src.constants import session
@@ -110,11 +109,6 @@ def insert_season_def_stats_into_db(def_stats):
 
 
 def insert_season_kicking_stats_into_db(kicking_stats):
-
-    week_year: WeekYearData = session.query(WeekYearData).order_by(
-        desc(WeekYearData.year),
-        desc(WeekYearData.week)
-    ).first()
     
     for i, value in enumerate(kicking_stats):
 

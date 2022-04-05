@@ -1,3 +1,4 @@
+from typing import List
 from flask import Flask
 from flask_cors import CORS
 from sqlalchemy import create_engine
@@ -6,6 +7,7 @@ from sqlalchemy.orm import(
     sessionmaker
 )
 
+from src.models.Coach import CoachInfo
 from src.responses.Commits import CommitsSchema
 from src.responses.Players import PlayerSchema
 from src.responses.Stats import (
@@ -43,6 +45,38 @@ CORS(app)
 # Mac file path
 dynasty_file_path = 'data/OD-4Bros3'
 user_teams = {'Baylor', 'Ole Miss', 'Vanderbilt', 'Wyoming'}
+
+# User/coach information
+ben: CoachInfo = CoachInfo(
+    id='ben',
+    first_name='Campbell',
+    last_name='Ponderosa',
+    team_id=106,
+    team_name='Vanderbilt'
+)
+brent: CoachInfo = CoachInfo(
+    id='brent',
+    first_name='Magnus',
+    last_name='Tiedemann',
+    team_id=73,
+    team_name='Ole Miss'
+)
+dan: CoachInfo = CoachInfo(
+    id='dan',
+    first_name='Boggs',
+    last_name='Moonbeam',
+    team_id=11,
+    team_name='Baylor'
+)
+seth: CoachInfo = CoachInfo(
+    id='seth',
+    first_name='Peewee',
+    last_name='FlyGuy',
+    team_id=115,
+    team_name='Wyoming'
+)
+
+users: List[CoachInfo] = [ben, brent, dan, seth]
 
 
 # DB constants
