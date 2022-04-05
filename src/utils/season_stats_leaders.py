@@ -546,6 +546,12 @@ def _get_season_passing_stats_leaders(is_season_specific: bool):
                 PlayerInfoData.id == SeasonOffensiveStatsData.player_id,
                 SeasonOffensiveStatsData.year == week_year.year
                 ).order_by(desc(SeasonOffensiveStatsData.pass_att)).limit(10)
+        
+        comp_pct_data = session.query(PlayerInfoData, SeasonOffensiveStatsData).filter(
+                PlayerInfoData.id == SeasonOffensiveStatsData.player_id,
+                SeasonOffensiveStatsData.year == week_year.year,
+                SeasonOffensiveStatsData.pass_att > 50
+                ).order_by(desc(SeasonOffensiveStatsData.comp_pct)).limit(10)
 
         long_pass_data = session.query(PlayerInfoData, SeasonOffensiveStatsData).filter(
                 PlayerInfoData.id == SeasonOffensiveStatsData.player_id,
@@ -587,6 +593,7 @@ def _get_season_passing_stats_leaders(is_season_specific: bool):
 
         # Convert players to PlayerPassingStats model so they can be sorted
         converted_completions: List[PlayerPassingStats] = [_get_player_passing_stats(player) for player in completions_data]
+        converted_comp_pct: List[PlayerPassingStats] = [_get_player_passing_stats(player) for player in comp_pct_data]
         converted_pass_att: List[PlayerPassingStats] = [_get_player_passing_stats(player) for player in pass_att_data]
         converted_long_pass: List[PlayerPassingStats] = [_get_player_passing_stats(player) for player in long_pass_data]
         converted_pass_yards: List[PlayerPassingStats] = [_get_player_passing_stats(player) for player in pass_yards_data]
@@ -599,6 +606,7 @@ def _get_season_passing_stats_leaders(is_season_specific: bool):
         # Convert top ten lists into json
         completions_leaders_json = passing_stats_schema.dump(converted_completions)
         pass_att_leaders_jason = passing_stats_schema.dump(converted_pass_att)
+        comp_pct_leaders_json = passing_stats_schema.dump(converted_comp_pct)
         longest_pass_leaders_jason = passing_stats_schema.dump(converted_long_pass)
         pass_yard_leaders_json = passing_stats_schema.dump(converted_pass_yards)
         pass_td_leaders_json = passing_stats_schema.dump(converted_pass_tds)
@@ -610,6 +618,7 @@ def _get_season_passing_stats_leaders(is_season_specific: bool):
         response = {
             'completions': completions_leaders_json,
             'pass_att': pass_att_leaders_jason,
+            'comp_pct': comp_pct_leaders_json,
             'longest_pass': longest_pass_leaders_jason,
             'pass_yards': pass_yard_leaders_json,
             'pass_tds': pass_td_leaders_json,
@@ -632,6 +641,11 @@ def _get_season_passing_stats_leaders(is_season_specific: bool):
         pass_att_data = session.query(PlayerInfoData, SeasonOffensiveStatsData).filter(
                 PlayerInfoData.id == SeasonOffensiveStatsData.player_id,
                 ).order_by(desc(SeasonOffensiveStatsData.pass_att)).limit(10)
+
+        comp_pct_data = session.query(PlayerInfoData, SeasonOffensiveStatsData).filter(
+                PlayerInfoData.id == SeasonOffensiveStatsData.player_id,
+                SeasonOffensiveStatsData.pass_att > 50
+                ).order_by(desc(SeasonOffensiveStatsData.comp_pct)).limit(10)
 
         long_pass_data = session.query(PlayerInfoData, SeasonOffensiveStatsData).filter(
                 PlayerInfoData.id == SeasonOffensiveStatsData.player_id,
@@ -666,6 +680,7 @@ def _get_season_passing_stats_leaders(is_season_specific: bool):
 
         # Convert players to PlayerPassingStats model so they can be sorted
         converted_completions: List[PlayerPassingStats] = [_get_player_passing_stats(player) for player in completions_data]
+        converted_comp_pct: List[PlayerPassingStats] = [_get_player_passing_stats(player) for player in comp_pct_data]
         converted_pass_att: List[PlayerPassingStats] = [_get_player_passing_stats(player) for player in pass_att_data]
         converted_long_pass: List[PlayerPassingStats] = [_get_player_passing_stats(player) for player in long_pass_data]
         converted_pass_yards: List[PlayerPassingStats] = [_get_player_passing_stats(player) for player in pass_yards_data]
@@ -678,6 +693,7 @@ def _get_season_passing_stats_leaders(is_season_specific: bool):
         # Convert top ten lists into json
         completions_leaders_json = passing_stats_schema.dump(converted_completions)
         pass_att_leaders_jason = passing_stats_schema.dump(converted_pass_att)
+        comp_pct_leaders_json = passing_stats_schema.dump(converted_comp_pct)
         longest_pass_leaders_jason = passing_stats_schema.dump(converted_long_pass)
         pass_yard_leaders_json = passing_stats_schema.dump(converted_pass_yards)
         pass_td_leaders_json = passing_stats_schema.dump(converted_pass_tds)
@@ -689,6 +705,7 @@ def _get_season_passing_stats_leaders(is_season_specific: bool):
         response = {
             'completions': completions_leaders_json,
             'pass_att': pass_att_leaders_jason,
+            'comp_pct': comp_pct_leaders_json,
             'longest_pass': longest_pass_leaders_jason,
             'pass_yards': pass_yard_leaders_json,
             'pass_tds': pass_td_leaders_json,

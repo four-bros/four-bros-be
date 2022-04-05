@@ -83,7 +83,9 @@ def get_team_by_team_id(request, team_id) -> TeamDetailsSchema:
     team_stats_data: TeamStatsData = session.query(TeamStatsData).where(TeamStatsData.id == team_id).one()
 
     players: List[PlayerInfoData] = session.query(PlayerInfoData).where(
-        PlayerInfoData.team_id == team_id).order_by(desc(PlayerInfoData.overall)).all()
+        PlayerInfoData.team_id == team_id,
+        PlayerInfoData.is_active == True
+    ).order_by(desc(PlayerInfoData.overall)).all()
 
     team_details: TeamDetails = _get_team_details(team_info=team_info_data, players=players)
     team_roster: TeamRoster = [_get_team_roster(player) for player in players]

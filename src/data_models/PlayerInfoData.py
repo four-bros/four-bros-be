@@ -66,6 +66,7 @@ class PlayerInfoData(Base):
     zone_coverage = Column(Integer)
     finesse_moves = Column(Integer)
     juke_move = Column(Integer)
+    is_active = Column(Boolean)
 
 
     def __repr__(self):

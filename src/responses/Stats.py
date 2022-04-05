@@ -58,6 +58,7 @@ class PassingStatsSchema(Schema):
     pass_yp_game = fields.Float()
     pass_rating = fields.Float()
     sacked = fields.Int()
+    comp_pct = fields.Float()
 
 
 class ReceivingStatsSchema(Schema):

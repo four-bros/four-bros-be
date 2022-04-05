@@ -234,7 +234,8 @@ def _get_passing_stats(
         pass_yp_attempt=offensive_stats.pass_yp_attempt,
         pass_yp_game=offensive_stats.pass_yp_game,
         pass_rating=offensive_stats.pass_rating,
-        sacked=offensive_stats.sacked
+        sacked=offensive_stats.sacked,
+        comp_pct=offensive_stats.comp_pct
     )
 
     return passing_stats
