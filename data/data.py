@@ -18,16 +18,3 @@ return_stats = data['Return Stats'].records
 off_stats = data['Offensive Stats'].records
 week_year = data['Week/Year'].records
 team_info = data['Team Info'].records
-
-
-year = _convert_stats_year(week_year[0].fields['Year'])
-
-print(f"Week: {week_year[0].fields['Week']}")
-print(f"Year: {year}")
-
-
-# for player in player_info:
-#     if player.fields['Team ID'] == 115:
-#         player_name = player.fields['First Name'] + ' ' + player.fields['Last Name']
-#         player_id = player.fields['Player ID']
-#         print(f'{player_name}: {player_id}')

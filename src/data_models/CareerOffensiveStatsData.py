@@ -16,7 +16,7 @@ class CareerOffensiveStatsData(Base):
     __tablename__ = 'career_offensive_stats'
     # __table_args__ = {'extend_existing': True}
     id = Column(String(50), primary_key=True)
-    player_id = Column(Integer, ForeignKey('player_info.id'))
+    player_id = Column(String(50), ForeignKey('player_info.id'))
     year = Column(String(20))
     games_played = Column(Integer)
     completions = Column(Integer)
@@ -51,6 +51,7 @@ class CareerOffensiveStatsData(Base):
     total_ypg = Column(Float)
     total_tds = Column(Integer)
     turnovers = Column(Integer)
+    comp_pct = Column(Float)
 
     
     def __repr__(self) -> str:

@@ -228,6 +228,10 @@ def _compile_career_passing_stats(offensive_stats: List[SeasonOffensiveStatsData
     completions = sum([stats.completions for stats in yearly_passing_stats])
     ints = sum([stats.ints for stats in yearly_passing_stats])
     pass_att = sum([stats.pass_att for stats in yearly_passing_stats])
+    comp_pct = round(
+        completions / pass_att *100 if pass_att > 0 else 0,
+        1
+    )
     pass_yp_attempt = round(
         pass_yards / pass_att if pass_att != 0 else 0,
         1
@@ -253,7 +257,8 @@ def _compile_career_passing_stats(offensive_stats: List[SeasonOffensiveStatsData
         pass_yp_game=pass_yp_game,
         pass_rating=pass_rating,
         year=years,
-        sacked=sacked
+        sacked=sacked,
+        comp_pct=comp_pct
     )
     
     return career_passing_stats

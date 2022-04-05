@@ -241,7 +241,12 @@ def insert_season_off_stats_into_db(off_stats):
         record = off_stats[i]
         readable_year = _convert_stats_year(record.fields['Year'])
         new_id = str(uuid4())
-        
+
+        comp_pct = round(
+            record.fields['Completions'] / record.fields['Pass Att.'] * 100\
+                if record.fields['Pass Att.'] != 0 else 0,
+                1
+            )
         pass_yp_attempt = round(
             record.fields['Pass. Yards'] / record.fields['Pass Att.']\
                 if record.fields['Pass Att.'] != 0 else 0,
@@ -364,7 +369,8 @@ def insert_season_off_stats_into_db(off_stats):
             total_yards=total_yards,
             total_tds=total_tds,
             total_ypg=total_ypg,
-            turnovers=turnovers
+            turnovers=turnovers,
+            comp_pct=comp_pct
         )
         
         player_query: SeasonOffensiveStatsData = session.query(SeasonOffensiveStatsData).where(
@@ -409,6 +415,7 @@ def insert_season_off_stats_into_db(off_stats):
             player_query.total_tds=player_off_stats.total_tds
             player_query.total_ypg=player_off_stats.total_ypg
             player_query.turnovers=player_off_stats.turnovers
+            player_query.comp_pct=player_off_stats.comp_pct
 
     try:
         session.commit()

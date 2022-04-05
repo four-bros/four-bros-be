@@ -399,7 +399,8 @@ def insert_game_off_stats_into_db():
                 rec_yp_catch=season_rec_stats.rec_yp_catch,
                 rec_yp_game=season_rec_stats.rec_yards,
                 pass_rating=season_pass_stats.pass_rating,
-                turnovers=turnovers
+                turnovers=turnovers,
+                comp_pct=season_pass_stats.comp_pct
             )
             session.add(game_stats)
 
@@ -432,7 +433,15 @@ def insert_game_off_stats_into_db():
             fumbles = season_rush_stats.fumbles - prior_rush_stats.fumbles
             twenty_plus_yd_runs = season_rush_stats.twenty_plus_yd_runs - prior_rush_stats.twenty_plus_yd_runs
 
-            pass_yp_attempt = season_pass_stats.pass_yp_attempt - prior_pass_stats.pass_yp_attempt
+            comp_pct = round(
+                completions / pass_att * 100 if pass_att > 0 else 0,
+                1
+            )
+
+            pass_yp_attempt = round(
+                pass_yards / pass_att if pass_att > 0 else 0,
+                1
+            )
 
             rush_yp_carry = round(0 if rush_att == 0 else\
                 rush_yards / rush_att,
@@ -489,7 +498,8 @@ def insert_game_off_stats_into_db():
                 total_yards=total_yards,
                 total_tds=total_tds,
                 total_ypg=total_yards,
-                turnovers=turnovers
+                turnovers=turnovers,
+                comp_pct=comp_pct
             )
 
             session.add(game_stats)

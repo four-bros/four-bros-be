@@ -271,7 +271,8 @@ def insert_career_off_stats_into_db():
             total_yards=career_total_stats.total_yards,
             total_tds=career_total_stats.total_tds,
             total_ypg=career_total_stats.total_ypg,
-            turnovers=career_total_stats.turnovers
+            turnovers=career_total_stats.turnovers,
+            comp_pct=career_pass_stats.comp_pct
         )
         
 
@@ -282,7 +283,6 @@ def insert_career_off_stats_into_db():
             session.add(player_career_off_stats)
 
         else:
-
             player_query.pass_yards=player_career_off_stats.pass_yards
             player_query.longest_rec=player_career_off_stats.longest_rec
             player_query.longest_pass=player_career_off_stats.longest_pass
@@ -316,6 +316,7 @@ def insert_career_off_stats_into_db():
             player_query.total_tds=player_career_off_stats.total_tds
             player_query.total_ypg=player_career_off_stats.total_ypg
             player_query.turnovers=player_career_off_stats.turnovers
+            player_query.comp_pct=player_career_off_stats.comp_pct
 
     try:
         session.commit()

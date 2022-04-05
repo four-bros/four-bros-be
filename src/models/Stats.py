@@ -98,7 +98,8 @@ class PassingStats:
         pass_yp_attempt,
         pass_yp_game,
         pass_rating,
-        sacked
+        sacked,
+        comp_pct
     ):      
 
         self.pass_yards = pass_yards
@@ -113,6 +114,7 @@ class PassingStats:
         self.pass_yp_game = pass_yp_game
         self.pass_rating = pass_rating
         self.sacked = sacked
+        self.comp_pct = comp_pct
 
     def __repr__(self):
         return f'Total Pass Yards: {self.pass_yards}'
