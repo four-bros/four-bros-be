@@ -1,3 +1,7 @@
+from src.constants import (
+    Base,
+    engine
+)
 from data import (
     def_stats,
     kicking_stats,
@@ -13,6 +17,10 @@ from scripts.career_db_scripts import (
     insert_career_kicking_stats_into_db,
     insert_career_off_stats_into_db,
     insert_career_return_stats_into_db
+)
+from scripts.coach_scripts import (
+    insert_coach_info_into_db,
+    insert_coach_stats_into_db
 )
 from scripts.game_db_scripts import (
     insert_game_def_stats_into_db,
@@ -56,8 +64,10 @@ def main():
     ################################
     # Insert all data to DB tables #
     ################################
+    insert_coach_info_into_db()
     insert_week_year_into_db(week_year)
     insert_team_info_into_db(team_info)
+    insert_coach_stats_into_db()
     insert_commits_into_db(commits)
     deactivate_inactive_players(player_info)
     insert_player_info_into_db(player_info)

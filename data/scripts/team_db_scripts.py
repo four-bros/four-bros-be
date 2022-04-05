@@ -1,15 +1,10 @@
 from typing import List
 from sqlalchemy import desc
-from sqlalchemy.sql.expression import update
 from uuid import uuid4
 
 from src.constants import(
     session,
-    user_teams
-)
-
-from src.utils.helpers import(
-    _convert_stats_year
+    users
 )
 from src.utils.player import (
     _get_player_defensive_stats,
@@ -18,7 +13,6 @@ from src.utils.player import (
     _get_player_passing_stats,
     _get_player_receiving_stats,
     _get_player_punt_return_stats,
-    _get_player_punting_stats,
     _get_player_rushing_stats
 )
 from src.data_models.SeasonDefensiveStatsData import SeasonDefensiveStatsData
@@ -29,7 +23,7 @@ from src.data_models.SeasonReturnStatsData import SeasonReturnStatsData
 from src.data_models.TeamInfoData import TeamInfoData
 from src.data_models.TeamStatsData import TeamStatsData
 from src.data_models.WeekYearData import WeekYearData
-from src.models.Stats import(
+from src.models.Stats import (
     PlayerDefensiveStats,
     PlayerKickReturnStats,
     PlayerKickingStats,
@@ -42,6 +36,8 @@ from src.models.Stats import(
 
 
 def insert_team_info_into_db(team_info):
+
+    user_teams: List[str] = [user.team_name for user in users]
     
     for i, value in enumerate(team_info):
         
