@@ -25,6 +25,7 @@ def insert_coach_info_into_db():
         
         coach: CoachInfoData = CoachInfoData(
             id=new_id,
+            user=user.id,
             first_name=user.first_name,
             last_name=user.last_name,
             team_id=user.team_id,
@@ -37,8 +38,6 @@ def insert_coach_info_into_db():
             session.add(coach)
 
         else:
-            coach_query.first_name = coach.first_name
-            coach_query.last_name = coach.last_name
             coach_query.team_id = coach.team_id
             coach_query.team_name = coach.team_name
     
@@ -71,6 +70,7 @@ def insert_coach_stats_into_db():
         coach_stats:CoachStatsData = CoachStatsData(
             id=new_id,
             coach_id=user.id,
+            user=user.id,
             year=week_year.year,
             wins=user_team_info.wins,
             losses=user_team_info.losses,
