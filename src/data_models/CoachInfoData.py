@@ -12,6 +12,7 @@ from  src.constants import Base
 class CoachInfoData(Base):
     __tablename__ = 'coach_info'
     id = Column(String(10), primary_key=True)
+    user = Column(String(10))
     first_name = Column(String(50))
     last_name = Column(String(50))
     team_id = Column(Integer)

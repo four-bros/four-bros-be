@@ -1,4 +1,6 @@
 from typing import List
+
+from src.blueprints.coach import coach_bp
 from src.blueprints.commits import commits_bp
 from src.blueprints.home import home_bp
 from src.blueprints.players import players_bp
@@ -10,6 +12,7 @@ from src.constants import app
 
 
 blueprints = [
+    coach_bp,
     commits_bp,
     home_bp,
     players_bp,
@@ -44,6 +47,7 @@ def index():
     ]
 
     backend_endpoints = {
+        'coach': '/',
         'commits': '/',
         'home': '/',
         'players': players_endpoints,
