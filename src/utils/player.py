@@ -14,7 +14,6 @@ from src.models.Player import (
 from src.models.Stats import (
     KickReturnStats,
     KickingStats,
-    KickingAndPuntingStats,
     PassingStats,
     PlayerDefensiveStats,
     PlayerKickingStats,

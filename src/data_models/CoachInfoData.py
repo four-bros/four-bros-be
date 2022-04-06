@@ -1,5 +1,6 @@
 from dataclasses import dataclass
 from sqlalchemy import(
+    Boolean,
     Column,
     Integer,
     String
@@ -17,3 +18,4 @@ class CoachInfoData(Base):
     last_name = Column(String(50))
     team_id = Column(Integer)
     team_name = Column(String(50))
+    year = Column(Integer)
