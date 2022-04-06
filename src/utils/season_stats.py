@@ -20,7 +20,6 @@ from src.models.Stats import (
     DefensiveStats,
     KickingStats,
     KickReturnStats,
-    KickingAndPuntingStats,
     PassingStats,
     PuntingStats,
     PuntReturnStats,

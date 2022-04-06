@@ -9,7 +9,7 @@ from sqlalchemy.orm import(
 
 from src.models.Coach import CoachInfo
 from src.responses.Coach import (
-    CoachInfoSchema,
+    CoachSeasonRecordSchema,
     CoachStatsSchema
 )
 from src.responses.Commits import CommitsSchema
@@ -92,6 +92,7 @@ Base = declarative_base()
 
 
 # Schema constants
+coach_season_record_schema = CoachSeasonRecordSchema()
 coach_stat_schema = CoachStatsSchema()
 coach_stats_schema = CoachStatsSchema(many=True)
 commit_schema = CommitsSchema()

@@ -17,3 +17,12 @@ class CoachStatsSchema(Schema):
     wins = fields.Int()
     losses = fields.Int()
     national_title = fields.Bool()
+
+
+class CoachSeasonRecordSchema(Schema):
+    team_id = fields.Int()
+    team_name = fields.Str()
+    year = fields.Int()
+    wins = fields.Int()
+    losses = fields.Int()
+    national_title = fields.Bool()

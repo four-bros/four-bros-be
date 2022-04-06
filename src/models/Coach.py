@@ -39,3 +39,21 @@ class CoachStats:
     
     def __repr__(self):
         return f'ID: {self.id}, User: {self.coach_id}'
+
+
+class CoachSeasonRecord:
+    def __init__(
+        self,
+        team_id,
+        team_name,
+        year,
+        wins,
+        losses,
+        national_title
+    ):
+        self.team_id = team_id
+        self.team_name = team_name
+        self.year = year
+        self.wins = wins
+        self.losses = losses
+        self.national_title = national_title
