@@ -165,7 +165,7 @@ def _get_game_passing_stats_leaders():
     comp_pct_data = session.query(PlayerInfoData, GameOffensiveStatsData).filter(
             PlayerInfoData.id == GameOffensiveStatsData.player_id,
             GameOffensiveStatsData.pass_att > 10,
-            ).order_by(desc(GameOffensiveStatsData.completions)).limit(10)
+            ).order_by(desc(GameOffensiveStatsData.comp_pct)).limit(10)
 
     pass_att_data = session.query(PlayerInfoData, GameOffensiveStatsData).filter(
             PlayerInfoData.id == GameOffensiveStatsData.player_id,
