@@ -197,6 +197,11 @@ def _get_game_passing_stats_leaders():
             GameOffensiveStatsData.pass_att > 10,
             ).order_by(desc(GameOffensiveStatsData.pass_rating)).limit(10)
 
+    pass_yp_game_data = session.query(PlayerInfoData, GameOffensiveStatsData).filter(
+            PlayerInfoData.id == GameOffensiveStatsData.player_id,
+            GameOffensiveStatsData.pass_att > 10,
+            ).order_by(desc(GameOffensiveStatsData.pass_yp_game)).limit(10)
+
     # Convert players to PlayerPassingStats model so they can be sorted
     converted_completions: List[PlayerPassingStats] = [_get_player_passing_stats(player) for player in completions_data]
     converted_pass_att: List[PlayerPassingStats] = [_get_player_passing_stats(player) for player in pass_att_data]
@@ -207,6 +212,7 @@ def _get_game_passing_stats_leaders():
     converted_ints: List[PlayerPassingStats] = [_get_player_passing_stats(player) for player in ints_data]
     converted_pass_yp_attempt: List[PlayerPassingStats] = [_get_player_passing_stats(player) for player in pass_yp_attempt_data]
     converted_pass_rating: List[PlayerPassingStats] = [_get_player_passing_stats(player) for player in pass_rating_data]
+    converted_pass_yp_game: List[PlayerPassingStats] = [_get_player_passing_stats(player) for player in pass_yp_game_data]
 
     # Convert top ten lists into json
     completions_leaders_json = passing_stats_schema.dump(converted_completions)
@@ -218,6 +224,7 @@ def _get_game_passing_stats_leaders():
     int_leaders_json = passing_stats_schema.dump(converted_ints)
     pass_yp_attempt_leaders_json = passing_stats_schema.dump(converted_pass_yp_attempt)
     pass_rating_leaders_json = passing_stats_schema.dump(converted_pass_rating)
+    pass_yp_game_leaders_json = passing_stats_schema.dump(converted_pass_yp_game)
 
     response = {
         'completions': completions_leaders_json,
@@ -228,7 +235,8 @@ def _get_game_passing_stats_leaders():
         'pass_tds': pass_td_leaders_json,
         'interceptions': int_leaders_json,
         'pass_yp_attempt': pass_yp_attempt_leaders_json,
-        'pass_rating': pass_rating_leaders_json
+        'pass_rating': pass_rating_leaders_json,
+        'pass_yp_game': pass_yp_game_leaders_json
     }
 
     return response
@@ -261,6 +269,11 @@ def _get_game_rec_stats_leaders():
             PlayerInfoData.id == GameOffensiveStatsData.player_id,
             GameOffensiveStatsData.receptions > 4
             ).order_by(desc(GameOffensiveStatsData.rec_yp_catch)).limit(10)
+    
+    rec_yp_game_data = session.query(PlayerInfoData, GameOffensiveStatsData).filter(
+            PlayerInfoData.id == GameOffensiveStatsData.player_id,
+            GameOffensiveStatsData.receptions > 4
+            ).order_by(desc(GameOffensiveStatsData.rec_yp_game)).limit(10)
 
     # Convert players to PlayerReceivingStats model so they can be sorted
     converted_receptions: List[PlayerReceivingStats] = [_get_player_receiving_stats(player) for player in receptions_data]
@@ -269,6 +282,7 @@ def _get_game_rec_stats_leaders():
     converted_yac: List[PlayerReceivingStats] = [_get_player_receiving_stats(player) for player in yac_data]
     converted_drops: List[PlayerReceivingStats] = [_get_player_receiving_stats(player) for player in drops_data]
     converted_rec_yp_catch: List[PlayerReceivingStats] = [_get_player_receiving_stats(player) for player in rec_yp_catch_data]
+    converted_rec_yp_game: List[PlayerReceivingStats] = [_get_player_receiving_stats(player) for player in rec_yp_game_data]
 
     # Convert top ten lists to json
     reception_leaders_json = receiving_stats_schema.dump(converted_receptions)
@@ -277,6 +291,7 @@ def _get_game_rec_stats_leaders():
     yac_leaders_json = receiving_stats_schema.dump(converted_yac)
     drops_leaders_json = receiving_stats_schema.dump(converted_drops)
     rec_yp_catch_leaders_json = receiving_stats_schema.dump(converted_rec_yp_catch)
+    rec_yp_game_leaders_json = receiving_stats_schema.dump(converted_rec_yp_game)
 
     response = {
         'receptions': reception_leaders_json,
@@ -285,6 +300,7 @@ def _get_game_rec_stats_leaders():
         'yac': yac_leaders_json,
         'drops': drops_leaders_json,
         'rec_yp_catch': rec_yp_catch_leaders_json,
+        'rec_yp_game': rec_yp_game_leaders_json,
     }
 
     return response
@@ -326,6 +342,11 @@ def _get_game_rush_stats_leaders():
             PlayerInfoData.id == GameOffensiveStatsData.player_id,
             ).order_by(desc(GameOffensiveStatsData.rush_tds)).limit(10)
 
+    rush_yp_game_data = session.query(PlayerInfoData, GameOffensiveStatsData).filter(
+            PlayerInfoData.id == GameOffensiveStatsData.player_id,
+            GameOffensiveStatsData.rush_att > 10
+            ).order_by(desc(GameOffensiveStatsData.rush_yp_game)).limit(10)
+
     # Convert players to PlayerRushingStats model so they can be sorted
     converted_rush_att: List[PlayerRushingStats] = [_get_player_rushing_stats(player) for player in rush_att_data]
     converted_rush_yards: List[PlayerRushingStats] = [_get_player_rushing_stats(player) for player in rush_yards_data]
@@ -335,6 +356,7 @@ def _get_game_rush_stats_leaders():
     converted_twenty_plus_yd_runs: List[PlayerRushingStats] = [_get_player_rushing_stats(player) for player in twenty_plus_yd_runs_data]
     converted_rush_yp_carry: List[PlayerRushingStats] = [_get_player_rushing_stats(player) for player in rush_yp_carry_data]
     converted_rush_tds: List[PlayerRushingStats] = [_get_player_rushing_stats(player) for player in rush_tds_data]
+    converted_rush_yp_game: List[PlayerRushingStats] = [_get_player_rushing_stats(player) for player in rush_yp_game_data]
 
     # Convert top ten lists to json
     rush_att_leaders_json = rushing_stats_schema.dump(converted_rush_att)
@@ -345,6 +367,7 @@ def _get_game_rush_stats_leaders():
     twenty_plus_yd_runs_leaders_json = rushing_stats_schema.dump(converted_twenty_plus_yd_runs)
     rush_yp_carry_leaders_json = rushing_stats_schema.dump(converted_rush_yp_carry)
     rush_tds_leaders_json = rushing_stats_schema.dump(converted_rush_tds)
+    rush_yp_game_leaders_json = rushing_stats_schema.dump(converted_rush_yp_game)
 
     response = {
         'rush_att': rush_att_leaders_json,
@@ -354,7 +377,8 @@ def _get_game_rush_stats_leaders():
         'fumbles': fumbles_leaders_json,
         'twenty_plus_runs': twenty_plus_yd_runs_leaders_json,
         'rush_yp_carry': rush_yp_carry_leaders_json,
-        'rush_tds': rush_tds_leaders_json
+        'rush_tds': rush_tds_leaders_json,
+        'rush_yp_game': rush_yp_game_leaders_json,
     }
 
     return response
