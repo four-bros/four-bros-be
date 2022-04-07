@@ -18,7 +18,7 @@ from scripts.career_db_scripts import (
     insert_career_off_stats_into_db,
     insert_career_return_stats_into_db
 )
-from scripts.coach_scripts import (
+from scripts.coach_db_scripts import (
     insert_coach_info_into_db,
     insert_coach_stats_into_db
 )
