@@ -1,8 +1,10 @@
 from dataclasses import dataclass
 from sqlalchemy import(
     Column,
+    ForeignKey,
     Integer,
-    Float
+    Float,
+    String
 )
 
 from  src.constants import Base
@@ -11,7 +13,10 @@ from  src.constants import Base
 class TeamStatsData(Base):
     __tablename__ = 'team_stats'
     # __table_args__ = {'extend_existing': True}
-    id = Column(Integer, primary_key=True)
+    id = Column(String(50), primary_key=True)
+    team_id = Column(Integer, ForeignKey('team_info.id'))
+    year = Column(Integer)
+    games_played = Column(Integer)
     total_points = Column(Integer)
     ppg = Column(Float)
     pass_yds = Column(Integer)

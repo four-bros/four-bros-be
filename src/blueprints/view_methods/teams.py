@@ -79,12 +79,18 @@ def get_all_teams(request):
 
 def get_team_by_team_id(request, team_id) -> TeamDetailsSchema:
     
+    week_year: WeekYearData = session.query(WeekYearData).order_by(
+            desc(WeekYearData.year)
+        ).first()
     team_info_data: TeamInfoData = session.query(TeamInfoData).where(TeamInfoData.id == team_id).one()
-    team_stats_data: TeamStatsData = session.query(TeamStatsData).where(TeamStatsData.id == team_id).one()
+    team_stats_data: TeamStatsData = session.query(TeamStatsData).where(
+        TeamStatsData.team_id == team_id,
+        TeamStatsData.year == week_year.year
+    ).one()
 
     players: List[PlayerInfoData] = session.query(PlayerInfoData).where(
         PlayerInfoData.team_id == team_id,
-        PlayerInfoData.is_active == True
+        PlayerInfoData.is_active == True,
     ).order_by(desc(PlayerInfoData.overall)).all()
 
     team_details: TeamDetails = _get_team_details(team_info=team_info_data, players=players)
@@ -115,14 +121,27 @@ def get_team_player_stats(request, team_id):
     defense_data = session.query(PlayerInfoData, SeasonDefensiveStatsData).filter(
         PlayerInfoData.id == SeasonDefensiveStatsData.player_id,
         PlayerInfoData.team_id == team.id,
+        PlayerInfoData.is_active == True,
         SeasonDefensiveStatsData.year == week_year.year,
         SeasonDefensiveStatsData.total_tkls > 0
     ).order_by(desc(SeasonDefensiveStatsData.total_tkls)).all()
+
+    defense_to_data = session.query(PlayerInfoData, SeasonDefensiveStatsData).filter(
+        PlayerInfoData.id == SeasonDefensiveStatsData.player_id,
+        PlayerInfoData.team_id == team.id,
+        PlayerInfoData.is_active == True,
+        SeasonDefensiveStatsData.year == week_year.year,
+        SeasonDefensiveStatsData.total_tkls > 0
+    ).order_by(
+        desc(SeasonDefensiveStatsData.ints_made),
+        desc(SeasonDefensiveStatsData.fumbles_rec)
+    ).all()
 
     # Get offensive stats
     passing_data = session.query(PlayerInfoData, SeasonOffensiveStatsData).filter(
         PlayerInfoData.id == SeasonOffensiveStatsData.player_id,
         PlayerInfoData.team_id == team.id,
+        PlayerInfoData.is_active == True,
         SeasonOffensiveStatsData.year == week_year.year,
         SeasonOffensiveStatsData.pass_att > 0
     ).order_by(desc(SeasonOffensiveStatsData.pass_yards)).all()
@@ -130,6 +149,7 @@ def get_team_player_stats(request, team_id):
     receiving_data = session.query(PlayerInfoData, SeasonOffensiveStatsData).filter(
         PlayerInfoData.id == SeasonOffensiveStatsData.player_id,
         PlayerInfoData.team_id == team.id,
+        PlayerInfoData.is_active == True,
         SeasonOffensiveStatsData.year == week_year.year,
         SeasonOffensiveStatsData.receptions > 0
     ).order_by(desc(SeasonOffensiveStatsData.rec_yards)).all()
@@ -137,6 +157,7 @@ def get_team_player_stats(request, team_id):
     rushing_data = session.query(PlayerInfoData, SeasonOffensiveStatsData).filter(
         PlayerInfoData.id == SeasonOffensiveStatsData.player_id,
         PlayerInfoData.team_id == team.id,
+        PlayerInfoData.is_active == True,
         SeasonOffensiveStatsData.year == week_year.year,
         SeasonOffensiveStatsData.rush_att > 0
     ).order_by(desc(SeasonOffensiveStatsData.rush_yards)).all()
@@ -144,6 +165,7 @@ def get_team_player_stats(request, team_id):
     total_off_data = session.query(PlayerInfoData, SeasonOffensiveStatsData).filter(
         PlayerInfoData.id == SeasonOffensiveStatsData.player_id,
         PlayerInfoData.team_id == team.id,
+        PlayerInfoData.is_active == True,
         SeasonOffensiveStatsData.year == week_year.year,
         SeasonOffensiveStatsData.total_yards > 0
     ).order_by(desc(SeasonOffensiveStatsData.total_yards)).all()
@@ -152,6 +174,7 @@ def get_team_player_stats(request, team_id):
     kicking_data = session.query(PlayerInfoData, SeasonKickingStatsData).filter(
         PlayerInfoData.id == SeasonKickingStatsData.player_id,
         PlayerInfoData.team_id == team.id,
+        PlayerInfoData.is_active == True,
         SeasonKickingStatsData.year == week_year.year,
         SeasonKickingStatsData.fg_att > 0
     ).order_by(desc(SeasonKickingStatsData.fg_made)).all()
@@ -159,6 +182,7 @@ def get_team_player_stats(request, team_id):
     punting_data = session.query(PlayerInfoData, SeasonKickingStatsData).filter(
         PlayerInfoData.id == SeasonKickingStatsData.player_id,
         PlayerInfoData.team_id == team.id,
+        PlayerInfoData.is_active == True,
         SeasonKickingStatsData.year == week_year.year,
         SeasonKickingStatsData.number_punts > 0
     ).order_by(desc(SeasonKickingStatsData.total_punt_yards)).all()
@@ -167,6 +191,7 @@ def get_team_player_stats(request, team_id):
     kick_return_data = session.query(PlayerInfoData, SeasonReturnStatsData).filter(
         PlayerInfoData.id == SeasonReturnStatsData.player_id,
         PlayerInfoData.team_id == team.id,
+        PlayerInfoData.is_active == True,
         SeasonReturnStatsData.year == week_year.year,
         SeasonReturnStatsData.kick_returns > 0
     ).order_by(desc(SeasonReturnStatsData.kr_yds)).all()
@@ -174,12 +199,14 @@ def get_team_player_stats(request, team_id):
     punt_return_data = session.query(PlayerInfoData, SeasonReturnStatsData).filter(
         PlayerInfoData.id == SeasonReturnStatsData.player_id,
         PlayerInfoData.team_id == team.id,
+        PlayerInfoData.is_active == True,
         SeasonReturnStatsData.year == week_year.year,
         SeasonReturnStatsData.punt_returns > 0
     ).order_by(desc(SeasonReturnStatsData.pr_yds)).all()
 
     # Convert players to the appropriate models based on stat category
     defensive_stats: List[PlayerDefensiveStats] = [_get_player_defensive_stats(player) for player in defense_data]
+    defensive_to_stats: List[PlayerDefensiveStats] = [_get_player_defensive_stats(player) for player in defense_to_data]
     kick_return_stats: List[PlayerKickingStats] = [_get_player_kick_return_stats(player) for player in kick_return_data]
     kick_stats: List[PlayerKickingStats] = [_get_player_kicking_stats(player) for player in kicking_data]
     passing_stats: List[PlayerPassingStats] = [_get_player_passing_stats(player) for player in passing_data]
@@ -191,6 +218,7 @@ def get_team_player_stats(request, team_id):
 
     # Convert players to json for response
     defensive_stats_json = defensive_stats_schema.dump(defensive_stats)
+    defensive_to_stats_json = defensive_stats_schema.dump(defensive_to_stats)
     kicking_stats_json = kicking_stats_schema.dump(kick_stats)
     kick_return_stats_json = kick_return_stats_schema.dump(kick_return_stats)
     passing_stats_json = passing_stats_schema.dump(passing_stats)
@@ -202,6 +230,7 @@ def get_team_player_stats(request, team_id):
 
     response = {
         'defense': defensive_stats_json,
+        'defense_to': defensive_to_stats_json,
         'kicking': kicking_stats_json,
         'kick_return': kick_return_stats_json,
         'passing': passing_stats_json,
