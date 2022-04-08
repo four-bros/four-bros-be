@@ -23,6 +23,13 @@ class TeamDetailsSchema(Schema):
     coachs_poll_points = fields.Int()
 
 
+class TeamInfoSchema(Schema):
+    id = fields.Int()
+    team_name = fields.Str()
+    team_short_name = fields.Str()
+    is_user = fields.Bool()
+
+
 class TeamRosterSchema(PlayerDetailsSchema):
     id = fields.Str()
     first_name = fields.Str()
@@ -38,6 +45,8 @@ class TeamRosterSchema(PlayerDetailsSchema):
 
 
 class TeamStatsSchema(Schema):
+    year = fields.Int()
+    games_played = fields.Int()
     total_points = fields.Int()
     ppg = fields.Float()
     pass_yds = fields.Int()
@@ -58,6 +67,7 @@ class TeamStatsSchema(Schema):
     turnovers = fields.Int()
     pass_def = fields.Int()
     safeties = fields.Int()
+    blocked_kicks = fields.Int()
     def_tds = fields.Int()
     kr_yds = fields.Int()
     kr_tds = fields.Int()
@@ -65,7 +75,12 @@ class TeamStatsSchema(Schema):
     pr_tds = fields.Int()
 
 
-class TeamInfoSchema(Schema):
+class TeamSummarySchema(Schema):
     team_details = fields.Nested(TeamDetailsSchema)
     team_roster = fields.List(fields.Nested(TeamRosterSchema))
+    team_stats = fields.Nested(TeamStatsSchema)
+
+
+class TeamSeasonRecordSchema(Schema):
+    team_info = fields.Nested(TeamInfoSchema)
     team_stats = fields.Nested(TeamStatsSchema)

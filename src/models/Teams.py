@@ -42,6 +42,20 @@ class TeamDetails:
         self.coachs_poll_points = coachs_poll_points
 
 
+class TeamInfo:
+    def __init__(
+        self,
+        id,
+        team_name,
+        team_short_name,
+        is_user,
+    ):
+        self.id = id
+        self.team_name = team_name
+        self.team_short_name = team_short_name
+        self.is_user = is_user
+
+
 # Should be able to refactor this in some way
 class TeamRoster(PlayerDetails):
     def __init__(
@@ -74,6 +88,9 @@ class TeamRoster(PlayerDetails):
 class TeamStats:
     def __init__(
         self,
+        team_id,
+        year,
+        games_played,
         total_points,
         ppg,
         pass_yds,
@@ -94,12 +111,16 @@ class TeamStats:
         turnovers,
         pass_def,
         safeties,
+        blocked_kicks,
         def_tds,
         kr_yds,
         kr_tds,
         pr_yds,
         pr_tds,
     ):
+        self.team_id = team_id
+        self.year = year
+        self.games_played = games_played
         self.total_points = total_points
         self.ppg = ppg
         self.pass_yds = pass_yds
@@ -120,6 +141,7 @@ class TeamStats:
         self.turnovers = turnovers
         self.pass_def = pass_def
         self.safeties = safeties
+        self.blocked_kicks = blocked_kicks
         self.def_tds = def_tds
         self.kr_yds = kr_yds
         self.kr_tds = kr_tds
@@ -127,7 +149,17 @@ class TeamStats:
         self.pr_tds = pr_tds
 
 
-class TeamInfo:
+class TeamSeasonRecord:
+    def __init__(
+        self,
+        team_info: TeamInfo,
+        team_stats: TeamStats
+    ):
+        self.team_info = team_info
+        self.team_stats = team_stats
+
+
+class TeamSummary:
     def __init__(
         self,
         team_details: TeamDetails,
