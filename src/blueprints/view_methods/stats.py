@@ -9,6 +9,9 @@ from src.utils.season_stats_leaders import (
     _get_season_rushing_stats_leaders,
     _get_season_total_stats_leaders
 )
+from src.utils.team_stats_leaders import (
+    _get_team_season_stats_leaders
+)
 
 
 def get_season_defense_stats_leaders(request, is_season_specific: bool):
@@ -31,7 +34,7 @@ def get_season_rushing_stats_leaders(request, is_season_specific: bool):
     return _get_season_rushing_stats_leaders(is_season_specific=is_season_specific)
 
 
-def get_season_stats_leaders(request, is_season_specific: bool):
+def get_player_season_stats_leaders(request, is_season_specific: bool):
 
         response = {
             'defense': _get_season_defensive_stats_leaders(is_season_specific=is_season_specific),
@@ -46,3 +49,7 @@ def get_season_stats_leaders(request, is_season_specific: bool):
         }
 
         return response
+
+
+def get_team_season_stat_leaders(request, is_season_specific: bool):
+    return _get_team_season_stats_leaders(is_season_specific=is_season_specific)
