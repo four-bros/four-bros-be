@@ -50,7 +50,9 @@ from src.utils.season_stats import (
 
 def insert_game_def_stats_into_db():
 
-    players: List[PlayerInfoData] = session.query(PlayerInfoData).all()
+    players: List[PlayerInfoData] = session.query(PlayerInfoData).where(
+        PlayerInfoData.is_active == True
+    ).all()
 
     week_year: WeekYearData = session.query(WeekYearData).order_by(
         desc(WeekYearData.year),
@@ -166,7 +168,9 @@ def insert_game_def_stats_into_db():
 
 def insert_game_kick_stats_into_db():
 
-    players: List[PlayerInfoData] = session.query(PlayerInfoData).all()
+    players: List[PlayerInfoData] = session.query(PlayerInfoData).where(
+        PlayerInfoData.is_active == True
+    ).all()
     
     week_year: WeekYearData = session.query(WeekYearData).order_by(
         desc(WeekYearData.year),
@@ -328,7 +332,9 @@ def insert_game_kick_stats_into_db():
 
 def insert_game_off_stats_into_db():
 
-    players: List[PlayerInfoData] = session.query(PlayerInfoData).all()
+    players: List[PlayerInfoData] = session.query(PlayerInfoData).where(
+        PlayerInfoData.is_active == True
+    ).all()
     week_year: WeekYearData = session.query(WeekYearData).order_by(
         desc(WeekYearData.year),
         desc(WeekYearData.week)
@@ -341,7 +347,7 @@ def insert_game_off_stats_into_db():
             SeasonOffensiveStatsData.year == week_year.year
         ).scalar()
 
-        # Skip over players that don't have kicking stats
+        # Skip over players that don't have offensive stats
         if not off_stats_data:
             continue
 
@@ -515,7 +521,9 @@ def insert_game_off_stats_into_db():
 
 def insert_game_return_stats_into_db():
 
-    players: List[PlayerInfoData] = session.query(PlayerInfoData).all()
+    players: List[PlayerInfoData] = session.query(PlayerInfoData).where(
+        PlayerInfoData.is_active == True
+    ).all()
     week_year: WeekYearData = session.query(WeekYearData).order_by(
         desc(WeekYearData.year),
         desc(WeekYearData.week)

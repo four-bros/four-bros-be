@@ -201,6 +201,7 @@ def insert_team_stats_into_db():
         turnovers = sum([ints, fr])
         pass_def = sum([p.defensive_stats.pass_def for p in def_stats])
         safeties = sum([p.defensive_stats.safeties for p in def_stats])
+        blocked_kicks = sum([p.defensive_stats.blocked_kicks for p in def_stats])
         
         # calculate KR and PR yards
         kr_yds = sum([p.kick_return_stats.kr_yds for p in kick_return_stats])
@@ -231,6 +232,7 @@ def insert_team_stats_into_db():
             turnovers=turnovers,
             pass_def=pass_def,
             safeties=safeties,
+            blocked_kicks=blocked_kicks,
             def_tds=def_tds,
             kr_yds=kr_yds,
             kr_tds=kr_tds,
@@ -267,6 +269,7 @@ def insert_team_stats_into_db():
             team_query.turnovers=team_stats.turnovers
             team_query.pass_def=team_stats.pass_def
             team_query.safeties=team_stats.safeties
+            team_query.blocked_kicks=team_stats.blocked_kicks
             team_query.def_tds=team_stats.def_tds
             team_query.kr_yds=team_stats.kr_yds
             team_query.kr_tds=team_stats.kr_tds

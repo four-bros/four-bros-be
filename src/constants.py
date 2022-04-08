@@ -28,9 +28,10 @@ from src.responses.Stats import (
     PlayerTotalStatsSchema,
 )
 from src.responses.Teams import (
-    TeamInfoSchema,
+    TeamSummarySchema,
     TeamRosterSchema,
-    TeamDetailsSchema
+    TeamDetailsSchema,
+    TeamSeasonRecordSchema
 )
 from src.responses.WeekYear import (
     WeekYearSchema
@@ -120,8 +121,10 @@ return_stats_schema = PlayerKickReturnAndPuntReturnStatsSchema(many=True)
 rushing_stat_schema = PlayerRushingStatsSchema()
 rushing_stats_schema = PlayerRushingStatsSchema(many=True)
 team_details_schema = TeamDetailsSchema(many=True)
-team_schema = TeamInfoSchema()
-teams_schema = TeamInfoSchema(many=True)
+team_schema = TeamSummarySchema()
+teams_schema = TeamSummarySchema(many=True)
+team_season_record_schema = TeamSeasonRecordSchema()
+team_season_records_schema = TeamSeasonRecordSchema(many=True)
 team_roster_schema = TeamRosterSchema(many=True)
 total_stat_schema = PlayerTotalStatsSchema()
 total_stats_schema = PlayerTotalStatsSchema(many=True)

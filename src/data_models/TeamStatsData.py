@@ -36,6 +36,7 @@ class TeamStatsData(Base):
     fr = Column(Integer)
     turnovers = Column(Integer)
     pass_def = Column(Integer)
+    blocked_kicks = Column(Integer)
     safeties = Column(Integer)
     def_tds = Column(Integer)
     kr_yds = Column(Integer)

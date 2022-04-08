@@ -23,6 +23,7 @@ from src.utils.game_stats_leaders import (
     _get_game_rush_stats_leaders,
     _get_game_total_stats_leaders
 )
+from src.utils.team_stats_leaders import _get_team_season_records
 
 
 def get_career_records(request):
@@ -64,3 +65,7 @@ def get_season_records(request):
     response = get_season_stats_leaders(request, is_season_specific=False)
 
     return response
+
+
+def get_team_records(request):
+    return _get_team_season_records()

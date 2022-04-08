@@ -51,13 +51,13 @@ from src.models.Stats import (
 )
 from src.models.Teams import (
     TeamDetails,
-    TeamInfo,
+    TeamSummary,
     TeamRoster,
     TeamStats
 )
 from src.responses.Teams import (
     TeamDetailsSchema,
-    TeamInfoSchema
+    TeamSummarySchema
 )
 
 
@@ -97,13 +97,13 @@ def get_team_by_team_id(request, team_id) -> TeamDetailsSchema:
     team_roster: TeamRoster = [_get_team_roster(player) for player in players]
     team_stats: TeamStats = _get_team_stats(team_stats_data=team_stats_data)
 
-    team_info: TeamInfo = TeamInfo(
+    team_info: TeamSummary = TeamSummary(
         team_details=team_details,
         team_roster=team_roster,
         team_stats=team_stats
     )
 
-    response: TeamInfoSchema = team_schema.dump(team_info)
+    response: TeamSummarySchema = team_schema.dump(team_info)
     
     return response
 

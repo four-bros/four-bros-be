@@ -6,6 +6,7 @@ from src.data_models.TeamInfoData import TeamInfoData
 from src.data_models.TeamStatsData import TeamStatsData
 from src.models.Teams import (
     TeamDetails,
+    TeamInfo,
     TeamRoster,
     TeamStats
 )
@@ -48,6 +49,18 @@ def _get_team_details(team_info: TeamInfoData, players: List[PlayerInfoData]) ->
     return team_details
 
 
+def _get_team_info(team: TeamInfoData) -> TeamInfo:
+
+    team_info: TeamInfo = TeamInfo(
+        id=team.id,
+        team_name=team.team_name,
+        team_short_name=team.team_short_name,
+        is_user=team.is_user,
+    )
+
+    return team_info
+
+
 def _get_team_roster(player: PlayerInfoData) -> TeamRoster:
 
     player_details: TeamRoster = TeamRoster(
@@ -70,6 +83,9 @@ def _get_team_roster(player: PlayerInfoData) -> TeamRoster:
 def _get_team_stats(team_stats_data: TeamStatsData):
 
     team_stats: TeamStats = TeamStats(
+        team_id=team_stats_data.team_id,
+        year=team_stats_data.year,
+        games_played=team_stats_data.games_played,
         total_points=team_stats_data.total_points,
         ppg=team_stats_data.ppg,
         pass_yds=team_stats_data.pass_yds,
@@ -90,6 +106,7 @@ def _get_team_stats(team_stats_data: TeamStatsData):
         turnovers=team_stats_data.turnovers,
         pass_def=team_stats_data.pass_def,
         safeties=team_stats_data.safeties,
+        blocked_kicks=team_stats_data.blocked_kicks,
         def_tds=team_stats_data.def_tds,
         kr_yds=team_stats_data.kr_yds,
         kr_tds=team_stats_data.kr_tds,
