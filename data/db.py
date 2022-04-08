@@ -64,9 +64,9 @@ def main():
     ################################
     # Insert all data to DB tables #
     ################################
-    insert_coach_info_into_db()
     insert_week_year_into_db(week_year)
     insert_team_info_into_db(team_info)
+    insert_coach_info_into_db()
     insert_coach_stats_into_db()
     insert_commits_into_db(commits)
     deactivate_inactive_players(player_info)

@@ -129,24 +129,31 @@ def insert_team_stats_into_db():
         # Grab all player data for each team
         def_data = session.query(PlayerInfoData, SeasonDefensiveStatsData).filter(
                 PlayerInfoData.team_id == team.id,
+                PlayerInfoData.is_active == True,
                 PlayerInfoData.id == SeasonDefensiveStatsData.player_id,
                 SeasonDefensiveStatsData.year == week_year.year
             ).all()
         off_data = session.query(PlayerInfoData, SeasonOffensiveStatsData).filter(
             PlayerInfoData.team_id == team.id,
+            PlayerInfoData.is_active == True,
             PlayerInfoData.id == SeasonOffensiveStatsData.player_id,
             SeasonOffensiveStatsData.year == week_year.year
             ).all()
         ret_data = session.query(PlayerInfoData, SeasonReturnStatsData).filter(
                 PlayerInfoData.team_id == team.id,
+                PlayerInfoData.is_active == True,
                 PlayerInfoData.id == SeasonReturnStatsData.player_id,
                 SeasonReturnStatsData.year == week_year.year
                 ).all()
         kick_data = session.query(PlayerInfoData, SeasonKickingStatsData).filter(
                 PlayerInfoData.team_id == team.id,
+                PlayerInfoData.is_active == True,
                 SeasonKickingStatsData.player_id == PlayerInfoData.id,
                 SeasonKickingStatsData.year == week_year.year
             ).all()   
+
+        # Create year specific id for primary key
+        primary_key = f'{week_year.year}-{team.id}'
 
         # Convert data to models for data manipulation
         def_stats: List[PlayerDefensiveStats] = [_get_player_defensive_stats(player) for player in def_data]
@@ -200,7 +207,10 @@ def insert_team_stats_into_db():
         pr_yds = sum([p.punt_return_stats.pr_yds for p in punt_return_stats])
         
         team_stats = TeamStatsData(
-            id=team.id,
+            id=primary_key,
+            team_id=team.id,
+            year=week_year.year,
+            games_played=games_played,
             total_points=total_points,
             ppg=ppg,
             pass_yds=pass_yards,
@@ -236,7 +246,7 @@ def insert_team_stats_into_db():
             session.add(team_stats)
 
         else:
-
+            team_query.games_played=team_stats.games_played
             team_query.total_points=team_stats.total_points
             team_query.ppg=team_stats.ppg
             team_query.pass_yds=team_stats.pass_yds
@@ -248,6 +258,8 @@ def insert_team_stats_into_db():
             team_query.rec_yds=team_stats.rec_yds
             team_query.rec_ypg=team_stats.rec_ypg
             team_query.rec_tds=team_stats.rec_tds
+            team_query.total_yards=team_stats.total_yards
+            team_query.total_ypg=team_stats.total_ypg
             team_query.sacks=team_stats.sacks
             team_query.ints=team_stats.ints
             team_query.ff=team_stats.ff
