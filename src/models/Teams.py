@@ -96,23 +96,32 @@ class TeamStats:
         pass_yds,
         pass_ypg,
         pass_tds,
+        ints,
+        sacked,
         rush_yds,
         rush_ypg,
         rush_tds,
+        fumbles,
         rec_yds,
         rec_ypg,
         rec_tds,
-        total_yds,
+        drops,
+        off_yards,
+        off_ypg,
+        total_yards,
         total_ypg,
+        off_turnovers,
         sacks,
-        ints,
+        tfl,
+        ints_made,
         ff,
         fr,
-        turnovers,
+        def_turnovers,
         pass_def,
         safeties,
         blocked_kicks,
         def_tds,
+        to_margin,
         kr_yds,
         kr_tds,
         pr_yds,
@@ -126,23 +135,32 @@ class TeamStats:
         self.pass_yds = pass_yds
         self.pass_ypg = pass_ypg
         self.pass_tds = pass_tds
+        self.ints = ints
+        self.sacked = sacked
         self.rush_yds = rush_yds
         self.rush_ypg = rush_ypg
         self.rush_tds = rush_tds
+        self.fumbles = fumbles
         self.rec_yds = rec_yds
         self.rec_ypg = rec_ypg
         self.rec_tds = rec_tds
-        self.total_yds = total_yds
+        self.drops = drops
+        self.off_yards = off_yards
+        self.off_ypg = off_ypg
+        self.total_yards = total_yards
         self.total_ypg = total_ypg
+        self.off_turnovers = off_turnovers
         self.sacks = sacks
-        self.ints = ints
+        self.tfl = tfl
+        self.ints = ints_made
         self.ff = ff
         self.fr = fr
-        self.turnovers = turnovers
+        self.def_turnovers = def_turnovers
         self.pass_def = pass_def
         self.safeties = safeties
         self.blocked_kicks = blocked_kicks
         self.def_tds = def_tds
+        self.to_margin = to_margin
         self.kr_yds = kr_yds
         self.kr_tds = kr_tds
         self.pr_yds = pr_yds
