@@ -164,7 +164,7 @@ def insert_team_stats_into_db():
         kick_return_stats: List[PlayerKickReturnStats] = [_get_player_kick_return_stats(player) for player in ret_data]
         punt_return_stats: List[PlayerPuntReturnStats] = [_get_player_punt_return_stats(player) for player in ret_data]
         
-        # compile all TDs and TD points
+        # compile all TD points
         passing_tds = sum([p.passing_stats.pass_tds for p in pass_stats])
         rushing_tds = sum([p.rushing_stats.rush_tds for p in rush_stats])
         receiving_tds = sum([p.receiving_stats.rec_tds for p in rec_stats])
@@ -183,29 +183,40 @@ def insert_team_stats_into_db():
         total_points = sum([td_points, kick_points])
         ppg = round(total_points / games_played, 1)
         
-        # calculate pass, rush, rec. total yards and YPG
+        # calculate various offensive stats
         pass_yards = sum([p.passing_stats.pass_yards for p in pass_stats])
         pass_ypg = round(pass_yards / games_played, 1)
         rush_yards = sum([p.rushing_stats.rush_yards for p in rush_stats])
         rush_ypg = round(rush_yards / games_played, 1)
         rec_yards = sum([p.receiving_stats.rec_yards for p in rec_stats])
         rec_ypg = round(rec_yards / games_played, 1)
-        total_yards = pass_yards + rush_yards
-        total_ypg = round(total_yards / games_played, 1)
+        off_yards = pass_yards + rush_yards
+        off_ypg = round(off_yards / games_played, 1)
+        ints = sum([p.passing_stats.ints for p in pass_stats])
+        sacked = sum([p.passing_stats.sacked for p in pass_stats])
+        fumbles = sum([p.rushing_stats.fumbles for p in rush_stats])
+        drops = sum([p.receiving_stats.drops for p in rec_stats])
+        off_turnovers = ints + fumbles
         
         # calculate defensive stat totals
         sacks = sum([p.defensive_stats.sacks for p in def_stats])
-        ints = sum([p.defensive_stats.ints_made for p in def_stats])
+        tfl = sum([p.defensive_stats.tfl for p in def_stats])
+        ints_made = sum([p.defensive_stats.ints_made for p in def_stats])
         ff = sum([p.defensive_stats.forced_fumbles for p in def_stats])
         fr = sum([p.defensive_stats.fumbles_rec for p in def_stats])
-        turnovers = sum([ints, fr])
+        def_turnovers = sum([ints_made, fr])
         pass_def = sum([p.defensive_stats.pass_def for p in def_stats])
         safeties = sum([p.defensive_stats.safeties for p in def_stats])
         blocked_kicks = sum([p.defensive_stats.blocked_kicks for p in def_stats])
+        to_margin = def_turnovers - off_turnovers
         
         # calculate KR and PR yards
         kr_yds = sum([p.kick_return_stats.kr_yds for p in kick_return_stats])
         pr_yds = sum([p.punt_return_stats.pr_yds for p in punt_return_stats])
+
+        # Calculate total yards
+        total_yards = sum([off_yards, kr_yds, pr_yds])
+        total_ypg = round(total_yards / games_played, 1)
         
         team_stats = TeamStatsData(
             id=primary_key,
@@ -217,19 +228,28 @@ def insert_team_stats_into_db():
             pass_yds=pass_yards,
             pass_ypg=pass_ypg,
             pass_tds=passing_tds,
+            ints=ints,
+            sacked=sacked,
             rush_yds=rush_yards,
             rush_tds=rushing_tds,
+            fumbles=fumbles,
             rush_ypg=rush_ypg,
             rec_yds=rec_yards,
             rec_ypg=rec_ypg,
             rec_tds=receiving_tds,
+            drops=drops,
+            off_yards=off_yards,
+            off_ypg=off_ypg,
             total_yards=total_yards,
             total_ypg=total_ypg,
+            off_turnovers=off_turnovers,
             sacks=sacks,
-            ints=ints,
+            tfl=tfl,
+            ints_made=ints_made,
             ff=ff,
             fr=fr,
-            turnovers=turnovers,
+            def_turnovers=def_turnovers,
+            to_margin=to_margin,
             pass_def=pass_def,
             safeties=safeties,
             blocked_kicks=blocked_kicks,
@@ -254,19 +274,28 @@ def insert_team_stats_into_db():
             team_query.pass_yds=team_stats.pass_yds
             team_query.pass_ypg=team_stats.pass_ypg
             team_query.pass_tds=team_stats.pass_tds
+            team_query.ints=team_stats.ints
+            team_query.sacked=team_stats.sacked
             team_query.rush_yds=team_stats.rush_yds
             team_query.rush_ypg=team_stats.rush_ypg
             team_query.rush_tds=team_stats.rush_tds
+            team_query.fumbles=team_stats.fumbles
             team_query.rec_yds=team_stats.rec_yds
             team_query.rec_ypg=team_stats.rec_ypg
             team_query.rec_tds=team_stats.rec_tds
+            team_query.drops=team_stats.drops
+            team_query.off_yards=team_stats.off_yards
+            team_query.off_ypg=team_stats.off_ypg
             team_query.total_yards=team_stats.total_yards
             team_query.total_ypg=team_stats.total_ypg
+            team_query.off_turnovers=team_stats.off_turnovers
             team_query.sacks=team_stats.sacks
-            team_query.ints=team_stats.ints
+            team_query.tfl=team_stats.tfl
+            team_query.ints_made=team_stats.ints_made
             team_query.ff=team_stats.ff
             team_query.fr=team_stats.fr
-            team_query.turnovers=team_stats.turnovers
+            team_query.def_turnovers=team_stats.def_turnovers
+            team_query.to_margin=team_stats.to_margin
             team_query.pass_def=team_stats.pass_def
             team_query.safeties=team_stats.safeties
             team_query.blocked_kicks=team_stats.blocked_kicks
