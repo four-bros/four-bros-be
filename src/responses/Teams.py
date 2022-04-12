@@ -26,7 +26,7 @@ class TeamDetailsSchema(Schema):
 class TeamInfoSchema(Schema):
     id = fields.Int()
     team_name = fields.Str()
-    team_short_name = fields.Str()
+    nickname = fields.Str()
     is_user = fields.Bool()
 
 
