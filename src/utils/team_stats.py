@@ -54,7 +54,7 @@ def _get_team_info(team: TeamInfoData) -> TeamInfo:
     team_info: TeamInfo = TeamInfo(
         id=team.id,
         team_name=team.team_name,
-        team_short_name=team.team_short_name,
+        nickname=team.nickname,
         is_user=team.is_user,
     )
 

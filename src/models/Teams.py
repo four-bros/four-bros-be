@@ -47,12 +47,12 @@ class TeamInfo:
         self,
         id,
         team_name,
-        team_short_name,
+        nickname,
         is_user,
     ):
         self.id = id
         self.team_name = team_name
-        self.team_short_name = team_short_name
+        self.nickname = nickname
         self.is_user = is_user
 
 
