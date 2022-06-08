@@ -73,7 +73,7 @@ async def main():
     ############ typically only necessary if ###############
     ############ updating table structure ##################
     ########################################################
-    Base.metadata.drop_all(engine)
+    # Base.metadata.drop_all(engine)
 
     ########################
     # Create all DB tables #
@@ -84,12 +84,12 @@ async def main():
     # Insert all data to DB tables #
     ################################
 
-    # insert_week_year_into_db(week_year),
-    # insert_team_info_into_db(team_info),
-    # insert_coach_info_into_db(),
-    # insert_commits_into_db(commits),
-    # deactivate_inactive_players(player_info),
-    # insert_player_info_into_db(player_info)
+    insert_week_year_into_db(week_year),
+    insert_team_info_into_db(team_info),
+    insert_coach_info_into_db(),
+    insert_commits_into_db(commits),
+    deactivate_inactive_players(player_info),
+    insert_player_info_into_db(player_info)
     
     
     ##########################################################################
@@ -98,11 +98,11 @@ async def main():
     # data from the season_return_stats table.
     ##########################################################################
 
-    # insert_season_return_stats_into_db(return_stats)
-    # insert_coach_stats_into_db(),
-    # insert_season_def_stats_into_db(def_stats),
-    # insert_season_off_stats_into_db(off_stats),
-    # insert_season_kicking_stats_into_db(kicking_stats)
+    insert_season_return_stats_into_db(return_stats)
+    insert_coach_stats_into_db(),
+    insert_season_def_stats_into_db(def_stats),
+    insert_season_off_stats_into_db(off_stats),
+    insert_season_kicking_stats_into_db(kicking_stats)
     
     ##########################################################################
     # Note: all team_stats, career_stats and game_stats scripts need 
@@ -110,18 +110,18 @@ async def main():
     # scripts are reliant on data from all the various season_stats tables.
     ##########################################################################
 
-    # await asyncio.gather(
-    #     insert_team_season_stats_into_db(),
-    #     insert_team_game_stats_into_db(),
-    #     insert_career_return_stats_into_db(),
-    #     insert_career_def_stats_into_db(),
-    #     insert_career_kicking_stats_into_db(),
-    #     insert_career_off_stats_into_db(),
-    #     insert_game_def_stats_into_db(),
-    #     insert_game_kick_stats_into_db(),
-    #     insert_game_off_stats_into_db(),
-    #     insert_game_return_stats_into_db()
-    # )
+    await asyncio.gather(
+        insert_team_season_stats_into_db(),
+        insert_team_game_stats_into_db(),
+        insert_career_return_stats_into_db(),
+        insert_career_def_stats_into_db(),
+        insert_career_kicking_stats_into_db(),
+        insert_career_off_stats_into_db(),
+        insert_game_def_stats_into_db(),
+        insert_game_kick_stats_into_db(),
+        insert_game_off_stats_into_db(),
+        insert_game_return_stats_into_db()
+    )
 
 sorted_data_dir = sorted(os.listdir(data_dir), key = lambda x: int(x.replace('OD-4Bros3_week', '')))
 
@@ -141,4 +141,4 @@ for file in sorted_data_dir:
     week_year = data['Week/Year'].records
     team_info = data['Team Info'].records
 
-asyncio.run(main())
+    asyncio.run(main())

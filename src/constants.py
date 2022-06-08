@@ -51,10 +51,10 @@ from src.responses.WeekYear import (
 
 # App constants
 app = Flask(__name__)
-app.config['SQL_ALCHEMY_DATABASE_URI'] = "sqlite+pysqlite:///ncaa.db"
+# app.config['SQL_ALCHEMY_DATABASE_URI'] = "sqlite+pysqlite:///ncaa.db"
 # app.config['SQL_ALCHEMY_DATABASE_URI'] = DB_URL
-# DB_URL = os.environ['DATABASE_URL']
-# conn = psycopg2.connect(DB_URL, sslmode='require')
+DB_URL = os.environ['DATABASE_URL']
+conn = psycopg2.connect(DB_URL, sslmode='require')
 # conn = psycopg2.connect(host=DB_HOST, user=DB_USER, password=DB_PASSWORD, dbname=DB_NAME, sslmode='require')
 CORS(app)
 
@@ -101,8 +101,8 @@ user_teams = {user.team_name for user in users}
 
 
 # DB constants
-db_path = "sqlite+pysqlite:///ncaa.db?check_same_thread=False"
-engine = create_engine(db_path, echo=False, future=True)
+# db_path = "sqlite+pysqlite:///ncaa.db?check_same_thread=False"
+engine = create_engine(DB_URL, echo=False, future=True)
 Session = sessionmaker(bind=engine)
 session = Session()
 Base = declarative_base()
