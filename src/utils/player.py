@@ -147,7 +147,7 @@ def _get_player_defensive_stats(player) -> PlayerDefensiveStats:
     def_stats: SeasonDefensiveStatsData = player[1]
 
     player_details: PlayerDetails = _get_player_details(player=player_info)
-    defensive_stats: SeasonDefensiveStatsData = _get_defensive_stats(defensive_stats=def_stats)
+    defensive_stats: SeasonDefensiveStatsData = _get_defensive_stats(defensive_stats_data=def_stats)
 
     player_defensive_stats: PlayerDefensiveStats = PlayerDefensiveStats(
         player_details=player_details,

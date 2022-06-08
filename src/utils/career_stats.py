@@ -232,11 +232,11 @@ def _compile_career_passing_stats(offensive_stats: List[SeasonOffensiveStatsData
         completions / pass_att *100 if pass_att > 0 else 0,
         1
     )
-    pass_yp_attempt = round(
+    pass_ypa = round(
         pass_yards / pass_att if pass_att != 0 else 0,
         1
     )
-    pass_yp_game = round(pass_yards / games_played, 1)
+    pass_ypg = round(pass_yards / games_played, 1)
     pass_rating_calc = (
         0 if pass_att == 0 else \
         ((8.4 * pass_yards) + (330 * pass_tds) + \
@@ -253,8 +253,8 @@ def _compile_career_passing_stats(offensive_stats: List[SeasonOffensiveStatsData
         completions=completions,
         ints=ints,
         pass_att=pass_att,
-        pass_yp_attempt=pass_yp_attempt,
-        pass_yp_game=pass_yp_game,
+        pass_ypa=pass_ypa,
+        pass_ypg=pass_ypg,
         pass_rating=pass_rating,
         year=years,
         sacked=sacked,
@@ -278,11 +278,11 @@ def _compile_career_receiving_stats(offensive_stats: List[SeasonOffensiveStatsDa
     games_played = sum([stats.games_played for stats in yearly_rec_stats])
     yac = sum([stats.yac for stats in yearly_rec_stats])
     drops = sum([stats.drops for stats in yearly_rec_stats])
-    rec_yp_catch = round(
+    rec_ypc = round(
         rec_yards / receptions if receptions != 0 else 0,
         1
     )
-    rec_yp_game = round(rec_yards / games_played, 1)
+    rec_ypg = round(rec_yards / games_played, 1)
     longest_rec = max([stats.longest_rec for stats in yearly_rec_stats])
 
     
@@ -293,8 +293,8 @@ def _compile_career_receiving_stats(offensive_stats: List[SeasonOffensiveStatsDa
         games_played=games_played,
         yac=yac,
         drops=drops,
-        rec_yp_catch=rec_yp_catch,
-        rec_yp_game=rec_yp_game,
+        rec_ypc=rec_ypc,
+        rec_ypg=rec_ypg,
         year=years,
         longest_rec=longest_rec
     )
@@ -363,11 +363,11 @@ def _compile_career_rushing_stats(offensive_stats: List[SeasonOffensiveStatsData
     broke_tkls = sum([stats.broke_tkls for stats in yearly_rush_stats])
     fumbles = sum([stats.fumbles for stats in yearly_rush_stats])
     twenty_plus_yd_runs = sum([stats.twenty_plus_yd_runs for stats in yearly_rush_stats])
-    rush_yp_carry = round(
+    rush_ypc = round(
         rush_yards / rush_att if rush_att != 0 else 0,
         1
     )
-    rush_yp_game = round(rush_yards / games_played, 1)
+    rush_ypg = round(rush_yards / games_played, 1)
     longest_run = max([stats.longest_run for stats in yearly_rush_stats])
 
     career_rushing_stats: RushingStats = RushingStats(
@@ -379,8 +379,8 @@ def _compile_career_rushing_stats(offensive_stats: List[SeasonOffensiveStatsData
         broke_tkls=broke_tkls,
         fumbles=fumbles,
         twenty_plus_yd_runs=twenty_plus_yd_runs,
-        rush_yp_carry=rush_yp_carry,
-        rush_yp_game=rush_yp_game,
+        rush_ypc=rush_ypc,
+        rush_ypg=rush_ypg,
         year=years,
         longest_run=longest_run
     )

@@ -32,7 +32,7 @@ from src.data_models.PlayerInfoData import PlayerInfoData
 from src.data_models.SeasonReturnStatsData import SeasonReturnStatsData
 
 
-def insert_career_def_stats_into_db():
+async def insert_career_def_stats_into_db():
 
     players: List[PlayerInfoData] = session.query(PlayerInfoData).all()
 
@@ -112,7 +112,7 @@ def insert_career_def_stats_into_db():
         session.close()
 
 
-def insert_career_kicking_stats_into_db():
+async def insert_career_kicking_stats_into_db():
 
     players: List[PlayerInfoData] = session.query(PlayerInfoData).all()
 
@@ -212,7 +212,7 @@ def insert_career_kicking_stats_into_db():
         session.close()
 
 
-def insert_career_off_stats_into_db():
+async def insert_career_off_stats_into_db():
 
     players: List[PlayerInfoData] = session.query(PlayerInfoData).all()
 
@@ -261,12 +261,12 @@ def insert_career_off_stats_into_db():
             broke_tkls=career_rush_stats.broke_tkls,
             fumbles=career_rush_stats.fumbles,
             twenty_plus_yd_runs=career_rush_stats.twenty_plus_yd_runs,
-            pass_yp_attempt=career_pass_stats.pass_yp_attempt,
-            pass_yp_game=career_pass_stats.pass_yp_game,
-            rush_yp_carry=career_rush_stats.rush_yp_carry,
-            rush_yp_game=career_rush_stats.rush_yp_game,
-            rec_yp_catch=career_rec_stats.rec_yp_catch,
-            rec_yp_game=career_rec_stats.rec_yp_game,
+            pass_ypa=career_pass_stats.pass_ypa,
+            pass_ypg=career_pass_stats.pass_ypg,
+            rush_ypc=career_rush_stats.rush_ypc,
+            rush_ypg=career_rush_stats.rush_ypg,
+            rec_ypc=career_rec_stats.rec_ypc,
+            rec_ypg=career_rec_stats.rec_ypg,
             pass_rating=career_pass_stats.pass_rating,
             total_yards=career_total_stats.total_yards,
             total_tds=career_total_stats.total_tds,
@@ -306,12 +306,12 @@ def insert_career_off_stats_into_db():
             player_query.broke_tkls=player_career_off_stats.broke_tkls
             player_query.fumbles=player_career_off_stats.fumbles
             player_query.twenty_plus_yd_runs=player_career_off_stats.twenty_plus_yd_runs
-            player_query.pass_yp_attempt=player_career_off_stats.pass_yp_attempt
-            player_query.pass_yp_game=player_career_off_stats.pass_yp_game
-            player_query.rush_yp_carry=player_career_off_stats.rush_yp_carry
-            player_query.rush_yp_game=player_career_off_stats.rush_yp_game
-            player_query.rec_yp_catch=player_career_off_stats.rec_yp_catch
-            player_query.rec_yp_game=player_career_off_stats.rec_yp_game
+            player_query.pass_ypa=player_career_off_stats.pass_ypa
+            player_query.pass_ypg=player_career_off_stats.pass_ypg
+            player_query.rush_ypc=player_career_off_stats.rush_ypc
+            player_query.rush_ypg=player_career_off_stats.rush_ypg
+            player_query.rec_ypc=player_career_off_stats.rec_ypc
+            player_query.rec_ypg=player_career_off_stats.rec_ypg
             player_query.total_yards=player_career_off_stats.total_yards
             player_query.total_tds=player_career_off_stats.total_tds
             player_query.total_ypg=player_career_off_stats.total_ypg
@@ -327,7 +327,7 @@ def insert_career_off_stats_into_db():
         session.close()
 
 
-def insert_career_return_stats_into_db():
+async def insert_career_return_stats_into_db():
 
     players: List[PlayerInfoData] = session.query(PlayerInfoData).all()
 

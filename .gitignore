@@ -4,6 +4,8 @@
 /src/data_models/__pycache__/
 __pycache__/
 .DS_Store
+/src/hidden.py
+.env
 
 # VS 
 .vscode/

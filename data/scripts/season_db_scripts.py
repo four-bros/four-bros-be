@@ -1,3 +1,4 @@
+import asyncio
 from sqlalchemy import desc
 from uuid import uuid4
 
@@ -16,12 +17,7 @@ from src.data_models.WeekYearData import WeekYearData
 ################################################
 ######## insert player data functions ##########
 ################################################
-def insert_season_def_stats_into_db(def_stats):
-
-    week_year: WeekYearData = session.query(WeekYearData).order_by(
-        desc(WeekYearData.year),
-        desc(WeekYearData.week)
-    ).first()
+async def insert_season_def_stats_into_db(def_stats):
 
     for i, value in enumerate(def_stats):
 
@@ -36,7 +32,8 @@ def insert_season_def_stats_into_db(def_stats):
         new_id = str(uuid4())
 
         player_name: PlayerInfoData = session.query(PlayerInfoData).where(
-            PlayerInfoData.roster_id == record.fields['Player ID']
+            PlayerInfoData.roster_id == record.fields['Player ID'],
+            PlayerInfoData.is_active == True
         ).scalar()
 
         player_id: str = ''
@@ -108,7 +105,7 @@ def insert_season_def_stats_into_db(def_stats):
         session.close()
 
 
-def insert_season_kicking_stats_into_db(kicking_stats):
+async def insert_season_kicking_stats_into_db(kicking_stats):
     
     for i, value in enumerate(kicking_stats):
 
@@ -137,7 +134,8 @@ def insert_season_kicking_stats_into_db(kicking_stats):
             1)
         
         player_name: PlayerInfoData = session.query(PlayerInfoData).where(
-            PlayerInfoData.roster_id == record.fields['Player ID']
+            PlayerInfoData.roster_id == record.fields['Player ID'],
+            PlayerInfoData.is_active == True
         ).scalar()
 
         player_id: str = ''
@@ -229,7 +227,7 @@ def insert_season_kicking_stats_into_db(kicking_stats):
         session.close()
 
 
-def insert_season_off_stats_into_db(off_stats):
+async def insert_season_off_stats_into_db(off_stats):
 
     for i, value in enumerate(off_stats):
         record = off_stats[i]
@@ -241,32 +239,32 @@ def insert_season_off_stats_into_db(off_stats):
                 if record.fields['Pass Att.'] != 0 else 0,
                 1
             )
-        pass_yp_attempt = round(
+        pass_ypa = round(
             record.fields['Pass. Yards'] / record.fields['Pass Att.']\
                 if record.fields['Pass Att.'] != 0 else 0,
                 1
             )
-        pass_yp_game = round(
+        pass_ypg = round(
             record.fields['Pass. Yards'] / record.fields['Games Played']\
                 if record.fields['Games Played'] != 0 else 0, 
                 1
             )
-        rush_yp_carry = round(
+        rush_ypc = round(
             record.fields['Rush Yards'] / record.fields['Rush Att.']\
                 if record.fields['Rush Att.'] != 0 else 0,
                 1
             )
-        rush_yp_game = round(
+        rush_ypg = round(
             record.fields['Rush Yards'] / record.fields['Games Played']\
                 if record.fields['Games Played'] != 0 else 0,
                 1
             )
-        rec_yp_catch = round(
+        rec_ypc = round(
             record.fields['Rec. Yards'] / record.fields['Receptions']\
                 if record.fields['Receptions'] != 0 else 0,
                 1
             )
-        rec_yp_game = round(
+        rec_ypg = round(
             record.fields['Rec. Yards'] / record.fields['Games Played']\
                 if record.fields['Games Played'] != 0 else 0,
                 1
@@ -317,7 +315,8 @@ def insert_season_off_stats_into_db(off_stats):
                 1)
         
         player_name: PlayerInfoData = session.query(PlayerInfoData).where(
-            PlayerInfoData.roster_id == record.fields['Player ID']
+            PlayerInfoData.roster_id == record.fields['Player ID'],
+            PlayerInfoData.is_active == True,
         ).scalar()
 
         player_id: str = ''
@@ -353,12 +352,12 @@ def insert_season_off_stats_into_db(off_stats):
             broke_tkls=record.fields['Broke Tkls.'],
             fumbles=record.fields['Fumbles'],
             twenty_plus_yd_runs=record.fields['20+ yd. Runs'],
-            pass_yp_attempt=pass_yp_attempt,
-            pass_yp_game=pass_yp_game,
-            rush_yp_carry=rush_yp_carry,
-            rush_yp_game=rush_yp_game,
-            rec_yp_catch=rec_yp_catch,
-            rec_yp_game=rec_yp_game,
+            pass_ypa=pass_ypa,
+            pass_ypg=pass_ypg,
+            rush_ypc=rush_ypc,
+            rush_ypg=rush_ypg,
+            rec_ypc=rec_ypc,
+            rec_ypg=rec_ypg,
             pass_rating=pass_rating,
             total_yards=total_yards,
             total_tds=total_tds,
@@ -399,12 +398,12 @@ def insert_season_off_stats_into_db(off_stats):
             player_query.broke_tkls=player_off_stats.broke_tkls
             player_query.fumbles=player_off_stats.fumbles
             player_query.twenty_plus_yd_runs=player_off_stats.twenty_plus_yd_runs
-            player_query.pass_yp_attempt=player_off_stats.pass_yp_attempt
-            player_query.pass_yp_game=player_off_stats.pass_yp_game
-            player_query.rush_yp_carry=player_off_stats.rush_yp_carry
-            player_query.rush_yp_game=player_off_stats.rush_yp_game
-            player_query.rec_yp_catch=player_off_stats.rec_yp_catch
-            player_query.rec_yp_game=player_off_stats.rec_yp_game
+            player_query.pass_ypa=player_off_stats.pass_ypa
+            player_query.pass_ypg=player_off_stats.pass_ypg
+            player_query.rush_ypc=player_off_stats.rush_ypc
+            player_query.rush_ypg=player_off_stats.rush_ypg
+            player_query.rec_ypc=player_off_stats.rec_ypc
+            player_query.rec_ypg=player_off_stats.rec_ypg
             player_query.total_yards=player_off_stats.total_yards
             player_query.total_tds=player_off_stats.total_tds
             player_query.total_ypg=player_off_stats.total_ypg
@@ -420,12 +419,7 @@ def insert_season_off_stats_into_db(off_stats):
         session.close()
 
 
-def insert_season_return_stats_into_db(return_stats):
-
-    week_year: WeekYearData = session.query(WeekYearData).order_by(
-        desc(WeekYearData.year),
-        desc(WeekYearData.week)
-    ).first()
+async def insert_season_return_stats_into_db(return_stats):
     
     for i, value in enumerate(return_stats):
         record = return_stats[i]
@@ -444,7 +438,8 @@ def insert_season_return_stats_into_db(return_stats):
             )
 
         player_name: PlayerInfoData = session.query(PlayerInfoData).where(
-            PlayerInfoData.roster_id == record.fields['Player ID']
+            PlayerInfoData.roster_id == record.fields['Player ID'],
+            PlayerInfoData.is_active == True
         ).scalar()
 
         player_id: str = ''
@@ -480,7 +475,6 @@ def insert_season_return_stats_into_db(return_stats):
             session.add(player_return_stats)
             
         else:
-
             player_query.kick_returns=player_return_stats.kick_returns
             player_query.year=player_return_stats.year
             player_query.long_kr=player_return_stats.long_kr

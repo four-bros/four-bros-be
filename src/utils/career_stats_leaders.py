@@ -299,15 +299,15 @@ def _get_career_passing_stats_leaders():
             PlayerInfoData.id == CareerOffensiveStatsData.player_id,
             ).order_by(desc(CareerOffensiveStatsData.ints)).limit(10)
 
-    pass_yp_attempt_data = session.query(PlayerInfoData, CareerOffensiveStatsData).filter(
+    pass_ypa_data = session.query(PlayerInfoData, CareerOffensiveStatsData).filter(
             PlayerInfoData.id == CareerOffensiveStatsData.player_id,
             CareerOffensiveStatsData.pass_att > 100,
-            ).order_by(desc(CareerOffensiveStatsData.pass_yp_attempt)).limit(10)
+            ).order_by(desc(CareerOffensiveStatsData.pass_ypa)).limit(10)
 
-    pass_yp_game_data = session.query(PlayerInfoData, CareerOffensiveStatsData).filter(
+    pass_ypg_data = session.query(PlayerInfoData, CareerOffensiveStatsData).filter(
             PlayerInfoData.id == CareerOffensiveStatsData.player_id,
             CareerOffensiveStatsData.pass_att > 100,
-            ).order_by(desc(CareerOffensiveStatsData.pass_yp_game)).limit(10)
+            ).order_by(desc(CareerOffensiveStatsData.pass_ypg)).limit(10)
 
     pass_rating_data = session.query(PlayerInfoData, CareerOffensiveStatsData).filter(
             PlayerInfoData.id == CareerOffensiveStatsData.player_id,
@@ -322,8 +322,8 @@ def _get_career_passing_stats_leaders():
     converted_pass_yards: List[PlayerPassingStats] = [_get_player_passing_stats(player) for player in pass_yards_data]
     converted_pass_tds: List[PlayerPassingStats] = [_get_player_passing_stats(player) for player in pass_tds_data]
     converted_ints: List[PlayerPassingStats] = [_get_player_passing_stats(player) for player in ints_data]
-    converted_pass_yp_attempt: List[PlayerPassingStats] = [_get_player_passing_stats(player) for player in pass_yp_attempt_data]
-    converted_pass_yp_game: List[PlayerPassingStats] = [_get_player_passing_stats(player) for player in pass_yp_game_data]
+    converted_pass_ypa: List[PlayerPassingStats] = [_get_player_passing_stats(player) for player in pass_ypa_data]
+    converted_pass_ypg: List[PlayerPassingStats] = [_get_player_passing_stats(player) for player in pass_ypg_data]
     converted_pass_rating: List[PlayerPassingStats] = [_get_player_passing_stats(player) for player in pass_rating_data]
 
     # Convert top ten lists into json
@@ -334,8 +334,8 @@ def _get_career_passing_stats_leaders():
     pass_yard_leaders_json = passing_stats_schema.dump(converted_pass_yards)
     pass_td_leaders_json = passing_stats_schema.dump(converted_pass_tds)
     int_leaders_json = passing_stats_schema.dump(converted_ints)
-    pass_yp_attempt_leaders_json = passing_stats_schema.dump(converted_pass_yp_attempt)
-    pass_yp_game_leaders_json = passing_stats_schema.dump(converted_pass_yp_game)
+    pass_ypa_leaders_json = passing_stats_schema.dump(converted_pass_ypa)
+    pass_ypg_leaders_json = passing_stats_schema.dump(converted_pass_ypg)
     pass_rating_leaders_json = passing_stats_schema.dump(converted_pass_rating)
 
     response = {
@@ -346,8 +346,8 @@ def _get_career_passing_stats_leaders():
         'pass_yards': pass_yard_leaders_json,
         'pass_tds': pass_td_leaders_json,
         'interceptions': int_leaders_json,
-        'pass_yp_attempt': pass_yp_attempt_leaders_json,
-        'pass_yp_game': pass_yp_game_leaders_json,
+        'pass_ypa': pass_ypa_leaders_json,
+        'pass_ypg': pass_ypg_leaders_json,
         'pass_rating': pass_rating_leaders_json
     }
 
@@ -490,15 +490,15 @@ def _get_career_rec_stats_leaders():
             PlayerInfoData.id == CareerOffensiveStatsData.player_id,
             ).order_by(desc(CareerOffensiveStatsData.drops)).limit(10)
 
-    rec_yp_catch_data = session.query(PlayerInfoData, CareerOffensiveStatsData).filter(
+    rec_ypc_data = session.query(PlayerInfoData, CareerOffensiveStatsData).filter(
             PlayerInfoData.id == CareerOffensiveStatsData.player_id,
             CareerOffensiveStatsData.receptions > 50
-            ).order_by(desc(CareerOffensiveStatsData.rec_yp_catch)).limit(10)
+            ).order_by(desc(CareerOffensiveStatsData.rec_ypc)).limit(10)
 
-    rec_yp_game_data = session.query(PlayerInfoData, CareerOffensiveStatsData).filter(
+    rec_ypg_data = session.query(PlayerInfoData, CareerOffensiveStatsData).filter(
             PlayerInfoData.id == CareerOffensiveStatsData.player_id,
             CareerOffensiveStatsData.receptions > 50
-            ).order_by(desc(CareerOffensiveStatsData.rec_yp_game)).limit(10)
+            ).order_by(desc(CareerOffensiveStatsData.rec_ypg)).limit(10)
 
     # Convert players to PlayerReceivingStats model so they can be sorted
     converted_receptions: List[PlayerReceivingStats] = [_get_player_receiving_stats(player) for player in receptions_data]
@@ -506,8 +506,8 @@ def _get_career_rec_stats_leaders():
     converted_rec_tds: List[PlayerReceivingStats] = [_get_player_receiving_stats(player) for player in rec_tds_data]
     converted_yac: List[PlayerReceivingStats] = [_get_player_receiving_stats(player) for player in yac_data]
     converted_drops: List[PlayerReceivingStats] = [_get_player_receiving_stats(player) for player in drops_data]
-    converted_rec_yp_catch: List[PlayerReceivingStats] = [_get_player_receiving_stats(player) for player in rec_yp_catch_data]
-    converted_rec_yp_game: List[PlayerReceivingStats] = [_get_player_receiving_stats(player) for player in rec_yp_game_data]
+    converted_rec_ypc: List[PlayerReceivingStats] = [_get_player_receiving_stats(player) for player in rec_ypc_data]
+    converted_rec_ypg: List[PlayerReceivingStats] = [_get_player_receiving_stats(player) for player in rec_ypg_data]
 
     # Convert top ten lists to json
     reception_leaders_json = receiving_stats_schema.dump(converted_receptions)
@@ -515,8 +515,8 @@ def _get_career_rec_stats_leaders():
     rec_tds_leaders_json = receiving_stats_schema.dump(converted_rec_tds)
     yac_leaders_json = receiving_stats_schema.dump(converted_yac)
     drops_leaders_json = receiving_stats_schema.dump(converted_drops)
-    rec_yp_catch_leaders_json = receiving_stats_schema.dump(converted_rec_yp_catch)
-    rec_yp_game_leaders_json = receiving_stats_schema.dump(converted_rec_yp_game)
+    rec_ypc_leaders_json = receiving_stats_schema.dump(converted_rec_ypc)
+    rec_ypg_leaders_json = receiving_stats_schema.dump(converted_rec_ypg)
 
     response = {
         'receptions': reception_leaders_json,
@@ -524,8 +524,8 @@ def _get_career_rec_stats_leaders():
         'rec_tds': rec_tds_leaders_json,
         'yac': yac_leaders_json,
         'drops': drops_leaders_json,
-        'rec_yp_catch': rec_yp_catch_leaders_json,
-        'rec_yp_game': rec_yp_game_leaders_json
+        'rec_ypc': rec_ypc_leaders_json,
+        'rec_ypg': rec_ypg_leaders_json
     }
 
     return response
@@ -558,15 +558,15 @@ def _get_career_rush_stats_leaders():
             PlayerInfoData.id == CareerOffensiveStatsData.player_id,
             ).order_by(desc(CareerOffensiveStatsData.twenty_plus_yd_runs)).limit(10)
 
-    rush_yp_carry_data = session.query(PlayerInfoData, CareerOffensiveStatsData).filter(
+    rush_ypc_data = session.query(PlayerInfoData, CareerOffensiveStatsData).filter(
             PlayerInfoData.id == CareerOffensiveStatsData.player_id,
             CareerOffensiveStatsData.rush_att > 50
-            ).order_by(desc(CareerOffensiveStatsData.rush_yp_carry)).limit(10)
+            ).order_by(desc(CareerOffensiveStatsData.rush_ypc)).limit(10)
 
-    rush_yp_game_data = session.query(PlayerInfoData, CareerOffensiveStatsData).filter(
+    rush_ypg_data = session.query(PlayerInfoData, CareerOffensiveStatsData).filter(
             PlayerInfoData.id == CareerOffensiveStatsData.player_id,
             CareerOffensiveStatsData.rush_att > 50
-            ).order_by(desc(CareerOffensiveStatsData.rush_yp_game)).limit(10)
+            ).order_by(desc(CareerOffensiveStatsData.rush_ypg)).limit(10)
     
     rush_tds_data = session.query(PlayerInfoData, CareerOffensiveStatsData).filter(
             PlayerInfoData.id == CareerOffensiveStatsData.player_id,
@@ -580,8 +580,8 @@ def _get_career_rush_stats_leaders():
     converted_broke_tkls: List[PlayerRushingStats] = [_get_player_rushing_stats(player) for player in broke_tkls_data]
     converted_fumbles: List[PlayerRushingStats] = [_get_player_rushing_stats(player) for player in fumbles_data]
     converted_twenty_plus_yd_runs: List[PlayerRushingStats] = [_get_player_rushing_stats(player) for player in twenty_plus_yd_runs_data]
-    converted_rush_yp_carry: List[PlayerRushingStats] = [_get_player_rushing_stats(player) for player in rush_yp_carry_data]
-    converted_rush_yp_game: List[PlayerRushingStats] = [_get_player_rushing_stats(player) for player in rush_yp_game_data]
+    converted_rush_ypc: List[PlayerRushingStats] = [_get_player_rushing_stats(player) for player in rush_ypc_data]
+    converted_rush_ypg: List[PlayerRushingStats] = [_get_player_rushing_stats(player) for player in rush_ypg_data]
     converted_rush_tds: List[PlayerRushingStats] = [_get_player_rushing_stats(player) for player in rush_tds_data]
 
     # Convert top ten lists to json
@@ -591,8 +591,8 @@ def _get_career_rush_stats_leaders():
     broke_tkls_leaders_json = rushing_stats_schema.dump(converted_broke_tkls)
     fumbles_leaders_json = rushing_stats_schema.dump(converted_fumbles)
     twenty_plus_yd_runs_leaders_json = rushing_stats_schema.dump(converted_twenty_plus_yd_runs)
-    rush_yp_carry_leaders_json = rushing_stats_schema.dump(converted_rush_yp_carry)
-    rush_yp_game_leaders_json = rushing_stats_schema.dump(converted_rush_yp_game)
+    rush_ypc_leaders_json = rushing_stats_schema.dump(converted_rush_ypc)
+    rush_ypg_leaders_json = rushing_stats_schema.dump(converted_rush_ypg)
     rush_tds_leaders_json = rushing_stats_schema.dump(converted_rush_tds)
 
     response = {
@@ -602,8 +602,8 @@ def _get_career_rush_stats_leaders():
         'broken_tackles': broke_tkls_leaders_json,
         'fumbles': fumbles_leaders_json,
         'twenty_plus_runs': twenty_plus_yd_runs_leaders_json,
-        'rush_yp_carry': rush_yp_carry_leaders_json,
-        'rush_yp_game': rush_yp_game_leaders_json,
+        'rush_ypc': rush_ypc_leaders_json,
+        'rush_ypg': rush_ypg_leaders_json,
         'tds': rush_tds_leaders_json
     }
 

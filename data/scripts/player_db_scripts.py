@@ -1,3 +1,4 @@
+import asyncio
 from typing import List
 from sqlalchemy import desc
 from uuid import uuid4
@@ -7,7 +8,7 @@ from src.constants import session
 from src.data_models.PlayerInfoData import PlayerInfoData
 from src.data_models.WeekYearData import WeekYearData
 
-def deactivate_inactive_players(player_info):
+async def deactivate_inactive_players(player_info):
 
     week_year: WeekYearData = session.query(WeekYearData).order_by(
         desc(WeekYearData.year),
@@ -23,7 +24,6 @@ def deactivate_inactive_players(player_info):
             player_id = str(record.fields['Player ID']) + record.fields['First Name'] + record.fields['Last Name']
             active_player_ids.append(player_id)
         
-        print(active_player_ids[0:10])
         
         # Get all players in DB to determine if they are active or not
         all_players: List[PlayerInfoData] = session.query(PlayerInfoData).all()
@@ -31,6 +31,10 @@ def deactivate_inactive_players(player_info):
         for player in all_players:
             if player.id not in active_player_ids:
                 player.is_active = False
+                player.player_year = 'Grad.'
+            if player.roster_id == 1783 and player.first_name == 'Brady':
+                player.is_active = False
+                player.player_year = 'Grad.'
 
         try:
             session.commit()
@@ -41,7 +45,7 @@ def deactivate_inactive_players(player_info):
             session.close()
 
 
-def insert_player_info_into_db(player_info):
+async def insert_player_info_into_db(player_info):
 
     for i, value in enumerate(player_info):
         
@@ -56,7 +60,8 @@ def insert_player_info_into_db(player_info):
             record.fields['Team ID'] == 164 or
             record.fields['Team ID'] == 300 or
             record.fields['Team ID'] == 400 or
-            record.fields['Team ID'] == 1023
+            record.fields['Team ID'] == 1023 or
+            (record.fields['Player ID'] == '1783' and record.fields['First Name'] == 'Brady')
         ):
             continue
         

@@ -6,7 +6,7 @@ from src.constants import (
     team_season_records_schema
 )
 from src.data_models.TeamInfoData import TeamInfoData
-from src.data_models.TeamStatsData import TeamStatsData
+from src.data_models.TeamSeasonStatsData import TeamSeasonStatsData
 from src.data_models.WeekYearData import WeekYearData
 from src.models.Teams import TeamSeasonRecord
 from src.utils.team import _get_team_info_and_stats
@@ -19,223 +19,223 @@ def _get_team_season_stats_leaders(is_season_specific: bool):
             desc(WeekYearData.year)
         ).first()
         # Offensive Team Records Data
-        total_points_data = session.query(TeamInfoData, TeamStatsData).filter(
-            TeamInfoData.id == TeamStatsData.team_id,
-            TeamStatsData.year == week_year.year
+        total_points_data = session.query(TeamInfoData, TeamSeasonStatsData).filter(
+            TeamInfoData.id == TeamSeasonStatsData.team_id,
+            TeamSeasonStatsData.year == week_year.year
         ).order_by(
-            desc(TeamStatsData.total_points)
+            desc(TeamSeasonStatsData.total_points)
         ).limit(10)
 
-        total_yards_data = session.query(TeamInfoData, TeamStatsData).filter(
-            TeamInfoData.id == TeamStatsData.team_id,
-            TeamStatsData.year == week_year.year
+        total_yards_data = session.query(TeamInfoData, TeamSeasonStatsData).filter(
+            TeamInfoData.id == TeamSeasonStatsData.team_id,
+            TeamSeasonStatsData.year == week_year.year
         ).order_by(
-            desc(TeamStatsData.total_yards)
+            desc(TeamSeasonStatsData.total_yards)
         ).limit(10)
 
-        ppg_data = session.query(TeamInfoData, TeamStatsData).filter(
-            TeamInfoData.id == TeamStatsData.team_id,
-            TeamStatsData.year == week_year.year
+        ppg_data = session.query(TeamInfoData, TeamSeasonStatsData).filter(
+            TeamInfoData.id == TeamSeasonStatsData.team_id,
+            TeamSeasonStatsData.year == week_year.year
         ).order_by(
-            desc(TeamStatsData.ppg)
+            desc(TeamSeasonStatsData.ppg)
         ).limit(10)
 
-        pass_yds_data = session.query(TeamInfoData, TeamStatsData).filter(
-            TeamInfoData.id == TeamStatsData.team_id,
-            TeamStatsData.year == week_year.year
+        pass_yds_data = session.query(TeamInfoData, TeamSeasonStatsData).filter(
+            TeamInfoData.id == TeamSeasonStatsData.team_id,
+            TeamSeasonStatsData.year == week_year.year
         ).order_by(
-            desc(TeamStatsData.pass_yds)
+            desc(TeamSeasonStatsData.pass_yds)
         ).limit(10)
 
-        pass_tds_data = session.query(TeamInfoData, TeamStatsData).filter(
-            TeamInfoData.id == TeamStatsData.team_id,
-            TeamStatsData.year == week_year.year
+        pass_tds_data = session.query(TeamInfoData, TeamSeasonStatsData).filter(
+            TeamInfoData.id == TeamSeasonStatsData.team_id,
+            TeamSeasonStatsData.year == week_year.year
         ).order_by(
-            desc(TeamStatsData.pass_tds)
+            desc(TeamSeasonStatsData.pass_tds)
         ).limit(10)
 
-        ints_data = session.query(TeamInfoData, TeamStatsData).filter(
-            TeamInfoData.id == TeamStatsData.team_id,
-            TeamStatsData.year == week_year.year
+        ints_data = session.query(TeamInfoData, TeamSeasonStatsData).filter(
+            TeamInfoData.id == TeamSeasonStatsData.team_id,
+            TeamSeasonStatsData.year == week_year.year
         ).order_by(
-            desc(TeamStatsData.ints)
+            desc(TeamSeasonStatsData.ints)
         ).limit(10)
 
-        sacked_data = session.query(TeamInfoData, TeamStatsData).filter(
-            TeamInfoData.id == TeamStatsData.team_id,
-            TeamStatsData.year == week_year.year
+        sacked_data = session.query(TeamInfoData, TeamSeasonStatsData).filter(
+            TeamInfoData.id == TeamSeasonStatsData.team_id,
+            TeamSeasonStatsData.year == week_year.year
         ).order_by(
-            desc(TeamStatsData.sacked)
+            desc(TeamSeasonStatsData.sacked)
         ).limit(10)
 
-        rush_yds_data = session.query(TeamInfoData, TeamStatsData).filter(
-            TeamInfoData.id == TeamStatsData.team_id,
-            TeamStatsData.year == week_year.year
+        rush_yds_data = session.query(TeamInfoData, TeamSeasonStatsData).filter(
+            TeamInfoData.id == TeamSeasonStatsData.team_id,
+            TeamSeasonStatsData.year == week_year.year
         ).order_by(
-            desc(TeamStatsData.rush_yds)
+            desc(TeamSeasonStatsData.rush_yds)
         ).limit(10)
 
-        rush_tds_data = session.query(TeamInfoData, TeamStatsData).filter(
-            TeamInfoData.id == TeamStatsData.team_id,
-            TeamStatsData.year == week_year.year
+        rush_tds_data = session.query(TeamInfoData, TeamSeasonStatsData).filter(
+            TeamInfoData.id == TeamSeasonStatsData.team_id,
+            TeamSeasonStatsData.year == week_year.year
         ).order_by(
-            desc(TeamStatsData.rush_tds)
+            desc(TeamSeasonStatsData.rush_tds)
         ).limit(10)
 
-        fumbles_data = session.query(TeamInfoData, TeamStatsData).filter(
-            TeamInfoData.id == TeamStatsData.team_id,
-            TeamStatsData.year == week_year.year
+        fumbles_data = session.query(TeamInfoData, TeamSeasonStatsData).filter(
+            TeamInfoData.id == TeamSeasonStatsData.team_id,
+            TeamSeasonStatsData.year == week_year.year
         ).order_by(
-            desc(TeamStatsData.fumbles)
+            desc(TeamSeasonStatsData.fumbles)
         ).limit(10)
 
-        drops_data = session.query(TeamInfoData, TeamStatsData).filter(
-            TeamInfoData.id == TeamStatsData.team_id,
-            TeamStatsData.year == week_year.year
+        drops_data = session.query(TeamInfoData, TeamSeasonStatsData).filter(
+            TeamInfoData.id == TeamSeasonStatsData.team_id,
+            TeamSeasonStatsData.year == week_year.year
         ).order_by(
-            desc(TeamStatsData.drops)
+            desc(TeamSeasonStatsData.drops)
         ).limit(10)
 
-        off_turnovers_data = session.query(TeamInfoData, TeamStatsData).filter(
-            TeamInfoData.id == TeamStatsData.team_id,
-            TeamStatsData.year == week_year.year
+        off_turnovers_data = session.query(TeamInfoData, TeamSeasonStatsData).filter(
+            TeamInfoData.id == TeamSeasonStatsData.team_id,
+            TeamSeasonStatsData.year == week_year.year
         ).order_by(
-            desc(TeamStatsData.off_turnovers)
+            desc(TeamSeasonStatsData.off_turnovers)
         ).limit(10)
 
-        off_yards_data = session.query(TeamInfoData, TeamStatsData).filter(
-            TeamInfoData.id == TeamStatsData.team_id,
-            TeamStatsData.year == week_year.year
+        off_yards_data = session.query(TeamInfoData, TeamSeasonStatsData).filter(
+            TeamInfoData.id == TeamSeasonStatsData.team_id,
+            TeamSeasonStatsData.year == week_year.year
         ).order_by(
-            desc(TeamStatsData.off_yards)
+            desc(TeamSeasonStatsData.off_yards)
         ).limit(10)
 
-        off_ypg_data = session.query(TeamInfoData, TeamStatsData).filter(
-            TeamInfoData.id == TeamStatsData.team_id,
-            TeamStatsData.year == week_year.year
+        off_ypg_data = session.query(TeamInfoData, TeamSeasonStatsData).filter(
+            TeamInfoData.id == TeamSeasonStatsData.team_id,
+            TeamSeasonStatsData.year == week_year.year
         ).order_by(
-            desc(TeamStatsData.off_ypg)
+            desc(TeamSeasonStatsData.off_ypg)
         ).limit(10)
 
-        total_yards_data = session.query(TeamInfoData, TeamStatsData).filter(
-            TeamInfoData.id == TeamStatsData.team_id,
-            TeamStatsData.year == week_year.year
+        total_yards_data = session.query(TeamInfoData, TeamSeasonStatsData).filter(
+            TeamInfoData.id == TeamSeasonStatsData.team_id,
+            TeamSeasonStatsData.year == week_year.year
         ).order_by(
-            desc(TeamStatsData.total_yards)
+            desc(TeamSeasonStatsData.total_yards)
         ).limit(10)
 
-        total_ypg_data = session.query(TeamInfoData, TeamStatsData).filter(
-            TeamInfoData.id == TeamStatsData.team_id,
-            TeamStatsData.year == week_year.year
+        total_ypg_data = session.query(TeamInfoData, TeamSeasonStatsData).filter(
+            TeamInfoData.id == TeamSeasonStatsData.team_id,
+            TeamSeasonStatsData.year == week_year.year
         ).order_by(
-            desc(TeamStatsData.total_ypg)
+            desc(TeamSeasonStatsData.total_ypg)
         ).limit(10)
 
         # Defensive Team Records Data
-        sacks_data = session.query(TeamInfoData, TeamStatsData).filter(
-            TeamInfoData.id == TeamStatsData.team_id,
-            TeamStatsData.year == week_year.year
+        sacks_data = session.query(TeamInfoData, TeamSeasonStatsData).filter(
+            TeamInfoData.id == TeamSeasonStatsData.team_id,
+            TeamSeasonStatsData.year == week_year.year
         ).order_by(
-            desc(TeamStatsData.sacks)
+            desc(TeamSeasonStatsData.sacks)
         ).limit(10)
 
-        tfl_data = session.query(TeamInfoData, TeamStatsData).filter(
-            TeamInfoData.id == TeamStatsData.team_id,
-            TeamStatsData.year == week_year.year
+        tfl_data = session.query(TeamInfoData, TeamSeasonStatsData).filter(
+            TeamInfoData.id == TeamSeasonStatsData.team_id,
+            TeamSeasonStatsData.year == week_year.year
         ).order_by(
-            desc(TeamStatsData.tfl)
+            desc(TeamSeasonStatsData.tfl)
         ).limit(10)
 
-        ints_made_data = session.query(TeamInfoData, TeamStatsData).filter(
-            TeamInfoData.id == TeamStatsData.team_id,
-            TeamStatsData.year == week_year.year
+        ints_made_data = session.query(TeamInfoData, TeamSeasonStatsData).filter(
+            TeamInfoData.id == TeamSeasonStatsData.team_id,
+            TeamSeasonStatsData.year == week_year.year
         ).order_by(
-            desc(TeamStatsData.ints_made)
+            desc(TeamSeasonStatsData.ints_made)
         ).limit(10)
 
-        ff_data = session.query(TeamInfoData, TeamStatsData).filter(
-            TeamInfoData.id == TeamStatsData.team_id,
-            TeamStatsData.year == week_year.year
+        ff_data = session.query(TeamInfoData, TeamSeasonStatsData).filter(
+            TeamInfoData.id == TeamSeasonStatsData.team_id,
+            TeamSeasonStatsData.year == week_year.year
         ).order_by(
-            desc(TeamStatsData.ff)
+            desc(TeamSeasonStatsData.ff)
         ).limit(10)
 
-        fr_data = session.query(TeamInfoData, TeamStatsData).filter(
-            TeamInfoData.id == TeamStatsData.team_id,
-            TeamStatsData.year == week_year.year
+        fr_data = session.query(TeamInfoData, TeamSeasonStatsData).filter(
+            TeamInfoData.id == TeamSeasonStatsData.team_id,
+            TeamSeasonStatsData.year == week_year.year
         ).order_by(
-            desc(TeamStatsData.fr)
+            desc(TeamSeasonStatsData.fr)
         ).limit(10)
 
-        def_turnovers_data = session.query(TeamInfoData, TeamStatsData).filter(
-            TeamInfoData.id == TeamStatsData.team_id,
-            TeamStatsData.year == week_year.year
+        def_turnovers_data = session.query(TeamInfoData, TeamSeasonStatsData).filter(
+            TeamInfoData.id == TeamSeasonStatsData.team_id,
+            TeamSeasonStatsData.year == week_year.year
         ).order_by(
-            desc(TeamStatsData.def_turnovers)
+            desc(TeamSeasonStatsData.def_turnovers)
         ).limit(10)
 
-        pass_def_data = session.query(TeamInfoData, TeamStatsData).filter(
-            TeamInfoData.id == TeamStatsData.team_id,
-            TeamStatsData.year == week_year.year
+        pass_def_data = session.query(TeamInfoData, TeamSeasonStatsData).filter(
+            TeamInfoData.id == TeamSeasonStatsData.team_id,
+            TeamSeasonStatsData.year == week_year.year
         ).order_by(
-            desc(TeamStatsData.pass_def)
+            desc(TeamSeasonStatsData.pass_def)
         ).limit(10)
 
-        safeties_data = session.query(TeamInfoData, TeamStatsData).filter(
-            TeamInfoData.id == TeamStatsData.team_id,
-            TeamStatsData.year == week_year.year
+        safeties_data = session.query(TeamInfoData, TeamSeasonStatsData).filter(
+            TeamInfoData.id == TeamSeasonStatsData.team_id,
+            TeamSeasonStatsData.year == week_year.year
         ).order_by(
-            desc(TeamStatsData.safeties)
+            desc(TeamSeasonStatsData.safeties)
         ).limit(10)
 
-        blocked_kicks_data = session.query(TeamInfoData, TeamStatsData).filter(
-            TeamInfoData.id == TeamStatsData.team_id,
-            TeamStatsData.year == week_year.year
+        blocked_kicks_data = session.query(TeamInfoData, TeamSeasonStatsData).filter(
+            TeamInfoData.id == TeamSeasonStatsData.team_id,
+            TeamSeasonStatsData.year == week_year.year
         ).order_by(
-            desc(TeamStatsData.blocked_kicks)
+            desc(TeamSeasonStatsData.blocked_kicks)
         ).limit(10)
 
-        def_tds_data = session.query(TeamInfoData, TeamStatsData).filter(
-            TeamInfoData.id == TeamStatsData.team_id,
-            TeamStatsData.year == week_year.year
+        def_tds_data = session.query(TeamInfoData, TeamSeasonStatsData).filter(
+            TeamInfoData.id == TeamSeasonStatsData.team_id,
+            TeamSeasonStatsData.year == week_year.year
         ).order_by(
-            desc(TeamStatsData.def_tds)
+            desc(TeamSeasonStatsData.def_tds)
         ).limit(10)
 
-        to_margin_data = session.query(TeamInfoData, TeamStatsData).filter(
-            TeamInfoData.id == TeamStatsData.team_id,
-            TeamStatsData.year == week_year.year
+        to_margin_data = session.query(TeamInfoData, TeamSeasonStatsData).filter(
+            TeamInfoData.id == TeamSeasonStatsData.team_id,
+            TeamSeasonStatsData.year == week_year.year
         ).order_by(
-            desc(TeamStatsData.to_margin)
+            desc(TeamSeasonStatsData.to_margin)
         ).limit(10)
 
         # Special Teams Team Records Data
-        kr_yds_data = session.query(TeamInfoData, TeamStatsData).filter(
-            TeamInfoData.id == TeamStatsData.team_id,
-            TeamStatsData.year == week_year.year
+        kr_yds_data = session.query(TeamInfoData, TeamSeasonStatsData).filter(
+            TeamInfoData.id == TeamSeasonStatsData.team_id,
+            TeamSeasonStatsData.year == week_year.year
         ).order_by(
-            desc(TeamStatsData.kr_yds)
+            desc(TeamSeasonStatsData.kr_yds)
         ).limit(10)
 
-        kr_tds_data = session.query(TeamInfoData, TeamStatsData).filter(
-            TeamInfoData.id == TeamStatsData.team_id,
-            TeamStatsData.year == week_year.year
+        kr_tds_data = session.query(TeamInfoData, TeamSeasonStatsData).filter(
+            TeamInfoData.id == TeamSeasonStatsData.team_id,
+            TeamSeasonStatsData.year == week_year.year
         ).order_by(
-            desc(TeamStatsData.kr_tds)
+            desc(TeamSeasonStatsData.kr_tds)
         ).limit(10)
 
-        pr_yds_data = session.query(TeamInfoData, TeamStatsData).filter(
-            TeamInfoData.id == TeamStatsData.team_id,
-            TeamStatsData.year == week_year.year
+        pr_yds_data = session.query(TeamInfoData, TeamSeasonStatsData).filter(
+            TeamInfoData.id == TeamSeasonStatsData.team_id,
+            TeamSeasonStatsData.year == week_year.year
         ).order_by(
-            desc(TeamStatsData.pr_yds)
+            desc(TeamSeasonStatsData.pr_yds)
         ).limit(10)
 
-        pr_tds_data = session.query(TeamInfoData, TeamStatsData).filter(
-            TeamInfoData.id == TeamStatsData.team_id,
-            TeamStatsData.year == week_year.year
+        pr_tds_data = session.query(TeamInfoData, TeamSeasonStatsData).filter(
+            TeamInfoData.id == TeamSeasonStatsData.team_id,
+            TeamSeasonStatsData.year == week_year.year
         ).order_by(
-            desc(TeamStatsData.pr_tds)
+            desc(TeamSeasonStatsData.pr_tds)
         ).limit(10)
 
         # Convert data over to models to dump into json
@@ -352,192 +352,192 @@ def _get_team_season_stats_leaders(is_season_specific: bool):
     # If not season specific, get all time records (do not filter by year)
     else:
         # Offensive Team Records Data
-        total_points_data = session.query(TeamInfoData, TeamStatsData).filter(
-            TeamInfoData.id == TeamStatsData.team_id
+        total_points_data = session.query(TeamInfoData, TeamSeasonStatsData).filter(
+            TeamInfoData.id == TeamSeasonStatsData.team_id
         ).order_by(
-            desc(TeamStatsData.total_points)
+            desc(TeamSeasonStatsData.total_points)
         ).limit(10)
 
-        total_yards_data = session.query(TeamInfoData, TeamStatsData).filter(
-            TeamInfoData.id == TeamStatsData.team_id
+        total_yards_data = session.query(TeamInfoData, TeamSeasonStatsData).filter(
+            TeamInfoData.id == TeamSeasonStatsData.team_id
         ).order_by(
-            desc(TeamStatsData.total_yards)
+            desc(TeamSeasonStatsData.total_yards)
         ).limit(10)
 
-        ppg_data = session.query(TeamInfoData, TeamStatsData).filter(
-            TeamInfoData.id == TeamStatsData.team_id
+        ppg_data = session.query(TeamInfoData, TeamSeasonStatsData).filter(
+            TeamInfoData.id == TeamSeasonStatsData.team_id
         ).order_by(
-            desc(TeamStatsData.ppg)
+            desc(TeamSeasonStatsData.ppg)
         ).limit(10)
 
-        pass_yds_data = session.query(TeamInfoData, TeamStatsData).filter(
-            TeamInfoData.id == TeamStatsData.team_id
+        pass_yds_data = session.query(TeamInfoData, TeamSeasonStatsData).filter(
+            TeamInfoData.id == TeamSeasonStatsData.team_id
         ).order_by(
-            desc(TeamStatsData.pass_yds)
+            desc(TeamSeasonStatsData.pass_yds)
         ).limit(10)
 
-        pass_tds_data = session.query(TeamInfoData, TeamStatsData).filter(
-            TeamInfoData.id == TeamStatsData.team_id
+        pass_tds_data = session.query(TeamInfoData, TeamSeasonStatsData).filter(
+            TeamInfoData.id == TeamSeasonStatsData.team_id
         ).order_by(
-            desc(TeamStatsData.pass_tds)
+            desc(TeamSeasonStatsData.pass_tds)
         ).limit(10)
 
-        ints_data = session.query(TeamInfoData, TeamStatsData).filter(
-            TeamInfoData.id == TeamStatsData.team_id
+        ints_data = session.query(TeamInfoData, TeamSeasonStatsData).filter(
+            TeamInfoData.id == TeamSeasonStatsData.team_id
         ).order_by(
-            desc(TeamStatsData.ints)
+            desc(TeamSeasonStatsData.ints)
         ).limit(10)
 
-        sacked_data = session.query(TeamInfoData, TeamStatsData).filter(
-            TeamInfoData.id == TeamStatsData.team_id
+        sacked_data = session.query(TeamInfoData, TeamSeasonStatsData).filter(
+            TeamInfoData.id == TeamSeasonStatsData.team_id
         ).order_by(
-            desc(TeamStatsData.sacked)
+            desc(TeamSeasonStatsData.sacked)
         ).limit(10)
 
-        rush_yds_data = session.query(TeamInfoData, TeamStatsData).filter(
-            TeamInfoData.id == TeamStatsData.team_id
+        rush_yds_data = session.query(TeamInfoData, TeamSeasonStatsData).filter(
+            TeamInfoData.id == TeamSeasonStatsData.team_id
         ).order_by(
-            desc(TeamStatsData.rush_yds)
+            desc(TeamSeasonStatsData.rush_yds)
         ).limit(10)
 
-        rush_tds_data = session.query(TeamInfoData, TeamStatsData).filter(
-            TeamInfoData.id == TeamStatsData.team_id
+        rush_tds_data = session.query(TeamInfoData, TeamSeasonStatsData).filter(
+            TeamInfoData.id == TeamSeasonStatsData.team_id
         ).order_by(
-            desc(TeamStatsData.rush_tds)
+            desc(TeamSeasonStatsData.rush_tds)
         ).limit(10)
 
-        fumbles_data = session.query(TeamInfoData, TeamStatsData).filter(
-            TeamInfoData.id == TeamStatsData.team_id
+        fumbles_data = session.query(TeamInfoData, TeamSeasonStatsData).filter(
+            TeamInfoData.id == TeamSeasonStatsData.team_id
         ).order_by(
-            desc(TeamStatsData.fumbles)
+            desc(TeamSeasonStatsData.fumbles)
         ).limit(10)
 
-        drops_data = session.query(TeamInfoData, TeamStatsData).filter(
-            TeamInfoData.id == TeamStatsData.team_id
+        drops_data = session.query(TeamInfoData, TeamSeasonStatsData).filter(
+            TeamInfoData.id == TeamSeasonStatsData.team_id
         ).order_by(
-            desc(TeamStatsData.drops)
+            desc(TeamSeasonStatsData.drops)
         ).limit(10)
 
-        off_turnovers_data = session.query(TeamInfoData, TeamStatsData).filter(
-            TeamInfoData.id == TeamStatsData.team_id
+        off_turnovers_data = session.query(TeamInfoData, TeamSeasonStatsData).filter(
+            TeamInfoData.id == TeamSeasonStatsData.team_id
         ).order_by(
-            desc(TeamStatsData.off_turnovers)
+            desc(TeamSeasonStatsData.off_turnovers)
         ).limit(10)
 
-        off_yards_data = session.query(TeamInfoData, TeamStatsData).filter(
-            TeamInfoData.id == TeamStatsData.team_id
+        off_yards_data = session.query(TeamInfoData, TeamSeasonStatsData).filter(
+            TeamInfoData.id == TeamSeasonStatsData.team_id
         ).order_by(
-            desc(TeamStatsData.off_yards)
+            desc(TeamSeasonStatsData.off_yards)
         ).limit(10)
 
-        off_ypg_data = session.query(TeamInfoData, TeamStatsData).filter(
-            TeamInfoData.id == TeamStatsData.team_id
+        off_ypg_data = session.query(TeamInfoData, TeamSeasonStatsData).filter(
+            TeamInfoData.id == TeamSeasonStatsData.team_id
         ).order_by(
-            desc(TeamStatsData.off_ypg)
+            desc(TeamSeasonStatsData.off_ypg)
         ).limit(10)
 
-        total_yards_data = session.query(TeamInfoData, TeamStatsData).filter(
-            TeamInfoData.id == TeamStatsData.team_id
+        total_yards_data = session.query(TeamInfoData, TeamSeasonStatsData).filter(
+            TeamInfoData.id == TeamSeasonStatsData.team_id
         ).order_by(
-            desc(TeamStatsData.total_yards)
+            desc(TeamSeasonStatsData.total_yards)
         ).limit(10)
 
-        total_ypg_data = session.query(TeamInfoData, TeamStatsData).filter(
-            TeamInfoData.id == TeamStatsData.team_id
+        total_ypg_data = session.query(TeamInfoData, TeamSeasonStatsData).filter(
+            TeamInfoData.id == TeamSeasonStatsData.team_id
         ).order_by(
-            desc(TeamStatsData.total_ypg)
+            desc(TeamSeasonStatsData.total_ypg)
         ).limit(10)
 
         # Defensive Team Records Data
-        sacks_data = session.query(TeamInfoData, TeamStatsData).filter(
-            TeamInfoData.id == TeamStatsData.team_id
+        sacks_data = session.query(TeamInfoData, TeamSeasonStatsData).filter(
+            TeamInfoData.id == TeamSeasonStatsData.team_id
         ).order_by(
-            desc(TeamStatsData.sacks)
+            desc(TeamSeasonStatsData.sacks)
         ).limit(10)
 
-        tfl_data = session.query(TeamInfoData, TeamStatsData).filter(
-            TeamInfoData.id == TeamStatsData.team_id
+        tfl_data = session.query(TeamInfoData, TeamSeasonStatsData).filter(
+            TeamInfoData.id == TeamSeasonStatsData.team_id
         ).order_by(
-            desc(TeamStatsData.tfl)
+            desc(TeamSeasonStatsData.tfl)
         ).limit(10)
 
-        ints_made_data = session.query(TeamInfoData, TeamStatsData).filter(
-            TeamInfoData.id == TeamStatsData.team_id
+        ints_made_data = session.query(TeamInfoData, TeamSeasonStatsData).filter(
+            TeamInfoData.id == TeamSeasonStatsData.team_id
         ).order_by(
-            desc(TeamStatsData.ints_made)
+            desc(TeamSeasonStatsData.ints_made)
         ).limit(10)
 
-        ff_data = session.query(TeamInfoData, TeamStatsData).filter(
-            TeamInfoData.id == TeamStatsData.team_id
+        ff_data = session.query(TeamInfoData, TeamSeasonStatsData).filter(
+            TeamInfoData.id == TeamSeasonStatsData.team_id
         ).order_by(
-            desc(TeamStatsData.ff)
+            desc(TeamSeasonStatsData.ff)
         ).limit(10)
 
-        fr_data = session.query(TeamInfoData, TeamStatsData).filter(
-            TeamInfoData.id == TeamStatsData.team_id
+        fr_data = session.query(TeamInfoData, TeamSeasonStatsData).filter(
+            TeamInfoData.id == TeamSeasonStatsData.team_id
         ).order_by(
-            desc(TeamStatsData.fr)
+            desc(TeamSeasonStatsData.fr)
         ).limit(10)
 
-        def_turnovers_data = session.query(TeamInfoData, TeamStatsData).filter(
-            TeamInfoData.id == TeamStatsData.team_id
+        def_turnovers_data = session.query(TeamInfoData, TeamSeasonStatsData).filter(
+            TeamInfoData.id == TeamSeasonStatsData.team_id
         ).order_by(
-            desc(TeamStatsData.def_turnovers)
+            desc(TeamSeasonStatsData.def_turnovers)
         ).limit(10)
 
-        pass_def_data = session.query(TeamInfoData, TeamStatsData).filter(
-            TeamInfoData.id == TeamStatsData.team_id
+        pass_def_data = session.query(TeamInfoData, TeamSeasonStatsData).filter(
+            TeamInfoData.id == TeamSeasonStatsData.team_id
         ).order_by(
-            desc(TeamStatsData.pass_def)
+            desc(TeamSeasonStatsData.pass_def)
         ).limit(10)
 
-        safeties_data = session.query(TeamInfoData, TeamStatsData).filter(
-            TeamInfoData.id == TeamStatsData.team_id
+        safeties_data = session.query(TeamInfoData, TeamSeasonStatsData).filter(
+            TeamInfoData.id == TeamSeasonStatsData.team_id
         ).order_by(
-            desc(TeamStatsData.safeties)
+            desc(TeamSeasonStatsData.safeties)
         ).limit(10)
 
-        blocked_kicks_data = session.query(TeamInfoData, TeamStatsData).filter(
-            TeamInfoData.id == TeamStatsData.team_id
+        blocked_kicks_data = session.query(TeamInfoData, TeamSeasonStatsData).filter(
+            TeamInfoData.id == TeamSeasonStatsData.team_id
         ).order_by(
-            desc(TeamStatsData.blocked_kicks)
+            desc(TeamSeasonStatsData.blocked_kicks)
         ).limit(10)
 
-        def_tds_data = session.query(TeamInfoData, TeamStatsData).filter(
-            TeamInfoData.id == TeamStatsData.team_id
+        def_tds_data = session.query(TeamInfoData, TeamSeasonStatsData).filter(
+            TeamInfoData.id == TeamSeasonStatsData.team_id
         ).order_by(
-            desc(TeamStatsData.def_tds)
+            desc(TeamSeasonStatsData.def_tds)
         ).limit(10)
 
-        to_margin_data = session.query(TeamInfoData, TeamStatsData).filter(
-            TeamInfoData.id == TeamStatsData.team_id
+        to_margin_data = session.query(TeamInfoData, TeamSeasonStatsData).filter(
+            TeamInfoData.id == TeamSeasonStatsData.team_id
         ).order_by(
-            desc(TeamStatsData.to_margin)
+            desc(TeamSeasonStatsData.to_margin)
         ).limit(10)
 
         # Special Teams Team Records Data
-        kr_yds_data = session.query(TeamInfoData, TeamStatsData).filter(
-            TeamInfoData.id == TeamStatsData.team_id
+        kr_yds_data = session.query(TeamInfoData, TeamSeasonStatsData).filter(
+            TeamInfoData.id == TeamSeasonStatsData.team_id
         ).order_by(
-            desc(TeamStatsData.kr_yds)
+            desc(TeamSeasonStatsData.kr_yds)
         ).limit(10)
 
-        kr_tds_data = session.query(TeamInfoData, TeamStatsData).filter(
-            TeamInfoData.id == TeamStatsData.team_id
+        kr_tds_data = session.query(TeamInfoData, TeamSeasonStatsData).filter(
+            TeamInfoData.id == TeamSeasonStatsData.team_id
         ).order_by(
-            desc(TeamStatsData.kr_tds)
+            desc(TeamSeasonStatsData.kr_tds)
         ).limit(10)
 
-        pr_yds_data = session.query(TeamInfoData, TeamStatsData).filter(
-            TeamInfoData.id == TeamStatsData.team_id
+        pr_yds_data = session.query(TeamInfoData, TeamSeasonStatsData).filter(
+            TeamInfoData.id == TeamSeasonStatsData.team_id
         ).order_by(
-            desc(TeamStatsData.pr_yds)
+            desc(TeamSeasonStatsData.pr_yds)
         ).limit(10)
 
-        pr_tds_data = session.query(TeamInfoData, TeamStatsData).filter(
-            TeamInfoData.id == TeamStatsData.team_id
+        pr_tds_data = session.query(TeamInfoData, TeamSeasonStatsData).filter(
+            TeamInfoData.id == TeamSeasonStatsData.team_id
         ).order_by(
-            desc(TeamStatsData.pr_tds)
+            desc(TeamSeasonStatsData.pr_tds)
         ).limit(10)
 
         # Convert data over to models to dump into json

@@ -21,7 +21,7 @@ from src.data_models.SeasonOffensiveStatsData import SeasonOffensiveStatsData
 from src.data_models.SeasonReturnStatsData import SeasonReturnStatsData
 from src.data_models.PlayerInfoData import PlayerInfoData
 from src.data_models.TeamInfoData import TeamInfoData
-from src.data_models.TeamStatsData import TeamStatsData
+from src.data_models.TeamSeasonStatsData import TeamSeasonStatsData
 from src.data_models.WeekYearData import WeekYearData
 from src.utils.player import (
     _get_player_defensive_stats,
@@ -53,7 +53,7 @@ from src.models.Teams import (
     TeamDetails,
     TeamSummary,
     TeamRoster,
-    TeamStats
+    TeamSeasonStats
 )
 from src.responses.Teams import (
     TeamDetailsSchema,
@@ -83,9 +83,9 @@ def get_team_by_team_id(request, team_id) -> TeamDetailsSchema:
             desc(WeekYearData.year)
         ).first()
     team_info_data: TeamInfoData = session.query(TeamInfoData).where(TeamInfoData.id == team_id).one()
-    team_stats_data: TeamStatsData = session.query(TeamStatsData).where(
-        TeamStatsData.team_id == team_id,
-        TeamStatsData.year == week_year.year
+    team_stats_data: TeamSeasonStatsData = session.query(TeamSeasonStatsData).where(
+        TeamSeasonStatsData.team_id == team_id,
+        TeamSeasonStatsData.year == week_year.year
     ).one()
 
     players: List[PlayerInfoData] = session.query(PlayerInfoData).where(
@@ -95,7 +95,7 @@ def get_team_by_team_id(request, team_id) -> TeamDetailsSchema:
 
     team_details: TeamDetails = _get_team_details(team_info=team_info_data, players=players)
     team_roster: TeamRoster = [_get_team_roster(player) for player in players]
-    team_stats: TeamStats = _get_team_stats(team_stats_data=team_stats_data)
+    team_stats: TeamSeasonStats = _get_team_stats(team_stats_data=team_stats_data)
 
     team_info: TeamSummary = TeamSummary(
         team_details=team_details,

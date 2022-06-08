@@ -10,24 +10,32 @@ from sqlalchemy import(
 from  src.constants import Base
 
 @dataclass
-class TeamStatsData(Base):
-    __tablename__ = 'team_stats'
+class TeamSeasonStatsData(Base):
+    __tablename__ = 'team_season_stats'
     id = Column(String(50), primary_key=True)
     team_id = Column(Integer, ForeignKey('team_info.id'))
     year = Column(Integer)
     games_played = Column(Integer)
     total_points = Column(Integer)
     ppg = Column(Float)
+    completions = Column(Integer)
+    pass_att = Column(Integer)
+    comp_pct = Column(Float)
     pass_yds = Column(Integer)
+    pass_ypa = Column(Float)
     pass_ypg = Column(Float)
     pass_tds = Column(Integer)
     ints = Column(Integer)
     sacked = Column(Integer)
+    rush_att = Column(Integer)
     rush_yds = Column(Integer)
+    rush_ypc = Column(Float)
     rush_ypg = Column(Float)
     rush_tds = Column(Integer)
     fumbles = Column(Integer)
+    receptions = Column(Integer)
     rec_yds = Column(Integer)
+    rec_ypc = Column(Float)
     rec_ypg = Column(Float)
     rec_tds = Column(Integer)
     drops = Column(Integer)

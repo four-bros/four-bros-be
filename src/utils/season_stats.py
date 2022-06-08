@@ -96,32 +96,32 @@ def _get_player_season_stats(player: PlayerInfoData) -> PlayerStats:
 ######### Get player defensive stats ###########
 ################################################
 def _get_defensive_stats(
-    defensive_stats: Union[CareerDefensiveStatsData, GameDefensiveStatsData, SeasonDefensiveStatsData]
+    defensive_stats_data: Union[CareerDefensiveStatsData, GameDefensiveStatsData, SeasonDefensiveStatsData]
     ) -> DefensiveStats:
 
-    defensive_stats_all: DefensiveStats = DefensiveStats(
-        long_int_ret=defensive_stats.long_int_ret,
-        sacks=defensive_stats.sacks,
-        year=defensive_stats.year,
-        forced_fumbles=defensive_stats.forced_fumbles,
-        solo_tkls=defensive_stats.solo_tkls,
-        safeties=defensive_stats.safeties,
-        pass_def=defensive_stats.pass_def,
-        blocked_kicks=defensive_stats.blocked_kicks,
-        tfl=defensive_stats.tfl,
-        ints_made=defensive_stats.ints_made,
-        games_played=defensive_stats.games_played,
-        fumbles_rec=defensive_stats.fumbles_rec,
-        half_a_sack=defensive_stats.half_a_sack,
-        asst_tkls=defensive_stats.asst_tkls,
-        def_tds=defensive_stats.def_tds,
-        fum_rec_yards=defensive_stats.fum_rec_yards,
-        int_ret_yards=defensive_stats.int_ret_yards,
-        total_tkls=defensive_stats.total_tkls,
-        total_sacks=defensive_stats.total_sacks
+    defensive_stats = DefensiveStats(
+        long_int_ret=defensive_stats_data.long_int_ret,
+        sacks=defensive_stats_data.sacks,
+        year=defensive_stats_data.year,
+        forced_fumbles=defensive_stats_data.forced_fumbles,
+        solo_tkls=defensive_stats_data.solo_tkls,
+        safeties=defensive_stats_data.safeties,
+        pass_def=defensive_stats_data.pass_def,
+        blocked_kicks=defensive_stats_data.blocked_kicks,
+        tfl=defensive_stats_data.tfl,
+        ints_made=defensive_stats_data.ints_made,
+        games_played=defensive_stats_data.games_played,
+        fumbles_rec=defensive_stats_data.fumbles_rec,
+        half_a_sack=defensive_stats_data.half_a_sack,
+        asst_tkls=defensive_stats_data.asst_tkls,
+        def_tds=defensive_stats_data.def_tds,
+        fum_rec_yards=defensive_stats_data.fum_rec_yards,
+        int_ret_yards=defensive_stats_data.int_ret_yards,
+        total_tkls=defensive_stats_data.total_tkls,
+        total_sacks=defensive_stats_data.total_sacks
     )
 
-    return defensive_stats_all
+    return defensive_stats
 
 
 ################################################
@@ -230,8 +230,8 @@ def _get_passing_stats(
         completions=offensive_stats.completions,
         ints=offensive_stats.ints,
         pass_att=offensive_stats.pass_att,
-        pass_yp_attempt=offensive_stats.pass_yp_attempt,
-        pass_yp_game=offensive_stats.pass_yp_game,
+        pass_ypa=offensive_stats.pass_ypa,
+        pass_ypg=offensive_stats.pass_ypg,
         pass_rating=offensive_stats.pass_rating,
         sacked=offensive_stats.sacked,
         comp_pct=offensive_stats.comp_pct
@@ -250,8 +250,8 @@ def _get_receiving_stats(
         rec_tds=offensive_stats.rec_tds,
         yac=offensive_stats.yac,
         drops=offensive_stats.drops,
-        rec_yp_catch=offensive_stats.rec_yp_catch,
-        rec_yp_game=offensive_stats.rec_yp_game,
+        rec_ypc=offensive_stats.rec_ypc,
+        rec_ypg=offensive_stats.rec_ypg,
         games_played=offensive_stats.games_played,
         year=offensive_stats.year,
         longest_rec=offensive_stats.longest_rec
@@ -272,8 +272,8 @@ def _get_rushing_stats(
         broke_tkls=offensive_stats.broke_tkls,
         fumbles=offensive_stats.fumbles,
         twenty_plus_yd_runs=offensive_stats.twenty_plus_yd_runs,
-        rush_yp_carry=offensive_stats.rush_yp_carry,
-        rush_yp_game=offensive_stats.rush_yp_game,
+        rush_ypc=offensive_stats.rush_ypc,
+        rush_ypg=offensive_stats.rush_ypg,
         games_played=offensive_stats.games_played,
         year=offensive_stats.year,
         longest_run=offensive_stats.longest_run
