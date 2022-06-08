@@ -1,3 +1,4 @@
+import asyncio
 from typing import List
 from uuid import uuid4
 
@@ -48,7 +49,7 @@ from src.utils.season_stats import (
 )
 
 
-def insert_game_def_stats_into_db():
+async def insert_game_def_stats_into_db():
 
     players: List[PlayerInfoData] = session.query(PlayerInfoData).where(
         PlayerInfoData.is_active == True
@@ -58,6 +59,15 @@ def insert_game_def_stats_into_db():
         desc(WeekYearData.year),
         desc(WeekYearData.week)
     ).first()
+
+    previous_week_year: GameDefensiveStatsData = session.query(GameDefensiveStatsData).order_by(
+        desc(GameDefensiveStatsData.year),
+        desc(GameDefensiveStatsData.week)
+    ).first()
+
+    # Safety check to prevent duplicate week/year entry into TeamGameStats table
+    if previous_week_year and week_year.week == previous_week_year.week and week_year.year == previous_week_year.year:
+        return
 
     for player in players:
 
@@ -75,7 +85,7 @@ def insert_game_def_stats_into_db():
         new_id = str(uuid4())
 
         # Check for prior week offensive stats
-        prior_def_stats_data: GameDefensiveStatsData = session.query(GameDefensiveStatsData).where(
+        prior_def_stats_data: List[GameDefensiveStatsData] = session.query(GameDefensiveStatsData).where(
             GameDefensiveStatsData.player_id == player.id,
             GameDefensiveStatsData.year == week_year.year
         ).all()
@@ -166,7 +176,7 @@ def insert_game_def_stats_into_db():
         session.close()
 
 
-def insert_game_kick_stats_into_db():
+async def insert_game_kick_stats_into_db():
 
     players: List[PlayerInfoData] = session.query(PlayerInfoData).where(
         PlayerInfoData.is_active == True
@@ -176,6 +186,15 @@ def insert_game_kick_stats_into_db():
         desc(WeekYearData.year),
         desc(WeekYearData.week)
     ).first()
+
+    previous_week_year: GameKickingStatsData = session.query(GameKickingStatsData).order_by(
+        desc(GameKickingStatsData.year),
+        desc(GameKickingStatsData.week)
+    ).first()
+
+    # Safety check to prevent duplicate week/year entry into TeamGameStats table
+    if previous_week_year and week_year.week == previous_week_year.week and week_year.year == previous_week_year.year:
+        return
 
     for player in players:
 
@@ -330,7 +349,7 @@ def insert_game_kick_stats_into_db():
         session.close()
 
 
-def insert_game_off_stats_into_db():
+async def insert_game_off_stats_into_db():
 
     players: List[PlayerInfoData] = session.query(PlayerInfoData).where(
         PlayerInfoData.is_active == True
@@ -339,6 +358,15 @@ def insert_game_off_stats_into_db():
         desc(WeekYearData.year),
         desc(WeekYearData.week)
     ).first()
+
+    previous_week_year: GameOffensiveStatsData = session.query(GameOffensiveStatsData).order_by(
+        desc(GameOffensiveStatsData.year),
+        desc(GameOffensiveStatsData.week)
+    ).first()
+
+    # Safety check to prevent duplicate week/year entry into TeamGameStats table
+    if previous_week_year and week_year.week == previous_week_year.week and week_year.year == previous_week_year.year:
+        return
 
     for player in players:
 
@@ -397,13 +425,9 @@ def insert_game_off_stats_into_db():
                 twenty_plus_yd_runs=season_rush_stats.twenty_plus_yd_runs,
                 total_yards=season_total_stats.total_yards,
                 total_tds=season_total_stats.total_tds,
-                total_ypg=season_total_stats.total_yards,
-                pass_yp_attempt=season_pass_stats.pass_yp_attempt,
-                pass_yp_game=season_pass_stats.pass_yards,
-                rush_yp_carry=season_rush_stats.rush_yp_carry,
-                rush_yp_game=season_rush_stats.rush_yards,
-                rec_yp_catch=season_rec_stats.rec_yp_catch,
-                rec_yp_game=season_rec_stats.rec_yards,
+                pass_ypa=season_pass_stats.pass_ypa,
+                rush_ypc=season_rush_stats.rush_ypc,
+                rec_ypc=season_rec_stats.rec_ypc,
                 pass_rating=season_pass_stats.pass_rating,
                 turnovers=turnovers,
                 comp_pct=season_pass_stats.comp_pct
@@ -444,16 +468,16 @@ def insert_game_off_stats_into_db():
                 1
             )
 
-            pass_yp_attempt = round(
+            pass_ypa = round(
                 pass_yards / pass_att if pass_att > 0 else 0,
                 1
             )
 
-            rush_yp_carry = round(0 if rush_att == 0 else\
+            rush_ypc = round(0 if rush_att == 0 else\
                 rush_yards / rush_att,
                 1
             )
-            rec_yp_catch = round(0 if receptions == 0 else\
+            rec_ypc = round(0 if receptions == 0 else\
                 rec_yards / receptions,
                 1
             )
@@ -494,20 +518,15 @@ def insert_game_off_stats_into_db():
                 broke_tkls=broke_tkls,
                 fumbles=fumbles,
                 twenty_plus_yd_runs=twenty_plus_yd_runs,
-                pass_yp_attempt=pass_yp_attempt,
-                pass_yp_game=pass_yards,
-                rush_yp_carry=rush_yp_carry,
-                rush_yp_game=rush_yards,
-                rec_yp_catch=rec_yp_catch,
-                rec_yp_game=rec_yards,
+                pass_ypa=pass_ypa,
+                rush_ypc=rush_ypc,
+                rec_ypc=rec_ypc,
                 pass_rating=pass_rating,
                 total_yards=total_yards,
                 total_tds=total_tds,
-                total_ypg=total_yards,
                 turnovers=turnovers,
                 comp_pct=comp_pct
             )
-
             session.add(game_stats)
 
     try:
@@ -519,7 +538,7 @@ def insert_game_off_stats_into_db():
         session.close()
 
 
-def insert_game_return_stats_into_db():
+async def insert_game_return_stats_into_db():
 
     players: List[PlayerInfoData] = session.query(PlayerInfoData).where(
         PlayerInfoData.is_active == True
@@ -528,6 +547,15 @@ def insert_game_return_stats_into_db():
         desc(WeekYearData.year),
         desc(WeekYearData.week)
     ).first()
+
+    previous_week_year: GameReturnStatsData = session.query(GameReturnStatsData).order_by(
+        desc(GameReturnStatsData.year),
+        desc(GameReturnStatsData.week)
+    ).first()
+
+    # Safety check to prevent duplicate week/year entry into TeamGameStats table
+    if previous_week_year and week_year.week == previous_week_year.week and week_year.year == previous_week_year.year:
+        return
 
     for player in players:
 

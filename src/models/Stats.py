@@ -95,8 +95,8 @@ class PassingStats:
         completions,
         ints,
         pass_att,
-        pass_yp_attempt,
-        pass_yp_game,
+        pass_ypa,
+        pass_ypg,
         pass_rating,
         sacked,
         comp_pct
@@ -110,8 +110,8 @@ class PassingStats:
         self.completions = completions
         self.ints = ints
         self.pass_att = pass_att
-        self.pass_yp_attempt = pass_yp_attempt
-        self.pass_yp_game = pass_yp_game
+        self.pass_ypa = pass_ypa
+        self.pass_ypg = pass_ypg
         self.pass_rating = pass_rating
         self.sacked = sacked
         self.comp_pct = comp_pct
@@ -128,8 +128,8 @@ class ReceivingStats:
         rec_tds,
         yac,
         drops,
-        rec_yp_catch,
-        rec_yp_game,
+        rec_ypc,
+        rec_ypg,
         games_played,
         year,
         longest_rec
@@ -140,8 +140,8 @@ class ReceivingStats:
         self.rec_tds = rec_tds
         self.yac = yac
         self.drops = drops
-        self.rec_yp_catch = rec_yp_catch
-        self.rec_yp_game = rec_yp_game
+        self.rec_ypc = rec_ypc
+        self.rec_ypg = rec_ypg
         self.games_played = games_played
         self.year = year
         self.longest_rec = longest_rec
@@ -160,8 +160,8 @@ class RushingStats:
         broke_tkls,
         fumbles,
         twenty_plus_yd_runs,
-        rush_yp_carry,
-        rush_yp_game,
+        rush_ypc,
+        rush_ypg,
         games_played,
         year,
         longest_run
@@ -173,8 +173,8 @@ class RushingStats:
         self.broke_tkls = broke_tkls
         self.fumbles = fumbles
         self.twenty_plus_yd_runs = twenty_plus_yd_runs
-        self.rush_yp_carry = rush_yp_carry
-        self.rush_yp_game = rush_yp_game
+        self.rush_ypc = rush_ypc
+        self.rush_ypg = rush_ypg
         self.games_played = games_played
         self.year = year
         self.longest_run = longest_run

@@ -1,12 +1,23 @@
 from typing import List
+from urllib.parse import urlparse
 from flask import Flask
 from flask_cors import CORS
+import os
+import psycopg2
 from sqlalchemy import create_engine
 from sqlalchemy.orm import(
     declarative_base,
     sessionmaker
 )
 
+from src.hidden import (
+  DB_URI,
+  DB_PASSWORD,
+  DB_HOST,
+  DB_NAME,
+  DB_PORT,
+  DB_USER
+)
 from src.models.Coach import CoachInfo
 from src.responses.Coach import (
     CoachSeasonRecordSchema,
@@ -41,6 +52,10 @@ from src.responses.WeekYear import (
 # App constants
 app = Flask(__name__)
 app.config['SQL_ALCHEMY_DATABASE_URI'] = "sqlite+pysqlite:///ncaa.db"
+# app.config['SQL_ALCHEMY_DATABASE_URI'] = DB_URL
+# DB_URL = os.environ['DATABASE_URL']
+# conn = psycopg2.connect(DB_URL, sslmode='require')
+# conn = psycopg2.connect(host=DB_HOST, user=DB_USER, password=DB_PASSWORD, dbname=DB_NAME, sslmode='require')
 CORS(app)
 
 
@@ -48,45 +63,46 @@ CORS(app)
 # Windows file path
 # dynasty_file_path = 'D:\Content\E00001485AECABB5\\454109B6\\00000001\OD-4Bros3'
 # Mac file path
-dynasty_file_path = 'data/OD-4Bros3'
-user_teams = {'Baylor', 'Ole Miss', 'Vanderbilt', 'Wyoming'}
+data_dynasty_file_path = 'data/OD-4Bros3'
+data_dir = '/Users/sgreen4/Desktop/data/dynasty3/2014'
 
 # User/coach information
 ben: CoachInfo = CoachInfo(
     id='ben',
     first_name='Campbell',
     last_name='Ponderosa',
-    team_id=106,
-    team_name='Vanderbilt'
+    team_id=25,
+    team_name='ECU'
 )
 brent: CoachInfo = CoachInfo(
     id='brent',
     first_name='Magnus',
     last_name='Tiedemann',
-    team_id=73,
-    team_name='Ole Miss'
+    team_id=82,
+    team_name='San Jose State'
 )
 dan: CoachInfo = CoachInfo(
     id='dan',
     first_name='Boggs',
     last_name='Moonbeam',
-    team_id=11,
-    team_name='Baylor'
+    team_id=181,
+    team_name='UMass'
 )
 seth: CoachInfo = CoachInfo(
     id='seth',
     first_name='Peewee',
     last_name='FlyGuy',
-    team_id=115,
-    team_name='Wyoming'
+    team_id=229,
+    team_name='Florida Atlantic'
 )
 
 users: List[CoachInfo] = [ben, brent, dan, seth]
+user_teams = {user.team_name for user in users}
 
 
 # DB constants
 db_path = "sqlite+pysqlite:///ncaa.db?check_same_thread=False"
-engine = create_engine(db_path, echo=True, future=True)
+engine = create_engine(db_path, echo=False, future=True)
 Session = sessionmaker(bind=engine)
 session = Session()
 Base = declarative_base()

@@ -1,3 +1,4 @@
+import asyncio
 from calendar import week
 from sqlalchemy import desc
 from uuid import uuid4
@@ -12,7 +13,7 @@ from src.data_models.TeamInfoData import TeamInfoData
 from src.data_models.WeekYearData import WeekYearData
 
 
-def insert_coach_info_into_db():
+async def insert_coach_info_into_db():
 
     week_year: WeekYearData = session.query(WeekYearData).order_by(
         desc(WeekYearData.year),
@@ -51,7 +52,7 @@ def insert_coach_info_into_db():
         session.close()
 
 
-def insert_coach_stats_into_db():
+async def insert_coach_stats_into_db():
 
     week_year: WeekYearData = session.query(WeekYearData).order_by(
         desc(WeekYearData.year),
@@ -75,7 +76,7 @@ def insert_coach_stats_into_db():
             year=week_year.year,
             wins=user_team_info.wins,
             losses=user_team_info.losses,
-            national_title=False
+            national_title=determine_national_title(week_year=week_year, team_info=user_team_info)
         )
 
         coach_query: CoachStatsData = session.query(CoachStatsData).where(
@@ -97,3 +98,14 @@ def insert_coach_stats_into_db():
         raise
     finally:
         session.close()
+
+
+def determine_national_title(week_year: WeekYearData, team_info: TeamInfoData) -> bool:
+
+    week: int = week_year.week
+    bcs_rank: int = team_info.bcs_rank
+
+    if week >= 22 and bcs_rank == 1:
+        return True
+    else: 
+        return False

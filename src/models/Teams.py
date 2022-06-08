@@ -85,7 +85,93 @@ class TeamRoster(PlayerDetails):
         self.overall = overall
 
 
-class TeamStats:
+class TeamGameStats:
+    def __init__(
+        self,
+        team_id,
+        week,
+        year,
+        total_points,
+        completions,
+        pass_att,
+        comp_pct,
+        pass_yds,
+        pass_ypa,
+        pass_tds,
+        ints,
+        sacked,
+        rush_att,
+        rush_yds,
+        rush_ypc,
+        rush_tds,
+        fumbles,
+        receptions,
+        rec_yds,
+        rec_ypc,
+        rec_tds,
+        drops,
+        off_yards,
+        total_yards,
+        off_turnovers,
+        sacks,
+        tfl,
+        ints_made,
+        ff,
+        fr,
+        def_turnovers,
+        to_margin,
+        pass_def,
+        blocked_kicks,
+        safeties,
+        def_tds,
+        kr_yds,
+        kr_tds,
+        pr_yds,
+        pr_tds,
+    ):
+        self.team_id = team_id
+        self.week = week
+        self.year = year
+        self.total_points = total_points
+        self.completions = completions
+        self.pass_att = pass_att
+        self.comp_pct = comp_pct
+        self.pass_yds = pass_yds
+        self.pass_ypa = pass_ypa
+        self.pass_tds = pass_tds
+        self.ints = ints
+        self.sacked = sacked
+        self.rush_att = rush_att
+        self.rush_yds = rush_yds
+        self.rush_ypc = rush_ypc
+        self.rush_tds = rush_tds
+        self.fumbles = fumbles
+        self.receptions = receptions
+        self.rec_yds = rec_yds
+        self.rec_ypc = rec_ypc
+        self.rec_tds = rec_tds
+        self.drops = drops
+        self.off_yards = off_yards
+        self.total_yards = total_yards
+        self.off_turnovers = off_turnovers
+        self.sacks = sacks
+        self.tfl = tfl
+        self.ints_made = ints_made
+        self.ff = ff
+        self.fr = fr
+        self.def_turnovers = def_turnovers
+        self.to_margin = to_margin
+        self.pass_def = pass_def
+        self.blocked_kicks = blocked_kicks
+        self.safeties = safeties
+        self.def_tds = def_tds
+        self.kr_yds = kr_yds
+        self.kr_tds = kr_tds
+        self.pr_yds = pr_yds
+        self.pr_tds = pr_tds
+
+
+class TeamSeasonStats:
     def __init__(
         self,
         team_id,
@@ -153,6 +239,7 @@ class TeamStats:
         self.sacks = sacks
         self.tfl = tfl
         self.ints = ints_made
+        self.ints_made = ints_made
         self.ff = ff
         self.fr = fr
         self.def_turnovers = def_turnovers
@@ -171,7 +258,7 @@ class TeamSeasonRecord:
     def __init__(
         self,
         team_info: TeamInfo,
-        team_stats: TeamStats
+        team_stats: TeamSeasonStats
     ):
         self.team_info = team_info
         self.team_stats = team_stats
@@ -182,7 +269,7 @@ class TeamSummary:
         self,
         team_details: TeamDetails,
         team_roster: List[TeamRoster],
-        team_stats: TeamStats
+        team_stats: TeamSeasonStats
     ):
         self.team_details = team_details
         self.team_roster = team_roster
