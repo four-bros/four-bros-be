@@ -47,6 +47,8 @@ CORS(app)
 
 # DB constants
 DB_URL = os.environ['DATABASE_URL']
+if DB_URL.startswith("postgres://"):
+    DB_URL = DB_URL.replace("postgres://", "postgresql://", 1)
 # app.config['SQL_ALCHEMY_DATABASE_URI'] = DB_URL
 conn = psycopg2.connect(DB_URL, sslmode='require')
 engine = create_engine(DB_URL, echo=False, future=True)
