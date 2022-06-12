@@ -17,7 +17,7 @@ class SeasonOffensiveStatsData(Base):
     # __table_args__ = {'extend_existing': True}
     id = Column(String(50), primary_key=True)
     player_id = Column(String(50), ForeignKey('player_info.id'))
-    year = Column(String(10))
+    year = Column(Integer)
     games_played = Column(Integer)
     completions = Column(Integer)
     pass_att = Column(Integer)

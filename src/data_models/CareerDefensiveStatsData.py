@@ -15,7 +15,7 @@ class CareerDefensiveStatsData(Base):
     __tablename__ = 'career_defensive_stats'
     # __table_args__ = {'extend_existing': True}
     id = Column(String(50), primary_key=True)
-    player_id = Column(Integer, ForeignKey('player_info.id'))
+    player_id = Column(String(50), ForeignKey('player_info.id'))
     year = Column(String(20))
     games_played = Column(Integer)
     solo_tkls = Column(Float)

@@ -8,7 +8,7 @@ from src.constants import session
 from src.data_models.PlayerInfoData import PlayerInfoData
 from src.data_models.WeekYearData import WeekYearData
 
-async def deactivate_inactive_players(player_info):
+def deactivate_inactive_players(player_info):
 
     week_year: WeekYearData = session.query(WeekYearData).order_by(
         desc(WeekYearData.year),
@@ -45,7 +45,7 @@ async def deactivate_inactive_players(player_info):
             session.close()
 
 
-async def insert_player_info_into_db(player_info):
+def insert_player_info_into_db(player_info):
 
     for i, value in enumerate(player_info):
         

@@ -17,13 +17,16 @@ from src.data_models.WeekYearData import WeekYearData
 ################################################
 ######## insert player data functions ##########
 ################################################
-async def insert_season_def_stats_into_db(def_stats):
+def insert_season_def_stats_into_db(def_stats):
 
     for i, value in enumerate(def_stats):
 
         record = def_stats[i]
         
         readable_year = _convert_stats_year(record.fields['Year'])
+        # skip 2013 stats
+        if readable_year == 2013:
+          continue
         
         total_tackles = record.fields['Solo Tkls'] + record.fields['Asst. Tkls']
         half_a_sack = round(record.fields['Half A Sack'] / 2, 1)
@@ -32,7 +35,7 @@ async def insert_season_def_stats_into_db(def_stats):
         new_id = str(uuid4())
 
         player_name: PlayerInfoData = session.query(PlayerInfoData).where(
-            PlayerInfoData.roster_id == record.fields['Player ID'],
+            PlayerInfoData.roster_id == str(record.fields['Player ID']),
             PlayerInfoData.is_active == True
         ).scalar()
 
@@ -105,13 +108,16 @@ async def insert_season_def_stats_into_db(def_stats):
         session.close()
 
 
-async def insert_season_kicking_stats_into_db(kicking_stats):
+def insert_season_kicking_stats_into_db(kicking_stats):
     
     for i, value in enumerate(kicking_stats):
 
         record = kicking_stats[i]
         new_id = str(uuid4())
         readable_year = _convert_stats_year(record.fields['Year'])
+        # skip 2013 stats
+        if readable_year == 2013:
+          continue
         fg_pct = round(
             record.fields['FG Made'] / record.fields['FG Att.'] * 100\
                 if record.fields['FG Att.'] != 0 else 0,
@@ -134,7 +140,7 @@ async def insert_season_kicking_stats_into_db(kicking_stats):
             1)
         
         player_name: PlayerInfoData = session.query(PlayerInfoData).where(
-            PlayerInfoData.roster_id == record.fields['Player ID'],
+            PlayerInfoData.roster_id == str(record.fields['Player ID']),
             PlayerInfoData.is_active == True
         ).scalar()
 
@@ -227,11 +233,15 @@ async def insert_season_kicking_stats_into_db(kicking_stats):
         session.close()
 
 
-async def insert_season_off_stats_into_db(off_stats):
+def insert_season_off_stats_into_db(off_stats):
 
     for i, value in enumerate(off_stats):
         record = off_stats[i]
         readable_year = _convert_stats_year(record.fields['Year'])
+        # skip 2013 stats
+        if readable_year == 2013:
+          continue
+
         new_id = str(uuid4())
 
         comp_pct = round(
@@ -280,7 +290,7 @@ async def insert_season_off_stats_into_db(off_stats):
 
         # get ReturnStats for total stats purposes (yards, TDs, etc)
         return_stats: SeasonReturnStatsData = session.query(SeasonReturnStatsData).where(
-            SeasonReturnStatsData.player_id == record.fields['Player ID'],
+            SeasonReturnStatsData.player_id == str(record.fields['Player ID']),
             SeasonReturnStatsData.year == readable_year
         ).scalar()
 
@@ -315,7 +325,7 @@ async def insert_season_off_stats_into_db(off_stats):
                 1)
         
         player_name: PlayerInfoData = session.query(PlayerInfoData).where(
-            PlayerInfoData.roster_id == record.fields['Player ID'],
+            PlayerInfoData.roster_id == str(record.fields['Player ID']),
             PlayerInfoData.is_active == True,
         ).scalar()
 
@@ -419,13 +429,16 @@ async def insert_season_off_stats_into_db(off_stats):
         session.close()
 
 
-async def insert_season_return_stats_into_db(return_stats):
+def insert_season_return_stats_into_db(return_stats):
     
     for i, value in enumerate(return_stats):
         record = return_stats[i]
 
         new_id = str(uuid4())
         readable_year = _convert_stats_year(record.fields['Year'])
+        # skip 2013 stats
+        if readable_year == 2013:
+          continue
         kr_avg = round(
             record.fields['KR Yds.'] / record.fields['Kick Returns']\
                 if record.fields['Kick Returns'] != 0 else 0,
@@ -438,9 +451,9 @@ async def insert_season_return_stats_into_db(return_stats):
             )
 
         player_name: PlayerInfoData = session.query(PlayerInfoData).where(
-            PlayerInfoData.roster_id == record.fields['Player ID'],
+            PlayerInfoData.roster_id == str(record.fields['Player ID']),
             PlayerInfoData.is_active == True
-        ).scalar()
+        ).one_or_none()
 
         player_id: str = ''
 

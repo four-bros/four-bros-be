@@ -10,14 +10,6 @@ from sqlalchemy.orm import(
     sessionmaker
 )
 
-from src.hidden import (
-  DB_URI,
-  DB_PASSWORD,
-  DB_HOST,
-  DB_NAME,
-  DB_PORT,
-  DB_USER
-)
 from src.models.Coach import CoachInfo
 from src.responses.Coach import (
     CoachSeasonRecordSchema,
@@ -51,11 +43,9 @@ from src.responses.WeekYear import (
 
 # App constants
 app = Flask(__name__)
-# app.config['SQL_ALCHEMY_DATABASE_URI'] = "sqlite+pysqlite:///ncaa.db"
-# app.config['SQL_ALCHEMY_DATABASE_URI'] = DB_URL
 DB_URL = os.environ['DATABASE_URL']
+app.config['SQL_ALCHEMY_DATABASE_URI'] = DB_URL
 conn = psycopg2.connect(DB_URL, sslmode='require')
-# conn = psycopg2.connect(host=DB_HOST, user=DB_USER, password=DB_PASSWORD, dbname=DB_NAME, sslmode='require')
 CORS(app)
 
 
@@ -63,8 +53,8 @@ CORS(app)
 # Windows file path
 # dynasty_file_path = 'D:\Content\E00001485AECABB5\\454109B6\\00000001\OD-4Bros3'
 # Mac file path
-data_dynasty_file_path = 'data/OD-4Bros3'
-data_dir = '/Users/sgreen4/Desktop/data/dynasty3/2014'
+# data_dynasty_file_path = 'data/OD-4Bros3_week115'
+data_dir = '/Users/sgreen4/Desktop/data/dynasty3/2015'
 
 # User/coach information
 ben: CoachInfo = CoachInfo(
@@ -101,7 +91,6 @@ user_teams = {user.team_name for user in users}
 
 
 # DB constants
-# db_path = "sqlite+pysqlite:///ncaa.db?check_same_thread=False"
 engine = create_engine(DB_URL, echo=False, future=True)
 Session = sessionmaker(bind=engine)
 session = Session()

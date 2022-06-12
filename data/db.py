@@ -5,7 +5,7 @@ import ncaa_dynasty
 from src.constants import (
     Base,
     data_dir,
-    data_dynasty_file_path,
+    # data_dynasty_file_path,
     engine,
     user_teams
 )
@@ -67,6 +67,7 @@ week_year = None
 team_info = None
 
 
+# async def main():
 async def main():
     ########################################################
     ############ Drop DB tables if necessary. ##############
@@ -78,7 +79,7 @@ async def main():
     ########################
     # Create all DB tables #
     ########################
-    Base.metadata.create_all(engine)
+    # Base.metadata.create_all(engine)
 
     ################################
     # Insert all data to DB tables #
@@ -90,7 +91,6 @@ async def main():
     insert_commits_into_db(commits),
     deactivate_inactive_players(player_info),
     insert_player_info_into_db(player_info)
-    
     
     ##########################################################################
     # Note: season_return_stats needs to be run prior to offensive stats.
@@ -116,12 +116,20 @@ async def main():
         insert_career_return_stats_into_db(),
         insert_career_def_stats_into_db(),
         insert_career_kicking_stats_into_db(),
-        insert_career_off_stats_into_db(),
         insert_game_def_stats_into_db(),
         insert_game_kick_stats_into_db(),
-        insert_game_off_stats_into_db(),
         insert_game_return_stats_into_db()
     )
+    # await asyncio.gather(
+    #   insert_game_def_stats_into_db(),
+    #   insert_game_kick_stats_into_db(),
+    #   insert_game_return_stats_into_db()
+    # )
+    await asyncio.gather(
+      insert_career_off_stats_into_db(),
+      insert_game_off_stats_into_db(),
+    )
+
 
 sorted_data_dir = sorted(os.listdir(data_dir), key = lambda x: int(x.replace('OD-4Bros3_week', '')))
 
@@ -142,3 +150,7 @@ for file in sorted_data_dir:
     team_info = data['Team Info'].records
 
     asyncio.run(main())
+
+
+# asyncio.run(main())
+# main()
