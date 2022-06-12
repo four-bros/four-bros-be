@@ -43,11 +43,16 @@ from src.responses.WeekYear import (
 
 # App constants
 app = Flask(__name__)
-DB_URL = os.environ['DATABASE_URL']
-app.config['SQL_ALCHEMY_DATABASE_URI'] = DB_URL
-conn = psycopg2.connect(DB_URL, sslmode='require')
 CORS(app)
 
+# DB constants
+DB_URL = os.environ['DATABASE_URL']
+# app.config['SQL_ALCHEMY_DATABASE_URI'] = DB_URL
+conn = psycopg2.connect(DB_URL, sslmode='require')
+engine = create_engine(DB_URL, echo=False, future=True)
+Session = sessionmaker(bind=engine)
+session = Session()
+Base = declarative_base()
 
 # File constants
 # Windows file path
@@ -88,13 +93,6 @@ seth: CoachInfo = CoachInfo(
 
 users: List[CoachInfo] = [ben, brent, dan, seth]
 user_teams = {user.team_name for user in users}
-
-
-# DB constants
-engine = create_engine(DB_URL, echo=False, future=True)
-Session = sessionmaker(bind=engine)
-session = Session()
-Base = declarative_base()
 
 
 # Schema constants
