@@ -10,7 +10,7 @@ from src.data_models.CommitsData import CommitsData
 from src.data_models.WeekYearData import WeekYearData
 
 
-async def insert_commits_into_db(commits):
+def insert_commits_into_db(commits):
 
     week_year: WeekYearData = session.query(WeekYearData).order_by(
         desc(WeekYearData.year),
@@ -45,7 +45,7 @@ async def insert_commits_into_db(commits):
         session.close()
 
 
-async def insert_week_year_into_db(week_year):
+def insert_week_year_into_db(week_year):
     
     record = week_year[0]
     

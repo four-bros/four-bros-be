@@ -15,9 +15,9 @@ class GameReturnStatsData(Base):
     __tablename__ = 'game_return_stats'
     # __table_args__ = {'extend_existing': True}
     id = Column(String(50), primary_key=True)
-    player_id = Column(Integer, ForeignKey('player_info.id'))
+    player_id = Column(String(50), ForeignKey('player_info.id'))
     week = Column(Integer)
-    year = Column(String(10))
+    year = Column(Integer)
     games_played = Column(Integer)
     kick_returns = Column(Integer)
     kr_yds = Column(Integer)

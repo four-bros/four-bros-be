@@ -13,7 +13,7 @@ from src.data_models.TeamInfoData import TeamInfoData
 from src.data_models.WeekYearData import WeekYearData
 
 
-async def insert_coach_info_into_db():
+def insert_coach_info_into_db():
 
     week_year: WeekYearData = session.query(WeekYearData).order_by(
         desc(WeekYearData.year),
@@ -52,7 +52,7 @@ async def insert_coach_info_into_db():
         session.close()
 
 
-async def insert_coach_stats_into_db():
+def insert_coach_stats_into_db():
 
     week_year: WeekYearData = session.query(WeekYearData).order_by(
         desc(WeekYearData.year),
