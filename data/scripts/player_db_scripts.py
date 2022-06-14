@@ -4,7 +4,7 @@ from sqlalchemy import desc
 from uuid import uuid4
 
 import ncaa_dynasty
-from src.constants import session
+from src.constants import corrupt_team_ids, session
 from src.data_models.PlayerInfoData import PlayerInfoData
 from src.data_models.WeekYearData import WeekYearData
 
@@ -52,17 +52,7 @@ def insert_player_info_into_db(player_info):
         record = player_info[i]
         # Skip over players from duplicate teams
         # Skip over players from duplicate or FCS teams 
-        if (
-            record.fields['Team ID'] == 160 or
-            record.fields['Team ID'] == 161 or
-            record.fields['Team ID'] == 162 or
-            record.fields['Team ID'] == 163 or
-            record.fields['Team ID'] == 164 or
-            record.fields['Team ID'] == 300 or
-            record.fields['Team ID'] == 400 or
-            record.fields['Team ID'] == 1023 or
-            (record.fields['Player ID'] == '1783' and record.fields['First Name'] == 'Brady')
-        ):
+        if (record.fields['Team ID'] in corrupt_team_ids or (record.fields['Player ID'] == '1783' and record.fields['First Name'] == 'Brady')):
             continue
         
         # Convert unintelligible values to readable values

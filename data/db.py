@@ -3,10 +3,9 @@ import os
 import ncaa_dynasty
 
 from src.constants import (
-    Base,
+    corrupt_team_ids,
     data_dir,
     # data_dynasty_file_path,
-    engine,
     user_teams
 )
 # from data import (
@@ -120,11 +119,7 @@ async def main():
         insert_game_kick_stats_into_db(),
         insert_game_return_stats_into_db()
     )
-    # await asyncio.gather(
-    #   insert_game_def_stats_into_db(),
-    #   insert_game_kick_stats_into_db(),
-    #   insert_game_return_stats_into_db()
-    # )
+
     await asyncio.gather(
       insert_career_off_stats_into_db(),
       insert_game_off_stats_into_db(),

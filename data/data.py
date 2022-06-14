@@ -2,6 +2,7 @@ from typing import List
 import ncaa_dynasty
 
 from src.constants import (
+    corrupt_team_ids,
     data_dynasty_file_path,
     user_teams
 )
@@ -22,3 +23,7 @@ team_info = data['Team Info'].records
 
 
 print(week_year[0].fields)
+
+for record in return_stats:
+  if record.fields['Player ID'] == 2:
+    print(record.fields['First Name'], record.fields['Team ID'], record.fields['Player ID'])

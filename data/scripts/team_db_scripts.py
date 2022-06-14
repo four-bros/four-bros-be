@@ -42,7 +42,7 @@ from src.models.Stats import (
 
 
 
-async def insert_team_info_into_db(team_info):
+def insert_team_info_into_db(team_info):
 
     user_teams: List[str] = [user.team_name for user in users]
     
@@ -99,12 +99,12 @@ async def insert_team_info_into_db(team_info):
             team_query.media_poll_points=new_team.media_poll_points
             team_query.coachs_poll_points=new_team.coachs_poll_points
         
-            try:
-                session.commit()
-            except:
-                session.rollback()
-            finally:
-                session.close()
+        try:
+            session.commit()
+        except:
+            session.rollback()
+        finally:
+            session.close()
 
 
 ################################################

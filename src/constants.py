@@ -60,8 +60,8 @@ Base = declarative_base()
 # Windows file path
 # dynasty_file_path = 'D:\Content\E00001485AECABB5\\454109B6\\00000001\OD-4Bros3'
 # Mac file path
-# data_dynasty_file_path = 'data/OD-4Bros3_week115'
-data_dir = '/Users/sgreen4/Desktop/data/dynasty3/2015'
+data_dynasty_file_path = '/Users/sgreen4/Desktop/data/dynasty3/2015/OD-4Bros3_week2'
+data_dir = '/Users/sgreen4/Desktop/data/dynasty3/2016-1'
 
 # User/coach information
 ben: CoachInfo = CoachInfo(
@@ -75,8 +75,8 @@ brent: CoachInfo = CoachInfo(
     id='brent',
     first_name='Magnus',
     last_name='Tiedemann',
-    team_id=82,
-    team_name='San Jose State'
+    team_id=86,
+    team_name='Syracuse'
 )
 dan: CoachInfo = CoachInfo(
     id='dan',
@@ -95,6 +95,8 @@ seth: CoachInfo = CoachInfo(
 
 users: List[CoachInfo] = [ben, brent, dan, seth]
 user_teams = {user.team_name for user in users}
+corrupt_team_ids: List[int] = [160, 161, 162, 163, 164, 300, 400, 1023]
+corrupt_player_ids: List[int] = [65535, 4, 8, 2, 13]
 
 
 # Schema constants

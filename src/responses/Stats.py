@@ -54,7 +54,7 @@ class PassingStatsSchema(Schema):
     completions = fields.Int()
     ints = fields.Int()
     pass_att = fields.Int()
-    pass_yp_attempt = fields.Float()
+    pass_ypa = fields.Float()
     pass_ypg = fields.Float()
     pass_rating = fields.Float()
     sacked = fields.Int()

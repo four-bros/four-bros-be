@@ -1,8 +1,7 @@
 import asyncio
-from sqlalchemy import desc
 from uuid import uuid4
 
-from src.constants import session
+from src.constants import corrupt_player_ids, corrupt_team_ids, session
 from src.data_models.PlayerInfoData import PlayerInfoData
 from src.utils.helpers import(
     _convert_stats_year
@@ -23,16 +22,18 @@ def insert_season_def_stats_into_db(def_stats):
 
         record = def_stats[i]
         
+        if record.fields['Player ID'] in corrupt_player_ids:
+            continue
         readable_year = _convert_stats_year(record.fields['Year'])
-        # skip 2013 stats
+         # skip 2013 stats
         if readable_year == 2013:
-          continue
+            continue
+        
+        new_id = str(uuid4())
         
         total_tackles = record.fields['Solo Tkls'] + record.fields['Asst. Tkls']
         half_a_sack = round(record.fields['Half A Sack'] / 2, 1)
         total_sacks = half_a_sack + record.fields['Sacks']
-
-        new_id = str(uuid4())
 
         player_name: PlayerInfoData = session.query(PlayerInfoData).where(
             PlayerInfoData.roster_id == str(record.fields['Player ID']),
@@ -45,6 +46,10 @@ def insert_season_def_stats_into_db(def_stats):
             player_id: str = str(record.fields['Player ID']) + player_name.first_name + player_name.last_name
         else:
             player_id = str(record.fields['Player ID'])
+        
+        # skip players who aren't in PlayerInfoData
+        if player_id.isdigit():
+          continue
         
         player_def_stats = SeasonDefensiveStatsData(
             id=new_id,
@@ -113,11 +118,15 @@ def insert_season_kicking_stats_into_db(kicking_stats):
     for i, value in enumerate(kicking_stats):
 
         record = kicking_stats[i]
-        new_id = str(uuid4())
+        if record.fields['Player ID'] in corrupt_player_ids:
+            continue
         readable_year = _convert_stats_year(record.fields['Year'])
-        # skip 2013 stats
+         # skip 2013 stats
         if readable_year == 2013:
-          continue
+            continue
+        
+        new_id = str(uuid4())
+
         fg_pct = round(
             record.fields['FG Made'] / record.fields['FG Att.'] * 100\
                 if record.fields['FG Att.'] != 0 else 0,
@@ -150,6 +159,10 @@ def insert_season_kicking_stats_into_db(kicking_stats):
             player_id: str = str(record.fields['Player ID']) + player_name.first_name + player_name.last_name
         else:
             player_id = str(record.fields['Player ID'])
+        
+        # skip players who aren't in PlayerInfoData
+        if player_id.isdigit():
+          continue
         
         player_kicking_stats = SeasonKickingStatsData(
             id=new_id,
@@ -237,11 +250,13 @@ def insert_season_off_stats_into_db(off_stats):
 
     for i, value in enumerate(off_stats):
         record = off_stats[i]
+        if record.fields['Player ID'] in corrupt_player_ids:
+            continue
         readable_year = _convert_stats_year(record.fields['Year'])
-        # skip 2013 stats
+         # skip 2013 stats
         if readable_year == 2013:
-          continue
-
+            continue
+        
         new_id = str(uuid4())
 
         comp_pct = round(
@@ -335,6 +350,10 @@ def insert_season_off_stats_into_db(off_stats):
             player_id: str = str(record.fields['Player ID']) + player_name.first_name + player_name.last_name
         else:
             player_id = str(record.fields['Player ID'])
+        
+        # skip players who aren't in PlayerInfoData
+        if player_id.isdigit():
+          continue
 
         player_off_stats = SeasonOffensiveStatsData(
             id=new_id,
@@ -433,12 +452,16 @@ def insert_season_return_stats_into_db(return_stats):
     
     for i, value in enumerate(return_stats):
         record = return_stats[i]
-
-        new_id = str(uuid4())
+        # skip bad data
+        if record.fields['Player ID'] in corrupt_player_ids:
+            continue
         readable_year = _convert_stats_year(record.fields['Year'])
-        # skip 2013 stats
+         # skip 2013 stats
         if readable_year == 2013:
-          continue
+            continue
+        
+        new_id = str(uuid4())
+        
         kr_avg = round(
             record.fields['KR Yds.'] / record.fields['Kick Returns']\
                 if record.fields['Kick Returns'] != 0 else 0,
@@ -461,6 +484,10 @@ def insert_season_return_stats_into_db(return_stats):
             player_id: str = str(record.fields['Player ID']) + player_name.first_name + player_name.last_name
         else:
             player_id = str(record.fields['Player ID'])
+        
+        # skip players who aren't in PlayerInfoData
+        if player_id.isdigit():
+          continue
         
         player_return_stats = SeasonReturnStatsData(
             id=new_id,
