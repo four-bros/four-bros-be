@@ -42,7 +42,7 @@ from src.models.Stats import (
 
 
 
-def insert_team_info_into_db(team_info):
+async def insert_team_info_into_db(team_info):
 
     user_teams: List[str] = [user.team_name for user in users]
     

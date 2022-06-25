@@ -51,7 +51,7 @@ if DB_URL.startswith("postgres://"):
     DB_URL = DB_URL.replace("postgres://", "postgresql://", 1)
 # app.config['SQL_ALCHEMY_DATABASE_URI'] = DB_URL
 conn = psycopg2.connect(DB_URL, sslmode='require')
-engine = create_engine(DB_URL, echo=False, future=True)
+engine = create_engine(DB_URL, echo=False, future=True, pool_pre_ping=True)
 Session = sessionmaker(bind=engine)
 session = Session()
 Base = declarative_base()
@@ -61,36 +61,36 @@ Base = declarative_base()
 # dynasty_file_path = 'D:\Content\E00001485AECABB5\\454109B6\\00000001\OD-4Bros3'
 # Mac file path
 data_dynasty_file_path = '/Users/sgreen4/Desktop/data/dynasty3/2015/OD-4Bros3_week2'
-data_dir = '/Users/sgreen4/Desktop/data/dynasty3/2016-1'
+data_dir = '/Users/sgreen4/Desktop/data/dynasty3/2022-2'
 
 # User/coach information
 ben: CoachInfo = CoachInfo(
     id='ben',
     first_name='Campbell',
     last_name='Ponderosa',
-    team_id=25,
-    team_name='ECU'
+    team_id=72,
+    team_name='Oklahoma State'
 )
 brent: CoachInfo = CoachInfo(
     id='brent',
     first_name='Magnus',
     last_name='Tiedemann',
-    team_id=86,
+    team_id=88,
     team_name='Syracuse'
 )
 dan: CoachInfo = CoachInfo(
     id='dan',
     first_name='Boggs',
     last_name='Moonbeam',
-    team_id=181,
-    team_name='UMass'
+    team_id=102,
+    team_name='USC'
 )
 seth: CoachInfo = CoachInfo(
     id='seth',
     first_name='Peewee',
     last_name='FlyGuy',
-    team_id=229,
-    team_name='Florida Atlantic'
+    team_id=67,
+    team_name='Northwestern'
 )
 
 users: List[CoachInfo] = [ben, brent, dan, seth]

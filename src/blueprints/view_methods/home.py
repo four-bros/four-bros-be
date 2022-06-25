@@ -18,7 +18,9 @@ def get_home_data(request):
         desc(WeekYearData.week)
     ).first()
 
-    user_teams: List[TeamInfoData] = session.query(TeamInfoData).where(TeamInfoData.is_user).all()
+    user_teams: List[TeamInfoData] = session.query(TeamInfoData).where(TeamInfoData.is_user).order_by(
+      TeamInfoData.team_name
+    ).all()
 
     # convert data models to objects
     current_week_year: WeekYear = WeekYear(

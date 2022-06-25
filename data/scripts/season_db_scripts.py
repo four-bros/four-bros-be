@@ -16,7 +16,7 @@ from src.data_models.WeekYearData import WeekYearData
 ################################################
 ######## insert player data functions ##########
 ################################################
-def insert_season_def_stats_into_db(def_stats):
+async def insert_season_def_stats_into_db(def_stats):
 
     for i, value in enumerate(def_stats):
 
@@ -113,7 +113,7 @@ def insert_season_def_stats_into_db(def_stats):
         session.close()
 
 
-def insert_season_kicking_stats_into_db(kicking_stats):
+async def insert_season_kicking_stats_into_db(kicking_stats):
     
     for i, value in enumerate(kicking_stats):
 
@@ -246,7 +246,7 @@ def insert_season_kicking_stats_into_db(kicking_stats):
         session.close()
 
 
-def insert_season_off_stats_into_db(off_stats):
+async def insert_season_off_stats_into_db(off_stats):
 
     for i, value in enumerate(off_stats):
         record = off_stats[i]
@@ -448,7 +448,7 @@ def insert_season_off_stats_into_db(off_stats):
         session.close()
 
 
-def insert_season_return_stats_into_db(return_stats):
+async def insert_season_return_stats_into_db(return_stats):
     
     for i, value in enumerate(return_stats):
         record = return_stats[i]

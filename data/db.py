@@ -84,12 +84,16 @@ async def main():
     # Insert all data to DB tables #
     ################################
 
-    insert_week_year_into_db(week_year),
-    insert_team_info_into_db(team_info),
-    insert_coach_info_into_db(),
-    insert_commits_into_db(commits),
-    deactivate_inactive_players(player_info),
-    insert_player_info_into_db(player_info)
+    await asyncio.gather(insert_week_year_into_db(week_year))
+
+    await asyncio.gather(
+        insert_team_info_into_db(team_info),
+        insert_coach_info_into_db(),
+        insert_commits_into_db(commits),
+    )
+
+    await asyncio.gather(deactivate_inactive_players(player_info))
+    await asyncio.gather(insert_player_info_into_db(player_info))
     
     ##########################################################################
     # Note: season_return_stats needs to be run prior to offensive stats.
@@ -97,11 +101,14 @@ async def main():
     # data from the season_return_stats table.
     ##########################################################################
 
-    insert_season_return_stats_into_db(return_stats)
-    insert_coach_stats_into_db(),
-    insert_season_def_stats_into_db(def_stats),
-    insert_season_off_stats_into_db(off_stats),
-    insert_season_kicking_stats_into_db(kicking_stats)
+    await asyncio.gather(
+        insert_season_return_stats_into_db(return_stats),
+        insert_coach_stats_into_db(),
+        insert_season_def_stats_into_db(def_stats),
+        insert_season_kicking_stats_into_db(kicking_stats)
+    )
+
+    await asyncio.gather(insert_season_off_stats_into_db(off_stats))
     
     ##########################################################################
     # Note: all team_stats, career_stats and game_stats scripts need 
@@ -129,6 +136,9 @@ async def main():
 sorted_data_dir = sorted(os.listdir(data_dir), key = lambda x: int(x.replace('OD-4Bros3_week', '')))
 
 for file in sorted_data_dir:
+
+    if '.DS_Store' in file:
+      continue
 
     data_dynasty_file_path = os.path.join(data_dir, file)
 
