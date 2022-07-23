@@ -476,7 +476,7 @@ async def insert_season_return_stats_into_db(return_stats):
         player_name: PlayerInfoData = session.query(PlayerInfoData).where(
             PlayerInfoData.roster_id == str(record.fields['Player ID']),
             PlayerInfoData.is_active == True
-        ).one_or_none()
+        ).scalar()
 
         player_id: str = ''
 
