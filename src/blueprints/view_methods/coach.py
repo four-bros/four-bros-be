@@ -22,7 +22,7 @@ def get_coach_records(request):
 
         yearly_coach_stats = session.query(CoachStatsData).where(
             CoachStatsData.user == user.id
-        ).order_by(CoachStatsData.year).all()
+        ).order_by(desc(CoachStatsData.year)).all()
 
         response[user.id] = _get_coach_season_records(yearly_coach_info, yearly_coach_stats)
     
