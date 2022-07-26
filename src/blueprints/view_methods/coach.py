@@ -1,4 +1,5 @@
 from typing import List
+from sqlalchemy import desc
 from src.constants import (
     coach_stat_schema,
     session,
@@ -17,7 +18,7 @@ def get_coach_records(request):
 
         yearly_coach_info: List[CoachInfoData] = session.query(CoachInfoData).where(
             CoachInfoData.user == user.id
-        ).order_by(CoachInfoData.year).all()
+        ).order_by(desc(CoachInfoData.year)).all()
 
         yearly_coach_stats = session.query(CoachStatsData).where(
             CoachStatsData.user == user.id

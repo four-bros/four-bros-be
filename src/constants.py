@@ -61,7 +61,7 @@ Base = declarative_base()
 # dynasty_file_path = 'D:\Content\E00001485AECABB5\\454109B6\\00000001\OD-4Bros3'
 # Mac file path
 data_dynasty_file_path = '/Users/sgreen4/Desktop/data/dynasty3/2015/OD-4Bros3_week2'
-data_dir = '/Users/sgreen4/Desktop/data/dynasty3/2029-2'
+data_dir = '/Users/sgreen4/Desktop/data/dynasty3/2031-1'
 
 # User/coach information
 ben: CoachInfo = CoachInfo(
@@ -82,8 +82,8 @@ dan: CoachInfo = CoachInfo(
     id='dan',
     first_name='Boggs',
     last_name='Moonbeam',
-    team_id=102,
-    team_name='USC'
+    team_id=11,
+    team_name='Baylor'
 )
 seth: CoachInfo = CoachInfo(
     id='seth',
