@@ -1,5 +1,7 @@
 import asyncio
+from typing import List
 from uuid import uuid4
+import time
 
 from src.constants import corrupt_player_ids, corrupt_team_ids, session
 from src.data_models.PlayerInfoData import PlayerInfoData
@@ -16,14 +18,28 @@ from src.data_models.WeekYearData import WeekYearData
 ################################################
 ######## insert player data functions ##########
 ################################################
-async def insert_season_def_stats_into_db(def_stats):
+async def insert_season_def_stats_into_db(week_year_data, def_stats):
+
+    start_time = time.time()
+    print('Starting insert Season Defensive Stats script.')
+
+    week_year = week_year_data[0]
+    # Note: do not need to convert the current year here. Only using this year for a comparison
+    current_year = week_year.fields['Year']
+
+    new_players: List[SeasonDefensiveStatsData] = []
 
     for i, value in enumerate(def_stats):
 
         record = def_stats[i]
+
+        #skip over players not in the current year
+        if record.fields['Year'] != current_year:
+            continue
         
         if record.fields['Player ID'] in corrupt_player_ids:
             continue
+
         readable_year = _convert_stats_year(record.fields['Year'])
          # skip 2013 stats
         if readable_year == 2013:
@@ -36,7 +52,7 @@ async def insert_season_def_stats_into_db(def_stats):
         total_sacks = half_a_sack + record.fields['Sacks']
 
         player_name: PlayerInfoData = session.query(PlayerInfoData).where(
-            PlayerInfoData.roster_id == str(record.fields['Player ID']),
+            PlayerInfoData.roster_id == record.fields['Player ID'],
             PlayerInfoData.is_active == True
         ).scalar()
 
@@ -82,7 +98,7 @@ async def insert_season_def_stats_into_db(def_stats):
         ).scalar()
 
         if not player_query:
-            session.add(player_def_stats)
+            new_players.append(player_def_stats)
 
         else:
             player_query.long_int_ret=player_def_stats.long_int_ret
@@ -105,19 +121,36 @@ async def insert_season_def_stats_into_db(def_stats):
             player_query.total_tkls=player_def_stats.total_tkls
 
     try:
+        session.add_all(new_players)
         session.commit()
     except:
         session.rollback()
         raise
     finally:
         session.close()
+        execution_time = time.time() - start_time
+        print(f'Insert Season Defensive Stats script took {(round(execution_time, 2))} seconds to complete.')
 
 
-async def insert_season_kicking_stats_into_db(kicking_stats):
+async def insert_season_kicking_stats_into_db(week_year_data, kicking_stats):
+
+    start_time = time.time()
+    print('Starting insert Season Kicking Stats script.')
+
+    week_year = week_year_data[0]
+    # Note: do not need to convert the current year here. Only using this year for a comparison
+    current_year = week_year.fields['Year']
+
+    new_players: List[SeasonKickingStatsData] = []
     
     for i, value in enumerate(kicking_stats):
 
         record = kicking_stats[i]
+
+        # skip over players not in the current year
+        if record.fields['Year'] != current_year:
+            continue
+
         if record.fields['Player ID'] in corrupt_player_ids:
             continue
         readable_year = _convert_stats_year(record.fields['Year'])
@@ -149,7 +182,7 @@ async def insert_season_kicking_stats_into_db(kicking_stats):
             1)
         
         player_name: PlayerInfoData = session.query(PlayerInfoData).where(
-            PlayerInfoData.roster_id == str(record.fields['Player ID']),
+            PlayerInfoData.roster_id == record.fields['Player ID'],
             PlayerInfoData.is_active == True
         ).scalar()
 
@@ -206,7 +239,7 @@ async def insert_season_kicking_stats_into_db(kicking_stats):
         ).scalar()
         
         if not player_query:
-            session.add(player_kicking_stats)
+            new_players.append(player_kicking_stats)
 
         else:
             player_query.fg_made_17_29=player_kicking_stats.fg_made_17_29
@@ -238,20 +271,39 @@ async def insert_season_kicking_stats_into_db(kicking_stats):
             player_query.net_avg=player_kicking_stats.net_avg
 
     try:
+        session.add_all(new_players)
         session.commit()
     except:
         session.rollback()
         raise
     finally:
         session.close()
+        execution_time = time.time() - start_time
+        print(f'Insert Season Kicking Stats script took {(round(execution_time, 2))} seconds to complete.')
 
 
-async def insert_season_off_stats_into_db(off_stats):
+async def insert_season_off_stats_into_db(week_year_data, off_stats):
+
+    start_time = time.time()
+    print('Starting insert Season Offensive Stats script.')
+
+    week_year = week_year_data[0]
+    # Note: do not need to convert the current year here. Only using this year for a comparison
+    current_year = week_year.fields['Year']
+
+    new_players: List[SeasonOffensiveStatsData] = []
 
     for i, value in enumerate(off_stats):
+
         record = off_stats[i]
+
+        # skip over players not in the current year
+        if record.fields['Year'] != current_year:
+            continue
+
         if record.fields['Player ID'] in corrupt_player_ids:
             continue
+
         readable_year = _convert_stats_year(record.fields['Year'])
          # skip 2013 stats
         if readable_year == 2013:
@@ -340,7 +392,7 @@ async def insert_season_off_stats_into_db(off_stats):
                 1)
         
         player_name: PlayerInfoData = session.query(PlayerInfoData).where(
-            PlayerInfoData.roster_id == str(record.fields['Player ID']),
+            PlayerInfoData.roster_id == record.fields['Player ID'],
             PlayerInfoData.is_active == True,
         ).scalar()
 
@@ -401,7 +453,7 @@ async def insert_season_off_stats_into_db(off_stats):
         ).scalar()
 
         if not player_query:
-            session.add(player_off_stats)
+            new_players.append(player_off_stats)
 
         else:
             player_query.pass_yards=player_off_stats.pass_yards
@@ -440,18 +492,36 @@ async def insert_season_off_stats_into_db(off_stats):
             player_query.comp_pct=player_off_stats.comp_pct
 
     try:
+        session.add_all(new_players)
         session.commit()
     except:
         session.rollback()
         raise
     finally:
         session.close()
+        execution_time = time.time() - start_time
+        print(f'Insert Season Offensive Stats script took {(round(execution_time, 2))} seconds to complete.')
 
 
-async def insert_season_return_stats_into_db(return_stats):
+async def insert_season_return_stats_into_db(week_year_data, return_stats):
+
+    start_time = time.time()
+    print('Starting insert Season Return Stats script.')
+
+    week_year = week_year_data[0]
+    # Note: do not need to convert the current year here. Only using this year for a comparison
+    current_year = week_year.fields['Year']
+    
+    new_players: List[SeasonReturnStatsData] = []
     
     for i, value in enumerate(return_stats):
+
         record = return_stats[i]
+
+        # skip over players not in the current year
+        if record.fields['Year'] != current_year:
+            continue
+
         # skip bad data
         if record.fields['Player ID'] in corrupt_player_ids:
             continue
@@ -474,7 +544,7 @@ async def insert_season_return_stats_into_db(return_stats):
             )
 
         player_name: PlayerInfoData = session.query(PlayerInfoData).where(
-            PlayerInfoData.roster_id == str(record.fields['Player ID']),
+            PlayerInfoData.roster_id == record.fields['Player ID'],
             PlayerInfoData.is_active == True
         ).scalar()
 
@@ -512,7 +582,7 @@ async def insert_season_return_stats_into_db(return_stats):
         ).scalar()
         
         if not player_query:
-            session.add(player_return_stats)
+            new_players.append(player_return_stats)
             
         else:
             player_query.kick_returns=player_return_stats.kick_returns
@@ -529,9 +599,12 @@ async def insert_season_return_stats_into_db(return_stats):
             player_query.pr_avg=player_return_stats.pr_avg
 
     try:
+        session.add_all(new_players)
         session.commit()
     except:
         session.rollback()
         raise
     finally:
         session.close()
+        execution_time = time.time() - start_time
+        print(f'Insert Season Return Stats script took {(round(execution_time, 2))} seconds to complete.')

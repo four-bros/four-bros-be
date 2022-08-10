@@ -1,6 +1,6 @@
 from typing import List
-from sqlalchemy.sql.expression import update
 from uuid import uuid4
+import time
 
 from src.constants import session
 from src.data_models.CareerDefensiveStatsData import CareerDefensiveStatsData
@@ -32,19 +32,38 @@ from src.data_models.PlayerInfoData import PlayerInfoData
 from src.data_models.SeasonReturnStatsData import SeasonReturnStatsData
 
 
-async def insert_career_def_stats_into_db():
+async def insert_career_def_stats_into_db(week_year_data, def_stats):
 
-    players: List[PlayerInfoData] = session.query(PlayerInfoData).all()
+    start_time = time.time()
+    print('Starting insert Career Defensive Stats script.')
 
-    for player in players:
+    week_year = week_year_data[0]
+    # Note: do not need to convert the current year here. Only using this year for a comparison
+    current_year = week_year.fields['Year']
+
+    new_players: List[CareerDefensiveStatsData] = []
+
+    for i, value in enumerate(def_stats):
+
+        def_record = def_stats[i]
+
+        # skip over players not in the current year
+        if def_record.fields['Year'] != current_year:
+            continue
+
+        player_info: PlayerInfoData = session.query(PlayerInfoData).where(
+            PlayerInfoData.roster_id == def_record.fields['Player ID'],
+            PlayerInfoData.is_active == True
+        ).scalar()
+
+        if not player_info:
+            continue
+        
+        player_id: str = str(def_record.fields['Player ID']) + player_info.first_name + player_info.last_name
 
         defensive_stats_data: List[SeasonDefensiveStatsData] = session.query(SeasonDefensiveStatsData).where(
-            SeasonDefensiveStatsData.player_id == player.id
+            SeasonDefensiveStatsData.player_id == player_id
         ).all()
-
-        # Skip over players that don't have defensive stats
-        if not defensive_stats_data:
-            continue
 
         career_defensive_stats: DefensiveStats = _compile_career_defensive_stats(defensive_stats_data)
         
@@ -52,7 +71,7 @@ async def insert_career_def_stats_into_db():
         
         player_career_def_stats = CareerDefensiveStatsData(
             id=new_id,
-            player_id=player.id,
+            player_id=player_id,
             long_int_ret=career_defensive_stats.long_int_ret,
             sacks=career_defensive_stats.sacks,
             year=career_defensive_stats.year,
@@ -80,7 +99,7 @@ async def insert_career_def_stats_into_db():
             CareerDefensiveStatsData.player_id == player_career_def_stats.player_id).scalar()
 
         if not player_query:
-            session.add(player_career_def_stats)
+            new_players.append(player_career_def_stats)
 
         else:
 
@@ -104,22 +123,48 @@ async def insert_career_def_stats_into_db():
             player_query.total_tkls=player_career_def_stats.total_tkls
 
     try:
+        session.add_all(new_players)
         session.commit()
     except:
         session.rollback()
         raise
     finally:
         session.close()
+        execution_time = time.time() - start_time
+        print(f'Insert Career Defensive Stats script took {(round(execution_time, 2))} seconds to complete.')
 
 
-async def insert_career_kicking_stats_into_db():
+async def insert_career_kicking_stats_into_db(week_year_data, kicking_stats):
 
-    players: List[PlayerInfoData] = session.query(PlayerInfoData).all()
+    start_time = time.time()
+    print('Starting insert Career Kicking Stats script.')
 
-    for player in players:
+    week_year = week_year_data[0]
+    # Note: do not need to convert the current year here. Only using this year for a comparison
+    current_year = week_year.fields['Year']
+
+    new_players: List[CareerKickingStatsData] = []
+
+    for i, value in enumerate(kicking_stats):
+
+        kick_record = kicking_stats[i]
+
+        # skip over players not in the current year
+        if kick_record.fields['Year'] != current_year:
+            continue
+
+        player_info: PlayerInfoData = session.query(PlayerInfoData).where(
+            PlayerInfoData.roster_id == kick_record.fields['Player ID'],
+            PlayerInfoData.is_active == True
+        ).scalar()
+
+        if not player_info:
+            continue
+
+        player_id: str = str(kick_record.fields['Player ID']) + player_info.first_name + player_info.last_name
 
         kicking_stats_data: List[SeasonKickingStatsData] = session.query(SeasonKickingStatsData).where(
-            SeasonKickingStatsData.player_id == player.id
+            SeasonKickingStatsData.player_id == player_id
         ).all()
 
         # Skip over players that don't have kicking stats
@@ -132,7 +177,7 @@ async def insert_career_kicking_stats_into_db():
 
         player_career_kick_stats = CareerKickingStatsData(
             id=new_id,
-            player_id=player.id,
+            player_id=player_id,
             fg_made_17_29=career_kicking_stats.fg_made_17_29,
             fg_att_17_29=career_kicking_stats.fg_att_17_29,
             long_fg=career_kicking_stats.long_fg,
@@ -171,7 +216,7 @@ async def insert_career_kicking_stats_into_db():
         ).scalar()
         
         if not player_query:
-            session.add(player_career_kick_stats)
+            new_players.append(player_career_kick_stats)
 
         else:
 
@@ -204,22 +249,48 @@ async def insert_career_kicking_stats_into_db():
             player_query.net_avg=player_career_kick_stats.net_avg
 
     try:
+        session.add_all(new_players)
         session.commit()
     except:
         session.rollback()
         raise
     finally:
         session.close()
+        execution_time = time.time() - start_time
+        print(f'Insert Career Kicking Stats script took {(round(execution_time, 2))} seconds to complete.')
 
 
-async def insert_career_off_stats_into_db():
+async def insert_career_off_stats_into_db(week_year_data, off_stats):
 
-    players: List[PlayerInfoData] = session.query(PlayerInfoData).all()
+    start_time = time.time()
+    print('Starting insert Career Offensive Stats script.')
 
-    for player in players:
+    week_year = week_year_data[0]
+    # Note: do not need to convert the current year here. Only using this year for a comparison
+    current_year = week_year.fields['Year']
+
+    new_players: List[CareerOffensiveStatsData] = []
+
+    for i, value in enumerate(off_stats):
+
+        offensive_record = off_stats[i]
+
+        # skip over players not in the current year
+        if offensive_record.fields['Year'] != current_year:
+            continue
+
+        player_info: PlayerInfoData = session.query(PlayerInfoData).where(
+            PlayerInfoData.roster_id == offensive_record.fields['Player ID'],
+            PlayerInfoData.is_active == True
+        ).scalar()
+
+        if not player_info:
+            continue
+
+        player_id: str = str(offensive_record.fields['Player ID']) + player_info.first_name + player_info.last_name
 
         off_stats_data: List[SeasonOffensiveStatsData] = session.query(SeasonOffensiveStatsData).where(
-            SeasonOffensiveStatsData.player_id == player.id
+            SeasonOffensiveStatsData.player_id == player_id
         ).all()
 
         # Skip over players that don't have kicking stats
@@ -237,7 +308,7 @@ async def insert_career_off_stats_into_db():
 
         player_career_off_stats = CareerOffensiveStatsData(
             id=new_id,
-            player_id=player.id,
+            player_id=player_id,
             pass_yards=career_pass_stats.pass_yards,
             longest_rec=career_rec_stats.longest_rec,
             longest_pass=career_pass_stats.longest_pass,
@@ -280,7 +351,7 @@ async def insert_career_off_stats_into_db():
             CareerOffensiveStatsData.player_id == player_career_off_stats.player_id).scalar()
 
         if not player_query:
-            session.add(player_career_off_stats)
+            new_players.append(player_career_off_stats)
 
         else:
             player_query.pass_yards=player_career_off_stats.pass_yards
@@ -319,22 +390,48 @@ async def insert_career_off_stats_into_db():
             player_query.comp_pct=player_career_off_stats.comp_pct
 
     try:
+        session.add_all(new_players)
         session.commit()
     except:
         session.rollback()
         raise
     finally:
         session.close()
+        execution_time = time.time() - start_time
+        print(f'Insert Career Offensive Stats script took {(round(execution_time, 2))} seconds to complete.')
 
 
-async def insert_career_return_stats_into_db():
+async def insert_career_return_stats_into_db(week_year_data, return_stats):
 
-    players: List[PlayerInfoData] = session.query(PlayerInfoData).all()
+    start_time = time.time()
+    print('Starting insert Career Return Stats script.')
 
-    for player in players:
+    week_year = week_year_data[0]
+    # Note: do not need to convert the current year here. Only using this year for a comparison
+    current_year = week_year.fields['Year']
+
+    new_players: List[CareerReturnStatsData] = []
+
+    for i, value in enumerate(return_stats):
+
+        return_record = return_stats[i]
+
+        # skip over players not in the current year
+        if return_record.fields['Year'] != current_year:
+            continue
+
+        player_info: PlayerInfoData = session.query(PlayerInfoData).where(
+            PlayerInfoData.roster_id == return_record.fields['Player ID'],
+            PlayerInfoData.is_active == True
+        ).scalar()
+
+        if not player_info:
+            continue
+
+        player_id: str = str(return_record.fields['Player ID']) + player_info.first_name + player_info.last_name
 
         return_stats_data: List[SeasonReturnStatsData] = session.query(SeasonReturnStatsData).where(
-            SeasonReturnStatsData.player_id == player.id
+            SeasonReturnStatsData.player_id == player_id
         ).all()
 
         # Skip over players that don't have kicking stats
@@ -347,7 +444,7 @@ async def insert_career_return_stats_into_db():
 
         player_career_return_stats = CareerReturnStatsData(
             id=new_id,
-            player_id=player.id,
+            player_id=player_id,
             kick_returns=career_return_stats.kick_returns,
             year=career_return_stats.year,
             long_kr=career_return_stats.long_kr,
@@ -367,7 +464,7 @@ async def insert_career_return_stats_into_db():
             CareerReturnStatsData.player_id == player_career_return_stats.player_id).scalar()
         
         if not player_query:
-            session.add(player_career_return_stats)
+            new_players.append(player_career_return_stats)
 
         else:
 
@@ -385,9 +482,12 @@ async def insert_career_return_stats_into_db():
             player_query.pr_avg=player_career_return_stats.pr_avg
 
     try:
+        session.add_all(new_players)
         session.commit()
     except:
         session.rollback()
         raise
     finally:
         session.close()
+        execution_time = time.time() - start_time
+        print(f'Insert Career Return Stats script took {(round(execution_time, 2))} seconds to complete.')

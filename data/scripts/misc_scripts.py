@@ -1,6 +1,7 @@
 import asyncio
 from sqlalchemy import desc
 from uuid import uuid4
+import time
 
 from src.constants import session
 from src.utils.helpers import(
@@ -11,6 +12,9 @@ from src.data_models.WeekYearData import WeekYearData
 
 
 async def insert_commits_into_db(commits):
+
+    start_time = time.time()
+    print('Starting Commits insert.')
 
     week_year: WeekYearData = session.query(WeekYearData).order_by(
         desc(WeekYearData.year),
@@ -43,9 +47,14 @@ async def insert_commits_into_db(commits):
         raise
     finally:
         session.close()
+        execution_time = time.time() - start_time
+        print(f'Commits took {(round(execution_time, 2))} seconds to complete.')
 
 
 async def insert_week_year_into_db(week_year):
+
+    start_time = time.time()
+    print('Starting Week/Year insert.')
     
     record = week_year[0]
     
@@ -74,3 +83,5 @@ async def insert_week_year_into_db(week_year):
         raise
     finally:
         session.close()
+        execution_time = time.time() - start_time
+        print(f'Insert Week/Year script took {(round(execution_time, 2))} seconds to complete.')

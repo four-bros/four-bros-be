@@ -1,6 +1,7 @@
 import asyncio
 import os
 import ncaa_dynasty
+import time
 
 from src.constants import (
     corrupt_team_ids,
@@ -28,12 +29,6 @@ from scripts.coach_db_scripts import (
     insert_coach_info_into_db,
     insert_coach_stats_into_db
 )
-from scripts.game_db_scripts import (
-    insert_game_def_stats_into_db,
-    insert_game_kick_stats_into_db,
-    insert_game_off_stats_into_db,
-    insert_game_return_stats_into_db
-)
 from scripts.misc_scripts import (
     insert_commits_into_db,
     insert_week_year_into_db
@@ -53,6 +48,15 @@ from scripts.team_db_scripts import (
     insert_team_game_stats_into_db,
     insert_team_season_stats_into_db
 )
+from scripts.game_db_scripts import (
+    insert_game_def_stats_into_db,
+    insert_game_kicking_stats_into_db,
+    insert_game_off_stats_into_db,
+    insert_game_return_stats_into_db
+)
+
+
+start_time = time.time()
 
 
 data = None
@@ -88,12 +92,23 @@ async def main():
 
     await asyncio.gather(
         insert_team_info_into_db(team_info),
-        insert_coach_info_into_db(),
+        insert_coach_info_into_db(week_year),
         insert_commits_into_db(commits),
     )
 
     await asyncio.gather(deactivate_inactive_players(player_info))
     await asyncio.gather(insert_player_info_into_db(player_info))
+
+    await asyncio.gather(
+        insert_season_return_stats_into_db(week_year, return_stats),
+    )
+
+    await asyncio.gather(
+        insert_game_def_stats_into_db(week_year, def_stats),
+        insert_game_kicking_stats_into_db(week_year, kicking_stats),
+        insert_game_off_stats_into_db(week_year, off_stats),
+        insert_game_return_stats_into_db(week_year, return_stats)
+    )
     
     ##########################################################################
     # Note: season_return_stats needs to be run prior to offensive stats.
@@ -102,13 +117,11 @@ async def main():
     ##########################################################################
 
     await asyncio.gather(
-        insert_season_return_stats_into_db(return_stats),
         insert_coach_stats_into_db(),
-        insert_season_def_stats_into_db(def_stats),
-        insert_season_kicking_stats_into_db(kicking_stats)
+        insert_season_def_stats_into_db(week_year, def_stats),
+        insert_season_kicking_stats_into_db(week_year, kicking_stats),
+        insert_season_off_stats_into_db(week_year, off_stats)
     )
-
-    await asyncio.gather(insert_season_off_stats_into_db(off_stats))
     
     ##########################################################################
     # Note: all team_stats, career_stats and game_stats scripts need 
@@ -117,19 +130,15 @@ async def main():
     ##########################################################################
 
     await asyncio.gather(
-        insert_team_season_stats_into_db(),
-        insert_team_game_stats_into_db(),
-        insert_career_return_stats_into_db(),
-        insert_career_def_stats_into_db(),
-        insert_career_kicking_stats_into_db(),
-        insert_game_def_stats_into_db(),
-        insert_game_kick_stats_into_db(),
-        insert_game_return_stats_into_db()
+        insert_team_season_stats_into_db(week_year),
+        insert_career_return_stats_into_db(week_year, return_stats),
+        insert_career_def_stats_into_db(week_year, def_stats),
+        insert_career_kicking_stats_into_db(week_year, kicking_stats),
     )
 
     await asyncio.gather(
-      insert_career_off_stats_into_db(),
-      insert_game_off_stats_into_db(),
+      insert_team_game_stats_into_db(week_year),
+      insert_career_off_stats_into_db(week_year, off_stats),
     )
 
 
@@ -154,7 +163,11 @@ for file in sorted_data_dir:
     week_year = data['Week/Year'].records
     team_info = data['Team Info'].records
 
+    print(week_year[0].fields)
     asyncio.run(main())
+
+execution_time = time.time() - start_time
+print(f'All insert scripts took {(round(execution_time, 1))} to complete.')
 
 
 # asyncio.run(main())

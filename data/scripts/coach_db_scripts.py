@@ -2,10 +2,14 @@ import asyncio
 from calendar import week
 from sqlalchemy import desc
 from uuid import uuid4
+import time
 
 from src.constants import (
     users,
     session
+)
+from src.utils.helpers import(
+    _convert_stats_year
 )
 from src.data_models.CoachInfoData import CoachInfoData
 from src.data_models.CoachStatsData import CoachStatsData
@@ -13,16 +17,17 @@ from src.data_models.TeamInfoData import TeamInfoData
 from src.data_models.WeekYearData import WeekYearData
 
 
-async def insert_coach_info_into_db():
+async def insert_coach_info_into_db(week_year):
 
-    week_year: WeekYearData = session.query(WeekYearData).order_by(
-        desc(WeekYearData.year),
-        desc(WeekYearData.week)
-    ).first()
+    start_time = time.time()
+    print('Starting insert CoachInfo script.')
+
+    week_year_data = week_year[0]
+    current_year = _convert_stats_year(week_year_data.fields['Year'])
 
     for user in users:
 
-        new_id =user.id + str(week_year.year)
+        new_id =user.id + str(current_year)
         
         coach: CoachInfoData = CoachInfoData(
             id=new_id,
@@ -31,7 +36,7 @@ async def insert_coach_info_into_db():
             last_name=user.last_name,
             team_id=user.team_id,
             team_name=user.team_name,
-            year=week_year.year
+            year=current_year
         )
 
         coach_query: CoachInfoData = session.query(CoachInfoData).where(CoachInfoData.id == coach.id).scalar()
@@ -50,9 +55,14 @@ async def insert_coach_info_into_db():
         raise
     finally:
         session.close()
+        execution_time = time.time() - start_time
+        print(f'Insert CoachInfo script took {(round(execution_time, 2))} seconds to complete.')
 
 
 async def insert_coach_stats_into_db():
+
+    start_time = time.time()
+    print('Starting insert CoachStats script.')
 
     week_year: WeekYearData = session.query(WeekYearData).order_by(
         desc(WeekYearData.year),
@@ -63,7 +73,6 @@ async def insert_coach_stats_into_db():
     # Could be a potential way to automate national titles
 
     for user in users:
-
         # Get team info for user_team
         user_team_info: TeamInfoData = session.query(TeamInfoData).where(TeamInfoData.id == user.team_id).scalar()
 
@@ -98,6 +107,8 @@ async def insert_coach_stats_into_db():
         raise
     finally:
         session.close()
+        execution_time = time.time() - start_time
+        print(f'Insert CoachStats script took {(round(execution_time, 2))} seconds to complete.')
 
 
 def determine_national_title(week_year: WeekYearData, team_info: TeamInfoData) -> bool:

@@ -2,6 +2,7 @@ import asyncio
 from typing import List
 from sqlalchemy import desc
 from uuid import uuid4
+import time
 
 import ncaa_dynasty
 from src.constants import corrupt_team_ids, session
@@ -9,6 +10,9 @@ from src.data_models.PlayerInfoData import PlayerInfoData
 from src.data_models.WeekYearData import WeekYearData
 
 async def deactivate_inactive_players(player_info):
+
+    start_time = time.time()
+    print('Starting Deactivate Inactive Players script.')
 
     week_year: WeekYearData = session.query(WeekYearData).order_by(
         desc(WeekYearData.year),
@@ -43,9 +47,17 @@ async def deactivate_inactive_players(player_info):
             raise
         finally:
             session.close()
+            execution_time = time.time() - start_time
+            print(f'Deactivate Inactive Players script took {(round(execution_time, 2))} seconds to complete.')
+    
+    else:
+        print(f'No need to deactivate players.')
 
 
 async def insert_player_info_into_db(player_info):
+
+    start_time = time.time()
+    print('Starting insert PlayerInfo script.')
 
     for i, value in enumerate(player_info):
         
@@ -187,3 +199,5 @@ async def insert_player_info_into_db(player_info):
         raise
     finally:
         session.close()
+        execution_time = time.time() - start_time
+        print(f'Insert PlayerInfo script took {(round(execution_time, 2))} seconds to complete.')

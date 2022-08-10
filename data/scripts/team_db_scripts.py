@@ -3,10 +3,14 @@ from typing import List
 import uuid
 from sqlalchemy import desc
 from uuid import uuid4
+import time
 
 from src.constants import(
     session,
     users
+)
+from src.utils.helpers import(
+    _convert_stats_year
 )
 from src.models.Teams import TeamGameStats
 from src.utils.player import (
@@ -41,8 +45,10 @@ from src.models.Stats import (
 )
 
 
-
 async def insert_team_info_into_db(team_info):
+
+    start_time = time.time()
+    print('Starting insert TeamInfo script.')
 
     user_teams: List[str] = [user.team_name for user in users]
     
@@ -99,25 +105,29 @@ async def insert_team_info_into_db(team_info):
             team_query.media_poll_points=new_team.media_poll_points
             team_query.coachs_poll_points=new_team.coachs_poll_points
         
-        try:
-            session.commit()
-        except:
-            session.rollback()
-        finally:
-            session.close()
+    try:
+        session.commit()
+    except:
+        session.rollback()
+    finally:
+        session.close()
+        execution_time = time.time() - start_time
+        print(f'Insert TeamInfo script took {(round(execution_time, 2))} seconds to complete.')
 
 
 ################################################
 ######### insert team stats function ###########
 ################################################
-async def insert_team_season_stats_into_db():
+async def insert_team_season_stats_into_db(week_year_data):
+
+    start_time = time.time()
+    print('Starting insert Team Season Stats script.')
 
     all_teams_info: List[TeamInfoData] = session.query(TeamInfoData).all()
     # Query the year to filter out irrelevant years
-    week_year: WeekYearData = session.query(WeekYearData).order_by(
-        desc(WeekYearData.year),
-        desc(WeekYearData.week)
-    ).first()
+    week_year = week_year_data[0]
+    current_week: int = week_year.fields['Week']
+    current_year: int = _convert_stats_year(week_year.fields['Year'])
 
     previous_week_year: TeamGameStatsData = session.query(TeamGameStatsData).order_by(
         desc(TeamGameStatsData.year),
@@ -125,7 +135,7 @@ async def insert_team_season_stats_into_db():
     ).first()
 
     # Safety check to prevent duplicate week/year entry into TeamGameStats table
-    if previous_week_year and week_year.week == previous_week_year.week and week_year.year == previous_week_year.year:
+    if previous_week_year and current_week == previous_week_year.week and current_year == previous_week_year.year:
         return
 
     for team in all_teams_info:
@@ -147,25 +157,25 @@ async def insert_team_season_stats_into_db():
                 PlayerInfoData.team_id == team.id,
                 PlayerInfoData.is_active == True,
                 PlayerInfoData.id == SeasonDefensiveStatsData.player_id,
-                SeasonDefensiveStatsData.year == week_year.year
+                SeasonDefensiveStatsData.year == current_year
             ).all()
         off_data = session.query(PlayerInfoData, SeasonOffensiveStatsData).filter(
             PlayerInfoData.team_id == team.id,
             PlayerInfoData.is_active == True,
             PlayerInfoData.id == SeasonOffensiveStatsData.player_id,
-            SeasonOffensiveStatsData.year == week_year.year
+            SeasonOffensiveStatsData.year == current_year
             ).all()
         ret_data = session.query(PlayerInfoData, SeasonReturnStatsData).filter(
                 PlayerInfoData.team_id == team.id,
                 PlayerInfoData.is_active == True,
                 PlayerInfoData.id == SeasonReturnStatsData.player_id,
-                SeasonReturnStatsData.year == week_year.year
+                SeasonReturnStatsData.year == current_year
                 ).all()
         kick_data = session.query(PlayerInfoData, SeasonKickingStatsData).filter(
                 PlayerInfoData.team_id == team.id,
                 PlayerInfoData.is_active == True,
                 SeasonKickingStatsData.player_id == PlayerInfoData.id,
-                SeasonKickingStatsData.year == week_year.year
+                SeasonKickingStatsData.year == current_year
             ).all()
         
         # Skip over teams without data
@@ -173,7 +183,7 @@ async def insert_team_season_stats_into_db():
             continue
 
         # Create year specific id for primary key
-        primary_key = f'{week_year.year}-{team.id}'
+        primary_key = f'{current_year}-{team.id}'
 
         # Convert data to models for data manipulation
         def_stats: List[PlayerDefensiveStats] = [_get_player_defensive_stats(player) for player in def_data]
@@ -252,7 +262,7 @@ async def insert_team_season_stats_into_db():
         team_stats = TeamSeasonStatsData(
             id=primary_key,
             team_id=team.id,
-            year=week_year.year,
+            year=current_year,
             games_played=games_played,
             total_points=total_points,
             ppg=ppg,
@@ -359,14 +369,18 @@ async def insert_team_season_stats_into_db():
         raise
     finally:
         session.close()
+        execution_time = time.time() - start_time
+        print(f'Insert Team Season Stats script took {(round(execution_time, 2))} seconds to complete.')
 
 
-async def insert_team_game_stats_into_db():
+async def insert_team_game_stats_into_db(week_year_data):
 
-    week_year: WeekYearData = session.query(WeekYearData).order_by(
-        desc(WeekYearData.year),
-        desc(WeekYearData.week)
-    ).first()
+    start_time = time.time()
+    print('Starting insert Team Game Stats script.')
+
+    week_year = week_year_data[0]
+    current_week: int = week_year.fields['Week']
+    current_year: int = _convert_stats_year(week_year.fields['Year'])
     
     teams_data: List[TeamInfoData] = session.query(TeamInfoData).all()
 
@@ -374,7 +388,7 @@ async def insert_team_game_stats_into_db():
 
         team_season_stats: TeamSeasonStatsData = session.query(TeamSeasonStatsData).where(
             TeamSeasonStatsData.team_id == team.id,
-            TeamSeasonStatsData.year == week_year.year
+            TeamSeasonStatsData.year == current_year
         ).scalar()
 
         # skip over teams that don't have team stats yet
@@ -384,7 +398,7 @@ async def insert_team_game_stats_into_db():
         # Check for prior game stats for team
         prior_team_game_stats: List[TeamGameStatsData] = session.query(TeamGameStatsData).where(
             TeamGameStatsData.team_id == team.id,
-            TeamGameStatsData.year == week_year.year
+            TeamGameStatsData.year == current_year
         ).all()
 
         new_id = str(uuid4())
@@ -393,8 +407,8 @@ async def insert_team_game_stats_into_db():
             team_game_stats: TeamGameStatsData = TeamGameStatsData(
                     id=new_id,
                     team_id=team.id,
-                    week=week_year.week,
-                    year=week_year.year,
+                    week=current_week,
+                    year=current_year,
                     total_points=team_season_stats.total_points,
                     completions=team_season_stats.completions,
                     pass_att=team_season_stats.pass_att,
@@ -493,8 +507,8 @@ async def insert_team_game_stats_into_db():
             team_game_stats: TeamGameStatsData = TeamGameStatsData(
                 id=new_id,
                 team_id=team.id,
-                week=week_year.week,
-                year=week_year.year,
+                week=current_week,
+                year=current_year,
                 total_points=total_points,
                 completions=completions,
                 pass_att=pass_att,
@@ -543,3 +557,5 @@ async def insert_team_game_stats_into_db():
         raise
     finally:
         session.close()
+        execution_time = time.time() - start_time
+        print(f'Insert Team Game Stats script took {(round(execution_time, 2))} seconds to complete.')
