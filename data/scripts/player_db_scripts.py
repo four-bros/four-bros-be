@@ -9,17 +9,14 @@ from src.constants import corrupt_team_ids, session
 from src.data_models.PlayerInfoData import PlayerInfoData
 from src.data_models.WeekYearData import WeekYearData
 
-async def deactivate_inactive_players(player_info):
+async def deactivate_inactive_players(week_year_data, player_info):
 
     start_time = time.time()
     print('Starting Deactivate Inactive Players script.')
 
-    week_year: WeekYearData = session.query(WeekYearData).order_by(
-        desc(WeekYearData.year),
-        desc(WeekYearData.week)
-    ).first()
+    current_week: int = week_year_data[0].fields['Week']
 
-    if week_year.week == 1:
+    if current_week == 1:
         # Compile a list of active player IDs
         active_player_ids: List[str] = []
 
@@ -30,7 +27,9 @@ async def deactivate_inactive_players(player_info):
         
         
         # Get all players in DB to determine if they are active or not
-        all_players: List[PlayerInfoData] = session.query(PlayerInfoData).all()
+        all_players: List[PlayerInfoData] = session.query(PlayerInfoData).where(
+            PlayerInfoData.is_active == True
+        ).all()
 
         for player in all_players:
             if player.id not in active_player_ids:

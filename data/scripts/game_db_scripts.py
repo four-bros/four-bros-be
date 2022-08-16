@@ -5,9 +5,7 @@ import time
 from sqlalchemy import desc
 
 from src.constants import session
-from src.utils.helpers import(
-    _convert_stats_year
-)
+from src.utils.helpers import _convert_stats_year
 from src.data_models.GameDefensiveStatsData import GameDefensiveStatsData
 from src.data_models.GameKickingStatsData import GameKickingStatsData
 from src.data_models.GameOffensiveStatsData import GameOffensiveStatsData
@@ -401,8 +399,8 @@ async def insert_game_off_stats_into_db(week_year_data, off_stats):
 	print('Starting insert Game Offensive Stats script.')
 
 	week_year = week_year_data[0]
-	current_week = week_year.fields['Week']
-	current_year = _convert_stats_year(week_year.fields['Year'])
+	current_week: int = week_year.fields['Week']
+	current_year: int = _convert_stats_year(week_year.fields['Year'])
 	all_game_off_stats: List[GameOffensiveStatsData] = []
 
 	for i, value in enumerate(off_stats):
@@ -476,9 +474,10 @@ async def insert_game_off_stats_into_db(week_year_data, off_stats):
 		turnovers = offensive_record.fields['INTs'] + offensive_record.fields['Fumbles']
 
 		# get ReturnStats for total stats purposes (yards, TDs, etc)
-		return_stats: SeasonReturnStatsData = session.query(SeasonReturnStatsData).where(
-		    SeasonReturnStatsData.player_id == player_id,
-		    SeasonReturnStatsData.year == current_year
+		return_stats: GameReturnStatsData = session.query(GameReturnStatsData).where(
+		    GameReturnStatsData.player_id == player_id,
+		    GameReturnStatsData.year == current_year,
+			GameReturnStatsData.week == current_week
 		).scalar()
 
 		# Calculate total stats
@@ -645,6 +644,24 @@ async def insert_game_off_stats_into_db(week_year_data, off_stats):
 			total_tds = current_off_stats.total_tds - prior_off_stats.total_tds
 			turnovers = ints + fumbles
 
+			if return_stats:
+				total_yards = sum([pass_yards, rush_yards, rec_yards, 
+			        return_stats.kr_yds, return_stats.pr_yds]
+			    )
+				total_tds = sum([pass_tds, rush_tds, rec_tds,
+					return_stats.kr_tds, return_stats.pr_tds
+				])
+				total_ypg = round(
+				    0 if offensive_record.fields['Games Played'] == 0\
+			        else total_yards,
+				1)
+
+			else:
+				total_yards = sum([pass_yards, rush_yards, rec_yards])
+				total_tds = sum([pass_tds, rush_tds, rec_tds])
+				total_ypg = round(0 if offensive_record.fields['Games Played'] == 0\
+				        else total_yards / offensive_record.fields['Games Played'], 1)
+
 			game_stats = GameOffensiveStatsData(
 			    id=new_id,
 			    player_id=player_id,
@@ -785,15 +802,15 @@ async def insert_game_return_stats_into_db(week_year_data, return_stats):
 		else:
 
 			kick_returns = current_return_stats.kick_returns - prior_return_stats.kick_returns
-			long_kr = current_return_stats.long_kr - prior_return_stats.long_kr
+			long_kr = max([current_return_stats.long_kr, prior_return_stats.long_kr])
 			punt_returns = current_return_stats.punt_returns - prior_return_stats.punt_returns
-			long_pr = current_return_stats.long_pr - prior_return_stats.long_pr
+			long_pr = max([current_return_stats.long_pr, prior_return_stats.long_pr])
 			kr_tds = current_return_stats.kr_tds - prior_return_stats.kr_tds
 			pr_tds = current_return_stats.pr_tds - prior_return_stats.pr_tds
 			kr_yds = current_return_stats.kr_yds - prior_return_stats.kr_yds
 			pr_yds = current_return_stats.pr_yds - prior_return_stats.pr_yds
-			kr_avg = current_return_stats.kr_avg - prior_return_stats.kr_avg
-			pr_avg = current_return_stats.pr_avg - prior_return_stats.pr_avg
+			kr_avg = 0 if kick_returns == 0 else round(kr_yds / kick_returns, 1)
+			pr_avg = 0 if punt_returns == 0 else round(pr_yds / punt_returns, 1)
 
 			game_stats = GameReturnStatsData(
 			    id=new_id,

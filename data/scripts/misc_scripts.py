@@ -1,4 +1,5 @@
 import asyncio
+from typing import List
 from sqlalchemy import desc
 from uuid import uuid4
 import time
@@ -11,15 +12,15 @@ from src.data_models.CommitsData import CommitsData
 from src.data_models.WeekYearData import WeekYearData
 
 
-async def insert_commits_into_db(commits):
+async def insert_commits_into_db(week_year_data, commits):
 
     start_time = time.time()
     print('Starting Commits insert.')
 
-    week_year: WeekYearData = session.query(WeekYearData).order_by(
-        desc(WeekYearData.year),
-        desc(WeekYearData.week)
-    ).first()
+    current_week: int = week_year_data[0].fields['Week']
+    current_year: int = week_year_data[0].fields['Year']
+
+    new_commits: List[CommitsData] = []
     
     for i, value in enumerate(commits):
         record = commits[i]
@@ -30,17 +31,18 @@ async def insert_commits_into_db(commits):
             position=record.fields['Position'],
             rank=record.fields['Rank'],
             school=record.fields['School'],
-            week=week_year.week,
-            year=week_year.year
+            week=current_week,
+            year=current_year
         )
 
         commit_query = session.query(CommitsData).where(
             CommitsData.name == new_commit.name).scalar()
         
         if commit_query is None:
-            session.add(new_commit)
+            new_commits.append(new_commit)
             
     try:
+        session.add_all(new_commits)
         session.commit()
     except:
         session.rollback()

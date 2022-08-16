@@ -60,8 +60,8 @@ Base = declarative_base()
 # Windows file path
 # dynasty_file_path = 'D:\Content\E00001485AECABB5\\454109B6\\00000001\OD-4Bros3'
 # Mac file path
-data_dynasty_file_path = '/Users/sgreen4/Desktop/data/dynasty3/2034-1/OD-4Bros3_week2'
-data_dir = '/Users/sgreen4/Desktop/data/dynasty3/2034-4on'
+data_dynasty_file_path = '/Users/sgreen4/Desktop/data/dynasty3/2036/OD-4Bros3_week10'
+data_dir = '/Users/sgreen4/Desktop/data/dynasty3/2036'
 
 # User/coach information
 ben: CoachInfo = CoachInfo(

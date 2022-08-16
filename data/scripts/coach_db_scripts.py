@@ -59,15 +59,13 @@ async def insert_coach_info_into_db(week_year):
         print(f'Insert CoachInfo script took {(round(execution_time, 2))} seconds to complete.')
 
 
-async def insert_coach_stats_into_db():
+async def insert_coach_stats_into_db(week_year_data):
 
     start_time = time.time()
     print('Starting insert CoachStats script.')
 
-    week_year: WeekYearData = session.query(WeekYearData).order_by(
-        desc(WeekYearData.year),
-        desc(WeekYearData.week)
-    ).first()
+    current_week: int = week_year_data[0].fields['Week']
+    current_year: int = week_year_data[0].fields['Year']
 
     #TODO: If it's the week after the title game, check for who is ranked 1st in BCS.
     # Could be a potential way to automate national titles
@@ -76,16 +74,16 @@ async def insert_coach_stats_into_db():
         # Get team info for user_team
         user_team_info: TeamInfoData = session.query(TeamInfoData).where(TeamInfoData.id == user.team_id).scalar()
 
-        new_id = user.id + str(week_year.year)
+        new_id = user.id + str(current_year)
 
         coach_stats:CoachStatsData = CoachStatsData(
             id=new_id,
             coach_id=user.id,
             user=user.id,
-            year=week_year.year,
+            year=current_year,
             wins=user_team_info.wins,
             losses=user_team_info.losses,
-            national_title=determine_national_title(week_year=week_year, team_info=user_team_info)
+            national_title=determine_national_title(week=current_week, team_info=user_team_info)
         )
 
         coach_query: CoachStatsData = session.query(CoachStatsData).where(
@@ -111,9 +109,8 @@ async def insert_coach_stats_into_db():
         print(f'Insert CoachStats script took {(round(execution_time, 2))} seconds to complete.')
 
 
-def determine_national_title(week_year: WeekYearData, team_info: TeamInfoData) -> bool:
+def determine_national_title(week: int, team_info: TeamInfoData) -> bool:
 
-    week: int = week_year.week
     bcs_rank: int = team_info.bcs_rank
 
     if week >= 22 and bcs_rank == 1:

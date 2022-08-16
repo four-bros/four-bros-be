@@ -311,6 +311,16 @@ async def insert_season_off_stats_into_db(week_year_data, off_stats):
         
         new_id = str(uuid4())
 
+        player_info: PlayerInfoData = session.query(PlayerInfoData).where(
+            PlayerInfoData.roster_id == record.fields['Player ID'],
+            PlayerInfoData.is_active == True
+        ).scalar()
+
+        if not player_info:
+            continue
+
+        player_id: str = str(record.fields['Player ID']) + player_info.first_name + player_info.last_name
+
         comp_pct = round(
             record.fields['Completions'] / record.fields['Pass Att.'] * 100\
                 if record.fields['Pass Att.'] != 0 else 0,
@@ -357,7 +367,7 @@ async def insert_season_off_stats_into_db(week_year_data, off_stats):
 
         # get ReturnStats for total stats purposes (yards, TDs, etc)
         return_stats: SeasonReturnStatsData = session.query(SeasonReturnStatsData).where(
-            SeasonReturnStatsData.player_id == str(record.fields['Player ID']),
+            SeasonReturnStatsData.player_id == player_id,
             SeasonReturnStatsData.year == readable_year
         ).scalar()
 
