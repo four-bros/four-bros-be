@@ -18,7 +18,7 @@ async def insert_commits_into_db(week_year_data, commits):
     print('Starting Commits insert.')
 
     current_week: int = week_year_data[0].fields['Week']
-    current_year: int = week_year_data[0].fields['Year']
+    current_year: int = _convert_stats_year(week_year_data[0].fields['Year'])
 
     new_commits: List[CommitsData] = []
     
@@ -77,7 +77,7 @@ async def insert_week_year_into_db(week_year):
     
     if not week_year_query:
         session.add(new_week_year)
-        session.flush()
+
     try:
         session.commit()
     except:

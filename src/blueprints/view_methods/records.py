@@ -1,6 +1,11 @@
 from src.blueprints.view_methods.stats import(
     get_player_season_stats_leaders
 )
+from src.utils.caches import (
+    _get_player_career_records_cache,
+    _get_player_game_records_cache,
+    _get_player_season_records_cache
+)
 from src.utils.career_stats_leaders import (
     _get_career_defensive_stats_leaders,
     _get_career_kicking_stats_leaders,
@@ -61,11 +66,22 @@ def get_game_records(request):
 
 
 def get_season_records(request):
-
     response = get_player_season_stats_leaders(request, is_season_specific=False)
-
     return response
 
 
-def get_team_records(request):
+def get_team_season_records(request):
     return _get_team_season_stats_leaders(is_season_specific=False)
+
+
+# cache endpoints
+def get_player_career_records_cache():
+    return _get_player_career_records_cache()
+
+
+def get_player_game_records_cache():
+    return _get_player_game_records_cache()
+
+
+def get_player_season_records_cache():
+    return _get_player_season_records_cache()

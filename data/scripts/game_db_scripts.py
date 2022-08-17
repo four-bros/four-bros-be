@@ -1,10 +1,9 @@
-import asyncio
 from typing import List
 from uuid import uuid4
 import time
-from sqlalchemy import desc
 
 from src.constants import session
+from src.utils.calcs import calculate_pass_rating
 from src.utils.helpers import _convert_stats_year
 from src.data_models.GameDefensiveStatsData import GameDefensiveStatsData
 from src.data_models.GameKickingStatsData import GameKickingStatsData
@@ -97,7 +96,7 @@ async def insert_game_def_stats_into_db(week_year_data, def_stats):
 			fum_rec_yards = current_def_stats.fum_rec_yards - prior_def_stats.fum_rec_yards
 			int_ret_yards = current_def_stats.int_ret_yards - prior_def_stats.int_ret_yards
 			total_tkls = current_def_stats.total_tkls - prior_def_stats.total_tkls
-			total_sacks = current_def_stats.total_sacks - prior_def_stats.total_sacks
+			total_sacks = sacks + half_a_sack
 
 			game_stats: GameDefensiveStatsData = GameDefensiveStatsData(
 				id=new_id,
@@ -464,12 +463,14 @@ async def insert_game_off_stats_into_db(week_year_data, off_stats):
 		        if offensive_record.fields['Games Played'] != 0 else 0,
 		        1
 		    )
-		pass_rating_calc = (
-		    0 if offensive_record.fields['Pass Att.'] == 0 else \
-		    ((8.4 * offensive_record.fields['Pass. Yards']) + (330 * offensive_record.fields['Pass. TDs']) + \
-		    (100 * offensive_record.fields['Completions']) - (200 * offensive_record.fields['INTs'])) / offensive_record.fields['Pass Att.']
-		    )
-		pass_rating = round(pass_rating_calc, 1)
+
+		pass_rating = calculate_pass_rating(
+			pass_att=offensive_record.fields['Pass Att.'],
+			pass_yds=offensive_record.fields['Pass. Yards'],
+			pass_tds=offensive_record.fields['Pass. TDs'],
+			completions=offensive_record.fields['Completions'],
+			ints=offensive_record.fields['INTs']
+		)
 
 		turnovers = offensive_record.fields['INTs'] + offensive_record.fields['Fumbles']
 
@@ -595,9 +596,9 @@ async def insert_game_off_stats_into_db(week_year_data, off_stats):
 		else:
 
 			pass_yards = current_off_stats.pass_yards - prior_off_stats.pass_yards
-			longest_rec = current_off_stats.longest_rec - prior_off_stats.longest_rec
-			longest_pass = current_off_stats.longest_pass - prior_off_stats.longest_pass
-			longest_run = current_off_stats.longest_run - prior_off_stats.longest_run
+			longest_rec = max([current_off_stats.longest_rec, prior_off_stats.longest_rec])
+			longest_pass = max([current_off_stats.longest_pass, prior_off_stats.longest_pass])
+			longest_run = max([current_off_stats.longest_run, prior_off_stats.longest_run])
 			receptions = current_off_stats.receptions - prior_off_stats.receptions
 			sacked = current_off_stats.sacked - prior_off_stats.sacked
 			rec_yards = current_off_stats.rec_yards - prior_off_stats.rec_yards
@@ -634,12 +635,13 @@ async def insert_game_off_stats_into_db(week_year_data, off_stats):
 			    rec_yards / receptions,
 			    1
 			)
-			pass_rating_calc = (
-			    0 if pass_att == 0 else \
-			    ((8.4 * pass_yards) + (330 * pass_tds) + \
-			    (100 * completions) - (200 * ints)) / pass_att
-			    )
-			pass_rating = round(pass_rating_calc, 1)
+			pass_rating = calculate_pass_rating(
+				pass_att=pass_att,
+				pass_yds=pass_yards,
+				pass_tds=pass_tds,
+				completions=completions,
+				ints=ints
+			)
 			total_yards = current_off_stats.total_yards - prior_off_stats.total_yards
 			total_tds = current_off_stats.total_tds - prior_off_stats.total_tds
 			turnovers = ints + fumbles

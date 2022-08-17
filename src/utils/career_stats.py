@@ -34,6 +34,7 @@ from src.utils.season_stats import (
     _get_rushing_stats,
     _get_total_stats
 )
+from src.utils.calcs import calculate_pass_rating
 
 
 #############################################
@@ -237,12 +238,13 @@ def _compile_career_passing_stats(offensive_stats: List[SeasonOffensiveStatsData
         1
     )
     pass_ypg = round(pass_yards / games_played, 1)
-    pass_rating_calc = (
-        0 if pass_att == 0 else \
-        ((8.4 * pass_yards) + (330 * pass_tds) + \
-        (100 * completions) - (200 * ints)) / pass_att
-        )
-    pass_rating = round(pass_rating_calc, 1)
+    pass_rating = calculate_pass_rating(
+        pass_att=pass_att,
+        pass_yds=pass_yards,
+        pass_tds=pass_tds,
+        completions=completions,
+        ints=ints
+    )
     sacked = sum([stats.sacked for stats in yearly_passing_stats])
     
     career_passing_stats: PassingStats = PassingStats(

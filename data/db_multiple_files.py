@@ -50,7 +50,7 @@ for file in sorted_data_dir:
     current_year: int = _convert_stats_year(week_year[0].fields['Year'])
 
     print(f'Starting main script for week {current_week}, {current_year}')
-    # asyncio.run(main())
+    asyncio.run(main())
 
 execution_time = time.time() - start_time
 print(f'All insert scripts took {(round(execution_time, 1))} seconds to complete.')

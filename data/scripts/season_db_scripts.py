@@ -5,9 +5,8 @@ import time
 
 from src.constants import corrupt_player_ids, corrupt_team_ids, session
 from src.data_models.PlayerInfoData import PlayerInfoData
-from src.utils.helpers import(
-    _convert_stats_year
-)
+from src.utils.calcs import calculate_pass_rating
+from src.utils.helpers import _convert_stats_year
 from src.data_models.SeasonDefensiveStatsData import SeasonDefensiveStatsData
 from src.data_models.SeasonKickingStatsData import SeasonKickingStatsData
 from src.data_models.SeasonOffensiveStatsData import SeasonOffensiveStatsData
@@ -356,12 +355,14 @@ async def insert_season_off_stats_into_db(week_year_data, off_stats):
                 if record.fields['Games Played'] != 0 else 0,
                 1
             )
-        pass_rating_calc = (
-            0 if record.fields['Pass Att.'] == 0 else \
-            ((8.4 * record.fields['Pass. Yards']) + (330 * record.fields['Pass. TDs']) + \
-            (100 * record.fields['Completions']) - (200 * record.fields['INTs'])) / record.fields['Pass Att.']
-            )
-        pass_rating = round(pass_rating_calc, 1)
+
+        pass_rating = calculate_pass_rating(
+            pass_att=record.fields['Pass Att.'],
+            pass_yds=record.fields['Pass. Yards'],
+            pass_tds=record.fields['Pass. TDs'],
+            completions=record.fields['Completions'],
+            ints=record.fields['INTs']
+        )
 
         turnovers = record.fields['INTs'] + record.fields['Fumbles']
 
@@ -466,6 +467,7 @@ async def insert_season_off_stats_into_db(week_year_data, off_stats):
             new_players.append(player_off_stats)
 
         else:
+
             player_query.pass_yards=player_off_stats.pass_yards
             player_query.longest_rec=player_off_stats.longest_rec
             player_query.longest_pass=player_off_stats.longest_pass
@@ -500,6 +502,7 @@ async def insert_season_off_stats_into_db(week_year_data, off_stats):
             player_query.total_ypg=player_off_stats.total_ypg
             player_query.turnovers=player_off_stats.turnovers
             player_query.comp_pct=player_off_stats.comp_pct
+            player_query.pass_rating=player_off_stats.pass_rating
 
     try:
         session.add_all(new_players)

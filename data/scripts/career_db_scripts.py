@@ -388,6 +388,7 @@ async def insert_career_off_stats_into_db(week_year_data, off_stats):
             player_query.total_ypg=player_career_off_stats.total_ypg
             player_query.turnovers=player_career_off_stats.turnovers
             player_query.comp_pct=player_career_off_stats.comp_pct
+            player_query.pass_rating=player_career_off_stats.pass_rating
 
     try:
         session.add_all(new_players)
