@@ -44,7 +44,42 @@ class TeamRosterSchema(PlayerDetailsSchema):
     overall = fields.Int()
 
 
-class TeamStatsSchema(Schema):
+class TeamGameStatsSchema(Schema):
+    year = fields.Int()
+    games_played = fields.Int()
+    total_points = fields.Int()
+    pass_yds = fields.Int()
+    pass_tds = fields.Int()
+    ints = fields.Int()
+    sacked = fields.Int()
+    rush_yds = fields.Int()
+    rush_tds = fields.Int()
+    fumbles = fields.Int()
+    rec_yds = fields.Int()
+    rec_tds = fields.Int()
+    drops = fields.Int()
+    off_yards = fields.Int()
+    off_ypg = fields.Float()
+    total_yards = fields.Int()
+    off_turnovers = fields.Int()
+    sacks = fields.Int()
+    tfl = fields.Int()
+    ints_made = fields.Int()
+    ff = fields.Int()
+    fr = fields.Int()
+    def_turnovers = fields.Int()
+    to_margin = fields.Int()
+    pass_def = fields.Int()
+    safeties = fields.Int()
+    blocked_kicks = fields.Int()
+    def_tds = fields.Int()
+    kr_yds = fields.Int()
+    kr_tds = fields.Int()
+    pr_yds = fields.Int()
+    pr_tds = fields.Int()
+
+
+class TeamSeasonStatsSchema(Schema):
     year = fields.Int()
     games_played = fields.Int()
     total_points = fields.Int()
@@ -87,9 +122,14 @@ class TeamStatsSchema(Schema):
 class TeamSummarySchema(Schema):
     team_details = fields.Nested(TeamDetailsSchema)
     team_roster = fields.List(fields.Nested(TeamRosterSchema))
-    team_stats = fields.Nested(TeamStatsSchema)
+    team_stats = fields.Nested(TeamSeasonStatsSchema)
+
+
+class TeamGameRecordSchema(Schema):
+    team_info = fields.Nested(TeamInfoSchema)
+    team_stats = fields.Nested(TeamGameStatsSchema)
 
 
 class TeamSeasonRecordSchema(Schema):
     team_info = fields.Nested(TeamInfoSchema)
-    team_stats = fields.Nested(TeamStatsSchema)
+    team_stats = fields.Nested(TeamSeasonStatsSchema)

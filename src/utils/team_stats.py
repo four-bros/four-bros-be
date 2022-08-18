@@ -226,7 +226,55 @@ def _get_team_roster(player: PlayerInfoData) -> TeamRoster:
     return player_details
 
 
-def _get_team_stats(team_stats_data: TeamSeasonStatsData):
+def _get_team_game_stats(team_stats_data: TeamGameStatsData):
+
+    team_stats: TeamGameStats = TeamGameStats(
+        team_id=team_stats_data.team_id,
+        week=team_stats_data.week,
+        year=team_stats_data.year,
+        total_points=team_stats_data.total_points,
+        completions=team_stats_data.completions,
+        pass_att=team_stats_data.pass_att,
+        comp_pct=team_stats_data.comp_pct,
+        pass_yds=team_stats_data.pass_yds,
+        pass_ypa=team_stats_data.pass_ypa,
+        pass_tds=team_stats_data.pass_tds,
+        ints=team_stats_data.ints,
+        sacked=team_stats_data.sacked,
+        rush_att=team_stats_data.rush_att,
+        rush_ypc=team_stats_data.rush_ypc,
+        rush_yds=team_stats_data.rush_yds,
+        rush_tds=team_stats_data.rush_tds,
+        fumbles=team_stats_data.fumbles,
+        receptions=team_stats_data.receptions,
+        rec_yds=team_stats_data.rec_yds,
+        rec_ypc=team_stats_data.rec_ypc,
+        rec_tds=team_stats_data.rec_tds,
+        drops=team_stats_data.drops,
+        off_yards=team_stats_data.off_yards,
+        total_yards=team_stats_data.total_yards,
+        off_turnovers=team_stats_data.off_turnovers,
+        sacks=team_stats_data.sacks,
+        tfl=team_stats_data.tfl,
+        ints_made=team_stats_data.ints_made,
+        ff=team_stats_data.ff,
+        fr=team_stats_data.fr,
+        def_turnovers=team_stats_data.def_turnovers,
+        pass_def=team_stats_data.pass_def,
+        safeties=team_stats_data.safeties,
+        blocked_kicks=team_stats_data.blocked_kicks,
+        def_tds=team_stats_data.def_tds,
+        to_margin=team_stats_data.to_margin,
+        kr_yds=team_stats_data.kr_yds,
+        kr_tds=team_stats_data.kr_tds,
+        pr_yds=team_stats_data.pr_yds,
+        pr_tds=team_stats_data.pr_tds
+    )
+
+    return team_stats
+
+
+def _get_team_season_stats(team_stats_data: TeamSeasonStatsData):
 
     team_stats: TeamSeasonStats = TeamSeasonStats(
         team_id=team_stats_data.team_id,

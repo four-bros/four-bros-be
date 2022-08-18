@@ -27,3 +27,21 @@ def _get_player_season_records_cache():
 	).scalar()
 
 	return player_season_records_data.record
+
+
+def _get_team_game_records_cache():
+
+	team_game_records_data: Records = session.query(Records).where(
+		Records.record_type == 'team_game'
+	).scalar()
+
+	return team_game_records_data.record
+
+
+def _get_team_season_records_cache():
+
+	team_season_records_data: Records = session.query(Records).where(
+		Records.record_type == 'team_season'
+	).scalar()
+
+	return team_season_records_data.record

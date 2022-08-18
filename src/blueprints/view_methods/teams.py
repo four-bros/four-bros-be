@@ -37,7 +37,7 @@ from src.utils.player import (
 from src.utils.team_stats import (
     _get_team_details,
     _get_team_roster,
-    _get_team_stats
+    _get_team_season_stats
 )
 from src.models.Stats import (
     PlayerDefensiveStats,
@@ -95,7 +95,7 @@ def get_team_by_team_id(request, team_id) -> TeamDetailsSchema:
 
     team_details: TeamDetails = _get_team_details(team_info=team_info_data, players=players)
     team_roster: TeamRoster = [_get_team_roster(player) for player in players]
-    team_stats: TeamSeasonStats = _get_team_stats(team_stats_data=team_stats_data)
+    team_stats: TeamSeasonStats = _get_team_season_stats(team_stats_data=team_stats_data)
 
     team_info: TeamSummary = TeamSummary(
         team_details=team_details,

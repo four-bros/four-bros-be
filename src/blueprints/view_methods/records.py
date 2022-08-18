@@ -4,7 +4,9 @@ from src.blueprints.view_methods.stats import(
 from src.utils.caches import (
     _get_player_career_records_cache,
     _get_player_game_records_cache,
-    _get_player_season_records_cache
+    _get_player_season_records_cache,
+    _get_team_game_records_cache,
+    _get_team_season_records_cache
 )
 from src.utils.career_stats_leaders import (
     _get_career_defensive_stats_leaders,
@@ -28,7 +30,10 @@ from src.utils.game_stats_leaders import (
     _get_game_rush_stats_leaders,
     _get_game_total_stats_leaders
 )
-from src.utils.team_stats_leaders import _get_team_season_stats_leaders
+from src.utils.team_stats_leaders import (
+    _get_team_season_stats_leaders,
+    _get_team_game_records
+)
 
 
 def get_career_records(request):
@@ -70,7 +75,11 @@ def get_season_records(request):
     return response
 
 
-def get_team_season_records(request):
+def get_team_game_records():
+    return _get_team_game_records()
+
+
+def get_team_season_records():
     return _get_team_season_stats_leaders(is_season_specific=False)
 
 
@@ -85,3 +94,11 @@ def get_player_game_records_cache():
 
 def get_player_season_records_cache():
     return _get_player_season_records_cache()
+
+
+def get_team_game_records_cache():
+    return _get_team_game_records_cache()
+
+
+def get_team_season_records_cache():
+    return _get_team_season_records_cache()

@@ -34,6 +34,7 @@ from src.responses.Teams import (
     TeamSummarySchema,
     TeamRosterSchema,
     TeamDetailsSchema,
+    TeamGameRecordSchema,
     TeamSeasonRecordSchema
 )
 from src.responses.WeekYear import (
@@ -132,6 +133,8 @@ team_schema = TeamSummarySchema()
 teams_schema = TeamSummarySchema(many=True)
 team_season_record_schema = TeamSeasonRecordSchema()
 team_season_records_schema = TeamSeasonRecordSchema(many=True)
+team_game_record_schema = TeamGameRecordSchema()
+team_game_records_schema = TeamGameRecordSchema(many=True)
 team_roster_schema = TeamRosterSchema(many=True)
 total_stat_schema = PlayerTotalStatsSchema()
 total_stats_schema = PlayerTotalStatsSchema(many=True)

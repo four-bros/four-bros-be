@@ -254,6 +254,16 @@ class TeamSeasonStats:
         self.pr_tds = pr_tds
 
 
+class TeamGameRecord:
+    def __init__(
+        self,
+        team_info: TeamInfo,
+        team_stats: TeamGameStats
+    ):
+        self.team_info = team_info
+        self.team_stats = team_stats
+
+
 class TeamSeasonRecord:
     def __init__(
         self,

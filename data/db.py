@@ -53,7 +53,9 @@ from scripts.game_db_scripts import (
 from scripts.cache import (
     cache_player_career_records,
     cache_player_game_records,
-    cache_player_season_records
+    cache_player_season_records,
+    cache_team_game_records,
+    cache_team_season_records
 )
 
 
@@ -144,7 +146,9 @@ async def main():
     await asyncio.gather(
         cache_player_career_records(),
         cache_player_game_records(),
-        cache_player_season_records()
+        cache_player_season_records(),
+        cache_team_game_records(),
+        cache_team_season_records()
     )
 
 
