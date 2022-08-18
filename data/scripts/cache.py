@@ -39,7 +39,7 @@ async def cache_player_career_records():
 	finally:
 		session.close()
 		execution_time = time.time() - start_time
-		print(f'Game records cache took {(round(execution_time, 2))} seconds to complete.')
+		print(f'Career records cache took {(round(execution_time, 2))} seconds to complete.')
 
 
 async def cache_player_game_records():
@@ -84,7 +84,7 @@ async def cache_player_season_records():
 	season_records = get_season_records('request')
 
 	season_record: Records = Records(
-		id=2,
+		id=3,
 		record_type='player_season',
 		record=season_records
 	)

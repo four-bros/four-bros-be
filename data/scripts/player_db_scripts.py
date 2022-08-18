@@ -130,6 +130,7 @@ async def insert_player_info_into_db(player_info):
             finesse_moves=record.fields['Finesse Moves'],
             juke_move=record.fields['Juke Move'],
             is_active=True
+            is_hof=False
         )
 
         player_query: PlayerInfoData = session.query(PlayerInfoData).where(
@@ -190,6 +191,7 @@ async def insert_player_info_into_db(player_info):
             player_query.finesse_moves=player.finesse_moves
             player_query.juke_move=player.juke_move
             player_query.is_active=player.is_active
+            player_query.is_hof=player.is_hof
 
     try:
         session.commit()
