@@ -125,11 +125,11 @@ async def main():
         insert_season_off_stats_into_db(week_year, off_stats)
     )
     
-    ##########################################################################
-    # Note: all team_stats, career_stats and game_stats scripts need 
-    # to be run after all season_stats scripts. This is because these 
-    # scripts are reliant on data from all the various season_stats tables.
-    ##########################################################################
+    # ##########################################################################
+    # # Note: all team_stats, career_stats and game_stats scripts need 
+    # # to be run after all season_stats scripts. This is because these 
+    # # scripts are reliant on data from all the various season_stats tables.
+    # ##########################################################################
 
     await asyncio.gather(
         insert_team_season_stats_into_db(week_year),

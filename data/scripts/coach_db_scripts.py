@@ -65,7 +65,7 @@ async def insert_coach_stats_into_db(week_year_data):
     print('Starting insert CoachStats script.')
 
     current_week: int = week_year_data[0].fields['Week']
-    current_year: int = week_year_data[0].fields['Year']
+    current_year: int = _convert_stats_year(week_year_data[0].fields['Year'])
 
     #TODO: If it's the week after the title game, check for who is ranked 1st in BCS.
     # Could be a potential way to automate national titles

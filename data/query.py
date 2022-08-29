@@ -23,7 +23,7 @@ from src.data_models.WeekYearData import WeekYearData
 from src.models.Stats import PlayerDefensiveStats
 from src.responses.Stats import PassingStatsSchema
 from src.responses.Players import PlayerSchema
-from src.utils.player import _get_player_defensive_stats
+from src.utils.player import _get_player_season_defensive_stats
 
 
 passing_stat_schema = PassingStatsSchema()
@@ -39,7 +39,7 @@ top_long_int_ret_data = session.query(PlayerInfoData, SeasonDefensiveStatsData).
         ).order_by(desc(SeasonDefensiveStatsData.long_int_ret)).limit(10)
 
 
-converted_players: List[PlayerDefensiveStats] = [_get_player_defensive_stats(player) for player in top_long_int_ret_data]
+converted_players: List[PlayerDefensiveStats] = [_get_player_season_defensive_stats(player) for player in top_long_int_ret_data]
 
 converted_players_json = defensive_stats_schema.dump(converted_players)
 

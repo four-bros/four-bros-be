@@ -23,7 +23,7 @@ from src.models.Stats import (
     RushingStats,
     TotalStats
 )
-from src.utils.season_stats import (
+from src.utils.player_stats import (
     _get_defensive_stats,
     _get_kicking_stats,
     _get_kick_return_stats,

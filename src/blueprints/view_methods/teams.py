@@ -24,15 +24,15 @@ from src.data_models.TeamInfoData import TeamInfoData
 from src.data_models.TeamSeasonStatsData import TeamSeasonStatsData
 from src.data_models.WeekYearData import WeekYearData
 from src.utils.player import (
-    _get_player_defensive_stats,
-    _get_player_kicking_stats,
+    _get_player_season_defensive_stats,
+    _get_player_season_kicking_stats,
     _get_player_kick_return_stats,
-    _get_player_passing_stats,
-    _get_player_punting_stats,
-    _get_player_punt_return_stats,
-    _get_player_receiving_stats,
+    _get_player_season_passing_stats,
+    _get_player_season_punting_stats,
+    _get_player_season_punt_return_stats,
+    _get_player_season_receiving_stats,
     _get_player_rushing_stats,
-    _get_player_total_off_stats
+    _get_player_season_total_off_stats
 )
 from src.utils.team_stats import (
     _get_team_details,
@@ -205,16 +205,16 @@ def get_team_player_stats(request, team_id):
     ).order_by(desc(SeasonReturnStatsData.pr_yds)).all()
 
     # Convert players to the appropriate models based on stat category
-    defensive_stats: List[PlayerDefensiveStats] = [_get_player_defensive_stats(player) for player in defense_data]
-    defensive_to_stats: List[PlayerDefensiveStats] = [_get_player_defensive_stats(player) for player in defense_to_data]
+    defensive_stats: List[PlayerDefensiveStats] = [_get_player_season_defensive_stats(player) for player in defense_data]
+    defensive_to_stats: List[PlayerDefensiveStats] = [_get_player_season_defensive_stats(player) for player in defense_to_data]
     kick_return_stats: List[PlayerKickingStats] = [_get_player_kick_return_stats(player) for player in kick_return_data]
-    kick_stats: List[PlayerKickingStats] = [_get_player_kicking_stats(player) for player in kicking_data]
-    passing_stats: List[PlayerPassingStats] = [_get_player_passing_stats(player) for player in passing_data]
-    punt_return_stats: List[PlayerPuntReturnStats] = [_get_player_punt_return_stats(player) for player in punt_return_data]
-    punt_stats: List[PlayerPuntingStats] = [_get_player_punting_stats(player) for player in punting_data]
-    receiving_stats: List[PlayerReceivingStats] = [_get_player_receiving_stats(player) for player in receiving_data]
+    kick_stats: List[PlayerKickingStats] = [_get_player_season_kicking_stats(player) for player in kicking_data]
+    passing_stats: List[PlayerPassingStats] = [_get_player_season_passing_stats(player) for player in passing_data]
+    punt_return_stats: List[PlayerPuntReturnStats] = [_get_player_season_punt_return_stats(player) for player in punt_return_data]
+    punt_stats: List[PlayerPuntingStats] = [_get_player_season_punting_stats(player) for player in punting_data]
+    receiving_stats: List[PlayerReceivingStats] = [_get_player_season_receiving_stats(player) for player in receiving_data]
     rushing_stats: List[PlayerRushingStats] = [_get_player_rushing_stats(player) for player in rushing_data]
-    total_off_stats: List[PlayerTotalStats] = [_get_player_total_off_stats(player) for player in total_off_data]
+    total_off_stats: List[PlayerTotalStats] = [_get_player_season_total_off_stats(player) for player in total_off_data]
 
     # Convert players to json for response
     defensive_stats_json = defensive_stats_schema.dump(defensive_stats)

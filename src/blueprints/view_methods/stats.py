@@ -14,27 +14,32 @@ from src.utils.team_stats_leaders import (
 )
 
 
-def get_season_defense_stats_leaders(request, is_season_specific: bool):
+def get_season_defense_stats_leaders(is_season_specific: bool):
     return _get_season_defensive_stats_leaders(is_season_specific=is_season_specific)
 
 
-def get_season_kicking_stats_leaders(request, is_season_specific: bool):
+def get_season_kicking_stats_leaders(is_season_specific: bool):
     return _get_season_kicking_stats_leaders(is_season_specific=is_season_specific)
 
 
-def get_season_passing_stats_leaders(request, is_season_specific: bool):
+def get_season_passing_stats_leaders(is_season_specific: bool):
     return _get_season_passing_stats_leaders(is_season_specific=is_season_specific)
 
 
-def get_season_receiving_stats_leaders(request, is_season_specific: bool):
+def get_season_receiving_stats_leaders(is_season_specific: bool):
     return _get_season_rec_stats_leaders(is_season_specific=is_season_specific)
 
 
-def get_season_rushing_stats_leaders(request, is_season_specific: bool):
+def get_season_rushing_stats_leaders(is_season_specific: bool):
     return _get_season_rushing_stats_leaders(is_season_specific=is_season_specific)
 
 
-def get_player_season_stats_leaders(request, is_season_specific: bool):
+def get_player_game_stats(is_season_specific: bool):
+    #TODO: finish this
+    pass
+
+
+def get_player_season_stats_leaders(is_season_specific: bool):
 
         response = {
             'defense': _get_season_defensive_stats_leaders(is_season_specific=is_season_specific),
@@ -51,5 +56,10 @@ def get_player_season_stats_leaders(request, is_season_specific: bool):
         return response
 
 
-def get_team_season_stat_leaders(request, is_season_specific: bool):
+def get_team_game_stats(is_season_specific: bool):
+    #TODO: finish this
+    pass
+
+
+def get_team_season_stat_leaders(is_season_specific: bool):
     return _get_team_season_stats_leaders(is_season_specific=is_season_specific)

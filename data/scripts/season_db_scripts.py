@@ -118,6 +118,7 @@ async def insert_season_def_stats_into_db(week_year_data, def_stats):
             player_query.fum_rec_yards=player_def_stats.fum_rec_yards
             player_query.int_ret_yards=player_def_stats.int_ret_yards
             player_query.total_tkls=player_def_stats.total_tkls
+            player_query.total_sacks=player_def_stats.total_sacks
 
     try:
         session.add_all(new_players)

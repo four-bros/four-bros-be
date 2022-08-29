@@ -70,8 +70,8 @@ def get_game_records(request):
     return response
 
 
-def get_season_records(request):
-    response = get_player_season_stats_leaders(request, is_season_specific=False)
+def get_season_records(is_season_specific: bool):
+    response = get_player_season_stats_leaders(is_season_specific=False)
     return response
 
 

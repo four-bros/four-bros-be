@@ -33,15 +33,15 @@ from src.models.Stats import (
     PlayerTotalStats
 )
 from src.utils.player import(
-    _get_player_defensive_stats,
-    _get_player_kicking_stats,
+    _get_player_season_defensive_stats,
+    _get_player_season_kicking_stats,
     _get_player_kick_return_stats,
-    _get_player_passing_stats,
-    _get_player_punting_stats,
-    _get_player_punt_return_stats,
-    _get_player_receiving_stats,
+    _get_player_season_passing_stats,
+    _get_player_season_punting_stats,
+    _get_player_season_punt_return_stats,
+    _get_player_season_receiving_stats,
     _get_player_rushing_stats,
-    _get_player_total_off_stats
+    _get_player_season_total_off_stats
 )
 
 
@@ -108,20 +108,20 @@ def _get_career_defensive_stats_leaders():
         ).order_by(desc(CareerDefensiveStatsData.total_sacks)).limit(10)
     
     # Convert data into models
-    converted_long_int_ret: List[PlayerDefensiveStats] = [_get_player_defensive_stats(player) for player in long_int_ret_data]
-    converted_sacks: List[PlayerDefensiveStats] = [_get_player_defensive_stats(player) for player in sacks_data]
-    converted_ff: List[PlayerDefensiveStats] = [_get_player_defensive_stats(player) for player in ff_data]
-    converted_safeties: List[PlayerDefensiveStats] = [_get_player_defensive_stats(player) for player in safeties_data]
-    converted_pass_def: List[PlayerDefensiveStats] = [_get_player_defensive_stats(player) for player in pass_def_data]
-    converted_blocked_kicks: List[PlayerDefensiveStats] = [_get_player_defensive_stats(player) for player in blocked_kicks_data]
-    converted_tfl: List[PlayerDefensiveStats] = [_get_player_defensive_stats(player) for player in tfl_data]
-    converted_ints_made: List[PlayerDefensiveStats] = [_get_player_defensive_stats(player) for player in ints_made_data]
-    converted_fr: List[PlayerDefensiveStats] = [_get_player_defensive_stats(player) for player in fr_data]
-    converted_def_td: List[PlayerDefensiveStats] = [_get_player_defensive_stats(player) for player in def_td_data]
-    converted_fr_yards: List[PlayerDefensiveStats] = [_get_player_defensive_stats(player) for player in fr_yards_data]
-    converted_int_ret_yards: List[PlayerDefensiveStats] = [_get_player_defensive_stats(player) for player in int_ret_yards_data]
-    converted_total_tkls: List[PlayerDefensiveStats] = [_get_player_defensive_stats(player) for player in total_tkls_data]
-    converted_total_sacks: List[PlayerDefensiveStats] = [_get_player_defensive_stats(player) for player in total_sacks_data]
+    converted_long_int_ret: List[PlayerDefensiveStats] = [_get_player_season_defensive_stats(player) for player in long_int_ret_data]
+    converted_sacks: List[PlayerDefensiveStats] = [_get_player_season_defensive_stats(player) for player in sacks_data]
+    converted_ff: List[PlayerDefensiveStats] = [_get_player_season_defensive_stats(player) for player in ff_data]
+    converted_safeties: List[PlayerDefensiveStats] = [_get_player_season_defensive_stats(player) for player in safeties_data]
+    converted_pass_def: List[PlayerDefensiveStats] = [_get_player_season_defensive_stats(player) for player in pass_def_data]
+    converted_blocked_kicks: List[PlayerDefensiveStats] = [_get_player_season_defensive_stats(player) for player in blocked_kicks_data]
+    converted_tfl: List[PlayerDefensiveStats] = [_get_player_season_defensive_stats(player) for player in tfl_data]
+    converted_ints_made: List[PlayerDefensiveStats] = [_get_player_season_defensive_stats(player) for player in ints_made_data]
+    converted_fr: List[PlayerDefensiveStats] = [_get_player_season_defensive_stats(player) for player in fr_data]
+    converted_def_td: List[PlayerDefensiveStats] = [_get_player_season_defensive_stats(player) for player in def_td_data]
+    converted_fr_yards: List[PlayerDefensiveStats] = [_get_player_season_defensive_stats(player) for player in fr_yards_data]
+    converted_int_ret_yards: List[PlayerDefensiveStats] = [_get_player_season_defensive_stats(player) for player in int_ret_yards_data]
+    converted_total_tkls: List[PlayerDefensiveStats] = [_get_player_season_defensive_stats(player) for player in total_tkls_data]
+    converted_total_sacks: List[PlayerDefensiveStats] = [_get_player_season_defensive_stats(player) for player in total_sacks_data]
 
     # Convert top ten lists into json
     long_int_ret_leaders_json = defensive_stats_schema.dump(converted_long_int_ret)
@@ -191,12 +191,12 @@ def _get_career_kicking_stats_leaders():
 
 
     # Convert players to PlayerKickingStats model so they can be dumped to json
-    converted_fg_made: List[PlayerKickingStats] = [_get_player_kicking_stats(player) for player in fg_made_data]
-    converted_fg_att: List[PlayerKickingStats] = [_get_player_kicking_stats(player) for player in fg_att_data]
-    converted_fg_pct: List[PlayerKickingStats] = [_get_player_kicking_stats(player) for player in fg_pct_data]
-    converted_long_fg: List[PlayerKickingStats] = [_get_player_kicking_stats(player) for player in long_fg_data]
-    converted_fg_made_50_plus: List[PlayerKickingStats] = [_get_player_kicking_stats(player) for player in fg_made_50_plus_data]
-    converted_fg_50_plus_pct: List[PlayerKickingStats] = [_get_player_kicking_stats(player) for player in fg_50_plus_pct_data]
+    converted_fg_made: List[PlayerKickingStats] = [_get_player_season_kicking_stats(player) for player in fg_made_data]
+    converted_fg_att: List[PlayerKickingStats] = [_get_player_season_kicking_stats(player) for player in fg_att_data]
+    converted_fg_pct: List[PlayerKickingStats] = [_get_player_season_kicking_stats(player) for player in fg_pct_data]
+    converted_long_fg: List[PlayerKickingStats] = [_get_player_season_kicking_stats(player) for player in long_fg_data]
+    converted_fg_made_50_plus: List[PlayerKickingStats] = [_get_player_season_kicking_stats(player) for player in fg_made_50_plus_data]
+    converted_fg_50_plus_pct: List[PlayerKickingStats] = [_get_player_season_kicking_stats(player) for player in fg_50_plus_pct_data]
 
     # Convert top ten lists into json
     fg_made_leaders_json = kicking_stats_schema.dump(converted_fg_made)
@@ -315,16 +315,16 @@ def _get_career_passing_stats_leaders():
             ).order_by(desc(CareerOffensiveStatsData.pass_rating)).limit(10)
 
     # Convert players to PlayerPassingStats model so they can be sorted
-    converted_completions: List[PlayerPassingStats] = [_get_player_passing_stats(player) for player in completions_data]
-    converted_pass_att: List[PlayerPassingStats] = [_get_player_passing_stats(player) for player in pass_att_data]
-    converted_comp_pct: List[PlayerPassingStats] = [_get_player_passing_stats(player) for player in comp_pct_data]
-    converted_long_pass: List[PlayerPassingStats] = [_get_player_passing_stats(player) for player in long_pass_data]
-    converted_pass_yards: List[PlayerPassingStats] = [_get_player_passing_stats(player) for player in pass_yards_data]
-    converted_pass_tds: List[PlayerPassingStats] = [_get_player_passing_stats(player) for player in pass_tds_data]
-    converted_ints: List[PlayerPassingStats] = [_get_player_passing_stats(player) for player in ints_data]
-    converted_pass_ypa: List[PlayerPassingStats] = [_get_player_passing_stats(player) for player in pass_ypa_data]
-    converted_pass_ypg: List[PlayerPassingStats] = [_get_player_passing_stats(player) for player in pass_ypg_data]
-    converted_pass_rating: List[PlayerPassingStats] = [_get_player_passing_stats(player) for player in pass_rating_data]
+    converted_completions: List[PlayerPassingStats] = [_get_player_season_passing_stats(player) for player in completions_data]
+    converted_pass_att: List[PlayerPassingStats] = [_get_player_season_passing_stats(player) for player in pass_att_data]
+    converted_comp_pct: List[PlayerPassingStats] = [_get_player_season_passing_stats(player) for player in comp_pct_data]
+    converted_long_pass: List[PlayerPassingStats] = [_get_player_season_passing_stats(player) for player in long_pass_data]
+    converted_pass_yards: List[PlayerPassingStats] = [_get_player_season_passing_stats(player) for player in pass_yards_data]
+    converted_pass_tds: List[PlayerPassingStats] = [_get_player_season_passing_stats(player) for player in pass_tds_data]
+    converted_ints: List[PlayerPassingStats] = [_get_player_season_passing_stats(player) for player in ints_data]
+    converted_pass_ypa: List[PlayerPassingStats] = [_get_player_season_passing_stats(player) for player in pass_ypa_data]
+    converted_pass_ypg: List[PlayerPassingStats] = [_get_player_season_passing_stats(player) for player in pass_ypg_data]
+    converted_pass_rating: List[PlayerPassingStats] = [_get_player_season_passing_stats(player) for player in pass_rating_data]
 
     # Convert top ten lists into json
     completions_leaders_json = passing_stats_schema.dump(converted_completions)
@@ -388,13 +388,13 @@ def _get_career_punting_stats_leaders():
         ).order_by(desc(CareerKickingStatsData.net_avg)).limit(10)
 
     # Convert players to PlayerKickingStats model so they can be dumped to json
-    converted_long_punt: List[PlayerPuntingStats] = [_get_player_punting_stats(player) for player in long_punt_data]
-    converted_num_punts: List[PlayerPuntingStats] = [_get_player_punting_stats(player) for player in num_punts_data]
-    converted_total_punt_yards: List[PlayerPuntingStats] = [_get_player_punting_stats(player) for player in total_punt_yards_data]
-    converted_punt_avg: List[PlayerPuntingStats] = [_get_player_punting_stats(player) for player in punt_avg_data]
-    converted_net_punting: List[PlayerPuntingStats] = [_get_player_punting_stats(player) for player in net_punting_data]
-    converted_inside_twenty: List[PlayerPuntingStats] = [_get_player_punting_stats(player) for player in inside_twenty_data]
-    converted_net_avg: List[PlayerPuntingStats] = [_get_player_punting_stats(player) for player in net_avg_data]
+    converted_long_punt: List[PlayerPuntingStats] = [_get_player_season_punting_stats(player) for player in long_punt_data]
+    converted_num_punts: List[PlayerPuntingStats] = [_get_player_season_punting_stats(player) for player in num_punts_data]
+    converted_total_punt_yards: List[PlayerPuntingStats] = [_get_player_season_punting_stats(player) for player in total_punt_yards_data]
+    converted_punt_avg: List[PlayerPuntingStats] = [_get_player_season_punting_stats(player) for player in punt_avg_data]
+    converted_net_punting: List[PlayerPuntingStats] = [_get_player_season_punting_stats(player) for player in net_punting_data]
+    converted_inside_twenty: List[PlayerPuntingStats] = [_get_player_season_punting_stats(player) for player in inside_twenty_data]
+    converted_net_avg: List[PlayerPuntingStats] = [_get_player_season_punting_stats(player) for player in net_avg_data]
 
     # Convert top ten lists into json
     long_punt_leaders_json = punting_stats_schema.dump(converted_long_punt)
@@ -443,11 +443,11 @@ def _get_career_punt_return_stats_leaders():
             ).order_by(desc(CareerReturnStatsData.pr_avg)).limit(10)
 
     # Convert players to PlayerKickingStats model so they can be sorted
-    converted_punt_returns: List[PlayerPuntReturnStats] = [_get_player_punt_return_stats(player) for player in punt_returns_data]
-    converted_long_pr: List[PlayerPuntReturnStats] = [_get_player_punt_return_stats(player) for player in long_pr_data]
-    converted_pr_tds: List[PlayerPuntReturnStats] = [_get_player_punt_return_stats(player) for player in pr_tds_data]
-    converted_pr_yards: List[PlayerPuntReturnStats] = [_get_player_punt_return_stats(player) for player in pr_yards_data]
-    converted_pr_avg_data: List[PlayerPuntReturnStats] = [_get_player_punt_return_stats(player) for player in pr_avg_data]
+    converted_punt_returns: List[PlayerPuntReturnStats] = [_get_player_season_punt_return_stats(player) for player in punt_returns_data]
+    converted_long_pr: List[PlayerPuntReturnStats] = [_get_player_season_punt_return_stats(player) for player in long_pr_data]
+    converted_pr_tds: List[PlayerPuntReturnStats] = [_get_player_season_punt_return_stats(player) for player in pr_tds_data]
+    converted_pr_yards: List[PlayerPuntReturnStats] = [_get_player_season_punt_return_stats(player) for player in pr_yards_data]
+    converted_pr_avg_data: List[PlayerPuntReturnStats] = [_get_player_season_punt_return_stats(player) for player in pr_avg_data]
 
     # Convert top ten lists to json
     punt_returns_leaders_json = punt_return_stats_schema.dump(converted_punt_returns)
@@ -501,13 +501,13 @@ def _get_career_rec_stats_leaders():
             ).order_by(desc(CareerOffensiveStatsData.rec_ypg)).limit(10)
 
     # Convert players to PlayerReceivingStats model so they can be sorted
-    converted_receptions: List[PlayerReceivingStats] = [_get_player_receiving_stats(player) for player in receptions_data]
-    converted_rec_yards: List[PlayerReceivingStats] = [_get_player_receiving_stats(player) for player in rec_yards_data]
-    converted_rec_tds: List[PlayerReceivingStats] = [_get_player_receiving_stats(player) for player in rec_tds_data]
-    converted_yac: List[PlayerReceivingStats] = [_get_player_receiving_stats(player) for player in yac_data]
-    converted_drops: List[PlayerReceivingStats] = [_get_player_receiving_stats(player) for player in drops_data]
-    converted_rec_ypc: List[PlayerReceivingStats] = [_get_player_receiving_stats(player) for player in rec_ypc_data]
-    converted_rec_ypg: List[PlayerReceivingStats] = [_get_player_receiving_stats(player) for player in rec_ypg_data]
+    converted_receptions: List[PlayerReceivingStats] = [_get_player_season_receiving_stats(player) for player in receptions_data]
+    converted_rec_yards: List[PlayerReceivingStats] = [_get_player_season_receiving_stats(player) for player in rec_yards_data]
+    converted_rec_tds: List[PlayerReceivingStats] = [_get_player_season_receiving_stats(player) for player in rec_tds_data]
+    converted_yac: List[PlayerReceivingStats] = [_get_player_season_receiving_stats(player) for player in yac_data]
+    converted_drops: List[PlayerReceivingStats] = [_get_player_season_receiving_stats(player) for player in drops_data]
+    converted_rec_ypc: List[PlayerReceivingStats] = [_get_player_season_receiving_stats(player) for player in rec_ypc_data]
+    converted_rec_ypg: List[PlayerReceivingStats] = [_get_player_season_receiving_stats(player) for player in rec_ypg_data]
 
     # Convert top ten lists to json
     reception_leaders_json = receiving_stats_schema.dump(converted_receptions)
@@ -631,10 +631,10 @@ def _get_career_total_stats_leaders():
         ).order_by(desc(CareerOffensiveStatsData.turnovers)).limit(10)
     
     # Convert players to PlayerRushingStats model so they can be sorted
-    converted_total_yards: List[PlayerTotalStats] = [_get_player_total_off_stats(player) for player in total_yards_data]
-    converted_total_tds: List[PlayerTotalStats] = [_get_player_total_off_stats(player) for player in total_tds_data]
-    converted_total_ypg: List[PlayerTotalStats] = [_get_player_total_off_stats(player) for player in total_ypg_data]
-    converted_to: List[PlayerTotalStats] = [_get_player_total_off_stats(player) for player in to_data]
+    converted_total_yards: List[PlayerTotalStats] = [_get_player_season_total_off_stats(player) for player in total_yards_data]
+    converted_total_tds: List[PlayerTotalStats] = [_get_player_season_total_off_stats(player) for player in total_tds_data]
+    converted_total_ypg: List[PlayerTotalStats] = [_get_player_season_total_off_stats(player) for player in total_ypg_data]
+    converted_to: List[PlayerTotalStats] = [_get_player_season_total_off_stats(player) for player in to_data]
 
     # Convert top ten lists to json
     total_yards_leaders_json = total_stats_schema.dump(converted_total_yards)

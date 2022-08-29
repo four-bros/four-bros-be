@@ -36,7 +36,7 @@ from src.utils.career_stats import (
     _compile_career_rushing_stats,
     _compile_career_total_stats,
 )
-from src.utils.season_stats import (
+from src.utils.player_stats import (
     _get_defensive_stats,
     _get_kicking_stats,
     _get_kick_return_stats,

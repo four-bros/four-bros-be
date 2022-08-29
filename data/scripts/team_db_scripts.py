@@ -14,12 +14,12 @@ from src.utils.helpers import(
 )
 from src.models.Teams import TeamGameStats
 from src.utils.player import (
-    _get_player_defensive_stats,
+    _get_player_season_defensive_stats,
     _get_player_kick_return_stats,
-    _get_player_kicking_stats,
-    _get_player_passing_stats,
-    _get_player_receiving_stats,
-    _get_player_punt_return_stats,
+    _get_player_season_kicking_stats,
+    _get_player_season_passing_stats,
+    _get_player_season_receiving_stats,
+    _get_player_season_punt_return_stats,
     _get_player_rushing_stats
 )
 from src.utils.team_stats import (
@@ -160,10 +160,10 @@ async def insert_team_season_stats_into_db(week_year_data):
                 SeasonDefensiveStatsData.year == current_year
             ).all()
         off_data = session.query(PlayerInfoData, SeasonOffensiveStatsData).filter(
-            PlayerInfoData.team_id == team.id,
-            PlayerInfoData.is_active == True,
-            PlayerInfoData.id == SeasonOffensiveStatsData.player_id,
-            SeasonOffensiveStatsData.year == current_year
+                PlayerInfoData.team_id == team.id,
+                PlayerInfoData.is_active == True,
+                PlayerInfoData.id == SeasonOffensiveStatsData.player_id,
+                SeasonOffensiveStatsData.year == current_year
             ).all()
         ret_data = session.query(PlayerInfoData, SeasonReturnStatsData).filter(
                 PlayerInfoData.team_id == team.id,
@@ -186,13 +186,13 @@ async def insert_team_season_stats_into_db(week_year_data):
         primary_key = f'{current_year}-{team.id}'
 
         # Convert data to models for data manipulation
-        def_stats: List[PlayerDefensiveStats] = [_get_player_defensive_stats(player) for player in def_data]
-        kick_stats: List[PlayerKickingStats] = [_get_player_kicking_stats(player) for player in kick_data]
-        pass_stats: List[PlayerPassingStats] = [_get_player_passing_stats(player) for player in off_data]
+        def_stats: List[PlayerDefensiveStats] = [_get_player_season_defensive_stats(player) for player in def_data]
+        kick_stats: List[PlayerKickingStats] = [_get_player_season_kicking_stats(player) for player in kick_data]
+        pass_stats: List[PlayerPassingStats] = [_get_player_season_passing_stats(player) for player in off_data]
         rush_stats: List[PlayerRushingStats] = [_get_player_rushing_stats(player) for player in off_data]
-        rec_stats: List[PlayerReceivingStats] = [_get_player_receiving_stats(player) for player in off_data]
+        rec_stats: List[PlayerReceivingStats] = [_get_player_season_receiving_stats(player) for player in off_data]
         kick_return_stats: List[PlayerKickReturnStats] = [_get_player_kick_return_stats(player) for player in ret_data]
-        punt_return_stats: List[PlayerPuntReturnStats] = [_get_player_punt_return_stats(player) for player in ret_data]
+        punt_return_stats: List[PlayerPuntReturnStats] = [_get_player_season_punt_return_stats(player) for player in ret_data]
         
         # compile all TD points
         passing_tds = sum([p.passing_stats.pass_tds for p in pass_stats])
