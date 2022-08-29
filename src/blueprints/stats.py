@@ -11,7 +11,7 @@ stats_bp = Blueprint('stats', __name__)
 
 @stats_bp.route('season/leaders/players', methods=['GET'])
 def stats_get_season_leaders():
-    return get_player_season_stats_leaders(request, is_season_specific=True)
+    return get_player_season_stats_leaders(is_season_specific=True)
 
 
 @stats_bp.route('season/leaders/teams', methods=['GET'])
