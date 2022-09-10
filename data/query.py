@@ -21,8 +21,8 @@ from src.data_models.SeasonOffensiveStatsData import SeasonOffensiveStatsData
 from src.data_models.TeamInfoData import TeamInfoData
 from src.data_models.WeekYearData import WeekYearData
 from src.models.Stats import PlayerDefensiveStats
-from src.responses.Stats import PassingStatsSchema
-from src.responses.Players import PlayerSchema
+from src.schemas.Stats import PassingStatsSchema
+from src.schemas.Players import PlayerSchema
 from src.utils.player import _get_player_season_defensive_stats
 
 

@@ -11,13 +11,13 @@ from sqlalchemy.orm import(
 )
 
 from src.models.Coach import CoachInfo
-from src.responses.Coach import (
+from src.schemas.Coach import (
     CoachSeasonRecordSchema,
     CoachStatsSchema
 )
-from src.responses.Commits import CommitsSchema
-from src.responses.Players import PlayerSchema
-from src.responses.Stats import (
+from src.schemas.Commits import CommitsSchema
+from src.schemas.Players import PlayerSchema, PlayerHofSchema
+from src.schemas.Stats import (
     PlayerDefensiveStatsSchema,
     PlayerDetailsSchema,
     PlayerKickingStatsSchema,
@@ -30,14 +30,14 @@ from src.responses.Stats import (
     PlayerRushingStatsSchema,
     PlayerTotalStatsSchema,
 )
-from src.responses.Teams import (
+from src.schemas.Teams import (
     TeamSummarySchema,
     TeamRosterSchema,
     TeamDetailsSchema,
     TeamGameRecordSchema,
     TeamSeasonRecordSchema
 )
-from src.responses.WeekYear import (
+from src.schemas.WeekYear import (
     WeekYearSchema
 )
 
@@ -61,8 +61,8 @@ Base = declarative_base()
 # Windows file path
 # dynasty_file_path = 'D:\Content\E00001485AECABB5\\454109B6\\00000001\OD-4Bros3'
 # Mac file path
-data_dynasty_file_path = '/Users/sgreen4/Desktop/data/dynasty3/2037/OD-4Bros3_week2'
-data_dir = '/Users/sgreen4/Desktop/data/dynasty3/2036-final'
+data_dynasty_file_path = '/Users/sgreen4/Desktop/data/dynasty3/2037/OD-4Bros3_week4'
+# data_dir = '/Users/sgreen4/Desktop/data/dynasty3/2036-final'
 
 # User/coach information
 ben: CoachInfo = CoachInfo(
@@ -116,6 +116,8 @@ passing_stat_schema = PlayerPassingStatsSchema()
 passing_stats_schema = PlayerPassingStatsSchema(many=True)
 player_details_schema_single = PlayerDetailsSchema()
 player_details_schema_list = PlayerDetailsSchema(many=True)
+player_hof_schema_single = PlayerHofSchema()
+player_hof_schema_list = PlayerHofSchema(many=True)
 player_schema_single = PlayerSchema()
 player_schema_list = PlayerSchema(many=True)
 punt_return_stat_schema = PlayerPuntReturnStatsSchema()

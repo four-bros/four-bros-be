@@ -1,6 +1,7 @@
+from typing import List
 from marshmallow import Schema, fields
 
-from src.schema.Stats import(
+from src.schemas.Stats import(
     DefensiveStatsSchema,
     KickReturnStatsSchema,
     KickingAndPuntingStatsSchema,
@@ -83,9 +84,27 @@ class PlayerStatsSchema(Schema):
     total = fields.Nested(TotalStatsSchema)
 
 
+class PlayerStatsAllSeasonsSchema(Schema):
+    passing = fields.List(fields.Nested(PassingStatsSchema))
+    rushing = fields.List(fields.Nested(RushingStatsSchema))
+    receiving = fields.List(fields.Nested(ReceivingStatsSchema))
+    defensive = fields.List(fields.Nested(DefensiveStatsSchema))
+    kick_return = fields.List(fields.Nested(KickReturnStatsSchema))
+    kicking = fields.List(fields.Nested(KickingAndPuntingStatsSchema))
+    punting = fields.List(fields.Nested(PuntingStatsSchema))
+    punt_return = fields.List(fields.Nested(PuntReturnStatsSchema))
+    total = fields.List(fields.Nested(TotalStatsSchema))
+
+
 class PlayerSchema(Schema):
     details = fields.Nested(PlayerDetailsSchema)
     abilities = fields.Nested(PlayerAbilitiesSchema)
     career_stats = fields.Nested(PlayerStatsSchema)
     season_stats = fields.Nested(PlayerStatsSchema)
-    game_stats = fields.Nested(PlayerStatsSchema)
+
+
+class PlayerHofSchema(Schema):
+    details = fields.Nested(PlayerDetailsSchema)
+    abilities = fields.Nested(PlayerAbilitiesSchema)
+    career_stats = fields.Nested(PlayerStatsSchema)
+    season_stats = fields.Nested(PlayerStatsAllSeasonsSchema)

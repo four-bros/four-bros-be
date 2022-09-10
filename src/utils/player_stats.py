@@ -1,4 +1,4 @@
-from typing import Union
+from typing import List, Union
 from sqlalchemy import desc
 from src.constants import session
 from src.data_models.CareerDefensiveStatsData import CareerDefensiveStatsData
@@ -15,7 +15,7 @@ from src.data_models.SeasonOffensiveStatsData import SeasonOffensiveStatsData
 from src.data_models.PlayerInfoData import PlayerInfoData
 from src.data_models.SeasonReturnStatsData import SeasonReturnStatsData
 from src.data_models.WeekYearData import WeekYearData
-from src.models.Player import PlayerStats
+from src.models.Player import PlayerStats, PlayerStatsAllSeasons
 from src.models.Stats import (
     DefensiveStats,
     KickingStats,
@@ -29,7 +29,61 @@ from src.models.Stats import (
 )
 
 
-def _get_player_season_stats(player: PlayerInfoData) -> PlayerStats:
+def _get_player_all_season_stats(player: PlayerInfoData) -> List[PlayerStats]:
+
+    offensive_stats_data: List[SeasonOffensiveStatsData] = session.query(SeasonOffensiveStatsData).where(
+        SeasonOffensiveStatsData.player_id == player.id,
+    ).order_by(desc(SeasonOffensiveStatsData.year)).all()
+    defensive_stats_data: List[SeasonDefensiveStatsData] = session.query(SeasonDefensiveStatsData).where(
+        SeasonDefensiveStatsData.player_id == player.id,
+    ).order_by(desc(SeasonDefensiveStatsData.year)).all()
+    return_stats_data: List[SeasonReturnStatsData] = session.query(SeasonReturnStatsData).where(
+        SeasonReturnStatsData.player_id == player.id,
+    ).order_by(desc(SeasonReturnStatsData.year)).all()
+    kicking_stats_data: List[SeasonKickingStatsData] = session.query(SeasonKickingStatsData).where(
+        SeasonKickingStatsData.player_id == player.id,
+    ).order_by(desc(SeasonKickingStatsData.year)).all()
+
+    passing_stats: List[PassingStats] = []
+    receiving_stats: List[ReceivingStats] = []
+    rushing_stats: List[RushingStats] = []
+    defensive_stats: List[DefensiveStats] = []
+    kicking_stats: List[KickingStats] = []
+    kick_return_stats: List[KickReturnStats] = []
+    punting_stats: List[PuntingStats] = []
+    punt_return_stats: List[PuntReturnStats] = []
+    total_stats: List[TotalStats] = []
+
+    if len(offensive_stats_data) > 0:
+        passing_stats = [_get_passing_stats(season) for season in offensive_stats_data]
+        receiving_stats = [_get_receiving_stats(season) for season in offensive_stats_data]
+        rushing_stats = [_get_rushing_stats(season) for season in offensive_stats_data]
+        total_stats = [_get_total_stats(season) for season in offensive_stats_data]
+    if len(defensive_stats_data) > 0:
+        defensive_stats = [_get_defensive_stats(season) for season in defensive_stats_data]
+    if len(return_stats_data) > 0:
+        kick_return_stats = [_get_kick_return_stats(season) for season in return_stats_data]
+        punt_return_stats = [_get_punt_return_stats(season) for season in return_stats_data]
+    if len(kicking_stats_data) > 0:
+        kicking_stats = [_get_kicking_stats(season) for season in kicking_stats_data]
+        punting_stats = [_get_punting_stats(season) for season in kicking_stats_data]
+    
+    player_stats: PlayerStatsAllSeasons = PlayerStatsAllSeasons(
+        passing=passing_stats,
+        rushing=rushing_stats,
+        receiving=receiving_stats,
+        defensive=defensive_stats,
+        kicking=kicking_stats,
+        kick_return=kick_return_stats,
+        punting=punting_stats,
+        punt_return=punt_return_stats,
+        total=total_stats
+    )
+
+    return player_stats
+
+
+def _get_player_current_season_stats(player: PlayerInfoData) -> PlayerStats:
 
     week_year: WeekYearData = session.query(WeekYearData).order_by(
         desc(WeekYearData.year),

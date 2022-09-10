@@ -55,7 +55,7 @@ from src.models.Teams import (
     TeamRoster,
     TeamSeasonStats
 )
-from src.responses.Teams import (
+from src.schemas.Teams import (
     TeamDetailsSchema,
     TeamSummarySchema
 )
