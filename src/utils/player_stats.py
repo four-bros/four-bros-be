@@ -17,8 +17,7 @@ from src.data_models.SeasonReturnStatsData import SeasonReturnStatsData
 from src.data_models.WeekYearData import WeekYearData
 from src.models.Player import (
     PlayerStats,
-    PlayerStatsAllSeasons,
-    PlayerGameStats,
+    PlayerStatsList,
     PlayerStats
 )
 from src.models.Stats import (
@@ -73,7 +72,7 @@ def _get_player_all_season_stats(player: PlayerInfoData) -> List[PlayerStats]:
         kicking_stats = [_get_kicking_stats(season) for season in kicking_stats_data]
         punting_stats = [_get_punting_stats(season) for season in kicking_stats_data]
     
-    player_stats: PlayerStatsAllSeasons = PlayerStatsAllSeasons(
+    player_stats: PlayerStatsList = PlayerStatsList(
         passing=passing_stats,
         rushing=rushing_stats,
         receiving=receiving_stats,
@@ -199,7 +198,7 @@ def _get_player_game_stats(player: PlayerInfoData) -> PlayerStats:
         kicking_stats = [_get_kicking_stats(game) for game in kicking_stats_data]
         punting_stats = [_get_punting_stats(game) for game in kicking_stats_data]
     
-    player_stats: PlayerGameStats = PlayerGameStats(
+    player_stats: PlayerStatsList = PlayerStatsList(
         passing=passing_stats,
         rushing=rushing_stats,
         receiving=receiving_stats,

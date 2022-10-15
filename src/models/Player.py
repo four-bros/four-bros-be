@@ -159,7 +159,7 @@ class PlayerStats:
         return f'passing stats: {self.passing}, rushing stats: {self.rushing}, rec stats {self.receiving}'
 
 
-class PlayerStatsAllSeasons:
+class PlayerStatsList:
     def __init__(
         self,
         passing: List[PassingStats],
@@ -193,7 +193,7 @@ class PlayerAbilitiesDetailsStats:
         abilities: PlayerAbilities,
         career_stats: PlayerStats,
         season_stats: PlayerStats,
-        game_stats: PlayerGameStats
+        game_stats: PlayerStatsList
     ):
         self.details = details
         self.abilities = abilities
@@ -211,7 +211,7 @@ class PlayerHofInfo:
         details: PlayerDetails,
         abilities: PlayerAbilities,
         career_stats: PlayerStats,
-        season_stats: PlayerStatsAllSeasons
+        season_stats: PlayerStatsList
     ):
         self.details = details
         self.abilities = abilities

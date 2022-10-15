@@ -38,7 +38,6 @@ from src.utils.career_stats import (
 )
 from src.utils.player_stats import (
     _get_player_game_stats,
-    _get_player_season_stats,
     _get_player_all_season_stats,
     _get_player_current_season_stats,
     _get_defensive_stats,
