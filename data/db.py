@@ -3,7 +3,7 @@ import os
 import ncaa_dynasty
 import time
 
-from src.constants import data_dir, user_teams
+# from src.constants import data_dir, user_teams
 from src.utils.helpers import _convert_stats_year
 from data import (
     def_stats,

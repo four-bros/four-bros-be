@@ -1,3 +1,4 @@
+from typing import List
 from src.constants import session
 from src.data_models.SeasonDefensiveStatsData import SeasonDefensiveStatsData
 from src.data_models.SeasonKickingStatsData import SeasonKickingStatsData
@@ -9,7 +10,8 @@ from src.models.Player import (
     PlayerAbilities,
     PlayerAbilitiesDetailsStats,
     PlayerDetails,
-    PlayerStats
+    PlayerStats,
+    PlayerHofInfo
 )
 from src.models.Stats import (
     KickReturnStats,
@@ -37,6 +39,8 @@ from src.utils.career_stats import (
 from src.utils.player_stats import (
     _get_player_game_stats,
     _get_player_season_stats,
+    _get_player_all_season_stats,
+    _get_player_current_season_stats,
     _get_defensive_stats,
     _get_kicking_stats,
     _get_kick_return_stats,
@@ -56,7 +60,7 @@ def _get_player_abilities_details_stats(player: PlayerInfoData) -> PlayerAbiliti
 
     player_details: PlayerDetails = _get_player_details(player=player)
     player_abilities: PlayerAbilities = _get_player_abilities(player=player)
-    season_stats: PlayerStats = _get_player_season_stats(player=player)
+    season_stats: PlayerStats = _get_player_current_season_stats(player=player)
     career_stats: PlayerStats = _get_player_career_stats(player=player)
     game_stats: PlayerStats = _get_player_game_stats(player=player)
 
@@ -69,6 +73,23 @@ def _get_player_abilities_details_stats(player: PlayerInfoData) -> PlayerAbiliti
     )
 
     return player_abilities_details_stats
+
+
+def _get_player_hof_info(player: PlayerInfoData) -> PlayerHofInfo:
+
+    player_details: PlayerDetails = _get_player_details(player=player)
+    player_abilities: PlayerAbilities = _get_player_abilities(player=player)
+    season_stats: List[PlayerStats] = _get_player_all_season_stats(player=player)
+    career_stats: PlayerStats = _get_player_career_stats(player=player)
+
+    player_hof_info = PlayerHofInfo(
+        details=player_details,
+        abilities=player_abilities,
+        career_stats=career_stats,
+        season_stats=season_stats
+    )
+
+    return player_hof_info
 
 
 def _get_player_abilities(player: PlayerInfoData) -> PlayerAbilities:
