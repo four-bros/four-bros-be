@@ -26,11 +26,13 @@ def get_all_players(request):
     return response
 
 
-def get_player_by_player_id(request, player_id) -> PlayerSchema:
+def get_player_by_player_id(player_id) -> PlayerSchema:
     player: PlayerInfoData = session.query(PlayerInfoData).where(
         PlayerInfoData.id == player_id).one()
 
     converted_player: PlayerAbilitiesDetailsStats = _get_player_abilities_details_stats(player)
+
+    print(converted_player)
 
     response: PlayerSchema = player_schema_single.dump(converted_player)
     

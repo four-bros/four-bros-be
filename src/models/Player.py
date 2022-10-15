@@ -1,13 +1,12 @@
+from typing import List
 from src.models.Stats import(
     DefensiveStats,
-    KickingAndPuntingStats,
     KickReturnStats,
     KickingStats,
     PassingStats,
     PuntingStats,
     PuntReturnStats,
     ReceivingStats,
-    ReturnStats,
     RushingStats,
     TotalStats
 )
@@ -159,15 +158,48 @@ class PlayerStats:
     def __repr__(self):
         return f'passing stats: {self.passing}, rushing stats: {self.rushing}, rec stats {self.receiving}'
 
+
+class PlayerGameStats:
+    def __init__(
+        self,
+        passing: List[PassingStats],
+        rushing: List[RushingStats],
+        receiving: List[ReceivingStats],
+        defensive: List[DefensiveStats],
+        kicking: List[KickingStats],
+        kick_return: List[KickReturnStats],
+        punting: List[PuntingStats],
+        punt_return: List[PuntReturnStats],
+        total: List[TotalStats]
+    ):
+        self.passing = passing
+        self.rushing = rushing
+        self.receiving = receiving
+        self.defensive = defensive
+        self.kicking = kicking
+        self.kick_return = kick_return
+        self.punting = punting
+        self.punt_return = punt_return
+        self.total = total
+
+    def __repr__(self):
+        return f'passing stats: {self.passing}, rushing stats: {self.rushing}, rec stats {self.receiving}'
+
+
 class PlayerAbilitiesDetailsStats:
     def __init__(
         self,
         details: PlayerDetails,
         abilities: PlayerAbilities,
         career_stats: PlayerStats,
-        season_stats: PlayerStats
+        season_stats: PlayerStats,
+        game_stats: PlayerGameStats
     ):
         self.details = details
         self.abilities = abilities
         self.career_stats = career_stats
         self.season_stats = season_stats
+        self.game_stats = game_stats
+
+    def __repr__(self) -> str:
+        return f'game stats: {self.game_stats}'

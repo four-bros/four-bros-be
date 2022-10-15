@@ -1,4 +1,4 @@
-from typing import Union
+from typing import List, Union
 from sqlalchemy import desc
 from src.constants import session
 from src.data_models.CareerDefensiveStatsData import CareerDefensiveStatsData
@@ -15,7 +15,7 @@ from src.data_models.SeasonOffensiveStatsData import SeasonOffensiveStatsData
 from src.data_models.PlayerInfoData import PlayerInfoData
 from src.data_models.SeasonReturnStatsData import SeasonReturnStatsData
 from src.data_models.WeekYearData import WeekYearData
-from src.models.Player import PlayerStats
+from src.models.Player import PlayerGameStats, PlayerStats
 from src.models.Stats import (
     DefensiveStats,
     KickingStats,
@@ -91,6 +91,68 @@ def _get_player_season_stats(player: PlayerInfoData) -> PlayerStats:
 
     return player_stats
 
+
+def _get_player_game_stats(player: PlayerInfoData) -> PlayerStats:
+
+    week_year: WeekYearData = session.query(WeekYearData).order_by(
+        desc(WeekYearData.year),
+        desc(WeekYearData.week)
+    ).first()
+
+    offensive_stats_data: GameOffensiveStatsData = session.query(GameOffensiveStatsData).where(
+        GameOffensiveStatsData.player_id == player.id,
+        GameOffensiveStatsData.year == week_year.year
+    ).order_by(desc(GameOffensiveStatsData.week)).all()
+    defensive_stats_data: GameDefensiveStatsData = session.query(GameDefensiveStatsData).where(
+        GameDefensiveStatsData.player_id == player.id,
+        GameDefensiveStatsData.year == week_year.year
+    ).order_by(desc(GameDefensiveStatsData.week)).all()
+    return_stats_data: GameReturnStatsData = session.query(GameReturnStatsData).where(
+        GameReturnStatsData.player_id == player.id,
+        GameReturnStatsData.year == week_year.year
+    ).order_by(desc(GameReturnStatsData.week)).all()
+    kicking_stats_data: GameKickingStatsData = session.query(GameKickingStatsData).where(
+        GameKickingStatsData.player_id == player.id,
+        GameKickingStatsData.year == week_year.year
+    ).order_by(desc(GameKickingStatsData.week)).all()
+
+    passing_stats: List[PassingStats] = None
+    receiving_stats: List[ReceivingStats] = None
+    rushing_stats: List[RushingStats] = None
+    defensive_stats: List[DefensiveStats] = None
+    kicking_stats: List[KickingStats] = None
+    kick_return_stats: List[KickReturnStats] = None
+    punting_stats: List[PuntingStats] = None
+    punt_return_stats: List[PuntReturnStats] = None
+    total_stats: List[TotalStats] = None
+
+    if offensive_stats_data:
+        passing_stats = [_get_passing_stats(game) for game in offensive_stats_data]
+        receiving_stats = [_get_receiving_stats(game) for game in offensive_stats_data]
+        rushing_stats = [_get_rushing_stats(game) for game in offensive_stats_data]
+        total_stats = [_get_total_stats(game) for game in offensive_stats_data]
+    if defensive_stats_data:
+        defensive_stats = [_get_defensive_stats(game) for game in defensive_stats_data]
+    if return_stats_data:
+        kick_return_stats = [_get_kick_return_stats(game) for game in return_stats_data]
+        punt_return_stats = [_get_punt_return_stats(game) for game in return_stats_data]
+    if kicking_stats_data:
+        kicking_stats = [_get_kicking_stats(game) for game in kicking_stats_data]
+        punting_stats = [_get_punting_stats(game) for game in kicking_stats_data]
+    
+    player_stats: PlayerGameStats = PlayerGameStats(
+        passing=passing_stats,
+        rushing=rushing_stats,
+        receiving=receiving_stats,
+        defensive=defensive_stats,
+        kicking=kicking_stats,
+        kick_return=kick_return_stats,
+        punting=punting_stats,
+        punt_return=punt_return_stats,
+        total=total_stats
+    )
+
+    return player_stats
 
 ################################################
 ######### Get player defensive stats ###########
