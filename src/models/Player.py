@@ -1,14 +1,12 @@
 from typing import List
 from src.models.Stats import(
     DefensiveStats,
-    KickingAndPuntingStats,
     KickReturnStats,
     KickingStats,
     PassingStats,
     PuntingStats,
     PuntReturnStats,
     ReceivingStats,
-    ReturnStats,
     RushingStats,
     TotalStats
 )
@@ -161,7 +159,7 @@ class PlayerStats:
         return f'passing stats: {self.passing}, rushing stats: {self.rushing}, rec stats {self.receiving}'
 
 
-class PlayerStatsAllSeasons:
+class PlayerStatsList:
     def __init__(
         self,
         passing: List[PassingStats],
@@ -184,6 +182,9 @@ class PlayerStatsAllSeasons:
         self.punt_return = punt_return
         self.total = total
 
+    def __repr__(self):
+        return f'passing stats: {self.passing}, rushing stats: {self.rushing}, rec stats {self.receiving}'
+
 
 class PlayerAbilitiesDetailsStats:
     def __init__(
@@ -191,12 +192,17 @@ class PlayerAbilitiesDetailsStats:
         details: PlayerDetails,
         abilities: PlayerAbilities,
         career_stats: PlayerStats,
-        season_stats: PlayerStats
+        season_stats: PlayerStats,
+        game_stats: PlayerStatsList
     ):
         self.details = details
         self.abilities = abilities
         self.career_stats = career_stats
         self.season_stats = season_stats
+        self.game_stats = game_stats
+
+    def __repr__(self) -> str:
+        return f'game stats: {self.game_stats}'
 
 
 class PlayerHofInfo:
@@ -205,7 +211,7 @@ class PlayerHofInfo:
         details: PlayerDetails,
         abilities: PlayerAbilities,
         career_stats: PlayerStats,
-        season_stats: PlayerStatsAllSeasons
+        season_stats: PlayerStatsList
     ):
         self.details = details
         self.abilities = abilities

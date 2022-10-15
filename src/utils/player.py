@@ -37,6 +37,7 @@ from src.utils.career_stats import (
     _get_player_career_stats
 )
 from src.utils.player_stats import (
+    _get_player_game_stats,
     _get_player_all_season_stats,
     _get_player_current_season_stats,
     _get_defensive_stats,
@@ -60,12 +61,14 @@ def _get_player_abilities_details_stats(player: PlayerInfoData) -> PlayerAbiliti
     player_abilities: PlayerAbilities = _get_player_abilities(player=player)
     season_stats: PlayerStats = _get_player_current_season_stats(player=player)
     career_stats: PlayerStats = _get_player_career_stats(player=player)
+    game_stats: PlayerStats = _get_player_game_stats(player=player)
 
     player_abilities_details_stats: PlayerAbilitiesDetailsStats = PlayerAbilitiesDetailsStats(
         details=player_details,
         abilities=player_abilities,
         career_stats=career_stats,
-        season_stats=season_stats
+        season_stats=season_stats,
+        game_stats=game_stats
     )
 
     return player_abilities_details_stats
