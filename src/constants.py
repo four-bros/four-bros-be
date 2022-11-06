@@ -61,7 +61,7 @@ Base = declarative_base()
 # Windows file path
 # dynasty_file_path = 'D:\Content\E00001485AECABB5\\454109B6\\00000001\OD-4Bros3'
 # Mac file path
-data_dynasty_file_path = '/Users/sgreen4/Desktop/data/dynasty3/2037/OD-4Bros3_week4'
+data_dynasty_file_path = '/Users/sgreen4/Desktop/data/dynasty3/2038/OD-4Bros3_week9'
 # data_dir = '/Users/sgreen4/Desktop/data/dynasty3/2036-final'
 
 # User/coach information
@@ -90,8 +90,8 @@ seth: CoachInfo = CoachInfo(
     id='seth',
     first_name='Peewee',
     last_name='FlyGuy',
-    team_id=115,
-    team_name='Wyoming'
+    team_id=99,
+    team_name='UCLA'
 )
 
 users: List[CoachInfo] = [ben, brent, dan, seth]
