@@ -5,7 +5,7 @@ from flask_cors import CORS
 import os
 import psycopg2
 from sqlalchemy import create_engine
-from sqlalchemy.orm import(
+from sqlalchemy.orm import (
     declarative_base,
     sessionmaker
 )
@@ -32,8 +32,8 @@ from src.schemas.Stats import (
 )
 from src.schemas.Teams import (
     TeamSummarySchema,
-    TeamRosterSchema,
-    TeamDetailsSchema,
+    RosterSchema,
+    DetailsSchema,
     TeamGameRecordSchema,
     TeamSeasonRecordSchema
 )
@@ -61,8 +61,8 @@ Base = declarative_base()
 # Windows file path
 # dynasty_file_path = 'D:\Content\E00001485AECABB5\\454109B6\\00000001\OD-4Bros3'
 # Mac file path
-data_dynasty_file_path = '/Users/sgreen4/Desktop/data/dynasty3/2041/OD-4Bros3_week2'
-# data_dir = '/Users/sgreen4/Desktop/data/dynasty3/2036-final'
+data_dynasty_file_path = '/Users/sgreen4/Desktop/data/dynasty3/2042/OD-4Bros3_week18make'
+# data_dir = '/Users/sgreen4/Desktop/data/dynasty3/2024-fix-b'
 
 # User/coach information
 ben: CoachInfo = CoachInfo(
@@ -130,14 +130,7 @@ return_stat_schema = PlayerKickReturnAndPuntReturnStatsSchema()
 return_stats_schema = PlayerKickReturnAndPuntReturnStatsSchema(many=True)
 rushing_stat_schema = PlayerRushingStatsSchema()
 rushing_stats_schema = PlayerRushingStatsSchema(many=True)
-team_details_schema = TeamDetailsSchema(many=True)
-team_schema = TeamSummarySchema()
-teams_schema = TeamSummarySchema(many=True)
-team_season_record_schema = TeamSeasonRecordSchema()
-team_season_records_schema = TeamSeasonRecordSchema(many=True)
-team_game_record_schema = TeamGameRecordSchema()
-team_game_records_schema = TeamGameRecordSchema(many=True)
-team_roster_schema = TeamRosterSchema(many=True)
+
 total_stat_schema = PlayerTotalStatsSchema()
 total_stats_schema = PlayerTotalStatsSchema(many=True)
 week_year_schema = WeekYearSchema()

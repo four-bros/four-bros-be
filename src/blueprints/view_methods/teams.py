@@ -1,7 +1,7 @@
 from typing import List
 from sqlalchemy.sql.expression import desc
 
-from src.constants import(
+from src.constants import (
     defensive_stats_schema,
     kicking_stats_schema,
     kick_return_stats_schema,
@@ -11,8 +11,6 @@ from src.constants import(
     receiving_stats_schema,
     rushing_stats_schema,
     session,
-    team_details_schema,
-    team_schema,
     total_stats_schema
 )
 from src.data_models.SeasonDefensiveStatsData import SeasonDefensiveStatsData
@@ -56,33 +54,38 @@ from src.models.Teams import (
     TeamSeasonStats
 )
 from src.schemas.Teams import (
+    DetailsSchema,
     TeamDetailsSchema,
-    TeamSummarySchema
+    TeamRosterSchema,
+    TeamStatsSchema,
+    TeamSummarySchema,
+    team_schema
 )
 
 
 def get_all_teams(request):
-    
+
     teams: List[TeamInfoData] = session.query(TeamInfoData).order_by(
         desc(TeamInfoData.is_user),
         TeamInfoData.team_name
     ).all()
 
     teams_json = team_details_schema.dump(teams)
-    
+
     response = {
         'teams': teams_json
     }
-    
+
     return response
 
 
-def get_team_by_team_id(team_id) -> TeamDetailsSchema:
-    
+def get_team_by_team_id(team_id) -> DetailsSchema:
+
     week_year: WeekYearData = session.query(WeekYearData).order_by(
-            desc(WeekYearData.year)
-        ).first()
-    team_info_data: TeamInfoData = session.query(TeamInfoData).where(TeamInfoData.id == team_id).one()
+        desc(WeekYearData.year)
+    ).first()
+    team_info_data: TeamInfoData = session.query(
+        TeamInfoData).where(TeamInfoData.id == team_id).one()
     team_stats_data: TeamSeasonStatsData = session.query(TeamSeasonStatsData).where(
         TeamSeasonStatsData.team_id == team_id,
         TeamSeasonStatsData.year == week_year.year
@@ -95,11 +98,12 @@ def get_team_by_team_id(team_id) -> TeamDetailsSchema:
 
     team_stats: TeamSeasonStats = []
 
-    team_details: TeamDetails = _get_team_details(team_info=team_info_data, players=players)
+    team_details: TeamDetails = _get_team_details(
+        team_info=team_info_data, players=players)
     if team_stats_data:
-            team_stats: TeamSeasonStats = _get_team_season_stats(team_stats_data=team_stats_data)
+        team_stats: TeamSeasonStats = _get_team_season_stats(
+            team_stats_data=team_stats_data)
     team_roster: TeamRoster = [_get_team_roster(player) for player in players]
-    
 
     team_info: TeamSummary = TeamSummary(
         team_details=team_details,
@@ -108,7 +112,21 @@ def get_team_by_team_id(team_id) -> TeamDetailsSchema:
     )
 
     response: TeamSummarySchema = team_schema.dump(team_info)
-    
+
+    return response
+
+
+def get_roster_by_team_id(team_id) -> List[TeamRoster]:
+
+    players: List[PlayerInfoData] = session.query(PlayerInfoData).where(
+        PlayerInfoData.team_id == team_id,
+        PlayerInfoData.is_active == True,
+    ).order_by(desc(PlayerInfoData.overall)).all()
+
+    team_roster: TeamRoster = [_get_team_roster(player) for player in players]
+
+    response: TeamRosterSchema = team_roster_schema.dump(team_roster)
+
     return response
 
 
@@ -119,7 +137,8 @@ def get_team_player_stats(team_id):
         desc(WeekYearData.week)
     ).first()
     # Query the team to get the team_id
-    team: TeamInfoData = session.query(TeamInfoData).where(TeamInfoData.id == team_id).one()
+    team: TeamInfoData = session.query(TeamInfoData).where(
+        TeamInfoData.id == team_id).one()
 
     # Get defensive stats
     defense_data = session.query(PlayerInfoData, SeasonDefensiveStatsData).filter(
@@ -209,16 +228,26 @@ def get_team_player_stats(team_id):
     ).order_by(desc(SeasonReturnStatsData.pr_yds)).all()
 
     # Convert players to the appropriate models based on stat category
-    defensive_stats: List[PlayerDefensiveStats] = [_get_player_season_defensive_stats(player) for player in defense_data]
-    defensive_to_stats: List[PlayerDefensiveStats] = [_get_player_season_defensive_stats(player) for player in defense_to_data]
-    kick_return_stats: List[PlayerKickingStats] = [_get_player_kick_return_stats(player) for player in kick_return_data]
-    kick_stats: List[PlayerKickingStats] = [_get_player_season_kicking_stats(player) for player in kicking_data]
-    passing_stats: List[PlayerPassingStats] = [_get_player_season_passing_stats(player) for player in passing_data]
-    punt_return_stats: List[PlayerPuntReturnStats] = [_get_player_season_punt_return_stats(player) for player in punt_return_data]
-    punt_stats: List[PlayerPuntingStats] = [_get_player_season_punting_stats(player) for player in punting_data]
-    receiving_stats: List[PlayerReceivingStats] = [_get_player_season_receiving_stats(player) for player in receiving_data]
-    rushing_stats: List[PlayerRushingStats] = [_get_player_rushing_stats(player) for player in rushing_data]
-    total_off_stats: List[PlayerTotalStats] = [_get_player_season_total_off_stats(player) for player in total_off_data]
+    defensive_stats: List[PlayerDefensiveStats] = [
+        _get_player_season_defensive_stats(player) for player in defense_data]
+    defensive_to_stats: List[PlayerDefensiveStats] = [
+        _get_player_season_defensive_stats(player) for player in defense_to_data]
+    kick_return_stats: List[PlayerKickingStats] = [
+        _get_player_kick_return_stats(player) for player in kick_return_data]
+    kick_stats: List[PlayerKickingStats] = [
+        _get_player_season_kicking_stats(player) for player in kicking_data]
+    passing_stats: List[PlayerPassingStats] = [
+        _get_player_season_passing_stats(player) for player in passing_data]
+    punt_return_stats: List[PlayerPuntReturnStats] = [
+        _get_player_season_punt_return_stats(player) for player in punt_return_data]
+    punt_stats: List[PlayerPuntingStats] = [
+        _get_player_season_punting_stats(player) for player in punting_data]
+    receiving_stats: List[PlayerReceivingStats] = [
+        _get_player_season_receiving_stats(player) for player in receiving_data]
+    rushing_stats: List[PlayerRushingStats] = [
+        _get_player_rushing_stats(player) for player in rushing_data]
+    total_off_stats: List[PlayerTotalStats] = [
+        _get_player_season_total_off_stats(player) for player in total_off_data]
 
     # Convert players to json for response
     defensive_stats_json = defensive_stats_schema.dump(defensive_stats)

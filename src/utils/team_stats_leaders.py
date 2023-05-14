@@ -1,16 +1,13 @@
 
 from typing import List
 from sqlalchemy import desc
-from src.constants import (
-    session,
-    team_game_records_schema,
-    team_season_records_schema
-)
+from src.constants import session
 from src.data_models.TeamInfoData import TeamInfoData
 from src.data_models.TeamGameStatsData import TeamGameStatsData
 from src.data_models.TeamSeasonStatsData import TeamSeasonStatsData
 from src.data_models.WeekYearData import WeekYearData
 from src.models.Teams import TeamSeasonRecord, TeamGameRecord
+from src.schemas.Teams import team_game_records_schema, team_season_records_schema
 from src.utils.team import _get_team_info_and_season_stats, _get_team_info_and_game_stats
 
 
