@@ -62,7 +62,7 @@ session = Session()
 Base = declarative_base()
 
 # Mac file path
-dynasty_dir_path = os.environ['DYNASTY_DIR_PATH']
+dynasty_dir_path = os.environ.get('DYNASTY_DIR_PATH')
 dynasty_file_name = 'OD-4Bros3_week2'
 dynasty_file_path = dynasty_dir_path + dynasty_file_name
 
