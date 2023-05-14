@@ -39,4 +39,14 @@ To run the app locally, use the following command from the app's home directory
 python app.py
 ```
 
+To run the app within a Docker container, run the following command:
+```
+docker compose up
+```
+
+To stop and remove the Docker container, run the following command:
+```
+python app.py
+```
+
 Happy coding!
