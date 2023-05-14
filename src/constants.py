@@ -61,12 +61,10 @@ Session = sessionmaker(bind=engine)
 session = Session()
 Base = declarative_base()
 
-# File constants
-# Windows file path
-# dynasty_file_path = 'D:\Content\E00001485AECABB5\\454109B6\\00000001\OD-4Bros3'
 # Mac file path
-data_dynasty_file_path = '/Users/sgreen4/Desktop/data/dynasty3/2041/OD-4Bros3_week2'
-# data_dir = '/Users/sgreen4/Desktop/data/dynasty3/2036-final'
+dynasty_dir_path = os.environ['DYNASTY_DIR_PATH']
+dynasty_file_name = 'OD-4Bros3_week2'
+dynasty_file_path = dynasty_dir_path + dynasty_file_name
 
 # User/coach information
 ben: CoachInfo = CoachInfo(
@@ -102,7 +100,6 @@ users: List[CoachInfo] = [ben, brent, dan, seth]
 user_teams = {user.team_name for user in users}
 corrupt_team_ids: List[int] = [160, 161, 162, 163, 164, 300, 400, 1023]
 corrupt_player_ids: List[int] = [65535, 4, 8, 2, 13]
-
 
 # Schema constants
 coach_season_record_schema = CoachSeasonRecordSchema()
@@ -145,7 +142,6 @@ team_roster_schema = TeamRosterSchema(many=True)
 total_stat_schema = PlayerTotalStatsSchema()
 total_stats_schema = PlayerTotalStatsSchema(many=True)
 week_year_schema = WeekYearSchema()
-
 
 # String Enums
 class Positions():
