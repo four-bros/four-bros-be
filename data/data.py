@@ -3,13 +3,13 @@ from collections import Counter
 import ncaa_dynasty
 
 from src.constants import (
-    data_dynasty_file_path,
+    dynasty_file_path,
     user_teams
 )
 from src.utils.helpers import _convert_stats_year
 
 
-data = ncaa_dynasty.read_database(data_dynasty_file_path, user_teams)
+data = ncaa_dynasty.read_database(dynasty_file_path, user_teams)
 
 # List of records for each data category
 def_stats = data['Defensive Stats'].records
