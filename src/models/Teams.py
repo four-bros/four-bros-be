@@ -284,3 +284,17 @@ class TeamSummary:
         self.team_details = team_details
         self.team_roster = team_roster
         self.team_stats = team_stats
+
+class TeamDetailsSummary:
+    def __init__(
+        self,
+        team_details: TeamDetails
+    ):
+        self.team_details = team_details
+
+class TeamRosterSummary:
+    def __init__(
+        self,
+        team_roster: List[TeamRoster]
+    ):
+        self.team_roster = team_roster

@@ -1,9 +1,11 @@
 from flask import Blueprint, request
 
-from src.blueprints.view_methods.teams import(
+from src.blueprints.view_methods.teams import (
     get_all_teams,
     get_team_by_team_id,
-    get_team_player_stats
+    get_team_player_stats,
+    get_team_details,
+    get_team_roster
 )
 
 
@@ -19,9 +21,16 @@ def teams_get_all():
 def teams_get_by_team_id(team_id: int):
     return get_team_by_team_id(team_id)
 
+
+@teams_bp.route('/<team_id>/details', methods=['GET'])
+def get_team_details_by_id(team_id: int):
+    return get_team_details(team_id)
+
+
 @teams_bp.route('/<team_id>/roster', methods=['GET'])
-def teams_get_by_team_id(team_id: int):
-    return get_team_by_team_id(team_id)
+def get_team_roster_by_id(team_id: int):
+    return get_team_roster(team_id)
+
 
 @teams_bp.route('/<team_id>/stats', methods=['GET'])
 def teams_get_player_stats(team_id: int):
