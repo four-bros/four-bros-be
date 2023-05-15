@@ -1,5 +1,5 @@
 from typing import List
-
+import redis
 from src.blueprints.coach import coach_bp
 from src.blueprints.commits import commits_bp
 from src.blueprints.home import home_bp
@@ -25,6 +25,8 @@ blueprints = [
 
 for bp in blueprints:
     app.register_blueprint(bp, url_prefix=f'/{bp.name}')
+
+cache = redis.Redis(host='redis', port=6379)
 
 
 @app.route('/', methods=['GET'])

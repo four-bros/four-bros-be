@@ -1,3 +1,4 @@
+from dotenv import load_dotenv
 from typing import List
 from urllib.parse import urlparse
 from flask import Flask
@@ -46,23 +47,24 @@ from src.schemas.WeekYear import (
 app = Flask(__name__)
 CORS(app)
 
+# Environment
+load_dotenv()
+
 # DB constants
 DB_URL = os.environ['DATABASE_URL']
 if DB_URL.startswith("postgres://"):
     DB_URL = DB_URL.replace("postgres://", "postgresql://", 1)
-# app.config['SQL_ALCHEMY_DATABASE_URI'] = DB_URL
+
 conn = psycopg2.connect(DB_URL, sslmode='require')
 engine = create_engine(DB_URL, echo=False, future=True, pool_pre_ping=True)
 Session = sessionmaker(bind=engine)
 session = Session()
 Base = declarative_base()
 
-# File constants
-# Windows file path
-# dynasty_file_path = 'D:\Content\E00001485AECABB5\\454109B6\\00000001\OD-4Bros3'
 # Mac file path
-data_dynasty_file_path = '/Users/sgreen4/Desktop/data/dynasty3/2042/OD-4Bros3_week18make'
-# data_dir = '/Users/sgreen4/Desktop/data/dynasty3/2024-fix-b'
+dynasty_dir_path = '/Users/sgreen4/Desktop/data/dynasty3/2043/'
+dynasty_file_name = 'OD-4Bros3_week2'
+dynasty_file_path = dynasty_dir_path + dynasty_file_name
 
 # User/coach information
 ben: CoachInfo = CoachInfo(
@@ -99,7 +101,6 @@ user_teams = {user.team_name for user in users}
 corrupt_team_ids: List[int] = [160, 161, 162, 163, 164, 300, 400, 1023]
 corrupt_player_ids: List[int] = [65535, 4, 8, 2, 13]
 
-
 # Schema constants
 coach_season_record_schema = CoachSeasonRecordSchema()
 coach_stat_schema = CoachStatsSchema()
@@ -134,7 +135,6 @@ rushing_stats_schema = PlayerRushingStatsSchema(many=True)
 total_stat_schema = PlayerTotalStatsSchema()
 total_stats_schema = PlayerTotalStatsSchema(many=True)
 week_year_schema = WeekYearSchema()
-
 
 # String Enums
 class Positions():
