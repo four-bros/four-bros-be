@@ -1,6 +1,5 @@
 from dotenv import load_dotenv
 from typing import List
-from urllib.parse import urlparse
 from flask import Flask
 from flask_cors import CORS
 import os
@@ -10,7 +9,6 @@ from sqlalchemy.orm import (
     declarative_base,
     sessionmaker
 )
-
 from src.models.Coach import CoachInfo
 from src.schemas.Coach import (
     CoachSeasonRecordSchema,
@@ -31,16 +29,7 @@ from src.schemas.Stats import (
     PlayerRushingStatsSchema,
     PlayerTotalStatsSchema,
 )
-from src.schemas.Teams import (
-    TeamSummarySchema,
-    RosterSchema,
-    DetailsSchema,
-    TeamGameRecordSchema,
-    TeamSeasonRecordSchema
-)
-from src.schemas.WeekYear import (
-    WeekYearSchema
-)
+from src.schemas.WeekYear import WeekYearSchema
 
 
 # App constants

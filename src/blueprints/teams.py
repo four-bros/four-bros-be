@@ -14,7 +14,7 @@ teams_bp = Blueprint('teams', __name__)
 
 @teams_bp.route('', methods=['GET'])
 def teams_get_all():
-    return get_all_teams(request)
+    return get_all_teams()
 
 
 @teams_bp.route('/<team_id>', methods=['GET'])

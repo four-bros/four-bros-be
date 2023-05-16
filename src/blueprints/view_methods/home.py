@@ -7,10 +7,10 @@ from src.constants import (
 from src.data_models.WeekYearData import WeekYearData
 from src.data_models.TeamInfoData import TeamInfoData
 from src.models.WeekYear import WeekYear
-from src.schemas.Teams import team_details_schema
+from src.schemas.Teams import details_schema
 
 
-def get_home_data(request):
+def get_home_data():
 
     week_year: WeekYearData = session.query(WeekYearData).order_by(
         desc(WeekYearData.year),
@@ -29,7 +29,7 @@ def get_home_data(request):
 
     # dump objects to JSON
     week_year_json = week_year_schema.dump(current_week_year)
-    user_teams_json = team_details_schema.dump(user_teams)
+    user_teams_json = details_schema.dump(user_teams)
 
     response = {
         'week_year': week_year_json,

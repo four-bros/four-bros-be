@@ -62,18 +62,19 @@ from src.schemas.Teams import (
     TeamSummarySchema,
     team_schema,
     team_details_schema,
-    team_roster_schema
+    team_roster_schema,
+    details_schema
 )
 
 
-def get_all_teams(request):
+def get_all_teams():
 
     teams: List[TeamInfoData] = session.query(TeamInfoData).order_by(
         desc(TeamInfoData.is_user),
         TeamInfoData.team_name
     ).all()
 
-    teams_json = team_details_schema.dump(teams)
+    teams_json = details_schema.dump(teams)
 
     response = {
         'teams': teams_json
