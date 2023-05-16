@@ -150,7 +150,6 @@ class TeamSeasonRecordSchema(Schema):
 # initiate schemas
 details_schema = DetailsSchema(many=True)
 team_details_schema = TeamDetailsSchema()
-teams_details_schema = TeamDetailsSchema(many=True)
 team_info_schema = TeamInfoSchema()
 teams_info_schema = TeamInfoSchema(many=True)
 team_roster_schema = TeamRosterSchema()

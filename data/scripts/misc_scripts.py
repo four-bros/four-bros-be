@@ -27,7 +27,7 @@ async def insert_commits_into_db(week_year_data, commits):
 
         new_commit = CommitsData(
             stars=record.fields['Stars'],
-            name=record.fields['Name'] if record.fields['Name'] != 'George Robinson' else 'George Robinson II',
+            name=record.fields['Name'],
             position=record.fields['Position'],
             rank=record.fields['Rank'],
             school=record.fields['School'],

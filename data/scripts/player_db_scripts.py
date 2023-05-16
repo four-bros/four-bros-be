@@ -140,7 +140,6 @@ async def insert_player_info_into_db(player_info):
 
         if not player_query:
             new_players.append(player)
-            # session.add(player)
             
         else:
             player_query.first_name=player.first_name
