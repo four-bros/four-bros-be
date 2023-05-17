@@ -298,3 +298,10 @@ class TeamRosterSummary:
         team_roster: List[TeamRoster]
     ):
         self.team_roster = team_roster
+    
+class TeamStatsSummary:
+    def __init__(
+        self,
+        team_stats: TeamSeasonStats
+    ):
+        self.team_stats = team_stats

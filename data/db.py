@@ -1,6 +1,4 @@
 import asyncio
-import os
-import ncaa_dynasty
 import time
 
 # from src.constants import data_dir, user_teams

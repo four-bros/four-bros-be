@@ -53,16 +53,19 @@ from src.models.Teams import (
     TeamRoster,
     TeamSeasonStats,
     TeamDetailsSummary,
-    TeamRosterSummary
+    TeamRosterSummary,
+    TeamStatsSummary
 )
 from src.schemas.Teams import (
     DetailsSchema,
     TeamDetailsSchema,
     TeamRosterSchema,
+    TeamStatsSchema,
     TeamSummarySchema,
     team_schema,
     team_details_schema,
     team_roster_schema,
+    team_stats_schema,
     details_schema
 )
 
@@ -295,5 +298,25 @@ def get_team_player_stats(team_id):
         'rushing': rushing_stats_json,
         'total': total_stats_json
     }
+
+    return response
+
+def get_team_stats(team_id):
+    week_year: WeekYearData = session.query(WeekYearData).order_by(
+        desc(WeekYearData.year)
+    ).first()
+    team_stats_data: TeamSeasonStatsData = session.query(TeamSeasonStatsData).where(
+        TeamSeasonStatsData.team_id == team_id,
+        TeamSeasonStatsData.year == week_year.year
+    ).scalar()
+
+    if team_stats_data is None:
+        return {}
+
+    team_stats: TeamSeasonStats = _get_team_season_stats(team_stats_data=team_stats_data)
+
+    team_stats_summary: TeamStatsSummary = TeamStatsSummary(team_stats=team_stats)
+
+    response: TeamStatsSchema = team_stats_schema.dump(team_stats_summary)
 
     return response
