@@ -49,35 +49,28 @@ from src.models.Stats import (
 )
 from src.models.Teams import (
     TeamDetails,
-    TeamSummary,
     TeamRoster,
-    TeamSeasonStats,
-    TeamDetailsSummary,
-    TeamRosterSummary,
-    TeamStatsSummary
+    TeamSeasonStats
 )
 from src.schemas.Teams import (
-    DetailsSchema,
+    TeamDetailsSchema,
     TeamDetailsSchema,
     TeamRosterSchema,
-    TeamStatsSchema,
-    TeamSummarySchema,
-    team_schema,
+    team_details_schema,
     team_details_schema,
     team_roster_schema,
     team_stats_schema,
-    details_schema
+    teams_details_schema
 )
 
 
 def get_all_teams():
-
     teams: List[TeamInfoData] = session.query(TeamInfoData).order_by(
         desc(TeamInfoData.is_user),
         TeamInfoData.team_name
     ).all()
 
-    teams_json = details_schema.dump(teams)
+    teams_json = teams_details_schema.dump(teams)
 
     response = {
         'teams': teams_json
@@ -85,44 +78,7 @@ def get_all_teams():
 
     return response
 
-
-def get_team_by_team_id(team_id) -> TeamSummarySchema:
-
-    week_year: WeekYearData = session.query(WeekYearData).order_by(
-        desc(WeekYearData.year)
-    ).first()
-    team_info_data: TeamInfoData = session.query(
-        TeamInfoData).where(TeamInfoData.id == team_id).one()
-    team_stats_data: TeamSeasonStatsData = session.query(TeamSeasonStatsData).where(
-        TeamSeasonStatsData.team_id == team_id,
-        TeamSeasonStatsData.year == week_year.year
-    ).scalar()
-
-    players: List[PlayerInfoData] = session.query(PlayerInfoData).where(
-        PlayerInfoData.team_id == team_id,
-        PlayerInfoData.is_active == True,
-    ).order_by(desc(PlayerInfoData.overall)).all()
-
-    team_stats: TeamSeasonStats = []
-
-    team_details: TeamDetails = _get_team_details(
-        team_info=team_info_data, players=players)
-    if team_stats_data:
-        team_stats: TeamSeasonStats = _get_team_season_stats(
-            team_stats_data=team_stats_data)
-    team_roster: TeamRoster = [_get_team_roster(player) for player in players]
-
-    team_info: TeamSummary = TeamSummary(
-        team_details=team_details,
-        team_roster=team_roster,
-        team_stats=team_stats
-    )
-
-    response: TeamSummarySchema = team_schema.dump(team_info)
-
-    return response
-
-def get_team_details(team_id) -> DetailsSchema:
+def get_team_details(team_id) -> TeamDetailsSchema:
     team_info_data: TeamInfoData = session.query(
         TeamInfoData).where(TeamInfoData.id == team_id).one()
 
@@ -133,9 +89,7 @@ def get_team_details(team_id) -> DetailsSchema:
 
     team_details: TeamDetails = _get_team_details(team_info=team_info_data, players=players)
 
-    team_details_summary: TeamDetailsSummary = TeamDetailsSummary(team_details=team_details)
-
-    response: TeamDetailsSchema = team_details_schema.dump(team_details_summary)
+    response: TeamDetailsSchema = team_details_schema.dump(team_details)
 
     return response
 
@@ -146,11 +100,9 @@ def get_team_roster(team_id) -> List[TeamRoster]:
         PlayerInfoData.is_active == True,
     ).order_by(desc(PlayerInfoData.overall)).all()
 
-    team_roster: TeamRoster = [_get_team_roster(player) for player in players]
+    team_roster: List[TeamRoster] = [_get_team_roster(player) for player in players]
 
-    team_roster_summary: TeamRosterSummary = TeamRosterSummary(team_roster=team_roster)
-
-    response: TeamRosterSchema = team_roster_schema.dump(team_roster_summary)
+    response: TeamRosterSchema = team_roster_schema.dump(team_roster)
 
     return response
 
@@ -315,8 +267,6 @@ def get_team_stats(team_id):
 
     team_stats: TeamSeasonStats = _get_team_season_stats(team_stats_data=team_stats_data)
 
-    team_stats_summary: TeamStatsSummary = TeamStatsSummary(team_stats=team_stats)
-
-    response: TeamStatsSchema = team_stats_schema.dump(team_stats_summary)
+    response: TeamStatsSchema = team_stats_schema.dump(team_stats)
 
     return response

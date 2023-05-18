@@ -3,7 +3,7 @@ from marshmallow import Schema, fields
 from src.schemas.Players import PlayerDetailsSchema
 
 
-class DetailsSchema(Schema):
+class TeamDetailsSchema(Schema):
     id = fields.Int()
     team_name = fields.Str()
     team_short_name = fields.Str()
@@ -30,7 +30,7 @@ class TeamInfoSchema(Schema):
     is_user = fields.Bool()
 
 
-class RosterSchema(PlayerDetailsSchema):
+class TeamRosterSchema(PlayerDetailsSchema):
     id = fields.Str()
     first_name = fields.Str()
     last_name = fields.Str()
@@ -119,24 +119,6 @@ class TeamSeasonStatsSchema(Schema):
     pr_tds = fields.Int()
 
 
-class TeamDetailsSchema(Schema):
-    team_details = fields.Nested(DetailsSchema)
-
-
-class TeamRosterSchema(Schema):
-    team_roster = fields.List(fields.Nested(RosterSchema))
-
-
-class TeamStatsSchema(Schema):
-    team_stats = fields.Nested(TeamSeasonStatsSchema)
-
-
-class TeamSummarySchema(Schema):
-    team_details = fields.Nested(DetailsSchema)
-    team_roster = fields.List(fields.Nested(RosterSchema))
-    team_stats = fields.Nested(TeamSeasonStatsSchema)
-
-
 class TeamGameRecordSchema(Schema):
     team_info = fields.Nested(TeamInfoSchema)
     team_stats = fields.Nested(TeamGameStatsSchema)
@@ -148,14 +130,12 @@ class TeamSeasonRecordSchema(Schema):
 
 
 # initiate schemas
-details_schema = DetailsSchema(many=True)
 team_details_schema = TeamDetailsSchema()
+teams_details_schema = TeamDetailsSchema(many=True)
 team_info_schema = TeamInfoSchema()
 teams_info_schema = TeamInfoSchema(many=True)
-team_roster_schema = TeamRosterSchema()
-team_stats_schema = TeamStatsSchema()
-team_schema = TeamSummarySchema()
-teams_schema = TeamSummarySchema(many=True)
+team_roster_schema = TeamRosterSchema(many=True)
+team_stats_schema = TeamSeasonStatsSchema()
 team_season_record_schema = TeamSeasonRecordSchema()
 team_season_records_schema = TeamSeasonRecordSchema(many=True)
 team_game_record_schema = TeamGameRecordSchema()

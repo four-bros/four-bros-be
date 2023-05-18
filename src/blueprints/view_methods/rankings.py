@@ -1,9 +1,9 @@
 from typing import List
 from src.constants import session
 from src.data_models.TeamInfoData import TeamInfoData
-from src.schemas.Teams import teams_info_schema
+from src.schemas.Teams import teams_details_schema
 
-def get_all_rankings(request):
+def get_all_rankings():
     coachs_poll_data: List[TeamInfoData] = session.query(TeamInfoData).where(
         TeamInfoData.coachs_poll_points > 0
     ).order_by(
@@ -21,9 +21,9 @@ def get_all_rankings(request):
     ).limit(10)
 
     # convert data to json
-    coachs_poll = teams_info_schema.dump(coachs_poll_data)
-    medial_poll = teams_info_schema.dump(media_poll_data)
-    bcs_poll = teams_info_schema.dump(bcs_data)
+    coachs_poll = teams_details_schema.dump(coachs_poll_data)
+    medial_poll = teams_details_schema.dump(media_poll_data)
+    bcs_poll = teams_details_schema.dump(bcs_data)
 
     response = {
         'coachs_poll': coachs_poll,
