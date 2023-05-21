@@ -57,6 +57,8 @@ async def insert_player_info_into_db(player_info):
     start_time = time.time()
     print('Starting insert PlayerInfo script.')
 
+    new_players: List[PlayerInfoData] = []
+
     for i, value in enumerate(player_info):
         
         record = player_info[i]
@@ -136,7 +138,7 @@ async def insert_player_info_into_db(player_info):
             ).scalar()
 
         if not player_query:
-            session.add(player)
+            new_players.append(player)
             
         else:
             player_query.first_name=player.first_name
@@ -191,6 +193,7 @@ async def insert_player_info_into_db(player_info):
             player_query.is_active=player.is_active
 
     try:
+        session.add_all(new_players)
         session.commit()
     except:
         session.rollback()

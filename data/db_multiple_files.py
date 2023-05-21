@@ -8,7 +8,126 @@ from src.constants import (
     user_teams
 )
 from src.utils.helpers import _convert_stats_year
-from db import main
+from scripts.career_db_scripts import (
+    insert_career_def_stats_into_db,
+    insert_career_kicking_stats_into_db,
+    insert_career_off_stats_into_db,
+    insert_career_return_stats_into_db
+)
+from scripts.player_db_scripts import (
+    deactivate_inactive_players,
+    insert_player_info_into_db,
+)
+from scripts.season_db_scripts import (
+    insert_season_def_stats_into_db,
+    insert_season_kicking_stats_into_db,
+    insert_season_off_stats_into_db,
+    insert_season_return_stats_into_db,
+)
+from scripts.team_db_scripts import (
+    insert_team_info_into_db,
+    insert_team_game_stats_into_db,
+    insert_team_season_stats_into_db
+)
+from scripts.game_db_scripts import (
+    insert_game_def_stats_into_db,
+    insert_game_kicking_stats_into_db,
+    insert_game_off_stats_into_db,
+    insert_game_return_stats_into_db
+)
+
+
+async def main():
+    ########################################################
+    ############ Drop DB tables if necessary. ##############
+    ############ typically only necessary if ###############
+    ############ updating table structure ##################
+    ########################################################
+    # Base.metadata.drop_all(engine)
+
+    ########################
+    # Create all DB tables #
+    ########################
+    # Base.metadata.create_all(engine)
+
+    ################################
+    # Insert all data to DB tables #
+    ################################
+
+    # await asyncio.gather(insert_week_year_into_db(week_year))
+
+    # await asyncio.gather(
+    #     insert_team_info_into_db(team_info),
+    #     insert_coach_info_into_db(week_year),
+    #     insert_commits_into_db(week_year, commits)
+    # )
+
+    current_week: int = week_year[0].fields['Week']
+    current_week: int = week_year[0].fields['Year']
+
+    await asyncio.gather(deactivate_inactive_players(week_year, player_info))
+    # await asyncio.gather(insert_player_info_into_db(player_info))
+
+    await asyncio.gather(
+        insert_game_return_stats_into_db(week_year, return_stats)
+    )
+
+    await asyncio.gather(
+        insert_season_return_stats_into_db(week_year, return_stats),
+    )
+
+    await asyncio.gather(
+        insert_game_def_stats_into_db(week_year, def_stats),
+        insert_game_kicking_stats_into_db(week_year, kicking_stats),
+        insert_game_off_stats_into_db(week_year, off_stats),
+    )
+    
+    ##########################################################################
+    # Note: season_return_stats needs to be run prior to offensive stats.
+    # This is because total_yards, total_tds, etc. are reliant on pulling 
+    # data from the season_return_stats table.
+    ##########################################################################
+
+    await asyncio.gather(
+        # insert_coach_stats_into_db(week_year),
+        insert_season_def_stats_into_db(week_year, def_stats),
+        insert_season_kicking_stats_into_db(week_year, kicking_stats),
+        insert_season_off_stats_into_db(week_year, off_stats)
+    )
+    
+    # ##########################################################################
+    # # Note: all team_stats, career_stats and game_stats scripts need 
+    # # to be run after all season_stats scripts. This is because these 
+    # # scripts are reliant on data from all the various season_stats tables.
+    # ##########################################################################
+
+    await asyncio.gather(
+        insert_team_season_stats_into_db(week_year),
+        # insert_career_return_stats_into_db(week_year, return_stats),
+        # insert_career_def_stats_into_db(week_year, def_stats),
+        # insert_career_kicking_stats_into_db(week_year, kicking_stats),
+    )
+
+    await asyncio.gather(
+      insert_team_game_stats_into_db(week_year),
+      # insert_career_off_stats_into_db(week_year, off_stats),
+    )
+
+    # if current_week >= 22:
+    #    await asyncio.gather(
+    #     insert_career_return_stats_into_db(week_year, return_stats),
+    #     insert_career_def_stats_into_db(week_year, def_stats),
+    #     insert_career_kicking_stats_into_db(week_year, kicking_stats),
+    #     insert_career_off_stats_into_db(week_year, off_stats),
+    #    )
+
+    # await asyncio.gather(
+    #     cache_player_career_records(),
+    #     cache_player_game_records(),
+    #     cache_player_season_records(),
+    #     cache_team_game_records(),
+    #     cache_team_season_records()
+    # )
 
 
 start_time = time.time()

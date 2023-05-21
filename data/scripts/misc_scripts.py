@@ -24,7 +24,7 @@ async def insert_commits_into_db(week_year_data, commits):
     
     for i, value in enumerate(commits):
         record = commits[i]
-        
+
         new_commit = CommitsData(
             stars=record.fields['Stars'],
             name=record.fields['Name'],

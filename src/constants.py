@@ -1,16 +1,14 @@
 from dotenv import load_dotenv
 from typing import List
-from urllib.parse import urlparse
 from flask import Flask
 from flask_cors import CORS
 import os
 import psycopg2
 from sqlalchemy import create_engine
-from sqlalchemy.orm import(
+from sqlalchemy.orm import (
     declarative_base,
     sessionmaker
 )
-
 from src.models.Coach import CoachInfo
 from src.schemas.Coach import (
     CoachSeasonRecordSchema,
@@ -31,16 +29,7 @@ from src.schemas.Stats import (
     PlayerRushingStatsSchema,
     PlayerTotalStatsSchema,
 )
-from src.schemas.Teams import (
-    TeamSummarySchema,
-    TeamRosterSchema,
-    TeamDetailsSchema,
-    TeamGameRecordSchema,
-    TeamSeasonRecordSchema
-)
-from src.schemas.WeekYear import (
-    WeekYearSchema
-)
+from src.schemas.WeekYear import WeekYearSchema
 
 
 # App constants
@@ -131,14 +120,7 @@ return_stat_schema = PlayerKickReturnAndPuntReturnStatsSchema()
 return_stats_schema = PlayerKickReturnAndPuntReturnStatsSchema(many=True)
 rushing_stat_schema = PlayerRushingStatsSchema()
 rushing_stats_schema = PlayerRushingStatsSchema(many=True)
-team_details_schema = TeamDetailsSchema(many=True)
-team_schema = TeamSummarySchema()
-teams_schema = TeamSummarySchema(many=True)
-team_season_record_schema = TeamSeasonRecordSchema()
-team_season_records_schema = TeamSeasonRecordSchema(many=True)
-team_game_record_schema = TeamGameRecordSchema()
-team_game_records_schema = TeamGameRecordSchema(many=True)
-team_roster_schema = TeamRosterSchema(many=True)
+
 total_stat_schema = PlayerTotalStatsSchema()
 total_stats_schema = PlayerTotalStatsSchema(many=True)
 week_year_schema = WeekYearSchema()

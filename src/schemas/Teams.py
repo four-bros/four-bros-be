@@ -119,12 +119,6 @@ class TeamSeasonStatsSchema(Schema):
     pr_tds = fields.Int()
 
 
-class TeamSummarySchema(Schema):
-    team_details = fields.Nested(TeamDetailsSchema)
-    team_roster = fields.List(fields.Nested(TeamRosterSchema))
-    team_stats = fields.Nested(TeamSeasonStatsSchema)
-
-
 class TeamGameRecordSchema(Schema):
     team_info = fields.Nested(TeamInfoSchema)
     team_stats = fields.Nested(TeamGameStatsSchema)
@@ -133,3 +127,16 @@ class TeamGameRecordSchema(Schema):
 class TeamSeasonRecordSchema(Schema):
     team_info = fields.Nested(TeamInfoSchema)
     team_stats = fields.Nested(TeamSeasonStatsSchema)
+
+
+# initiate schemas
+team_details_schema = TeamDetailsSchema()
+teams_details_schema = TeamDetailsSchema(many=True)
+team_info_schema = TeamInfoSchema()
+teams_info_schema = TeamInfoSchema(many=True)
+team_roster_schema = TeamRosterSchema(many=True)
+team_stats_schema = TeamSeasonStatsSchema()
+team_season_record_schema = TeamSeasonRecordSchema()
+team_season_records_schema = TeamSeasonRecordSchema(many=True)
+team_game_record_schema = TeamGameRecordSchema()
+team_game_records_schema = TeamGameRecordSchema(many=True)

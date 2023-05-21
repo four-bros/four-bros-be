@@ -2,16 +2,15 @@ from typing import List
 from sqlalchemy import desc
 from src.constants import (
     session,
-    team_details_schema,
     week_year_schema
 )
 from src.data_models.WeekYearData import WeekYearData
 from src.data_models.TeamInfoData import TeamInfoData
 from src.models.WeekYear import WeekYear
-from src.utils.team_stats import _get_team_details
+from src.schemas.Teams import teams_details_schema
 
 
-def get_home_data(request):
+def get_home_data():
 
     week_year: WeekYearData = session.query(WeekYearData).order_by(
         desc(WeekYearData.year),
@@ -30,7 +29,7 @@ def get_home_data(request):
 
     # dump objects to JSON
     week_year_json = week_year_schema.dump(current_week_year)
-    user_teams_json = team_details_schema.dump(user_teams)
+    user_teams_json = teams_details_schema.dump(user_teams)
 
     response = {
         'week_year': week_year_json,
