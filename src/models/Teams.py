@@ -295,9 +295,9 @@ class TeamDetailsSummary:
 class TeamRosterSummary:
     def __init__(
         self,
-        team_roster: List[TeamRoster]
+        roster: List[TeamRoster]
     ):
-        self.team_roster = team_roster
+        self.roster = roster
     
 class TeamStatsSummary:
     def __init__(

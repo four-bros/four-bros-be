@@ -30,7 +30,7 @@ class TeamInfoSchema(Schema):
     is_user = fields.Bool()
 
 
-class TeamRosterSchema(PlayerDetailsSchema):
+class RosterSchema(PlayerDetailsSchema):
     id = fields.Str()
     first_name = fields.Str()
     last_name = fields.Str()
@@ -119,6 +119,9 @@ class TeamSeasonStatsSchema(Schema):
     pr_tds = fields.Int()
 
 
+class TeamRosterSchema(RosterSchema):
+    roster = fields.List(fields.Nested(RosterSchema))
+
 class TeamGameRecordSchema(Schema):
     team_info = fields.Nested(TeamInfoSchema)
     team_stats = fields.Nested(TeamGameStatsSchema)
@@ -134,7 +137,7 @@ team_details_schema = TeamDetailsSchema()
 teams_details_schema = TeamDetailsSchema(many=True)
 team_info_schema = TeamInfoSchema()
 teams_info_schema = TeamInfoSchema(many=True)
-team_roster_schema = TeamRosterSchema(many=True)
+team_roster_schema = TeamRosterSchema()
 team_stats_schema = TeamSeasonStatsSchema()
 team_season_record_schema = TeamSeasonRecordSchema()
 team_season_records_schema = TeamSeasonRecordSchema(many=True)

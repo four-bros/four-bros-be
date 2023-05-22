@@ -50,11 +50,13 @@ from src.models.Stats import (
 from src.models.Teams import (
     TeamDetails,
     TeamRoster,
-    TeamSeasonStats
+    TeamSeasonStats,
+    TeamRosterSummary
 )
 from src.schemas.Teams import (
     TeamDetailsSchema,
     TeamDetailsSchema,
+    RosterSchema,
     TeamRosterSchema,
     team_details_schema,
     team_details_schema,
@@ -87,22 +89,26 @@ def get_team_details(team_id) -> TeamDetailsSchema:
         PlayerInfoData.is_active == True,
     ).order_by(desc(PlayerInfoData.overall)).all()
 
-    team_details: TeamDetails = _get_team_details(team_info=team_info_data, players=players)
+    team_details: TeamDetails = _get_team_details(
+        team_info=team_info_data, players=players)
 
     response: TeamDetailsSchema = team_details_schema.dump(team_details)
 
     return response
 
-def get_team_roster(team_id) -> List[TeamRoster]:
+def get_team_roster(team_id) -> TeamRosterSchema:
 
     players: List[PlayerInfoData] = session.query(PlayerInfoData).where(
         PlayerInfoData.team_id == team_id,
         PlayerInfoData.is_active == True,
     ).order_by(desc(PlayerInfoData.overall)).all()
 
-    team_roster: List[TeamRoster] = [_get_team_roster(player) for player in players]
+    team_roster: List[TeamRoster] = [
+        _get_team_roster(player) for player in players]
+    
+    team_roster_summary: TeamRosterSummary = TeamRosterSummary(roster=team_roster)
 
-    response: TeamRosterSchema = team_roster_schema.dump(team_roster)
+    response: TeamRosterSchema = team_roster_schema.dump(team_roster_summary)
 
     return response
 
@@ -253,6 +259,7 @@ def get_team_player_stats(team_id):
 
     return response
 
+
 def get_team_stats(team_id):
     week_year: WeekYearData = session.query(WeekYearData).order_by(
         desc(WeekYearData.year)
@@ -265,7 +272,8 @@ def get_team_stats(team_id):
     if team_stats_data is None:
         return {}
 
-    team_stats: TeamSeasonStats = _get_team_season_stats(team_stats_data=team_stats_data)
+    team_stats: TeamSeasonStats = _get_team_season_stats(
+        team_stats_data=team_stats_data)
 
     response: TeamStatsSchema = team_stats_schema.dump(team_stats)
 
