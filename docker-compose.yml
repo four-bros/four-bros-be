@@ -4,5 +4,9 @@ services:
     build: .
     ports:
       - "8000:5000"
+    volumes:
+      - type: bind
+        source: /c/Users/wseth/ncaa-data/2043/
+        target: /four-bros-be/ncaa_data
   redis:
     image: "redis:alpine"

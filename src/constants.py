@@ -50,9 +50,10 @@ Session = sessionmaker(bind=engine)
 session = Session()
 Base = declarative_base()
 
-# Mac file path
-dynasty_dir_path = '/Users/sgreen4/Desktop/data/dynasty3/2043/'
-dynasty_file_name = 'OD-4Bros3_week2'
+# NCAA file path
+DATA_DIR_PATH = os.environ.get('DYNASTY_DIR_PATH')
+dynasty_dir_path = DATA_DIR_PATH if DATA_DIR_PATH is not None else ''
+dynasty_file_name = 'OD-4Bros3_week3'
 dynasty_file_path = dynasty_dir_path + dynasty_file_name
 
 # User/coach information

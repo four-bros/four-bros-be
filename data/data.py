@@ -22,7 +22,7 @@ week_year = data['Week/Year'].records
 team_info = data['Team Info'].records
 
 
-# print(week_year[0].fields)
+print(week_year[0].fields)
 
 # defense_years: List[int] = []
 # kicking_years: List[int] = []
