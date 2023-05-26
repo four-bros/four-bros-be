@@ -127,6 +127,9 @@ class TeamGameRecordSchema(Schema):
     team_stats = fields.Nested(TeamGameStatsSchema)
 
 
+class TeamGameStatsSchema(Schema):
+    team_game_stats = fields.List(fields.Nested(TeamGameStatsSchema))
+
 class TeamSeasonRecordSchema(Schema):
     team_info = fields.Nested(TeamInfoSchema)
     team_stats = fields.Nested(TeamSeasonStatsSchema)
@@ -137,6 +140,8 @@ team_details_schema = TeamDetailsSchema()
 teams_details_schema = TeamDetailsSchema(many=True)
 team_info_schema = TeamInfoSchema()
 teams_info_schema = TeamInfoSchema(many=True)
+team_single_game_stats_schema = TeamGameStatsSchema()
+team_games_stats_schema = TeamGameStatsSchema()
 team_roster_schema = TeamRosterSchema()
 team_stats_schema = TeamSeasonStatsSchema()
 team_season_record_schema = TeamSeasonRecordSchema()

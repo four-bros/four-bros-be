@@ -19,6 +19,7 @@ from src.data_models.SeasonOffensiveStatsData import SeasonOffensiveStatsData
 from src.data_models.SeasonReturnStatsData import SeasonReturnStatsData
 from src.data_models.PlayerInfoData import PlayerInfoData
 from src.data_models.TeamInfoData import TeamInfoData
+from src.data_models.TeamGameStatsData import TeamGameStatsData
 from src.data_models.TeamSeasonStatsData import TeamSeasonStatsData
 from src.data_models.WeekYearData import WeekYearData
 from src.utils.player import (
@@ -34,6 +35,7 @@ from src.utils.player import (
 )
 from src.utils.team_stats import (
     _get_team_details,
+    _get_team_game_stats,
     _get_team_roster,
     _get_team_season_stats
 )
@@ -49,17 +51,20 @@ from src.models.Stats import (
 )
 from src.models.Teams import (
     TeamDetails,
+    TeamGameStats,
+    TeamGameStatsSummary,
     TeamRoster,
     TeamSeasonStats,
     TeamRosterSummary
 )
 from src.schemas.Teams import (
     TeamDetailsSchema,
-    TeamDetailsSchema,
-    RosterSchema,
+    TeamGameStatsSchema,
     TeamRosterSchema,
+    TeamSeasonStatsSchema,
     team_details_schema,
     team_details_schema,
+    team_games_stats_schema,
     team_roster_schema,
     team_stats_schema,
     teams_details_schema
@@ -259,8 +264,27 @@ def get_team_player_stats(team_id):
 
     return response
 
+def get_team_game_stats(team_id):
+    week_year: WeekYearData = session.query(WeekYearData).order_by(
+        desc(WeekYearData.year)
+    ).first()
+    team_game_data: List[TeamGameStatsData] = session.query(TeamGameStatsData).where(
+        TeamGameStatsData.team_id == team_id,
+        TeamGameStatsData.year == week_year.year
+    ).all()
 
-def get_team_stats(team_id):
+    if team_game_data is None:
+        return {}
+
+    team_game_stats: List[TeamGameStats] = [_get_team_game_stats(team_stats_data=game_data) for game_data in team_game_data]
+
+    team_game_stats_summary = TeamGameStatsSummary(team_game_stats=team_game_stats)
+
+    response: TeamGameStatsSchema = team_games_stats_schema.dump(team_game_stats_summary)
+
+    return response
+
+def get_team_season_stats(team_id):
     week_year: WeekYearData = session.query(WeekYearData).order_by(
         desc(WeekYearData.year)
     ).first()
@@ -272,9 +296,8 @@ def get_team_stats(team_id):
     if team_stats_data is None:
         return {}
 
-    team_stats: TeamSeasonStats = _get_team_season_stats(
-        team_stats_data=team_stats_data)
+    team_stats: TeamSeasonStats = _get_team_season_stats(team_stats_data=team_stats_data)
 
-    response: TeamStatsSchema = team_stats_schema.dump(team_stats)
+    response: TeamSeasonStatsSchema = team_stats_schema.dump(team_stats)
 
     return response
