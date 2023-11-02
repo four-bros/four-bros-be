@@ -51,8 +51,8 @@ session = Session()
 Base = declarative_base()
 
 # Mac file path
-dynasty_dir_path = '/Users/sgreen4/Desktop/data/dynasty3/2043/'
-dynasty_file_name = 'OD-4Bros3_week3'
+dynasty_dir_path = '/Users/sgreen4/Desktop/data/dynasty3/2045/'
+dynasty_file_name = 'OD-4Bros3_week7'
 dynasty_file_path = dynasty_dir_path + dynasty_file_name
 
 # User/coach information
@@ -81,8 +81,8 @@ seth: CoachInfo = CoachInfo(
     id='seth',
     first_name='Peewee',
     last_name='FlyGuy',
-    team_id=89,
-    team_name='TCU'
+    team_id=1,
+    team_name='Air Force'
 )
 
 users: List[CoachInfo] = [ben, brent, dan, seth]
