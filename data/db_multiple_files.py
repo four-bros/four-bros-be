@@ -5,7 +5,7 @@ import time
 
 from src.constants import (
     data_dir,
-    user_teams
+    user_team_names
 )
 from src.utils.helpers import _convert_stats_year
 from scripts.career_db_scripts import (
@@ -81,10 +81,10 @@ async def main():
         insert_game_kicking_stats_into_db(week_year, kicking_stats),
         insert_game_off_stats_into_db(week_year, off_stats),
     )
-    
+
     ##########################################################################
     # Note: season_return_stats needs to be run prior to offensive stats.
-    # This is because total_yards, total_tds, etc. are reliant on pulling 
+    # This is because total_yards, total_tds, etc. are reliant on pulling
     # data from the season_return_stats table.
     ##########################################################################
 
@@ -94,10 +94,10 @@ async def main():
         insert_season_kicking_stats_into_db(week_year, kicking_stats),
         insert_season_off_stats_into_db(week_year, off_stats)
     )
-    
+
     # ##########################################################################
-    # # Note: all team_stats, career_stats and game_stats scripts need 
-    # # to be run after all season_stats scripts. This is because these 
+    # # Note: all team_stats, career_stats and game_stats scripts need
+    # # to be run after all season_stats scripts. This is because these
     # # scripts are reliant on data from all the various season_stats tables.
     # ##########################################################################
 
@@ -109,8 +109,8 @@ async def main():
     )
 
     await asyncio.gather(
-      insert_team_game_stats_into_db(week_year),
-      # insert_career_off_stats_into_db(week_year, off_stats),
+        insert_team_game_stats_into_db(week_year),
+        # insert_career_off_stats_into_db(week_year, off_stats),
     )
 
     # if current_week >= 22:
@@ -144,16 +144,17 @@ week_year = None
 team_info = None
 
 
-sorted_data_dir = sorted(os.listdir(data_dir), key = lambda x: int(x.replace('OD-4Bros3_week', '')))
+sorted_data_dir = sorted(os.listdir(data_dir), key=lambda x: int(
+    x.replace('OD-4Bros3_week', '')))
 
 for file in sorted_data_dir:
 
     if '.DS_Store' in file:
-      continue
+        continue
 
     dynasty_file = os.path.join(data_dir, file)
 
-    data = ncaa_dynasty.read_database(dynasty_file, user_teams)
+    data = ncaa_dynasty.read_database(dynasty_file, user_team_names)
 
     # List of records for each data category
     def_stats = data['Defensive Stats'].records
@@ -172,4 +173,5 @@ for file in sorted_data_dir:
     asyncio.run(main())
 
 execution_time = time.time() - start_time
-print(f'All insert scripts took {(round(execution_time, 1))} seconds to complete.')
+print(
+    f'All insert scripts took {(round(execution_time, 1))} seconds to complete.')
