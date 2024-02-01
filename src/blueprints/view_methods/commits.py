@@ -1,10 +1,10 @@
 from typing import List
 from sqlalchemy import desc
 
-from src.constants import(
+from src.constants import (
     commits_schema,
     session,
-    user_teams
+    user_team_names
 )
 from src.data_models.CommitsData import CommitsData
 from src.data_models.WeekYearData import WeekYearData
@@ -26,8 +26,9 @@ def get_all_commits(request):
 
     response = {}
 
-    for team in user_teams:
+    for team in user_team_names:
         key = team.replace(' ', '_').lower()
-        response[key] = commits_schema.dump([commit for commit in commits_data if commit.school == team])
+        response[key] = commits_schema.dump(
+            [commit for commit in commits_data if commit.school == team])
 
     return response

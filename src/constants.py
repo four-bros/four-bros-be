@@ -51,8 +51,8 @@ session = Session()
 Base = declarative_base()
 
 # Mac file path
-dynasty_dir_path = '/Users/sgreen4/Desktop/data/dynasty3/2045/'
-dynasty_file_name = 'OD-4Bros3_week7'
+dynasty_dir_path = '/Users/sgreen4/Desktop/data/dynasty3/2046/'
+dynasty_file_name = 'OD-4Bros3_week8'
 dynasty_file_path = dynasty_dir_path + dynasty_file_name
 
 # User/coach information
@@ -86,7 +86,8 @@ seth: CoachInfo = CoachInfo(
 )
 
 users: List[CoachInfo] = [ben, brent, dan, seth]
-user_teams = {user.team_name for user in users}
+user_team_names = {user.team_name for user in users}
+user_team_ids = {user.team_id for user in users}
 corrupt_team_ids: List[int] = [160, 161, 162, 163, 164, 300, 400, 1023]
 corrupt_player_ids: List[int] = [65535, 4, 8, 2, 13]
 
@@ -126,6 +127,8 @@ total_stats_schema = PlayerTotalStatsSchema(many=True)
 week_year_schema = WeekYearSchema()
 
 # String Enums
+
+
 class Positions():
     QB = 'QB'
     RB = 'RB'

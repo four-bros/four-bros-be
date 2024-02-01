@@ -10,7 +10,6 @@ from src.blueprints.stats import stats_bp
 from src.blueprints.teams import teams_bp
 from src.constants import app
 
-
 blueprints = [
     coach_bp,
     commits_bp,
@@ -22,7 +21,7 @@ blueprints = [
     teams_bp,
 ]
 
-
+# register the various endpoints
 for bp in blueprints:
     app.register_blueprint(bp, url_prefix=f'/{bp.name}')
 
@@ -31,7 +30,6 @@ cache = redis.Redis(host='redis', port=6379)
 
 @app.route('/', methods=['GET'])
 def index():
-
     records_endpoints: List[str] = [
         'career',
         'game',
