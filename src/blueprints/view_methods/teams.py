@@ -101,7 +101,7 @@ def get_team_details_by_id(team_id) -> TeamDetailsSchema:
 
 
 def get_user_teams_details() -> List[TeamDetailsSchema]:
-    response = {}
+    response = { 'data': [] }
 
     for team_id in user_team_ids:
         team_info_data: TeamInfoData = session.query(
@@ -114,8 +114,11 @@ def get_user_teams_details() -> List[TeamDetailsSchema]:
 
         team_details: TeamDetails = _get_team_details(
             team_info=team_info_data, players=players)
+        
+        team = {}
+        team[team_details.team_name] = team_details_schema.dump(team_details)
 
-        response[team_details.team_name] = team_details_schema.dump(team_details)
+        response['data'].append(team)
 
     return response
 
@@ -453,7 +456,7 @@ def get_user_team_stats():
         desc(WeekYearData.year)
     ).first()
 
-    response = {}
+    response = { 'data': []}
 
     for user in users:
         team_stats_data: TeamSeasonStatsData = session.query(TeamSeasonStatsData).where(
@@ -466,7 +469,10 @@ def get_user_team_stats():
 
         team_stats: TeamSeasonStats = _get_team_season_stats(
             team_stats_data=team_stats_data)
+        
+        team = {}
+        team[user.team_name] = team_stats_schema.dump(team_stats)
 
-        response[user.team_name] = team_stats_schema.dump(team_stats)
+        response['data'].append(team)
 
     return response
