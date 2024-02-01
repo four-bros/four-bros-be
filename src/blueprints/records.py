@@ -6,8 +6,6 @@ from src.blueprints.view_methods.records import(
     get_player_season_records_cache,
     get_team_game_records_cache,
     get_team_season_records_cache,
-    get_team_game_records,
-    get_team_season_records
 )
 
 

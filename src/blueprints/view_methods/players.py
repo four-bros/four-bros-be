@@ -28,7 +28,7 @@ def get_all_players(request):
     return response
 
 
-def get_player_by_player_id(player_id) -> PlayerSchema:
+def get_player_by_player_id(player_id: str) -> PlayerSchema:
     player: PlayerInfoData = session.query(PlayerInfoData).where(
         PlayerInfoData.id == player_id).one()
 
