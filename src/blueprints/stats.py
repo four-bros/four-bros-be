@@ -1,4 +1,4 @@
-from flask import Blueprint, request
+from flask import Blueprint
 
 from src.blueprints.view_methods.stats import (
     get_player_season_stats_leaders,

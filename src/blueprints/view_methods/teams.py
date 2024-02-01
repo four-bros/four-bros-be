@@ -12,7 +12,8 @@ from src.constants import (
     rushing_stats_schema,
     session,
     total_stats_schema,
-    user_team_ids
+    user_team_ids,
+    users
 )
 from src.data_models.SeasonDefensiveStatsData import SeasonDefensiveStatsData
 from src.data_models.SeasonKickingStatsData import SeasonKickingStatsData
@@ -57,8 +58,8 @@ from src.models.Teams import (
 from src.schemas.Teams import (
     TeamDetailsSchema,
     TeamDetailsSchema,
-    RosterSchema,
     TeamRosterSchema,
+    TeamSeasonStatsSchema,
     team_details_schema,
     team_details_schema,
     team_roster_schema,
@@ -99,7 +100,7 @@ def get_team_details_by_id(team_id) -> TeamDetailsSchema:
     return response
 
 
-def get_user_teams_details() -> [TeamDetailsSchema]:
+def get_user_teams_details() -> List[TeamDetailsSchema]:
     response = {}
 
     for team_id in user_team_ids:
@@ -120,7 +121,6 @@ def get_user_teams_details() -> [TeamDetailsSchema]:
 
 
 def get_team_roster_by_id(team_id) -> TeamRosterSchema:
-
     players: List[PlayerInfoData] = session.query(PlayerInfoData).where(
         PlayerInfoData.team_id == team_id,
         PlayerInfoData.is_active == True,
@@ -443,6 +443,30 @@ def get_team_stats(team_id):
     team_stats: TeamSeasonStats = _get_team_season_stats(
         team_stats_data=team_stats_data)
 
-    response: TeamStatsSchema = team_stats_schema.dump(team_stats)
+    response: TeamSeasonStatsSchema = team_stats_schema.dump(team_stats)
+
+    return response
+
+
+def get_user_team_stats():
+    week_year: WeekYearData = session.query(WeekYearData).order_by(
+        desc(WeekYearData.year)
+    ).first()
+
+    response = {}
+
+    for user in users:
+        team_stats_data: TeamSeasonStatsData = session.query(TeamSeasonStatsData).where(
+            TeamSeasonStatsData.team_id == user.team_id,
+            TeamSeasonStatsData.year == week_year.year
+        ).one()
+
+        if team_stats_data is None:
+            continue
+
+        team_stats: TeamSeasonStats = _get_team_season_stats(
+            team_stats_data=team_stats_data)
+
+        response[user.team_name] = team_stats_schema.dump(team_stats)
 
     return response
