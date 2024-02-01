@@ -112,13 +112,9 @@ def get_user_teams_details() -> List[TeamDetailsSchema]:
             PlayerInfoData.is_active == True,
         ).order_by(desc(PlayerInfoData.overall)).all()
 
-        team_details: TeamDetails = _get_team_details(
-            team_info=team_info_data, players=players)
-        
-        team = {}
-        team[team_details.team_name] = team_details_schema.dump(team_details)
+        team_details: TeamDetails = _get_team_details(team_info=team_info_data, players=players)
 
-        response['data'].append(team)
+        response['data'].append(team_details_schema.dump(team_details))
 
     return response
 
@@ -471,7 +467,7 @@ def get_user_team_stats():
             team_stats_data=team_stats_data)
         
         team = {}
-        team[user.team_name] = team_stats_schema.dump(team_stats)
+        team[team_stats.team_id] = team_stats_schema.dump(team_stats)
 
         response['data'].append(team)
 
