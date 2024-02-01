@@ -1,6 +1,6 @@
 import redis
 import json
-from flask import jsonify
+from flask import jsonify, redirect
 from flask_swagger_ui import get_swaggerui_blueprint
 from src.blueprints.coach import coach_bp
 from src.blueprints.commits import commits_bp
@@ -38,6 +38,10 @@ app.register_blueprint(swagger_ui_blueprint)
 def swagger():
     with open('swagger.json', 'r') as f:
         return jsonify(json.load(f))
+    
+@app.route('/', methods=['GET'])
+def index():
+    return redirect('/swagger', code=302)
 
 if __name__ == '__main__':
     app.run()
