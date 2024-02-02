@@ -1,8 +1,8 @@
-from src.services.CommitsService import CommitsService
+from src.services.UsersService import UsersService
 
 class UsersController():
     def __intit__(self):
-        self.CommitsService = CommitsService()
+        self.UsersService = UsersService()
     
-    def get_all_commits(self):
-        return self.CommitsService.get_all_commits()
+    def get_users_and_week(self):
+        return self.UsersService.get_users_and_week()
