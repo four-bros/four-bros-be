@@ -1,11 +1,10 @@
-from flask import Blueprint, request
+from flask import Blueprint
 
-from src.blueprints.view_methods.commits import get_all_commits
-
+from src.controllers.CommitsController import CommitsController
 
 commits_bp = Blueprint('commits', __name__)
-
+CommitsController = CommitsController()
 
 @commits_bp.route('/', methods=['GET'])
 def get_commits():
-    return get_all_commits(request)
+    return CommitsController.get_all_commits()

@@ -1,12 +1,10 @@
-from flask import Blueprint, request
+from flask import Blueprint
 
-from src.blueprints.view_methods.coach import (
-    get_coach_records
-)
+from src.controllers.CoachsController import CoachsController
 
 coach_bp = Blueprint('coach', __name__)
-
+CoachsController = CoachsController()
 
 @coach_bp.route('', methods=['GET'])
 def coach_get_records():
-    return get_coach_records(request)
+    return CoachsController.get_coach_records()
