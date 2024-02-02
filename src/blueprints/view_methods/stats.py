@@ -63,3 +63,6 @@ def get_team_game_stats(is_season_specific: bool):
 
 def get_team_season_stat_leaders(is_season_specific: bool):
     return _get_team_season_stats_leaders(is_season_specific=is_season_specific)
+
+def get_player_of_the_week():
+    return 
