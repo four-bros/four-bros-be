@@ -524,11 +524,6 @@ def _get_season_kick_return_stats_leaders(is_season_specific: bool, is_users_onl
 
         # Querying PlayerInfo first and SeasonReturnStatsData second will return
         # a set or tuple to the players variable.
-        kick_returns_data = session.query(PlayerInfoData, SeasonReturnStatsData).filter(
-            PlayerInfoData.team_id.in_(user_team_ids),
-            PlayerInfoData.id == SeasonReturnStatsData.player_id,
-            SeasonReturnStatsData.year == week_year.year,
-        ).order_by(desc(SeasonReturnStatsData.kick_returns)).limit(10)
 
         long_kr_data = session.query(PlayerInfoData, SeasonReturnStatsData).filter(
             PlayerInfoData.team_id.in_(user_team_ids),
@@ -590,9 +585,6 @@ def _get_season_kick_return_stats_leaders(is_season_specific: bool, is_users_onl
     else:
         # Querying PlayerInfo first and SeasonReturnStatsData second will return 
         # a set or tuple to the players variable.
-        kick_returns_data = session.query(PlayerInfoData, SeasonReturnStatsData).filter(
-                PlayerInfoData.id == SeasonReturnStatsData.player_id,
-                ).order_by(desc(SeasonReturnStatsData.kick_returns)).limit(10)
 
         long_kr_data = session.query(PlayerInfoData, SeasonReturnStatsData).filter(
                 PlayerInfoData.id == SeasonReturnStatsData.player_id,

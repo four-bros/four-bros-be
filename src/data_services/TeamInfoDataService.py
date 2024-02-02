@@ -13,3 +13,22 @@ class TeamInfoDataService():
     
     def get_team_info_by_id(self, team_id: int) -> List[TeamInfoData]:
         return session.query(TeamInfoData).filter(TeamInfoData.id == team_id).one()
+
+    def get_coachs_poll_data(self) -> List[TeamInfoData]:
+        return session.query(TeamInfoData).where(
+            TeamInfoData.coachs_poll_points > 0
+        ).order_by(
+            TeamInfoData.coachs_poll_rank
+        ).all()
+    
+    def get_media_poll_data(self) -> List[TeamInfoData]:
+        return session.query(TeamInfoData).where(
+            TeamInfoData.media_poll_points > 0
+        ).order_by(
+            TeamInfoData.media_poll_rank
+        ).all()
+
+    def get_bcs_poll_data(self) -> List[TeamInfoData]:
+        return session.query(TeamInfoData).order_by(
+            TeamInfoData.bcs_rank
+        ).limit(10)

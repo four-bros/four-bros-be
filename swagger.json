@@ -174,7 +174,7 @@
           }
         }
       },
-      "/records/game/season": {
+      "/records/season/team": {
         "get": {
           "description": "Returns the team season records",
           "produces": [

@@ -6,7 +6,6 @@ from src.data_models.SeasonOffensiveStatsData import SeasonOffensiveStatsData
 from src.data_models.SeasonKickingStatsData import SeasonKickingStatsData
 from src.data_models.SeasonReturnStatsData import SeasonReturnStatsData
 
-
 class PlayerSeasonStatsDataService():
     def __init__(self) -> None:
         pass
