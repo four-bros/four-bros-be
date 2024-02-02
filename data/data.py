@@ -4,12 +4,12 @@ import ncaa_dynasty
 
 from src.constants import (
     dynasty_file_path,
-    user_teams
+    user_team_names
 )
 from src.utils.helpers import _convert_stats_year
 
 
-data = ncaa_dynasty.read_database(dynasty_file_path, user_teams)
+data = ncaa_dynasty.read_database(dynasty_file_path, user_team_names)
 
 # List of records for each data category
 def_stats = data['Defensive Stats'].records

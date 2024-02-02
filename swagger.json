@@ -1,0 +1,390 @@
+{
+    "swagger": "2.0",
+    "info": {
+      "title": "Access API",
+      "version": "1.0.0"
+    },
+    "paths": {
+        "/coach": {
+        "get": {
+          "description": "Returns career coach records",
+          "produces": [
+            "application/json"
+          ],
+          "responses": {
+            "200": {
+              "description": "Successful operation"
+            },
+            "500": {
+              "description": "Error"
+            }
+          }
+        }
+      },
+      "/commits": {
+          "get": {
+            "description": "Returns this year's commits to user teams",
+            "produces": [
+              "application/json"
+            ],
+            "responses": {
+              "200": {
+                "description": "Successful operation"
+              },
+              "500": {
+                "description": "Error"
+              }
+            }
+          }
+      },
+      "/home": {
+        "get": {
+          "description": "Returns general user info",
+          "produces": [
+            "application/json"
+          ],
+          "responses": {
+            "200": {
+              "description": "Successful operation"
+            },
+            "500": {
+              "description": "Error"
+            }
+          }
+        }
+      },
+      "/players/{player_id}": {
+        "get": {
+          "description": "Returns information for a player",
+          "produces": [
+            "application/json"
+          ],
+          "parameters": [
+            {
+                "name": "player_id",
+                "in": "path",
+                "description": "player ID in path",
+                "required": true,
+                "type": "string"
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Successful operation"
+            },
+            "500": {
+              "description": "Error"
+            }
+          }
+        }
+      },
+      "/players/hof": {
+        "get": {
+          "description": "Returns the HOF inductees",
+          "produces": [
+            "application/json"
+          ],
+          "responses": {
+            "200": {
+              "description": "Successful operation"
+            },
+            "500": {
+              "description": "Error"
+            }
+          }
+        }
+      },
+      "/rankings": {
+        "get": {
+          "description": "Returns the various poll rankings",
+          "produces": [
+            "application/json"
+          ],
+          "responses": {
+            "200": {
+              "description": "Successful operation"
+            },
+            "500": {
+              "description": "Error"
+            }
+          }
+        }
+      },
+      "/records/career/player": {
+        "get": {
+          "description": "Returns the player career records",
+          "produces": [
+            "application/json"
+          ],
+          "responses": {
+            "200": {
+              "description": "Successful operation"
+            },
+            "500": {
+              "description": "Error"
+            }
+          }
+        }
+      },
+      "/records/game/player": {
+        "get": {
+          "description": "Returns the player game records",
+          "produces": [
+            "application/json"
+          ],
+          "responses": {
+            "200": {
+              "description": "Successful operation"
+            },
+            "500": {
+              "description": "Error"
+            }
+          }
+        }
+      },
+      "/records/season/player": {
+        "get": {
+          "description": "Returns the player season records",
+          "produces": [
+            "application/json"
+          ],
+          "responses": {
+            "200": {
+              "description": "Successful operation"
+            },
+            "500": {
+              "description": "Error"
+            }
+          }
+        }
+      },
+      "/records/game/team": {
+        "get": {
+          "description": "Returns the team game records",
+          "produces": [
+            "application/json"
+          ],
+          "responses": {
+            "200": {
+              "description": "Successful operation"
+            },
+            "500": {
+              "description": "Error"
+            }
+          }
+        }
+      },
+      "/records/game/season": {
+        "get": {
+          "description": "Returns the team season records",
+          "produces": [
+            "application/json"
+          ],
+          "responses": {
+            "200": {
+              "description": "Successful operation"
+            },
+            "500": {
+              "description": "Error"
+            }
+          }
+        }
+      },
+      "/stats/leaders/players": {
+        "get": {
+          "description": "Returns the player season stats leaders for each statistical category",
+          "produces": [
+            "application/json"
+          ],
+          "responses": {
+            "200": {
+              "description": "Successful operation"
+            },
+            "500": {
+              "description": "Error"
+            }
+          }
+        }
+      },
+      "/stats/leaders/teams": {
+        "get": {
+          "description": "Returns the team season stats leaders for each statistical category",
+          "produces": [
+            "application/json"
+          ],
+          "responses": {
+            "200": {
+              "description": "Successful operation"
+            },
+            "500": {
+              "description": "Error"
+            }
+          }
+        }
+      },
+      "/teams": {
+        "get": {
+          "description": "Returns all teams",
+          "produces": [
+            "application/json"
+          ],
+          "responses": {
+            "200": {
+              "description": "Successful operation"
+            },
+            "500": {
+              "description": "Error"
+            }
+          }
+        }
+      },
+      "/teams/details/users": {
+        "get": {
+          "description": "Returns all user teams general information",
+          "produces": [
+            "application/json"
+          ],
+          "responses": {
+            "200": {
+              "description": "Successful operation"
+            },
+            "500": {
+              "description": "Error"
+            }
+          }
+        }
+      },
+      "/teams/player/stats/users": {
+        "get": {
+          "description": "Returns all user teams players stats",
+          "produces": [
+            "application/json"
+          ],
+          "responses": {
+            "200": {
+              "description": "Successful operation"
+            },
+            "500": {
+              "description": "Error"
+            }
+          }
+        }
+      },
+      "/teams/stats/users": {
+        "get": {
+          "description": "Returns all user teams players stats",
+          "produces": [
+            "application/json"
+          ],
+          "responses": {
+            "200": {
+              "description": "Successful operation"
+            },
+            "500": {
+              "description": "Error"
+            }
+          }
+        }
+      },
+      "/teams/{team_id}/details": {
+        "get": {
+          "description": "Returns a team's general information",
+          "produces": [
+            "application/json"
+          ],
+          "parameters": [
+            {
+                "name": "team_id",
+                "in": "path",
+                "description": "team ID",
+                "required": true,
+                "type": "integer"
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Successful operation"
+            },
+            "500": {
+              "description": "Error"
+            }
+          }
+        }
+      },
+      "/teams/{team_id}/roster": {
+        "get": {
+          "description": "Returns a team's roster",
+          "produces": [
+            "application/json"
+          ],
+          "parameters": [
+            {
+                "name": "team_id",
+                "in": "path",
+                "description": "team ID",
+                "required": true,
+                "type": "integer"
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Successful operation"
+            },
+            "500": {
+              "description": "Error"
+            }
+          }
+        }
+      },
+      "/teams/{team_id}/player/stats": {
+        "get": {
+          "description": "Returns a team's players stats",
+          "produces": [
+            "application/json"
+          ],
+          "parameters": [
+            {
+                "name": "team_id",
+                "in": "path",
+                "description": "team ID",
+                "required": true,
+                "type": "integer"
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Successful operation"
+            },
+            "500": {
+              "description": "Error"
+            }
+          }
+        }
+      },
+      "/teams/{team_id}/stats": {
+        "get": {
+          "description": "Returns a team's stats",
+          "produces": [
+            "application/json"
+          ],
+          "parameters": [
+            {
+                "name": "team_id",
+                "in": "path",
+                "description": "team ID",
+                "required": true,
+                "type": "integer"
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Successful operation"
+            },
+            "500": {
+              "description": "Error"
+            }
+          }
+        }
+      }
+    }
+  }

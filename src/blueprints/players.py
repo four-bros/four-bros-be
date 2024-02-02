@@ -18,7 +18,7 @@ def players_get_all():
 
 
 @players_bp.route('/<player_id>', methods=['GET'])
-def players_get_by_player_id(player_id: int) -> PlayerSchema:
+def players_get_by_player_id(player_id: str) -> PlayerSchema:
     return get_player_by_player_id(player_id)
 
 
