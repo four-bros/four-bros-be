@@ -83,7 +83,7 @@ async def cache_player_season_records():
 	start_time = time.time()
 	print('Starting season records cache.')
 
-	season_records = get_season_records(False)
+	season_records = get_season_records(False, False)
 
 	season_record: Records = Records(
 		id=3,

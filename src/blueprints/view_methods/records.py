@@ -70,8 +70,8 @@ def get_game_records(request):
     return response
 
 
-def get_season_records(is_season_specific: bool):
-    response = get_player_season_stats_leaders(is_season_specific=False)
+def get_season_records(is_season_specific: bool, is_users_only: bool):
+    response = get_player_season_stats_leaders(is_season_specific=is_season_specific, is_users_only=is_users_only)
     return response
 
 
@@ -80,7 +80,7 @@ def get_team_game_records():
 
 
 def get_team_season_records():
-    return _get_team_season_stats_leaders(is_season_specific=False)
+    return _get_team_season_stats_leaders(is_season_specific=False, is_users_only=False)
 
 
 # cache endpoints
