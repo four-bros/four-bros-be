@@ -1,7 +1,7 @@
 from src.services.UsersService import UsersService
 
 class UsersController():
-    def __intit__(self):
+    def __init__(self):
         self.UsersService = UsersService()
     
     def get_users_and_week(self):

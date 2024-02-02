@@ -13,8 +13,7 @@ from src.models.Player import PlayerAbilitiesDetailsStats, PlayerHofInfo
 from src.schemas.Players import PlayerSchema
 
 
-def get_all_players(request):
-    
+def get_all_players():
     players: List[PlayerInfoData] = session.query(PlayerInfoData).all()
 
     converted_players: List[PlayerAbilitiesDetailsStats] = [_get_player_abilities_details_stats(player) for player in players]

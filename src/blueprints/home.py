@@ -1,11 +1,9 @@
-from flask import Blueprint, request
-
-from src.blueprints.view_methods.home import get_home_data
-
+from flask import Blueprint
+from src.controllers.UsersController import UsersController
 
 home_bp = Blueprint('home', __name__)
-
+UsersController = UsersController()
 
 @home_bp.route('/', methods=['GET'])
 def home():
-    return get_home_data()
+    return UsersController.get_users_and_week()

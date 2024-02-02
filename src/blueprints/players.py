@@ -1,32 +1,18 @@
-from flask import Blueprint, request
-
-from src.schemas.Players import PlayerSchema
-from src.blueprints.view_methods.players import(
-    get_all_players,
-    get_player_by_player_id,
-    get_players_by_team_id_and_position,
-    get_hof
-)
-
+from flask import Blueprint
+from src.controllers.PlayersController import PlayersController
 
 players_bp = Blueprint('players', __name__)
-
+PlayersController = PlayersController()
 
 @players_bp.route('', methods=['GET'])
 def players_get_all():
-    return get_all_players(request)
-
+    return PlayersController.get_all_players()
 
 @players_bp.route('/<player_id>', methods=['GET'])
-def players_get_by_player_id(player_id: str) -> PlayerSchema:
-    return get_player_by_player_id(player_id)
-
-
-@players_bp.route('team/<team_id>/<position>', methods=['GET'])
-def players_get_by_team_id_and_position(team_id: int, position: str):
-    return get_players_by_team_id_and_position(team_id, position)
+def players_get_by_player_id(player_id: str) -> dict:
+    return PlayersController.get_player_by_player_id(player_id)
 
 
 @players_bp.route('hof', methods=['GET'])
-def players_get_hof():
-    return get_hof()
+def players_get_hof() -> dict:
+    return PlayersController.get_hof()

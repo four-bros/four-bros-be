@@ -1,14 +1,4 @@
-from typing import List
-from sqlalchemy import desc
-
-from src.constants import (
-    commits_schema,
-    session,
-    user_team_names
-)
-from src.data_models.CommitsData import CommitsData
-from src.data_models.WeekYearData import WeekYearData
-
+from src.controllers.CommitsController import CommitsController
 
 def get_all_commits(request):
     return 

@@ -1,5 +1,4 @@
 from flask import Blueprint
-
 from src.controllers.CoachsController import CoachsController
 
 coach_bp = Blueprint('coach', __name__)

@@ -1,5 +1,4 @@
 from flask import Blueprint
-
 from src.controllers.CommitsController import CommitsController
 
 commits_bp = Blueprint('commits', __name__)
