@@ -52,7 +52,7 @@ Base = declarative_base()
 
 # Mac file path
 dynasty_dir_path = '/Users/sgreen4/Desktop/data/dynasty3/2046/'
-dynasty_file_name = 'OD-4Bros3_week8'
+dynasty_file_name = 'OD-4Bros3_week9'
 dynasty_file_path = dynasty_dir_path + dynasty_file_name
 
 # User/coach information
