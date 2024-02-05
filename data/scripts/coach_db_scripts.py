@@ -1,9 +1,4 @@
-import asyncio
-from calendar import week
-from sqlalchemy import desc
-from uuid import uuid4
 import time
-
 from src.constants import (
     users,
     session
@@ -14,11 +9,9 @@ from src.utils.helpers import(
 from src.data_models.CoachInfoData import CoachInfoData
 from src.data_models.CoachStatsData import CoachStatsData
 from src.data_models.TeamInfoData import TeamInfoData
-from src.data_models.WeekYearData import WeekYearData
 
 
 async def insert_coach_info_into_db(week_year):
-
     start_time = time.time()
     print('Starting insert CoachInfo script.')
 

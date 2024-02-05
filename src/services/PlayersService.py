@@ -76,6 +76,14 @@ class PlayersService():
 
         return response
 
+    def get_players_by_team_id(self, team_id: int) -> PlayerSchema:
+        player: PlayerInfoData = self.PlayersDataService.get_player_by_player_id(team_id)
+        converted_player: PlayerAbilitiesDetailsStats = self._get_player_abilities_details_stats(
+            player)
+        response: PlayerSchema = player_schema_single.dump(converted_player)
+
+        return response
+
     def get_hof(self):
         hof: List[HallOfFame] = self.PlayersDataService.get_hof()
         player_ids: List[str] = [player.player_id for player in hof]

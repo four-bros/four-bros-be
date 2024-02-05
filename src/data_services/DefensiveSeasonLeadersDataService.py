@@ -12,10 +12,10 @@ class DefensiveSeasonLeadersDataService():
     def get_long_int_ret_leaders(self, year: int, is_season_specific: bool, is_users_only: bool) -> List[SeasonDefensiveStatsData]:
         # returns all players for a specific season
         if is_season_specific and not is_users_only:
-            session.query(PlayerInfoData, SeasonDefensiveStatsData).filter(
+            return session.query(PlayerInfoData, SeasonDefensiveStatsData).filter(
                 PlayerInfoData.id == SeasonDefensiveStatsData.player_id,
                 SeasonDefensiveStatsData.year == year
-            ).order_by(desc(SeasonDefensiveStatsData.sacks)).limit(10)
+            ).order_by(desc(SeasonDefensiveStatsData.long_int_ret)).limit(10)
         # returns all user players for a specific season
         elif is_season_specific and is_users_only:
             return session.query(PlayerInfoData, SeasonDefensiveStatsData).filter(
