@@ -553,7 +553,6 @@ async def insert_game_off_stats_into_db(week_year_data, off_stats):
         )
 
 		if not prior_off_stats:
-
 			game_stats: GameOffensiveStatsData = GameOffensiveStatsData(
                 id = new_id,
                 player_id=player_id,
@@ -594,7 +593,6 @@ async def insert_game_off_stats_into_db(week_year_data, off_stats):
 			all_game_off_stats.append(game_stats)
 
 		else:
-
 			pass_yards = current_off_stats.pass_yards - prior_off_stats.pass_yards
 			longest_rec = max([current_off_stats.longest_rec, prior_off_stats.longest_rec])
 			longest_pass = max([current_off_stats.longest_pass, prior_off_stats.longest_pass])

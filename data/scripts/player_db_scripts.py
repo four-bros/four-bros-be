@@ -9,7 +9,6 @@ from src.data_models.PlayerInfoData import PlayerInfoData
 from src.data_models.WeekYearData import WeekYearData
 
 async def deactivate_inactive_players(week_year_data, player_info):
-
     start_time = time.time()
     print('Starting Deactivate Inactive Players script.')
 
@@ -53,7 +52,6 @@ async def deactivate_inactive_players(week_year_data, player_info):
 
 
 async def insert_player_info_into_db(player_info):
-
     start_time = time.time()
     print('Starting insert PlayerInfo script.')
 

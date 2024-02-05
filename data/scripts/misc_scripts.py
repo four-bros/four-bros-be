@@ -1,19 +1,13 @@
-import asyncio
 from typing import List
-from sqlalchemy import desc
 from uuid import uuid4
 import time
-
 from src.constants import session
-from src.utils.helpers import(
-    _convert_stats_year
-)
+from src.utils.helpers import _convert_stats_year
 from src.data_models.CommitsData import CommitsData
 from src.data_models.WeekYearData import WeekYearData
 
 
 async def insert_commits_into_db(week_year_data, commits):
-
     start_time = time.time()
     print('Starting Commits insert.')
 

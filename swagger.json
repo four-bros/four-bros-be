@@ -174,7 +174,7 @@
           }
         }
       },
-      "/records/game/season": {
+      "/records/season/team": {
         "get": {
           "description": "Returns the team season records",
           "produces": [
@@ -190,7 +190,7 @@
           }
         }
       },
-      "/stats/leaders/players": {
+      "/stats/season/leaders/players": {
         "get": {
           "description": "Returns the player season stats leaders for each statistical category",
           "produces": [
@@ -206,7 +206,167 @@
           }
         }
       },
-      "/stats/leaders/teams": {
+      "/stats/season/leaders/players/users": {
+        "get": {
+          "description": "Returns the player season stats leaders for each statistical category",
+          "produces": [
+            "application/json"
+          ],
+          "responses": {
+            "200": {
+              "description": "Successful operation"
+            },
+            "500": {
+              "description": "Error"
+            }
+          }
+        }
+      },
+      "/stats/season/leaders/players/defense": {
+        "get": {
+          "description": "Returns the players defense season stats leaders for each statistical category",
+          "produces": [
+            "application/json"
+          ],
+          "responses": {
+            "200": {
+              "description": "Successful operation"
+            },
+            "500": {
+              "description": "Error"
+            }
+          }
+        }
+      },
+      "/stats/season/leaders/players/kick_return": {
+        "get": {
+          "description": "Returns the players kick return season stats leaders for each statistical category",
+          "produces": [
+            "application/json"
+          ],
+          "responses": {
+            "200": {
+              "description": "Successful operation"
+            },
+            "500": {
+              "description": "Error"
+            }
+          }
+        }
+      },
+      "/stats/season/leaders/players/kicking": {
+        "get": {
+          "description": "Returns the players kicking season stats leaders for each statistical category",
+          "produces": [
+            "application/json"
+          ],
+          "responses": {
+            "200": {
+              "description": "Successful operation"
+            },
+            "500": {
+              "description": "Error"
+            }
+          }
+        }
+      },
+      "/stats/season/leaders/players/passing": {
+        "get": {
+          "description": "Returns the players passing season stats leaders for each statistical category",
+          "produces": [
+            "application/json"
+          ],
+          "responses": {
+            "200": {
+              "description": "Successful operation"
+            },
+            "500": {
+              "description": "Error"
+            }
+          }
+        }
+      },
+      "/stats/season/leaders/players/punt_return": {
+        "get": {
+          "description": "Returns the players punt return season stats leaders for each statistical category",
+          "produces": [
+            "application/json"
+          ],
+          "responses": {
+            "200": {
+              "description": "Successful operation"
+            },
+            "500": {
+              "description": "Error"
+            }
+          }
+        }
+      },
+      "/stats/season/leaders/players/punting": {
+        "get": {
+          "description": "Returns the players punting season stats leaders for each statistical category",
+          "produces": [
+            "application/json"
+          ],
+          "responses": {
+            "200": {
+              "description": "Successful operation"
+            },
+            "500": {
+              "description": "Error"
+            }
+          }
+        }
+      },
+      "/stats/season/leaders/players/receiving": {
+        "get": {
+          "description": "Returns the players receiving season stats leaders for each statistical category",
+          "produces": [
+            "application/json"
+          ],
+          "responses": {
+            "200": {
+              "description": "Successful operation"
+            },
+            "500": {
+              "description": "Error"
+            }
+          }
+        }
+      },
+      "/stats/season/leaders/players/rushing": {
+        "get": {
+          "description": "Returns the players rushing season stats leaders for each statistical category",
+          "produces": [
+            "application/json"
+          ],
+          "responses": {
+            "200": {
+              "description": "Successful operation"
+            },
+            "500": {
+              "description": "Error"
+            }
+          }
+        }
+      },
+      "/stats/season/leaders/players/total": {
+        "get": {
+          "description": "Returns the players total season stats leaders for each statistical category",
+          "produces": [
+            "application/json"
+          ],
+          "responses": {
+            "200": {
+              "description": "Successful operation"
+            },
+            "500": {
+              "description": "Error"
+            }
+          }
+        }
+      },
+      "/stats/season/leaders/teams": {
         "get": {
           "description": "Returns the team season stats leaders for each statistical category",
           "produces": [
