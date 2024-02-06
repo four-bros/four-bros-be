@@ -84,7 +84,7 @@ class PlayerStatsSchema(Schema):
     total = fields.Nested(TotalStatsSchema)
 
 
-class PlayerGameStatsSchema(Schema):
+class PlayerAllGamesStatsSchema(Schema):
     passing = fields.List(fields.Nested(PassingStatsSchema))
     rushing = fields.List(fields.Nested(RushingStatsSchema))
     receiving = fields.List(fields.Nested(ReceivingStatsSchema))
@@ -95,6 +95,17 @@ class PlayerGameStatsSchema(Schema):
     punt_return = fields.List(fields.Nested(PuntReturnStatsSchema))
     total = fields.List(fields.Nested(TotalStatsSchema))
 
+
+class PlayerGameStatsSchema(Schema):
+    passing = fields.Nested(PassingStatsSchema)
+    rushing = fields.Nested(RushingStatsSchema)
+    receiving = fields.Nested(ReceivingStatsSchema)
+    defensive = fields.Nested(DefensiveStatsSchema)
+    kick_return = fields.Nested(KickReturnStatsSchema)
+    kicking = fields.Nested(KickingAndPuntingStatsSchema)
+    punting = fields.Nested(PuntingStatsSchema)
+    punt_return = fields.Nested(PuntReturnStatsSchema)
+    total = fields.Nested(TotalStatsSchema)
 
 class PlayerStatsAllSeasonsSchema(Schema):
     passing = fields.List(fields.Nested(PassingStatsSchema))
@@ -113,8 +124,12 @@ class PlayerSchema(Schema):
     abilities = fields.Nested(PlayerAbilitiesSchema)
     career_stats = fields.Nested(PlayerStatsSchema)
     season_stats = fields.Nested(PlayerStatsSchema)
-    game_stats = fields.Nested(PlayerGameStatsSchema)
+    game_stats = fields.Nested(PlayerAllGamesStatsSchema)
 
+
+class PlayerOfTheWeekSchema(Schema):
+    details = fields.Nested(PlayerDetailsSchema)
+    game_stats = fields.Nested(PlayerGameStatsSchema)
 
 class PlayerHofSchema(Schema):
     details = fields.Nested(PlayerDetailsSchema)

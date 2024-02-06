@@ -205,6 +205,19 @@ class PlayerAbilitiesDetailsStats:
         return f'game stats: {self.game_stats}'
 
 
+class PlayerOfTheWeek:
+    def __init__(
+        self,
+        details: PlayerDetails,
+        game_stats: PlayerStats
+    ):
+        self.details = details
+        self.game_stats = game_stats
+
+    def __repr__(self) -> str:
+        return f'game stats: {self.game_stats}'
+
+
 class PlayerHofInfo:
     def __init__(
         self,

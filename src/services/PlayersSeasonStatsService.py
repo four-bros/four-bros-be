@@ -1,6 +1,6 @@
 from typing import List
 from src.constants import (
-    defensive_stats_schema,
+    player_defensive_stats_schema,
     kick_return_stats_schema,
     kicking_stats_schema,
     punt_return_stats_schema,
@@ -119,26 +119,32 @@ class PlayersSeasonStatsService():
             self._get_player_season_defensive_stats(player) for player in total_sacks_data]
 
         # Convert top ten lists into json
-        long_int_ret_leaders_json = defensive_stats_schema.dump(
+        long_int_ret_leaders_json = player_defensive_stats_schema.dump(
             converted_long_int_ret)
-        sacks_leaders_json = defensive_stats_schema.dump(converted_sacks)
-        forced_fumbles_leaders_json = defensive_stats_schema.dump(converted_ff)
-        safeties_leaders_json = defensive_stats_schema.dump(converted_safeties)
-        pass_def_leaders_json = defensive_stats_schema.dump(converted_pass_def)
-        blocked_kicks_leaders_json = defensive_stats_schema.dump(
+        sacks_leaders_json = player_defensive_stats_schema.dump(
+            converted_sacks)
+        forced_fumbles_leaders_json = player_defensive_stats_schema.dump(
+            converted_ff)
+        safeties_leaders_json = player_defensive_stats_schema.dump(
+            converted_safeties)
+        pass_def_leaders_json = player_defensive_stats_schema.dump(
+            converted_pass_def)
+        blocked_kicks_leaders_json = player_defensive_stats_schema.dump(
             converted_blocked_kicks)
-        tfl_leaders_json = defensive_stats_schema.dump(converted_tfl)
-        ints_made_leaders_json = defensive_stats_schema.dump(
+        tfl_leaders_json = player_defensive_stats_schema.dump(converted_tfl)
+        ints_made_leaders_json = player_defensive_stats_schema.dump(
             converted_ints_made)
-        fumbles_rec_leaders_json = defensive_stats_schema.dump(converted_fr)
-        def_tds_leaders_json = defensive_stats_schema.dump(converted_def_td)
-        fum_rec_yards_leaders_json = defensive_stats_schema.dump(
+        fumbles_rec_leaders_json = player_defensive_stats_schema.dump(
+            converted_fr)
+        def_tds_leaders_json = player_defensive_stats_schema.dump(
+            converted_def_td)
+        fum_rec_yards_leaders_json = player_defensive_stats_schema.dump(
             converted_fr_yards)
-        int_ret_yards_leaders_json = defensive_stats_schema.dump(
+        int_ret_yards_leaders_json = player_defensive_stats_schema.dump(
             converted_int_ret_yards)
-        total_tkls_leaders_json = defensive_stats_schema.dump(
+        total_tkls_leaders_json = player_defensive_stats_schema.dump(
             converted_total_tkls)
-        total_sacks_leaders_json = defensive_stats_schema.dump(
+        total_sacks_leaders_json = player_defensive_stats_schema.dump(
             converted_total_sacks)
 
         response = {

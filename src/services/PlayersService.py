@@ -2,7 +2,9 @@ from typing import List, Union
 from src.constants import (
     player_schema_list,
     player_schema_single,
-    player_hof_schema_list
+    player_details_schema_single,
+    player_hof_schema_list,
+    player_of_the_week_schema
 )
 from src.data_services.PlayersCareerStatsDataService import PlayersCareerStatsDataService
 from src.data_services.PlayersDataService import PlayersDataService
@@ -18,7 +20,9 @@ from src.models.Player import (
     PlayerDetails,
     PlayerStats,
     PlayerHofInfo,
-    PlayerStatsList
+    PlayerStatsList,
+    PlayerStats,
+    PlayerOfTheWeek
 )
 from src.data_models.CareerDefensiveStatsData import CareerDefensiveStatsData
 from src.data_models.CareerKickingStatsData import CareerKickingStatsData
@@ -77,10 +81,71 @@ class PlayersService():
         return response
 
     def get_players_by_team_id(self, team_id: int) -> PlayerSchema:
-        player: PlayerInfoData = self.PlayersDataService.get_player_by_player_id(team_id)
+        player: PlayerInfoData = self.PlayersDataService.get_player_by_player_id(
+            team_id)
         converted_player: PlayerAbilitiesDetailsStats = self._get_player_abilities_details_stats(
             player)
         response: PlayerSchema = player_schema_single.dump(converted_player)
+
+        return response
+
+    def get_player_of_the_week(self):
+        week_year: WeekYearData = self.WeekYearDataService.get_week_year()
+        top_offensive_players = self.PlayersGameStatsDataService.get_offensive_stats_leaders_by_week(
+            week=week_year.week, year=week_year.year
+        )
+        top_defensive_players = self.PlayersGameStatsDataService.get_defensive_stats_leaders_by_week(
+            week=week_year.week, year=week_year.year
+        )
+
+        players = []
+
+        for player_offensive_stats in top_offensive_players:
+            player_info = self.PlayersDataService.get_player_by_player_id(player_offensive_stats.player_id)
+            player_details = self._get_player_details(player_info)
+            player_stats = self._get_player_game_stats_by_week_and_year(player=player_info, week=week_year.week, year=week_year.year)
+            player = PlayerOfTheWeek(details=player_details, game_stats=player_stats)
+            game_points = self._calculate_game_points(
+                off_game_stats=player_offensive_stats,
+                def_game_stats=player.game_stats.defensive,
+                kr_game_stats=player.game_stats.kick_return,
+                pr_game_stats=player.game_stats.punt_return
+            )
+
+            player_object = {
+                'game_points': game_points,
+                'player': player_of_the_week_schema.dump(player),
+            }
+            players.append(player_object)
+
+        for player_defensive_stats in top_defensive_players:
+            player_info = self.PlayersDataService.get_player_by_player_id(player_defensive_stats.player_id)
+            player_details = self._get_player_details(player_info)
+            player_off_stats = self.PlayersGameStatsDataService.get_offensive_stats_by_week_and_year(
+                player_id=player_defensive_stats.player_id,
+                week=week_year.week,
+                year=week_year.year
+            )
+            player_stats = self._get_player_game_stats_by_week_and_year(player=player_info, week=week_year.week, year=week_year.year)
+            player = PlayerOfTheWeek(details=player_details, game_stats=player_stats)
+            game_points = self._calculate_game_points(
+                off_game_stats=player_off_stats,
+                def_game_stats=player_defensive_stats,
+                kr_game_stats=player.game_stats.kick_return,
+                pr_game_stats=player.game_stats.punt_return
+            )
+            player_object = {
+                'game_points': game_points,
+                'player': player_of_the_week_schema.dump(player),
+            }
+            players.append(player_object)
+
+        players.sort(key=lambda player: player['game_points'], reverse=True)
+
+        response = {
+            'player_of_the_week': players[0],
+            'honorable_mention': players[1:4]
+        }
 
         return response
 
@@ -107,7 +172,8 @@ class PlayersService():
             player=player)
         career_stats: PlayerStats = self._get_player_career_stats(
             player=player)
-        game_stats: PlayerStats = self._get_player_game_stats(player=player)
+        game_stats: PlayerStats = self._get_player_game_stats_by_year(
+            player=player)
 
         player_abilities_details_stats: PlayerAbilitiesDetailsStats = PlayerAbilitiesDetailsStats(
             details=player_details,
@@ -167,16 +233,20 @@ class PlayersService():
 
         return player_stats
 
-    def _get_player_game_stats(self, player: PlayerInfoData) -> PlayerStats:
+    def _get_player_game_stats_by_year(self, player: PlayerInfoData) -> PlayerStats:
         week_year: WeekYearData = self.WeekYearDataService.get_week_year()
-        offensive_stats_data: GameOffensiveStatsData = self.PlayersGameStatsDataService.get_offensive_stats(
-            player.id, week_year.year)
-        defensive_stats_data: GameDefensiveStatsData = self.PlayersGameStatsDataService.get_defensive_stats(
-            player.id, week_year.year)
-        return_stats_data: GameReturnStatsData = self.PlayersGameStatsDataService.get_return_stats(
-            player.id, week_year.year)
-        kicking_stats_data: GameKickingStatsData = self.PlayersGameStatsDataService.get_kicking_stats(
-            player.id, week_year.year)
+        offensive_stats_data: GameOffensiveStatsData = self.PlayersGameStatsDataService.get_offensive_stats_by_year(
+            player.id, week_year.year
+        )
+        defensive_stats_data: GameDefensiveStatsData = self.PlayersGameStatsDataService.get_defensive_stats_by_year(
+            player.id, week_year.year
+        )
+        return_stats_data: GameReturnStatsData = self.PlayersGameStatsDataService.get_return_stats_by_year(
+            player.id, week_year.year
+        )
+        kicking_stats_data: GameKickingStatsData = self.PlayersGameStatsDataService.get_kicking_stats_by_year(
+            player.id, week_year.year
+        )
 
         passing_stats: List[PassingStats] = None
         receiving_stats: List[ReceivingStats] = None
@@ -212,6 +282,66 @@ class PlayersService():
                 game) for game in kicking_stats_data]
 
         player_stats: PlayerStatsList = PlayerStatsList(
+            passing=passing_stats,
+            rushing=rushing_stats,
+            receiving=receiving_stats,
+            defensive=defensive_stats,
+            kicking=kicking_stats,
+            kick_return=kick_return_stats,
+            punting=punting_stats,
+            punt_return=punt_return_stats,
+            total=total_stats
+        )
+
+        return player_stats
+
+    def _get_player_game_stats_by_week_and_year(self, player: PlayerInfoData, week: int, year: int) -> PlayerStats:
+        offensive_stats_data: GameOffensiveStatsData = self.PlayersGameStatsDataService.get_offensive_stats_by_week_and_year(
+            player.id,
+            week,
+            year
+        )
+        defensive_stats_data: GameDefensiveStatsData = self.PlayersGameStatsDataService.get_defensive_stats_by_week_and_year(
+            player.id,
+            week,
+            year
+        )
+        return_stats_data: GameReturnStatsData = self.PlayersGameStatsDataService.get_return_stats_by_week_and_year(
+            player.id,
+            week,
+            year
+        )
+        kicking_stats_data: GameKickingStatsData = self.PlayersGameStatsDataService.get_kicking_stats_by_week_and_year(
+            player.id,
+            week,
+            year
+        )
+
+        passing_stats: PassingStats = None
+        receiving_stats: ReceivingStats = None
+        rushing_stats: RushingStats = None
+        defensive_stats: DefensiveStats = None
+        kicking_stats: KickingStats = None
+        kick_return_stats: KickReturnStats = None
+        punting_stats: PuntingStats = None
+        punt_return_stats: PuntReturnStats = None
+        total_stats: TotalStats = None
+
+        if offensive_stats_data:
+            passing_stats = self._get_passing_stats(offensive_stats_data)
+            receiving_stats = self._get_receiving_stats(offensive_stats_data)
+            rushing_stats = self._get_rushing_stats(offensive_stats_data)
+            total_stats = self._get_total_stats(offensive_stats_data)
+        if defensive_stats_data:
+            defensive_stats = self._get_defensive_stats(defensive_stats_data)
+        if return_stats_data:
+            kick_return_stats = self._get_kick_return_stats(return_stats_data)
+            punt_return_stats = self._get_punt_return_stats(return_stats_data)
+        if kicking_stats_data:
+            kicking_stats = self._get_kicking_stats(kicking_stats_data)
+            punting_stats = self._get_punting_stats(kicking_stats_data)
+
+        player_stats: PlayerStats = PlayerStats(
             passing=passing_stats,
             rushing=rushing_stats,
             receiving=receiving_stats,
@@ -344,9 +474,12 @@ class PlayersService():
 
     def _get_player_hof_info(self, player: PlayerInfoData) -> PlayerHofInfo:
         player_details: PlayerDetails = self._get_player_details(player=player)
-        player_abilities: PlayerAbilities = self._get_player_abilities(player=player)
-        season_stats: List[PlayerStats] = self._get_player_all_season_stats(player=player)
-        career_stats: PlayerStats = self._get_player_career_stats(player=player)
+        player_abilities: PlayerAbilities = self._get_player_abilities(
+            player=player)
+        season_stats: List[PlayerStats] = self._get_player_all_season_stats(
+            player=player)
+        career_stats: PlayerStats = self._get_player_career_stats(
+            player=player)
 
         player_hof_info = PlayerHofInfo(
             details=player_details,
@@ -358,10 +491,14 @@ class PlayersService():
         return player_hof_info
 
     def _get_player_all_season_stats(self, player: PlayerInfoData) -> List[PlayerStats]:
-        offensive_stats_data: List[SeasonOffensiveStatsData] = self.PlayerSeasonStatsDataService.get_all_offensive_stats(player.id)
-        defensive_stats_data: List[SeasonDefensiveStatsData] = self.PlayerSeasonStatsDataService.get_all_defensive_stats(player.id)
-        return_stats_data: List[SeasonReturnStatsData] = self.PlayerSeasonStatsDataService.get_all_return_stats(player.id)
-        kicking_stats_data: List[SeasonKickingStatsData] = self.PlayerSeasonStatsDataService.get_all_kicking_stats(player.id)
+        offensive_stats_data: List[SeasonOffensiveStatsData] = self.PlayerSeasonStatsDataService.get_all_offensive_stats(
+            player.id)
+        defensive_stats_data: List[SeasonDefensiveStatsData] = self.PlayerSeasonStatsDataService.get_all_defensive_stats(
+            player.id)
+        return_stats_data: List[SeasonReturnStatsData] = self.PlayerSeasonStatsDataService.get_all_return_stats(
+            player.id)
+        kicking_stats_data: List[SeasonKickingStatsData] = self.PlayerSeasonStatsDataService.get_all_kicking_stats(
+            player.id)
 
         passing_stats: List[PassingStats] = []
         receiving_stats: List[ReceivingStats] = []
@@ -412,8 +549,11 @@ class PlayersService():
 
     def _get_passing_stats(
         self,
-        offensive_stats: Union[CareerOffensiveStatsData,
-                               GameOffensiveStatsData, SeasonOffensiveStatsData]
+        offensive_stats: Union[
+            CareerOffensiveStatsData,
+            GameOffensiveStatsData,
+            SeasonOffensiveStatsData
+        ]
     ) -> PassingStats:
         passing_stats: PassingStats = PassingStats(
             pass_yards=offensive_stats.pass_yards,
@@ -435,8 +575,11 @@ class PlayersService():
 
     def _get_receiving_stats(
         self,
-        offensive_stats: Union[CareerOffensiveStatsData,
-                               GameOffensiveStatsData, SeasonOffensiveStatsData]
+        offensive_stats: Union[
+            CareerOffensiveStatsData,
+            GameOffensiveStatsData,
+            SeasonOffensiveStatsData
+        ]
     ) -> ReceivingStats:
         receiving_stats: ReceivingStats = ReceivingStats(
             receptions=offensive_stats.receptions,
@@ -455,8 +598,7 @@ class PlayersService():
 
     def _get_rushing_stats(
         self,
-        offensive_stats: Union[CareerOffensiveStatsData,
-                               GameOffensiveStatsData, SeasonOffensiveStatsData]
+        offensive_stats: Union[CareerOffensiveStatsData,GameOffensiveStatsData, SeasonOffensiveStatsData]
     ) -> RushingStats:
         rushing_stats: RushingStats = RushingStats(
             rush_att=offensive_stats.rush_att,
@@ -493,8 +635,7 @@ class PlayersService():
 
     def _get_defensive_stats(
         self,
-        defensive_stats_data: Union[CareerDefensiveStatsData,
-                                    GameDefensiveStatsData, SeasonDefensiveStatsData]
+        defensive_stats_data: Union[CareerDefensiveStatsData,GameDefensiveStatsData, SeasonDefensiveStatsData]
     ) -> DefensiveStats:
         defensive_stats = DefensiveStats(
             long_int_ret=defensive_stats_data.long_int_ret,
@@ -606,3 +747,59 @@ class PlayersService():
         )
 
         return punt_return_stats
+
+    def _calculate_game_points(
+        self,
+        off_game_stats: Union[GameOffensiveStatsData, None],
+        def_game_stats: Union[GameDefensiveStatsData, None],
+        kr_game_stats: Union[GameReturnStatsData, None],
+        pr_game_stats: Union[GameReturnStatsData, None]
+    ) -> int:
+        game_points = 0
+        # offensive stats
+        if off_game_stats:
+            game_points += off_game_stats.pass_yards / 25
+            game_points += off_game_stats.pass_tds * 4
+            game_points += off_game_stats.rush_yards / 10
+            game_points += off_game_stats.rush_tds * 6
+            game_points += off_game_stats.receptions
+            game_points += off_game_stats.rec_yards / 10
+            game_points += off_game_stats.rec_tds * 6
+            game_points + - off_game_stats.ints * 2
+            game_points + - off_game_stats.fumbles * 2
+        # defensive stats
+        if def_game_stats:
+            game_points += def_game_stats.sacks * 4
+            game_points += def_game_stats.tfl * 2
+            game_points += def_game_stats.ints_made * 6
+            game_points += def_game_stats.forced_fumbles * 4
+            game_points += def_game_stats.fumbles_rec * 6
+            game_points += def_game_stats.pass_def * 2
+            game_points += def_game_stats.safeties * 2
+            game_points += def_game_stats.def_tds * 10
+        # special teams stats
+        if kr_game_stats:
+            game_points += kr_game_stats.kr_tds * 6
+            game_points += kr_game_stats.kr_yds / 10
+        if pr_game_stats:
+            game_points += pr_game_stats.pr_tds * 6
+            game_points += pr_game_stats.pr_yds / 10
+
+        return game_points
+
+    def _calculate_defensive_game_points(
+        self,
+        game_stats: GameDefensiveStatsData
+    ) -> PuntReturnStats:
+        game_points = 0
+
+        game_points += game_stats.sacks * 4
+        game_points += game_stats.tfl * 2
+        game_points += game_stats.ints_made * 6
+        game_points += game_stats.forced_fumbles * 4
+        game_points += game_stats.fumbles_rec * 6
+        game_points += game_stats.pass_def * 2
+        game_points += game_stats.safeties * 2
+        game_points += game_stats.def_tds * 10
+
+        return game_points

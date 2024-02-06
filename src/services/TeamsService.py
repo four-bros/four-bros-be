@@ -1,6 +1,6 @@
 from typing import List
 from src.constants import (
-    defensive_stats_schema,
+    player_defensive_stats_schema,
     kicking_stats_schema,
     kick_return_stats_schema,
     passing_stats_schema,
@@ -97,10 +97,14 @@ class TeamsService():
         return response
 
     def get_roster_by_team_id(self, team_id: int):
-        players: List[PlayerInfoData] = self.PlayersDataService.get_players_by_team_id(team_id)
-        team_roster: List[TeamRoster] = [self._get_team_roster(player) for player in players]
-        team_roster_summary: TeamRosterSummary = TeamRosterSummary(roster=team_roster)
-        response: TeamRosterSchema = team_roster_schema.dump(team_roster_summary)
+        players: List[PlayerInfoData] = self.PlayersDataService.get_players_by_team_id(
+            team_id)
+        team_roster: List[TeamRoster] = [
+            self._get_team_roster(player) for player in players]
+        team_roster_summary: TeamRosterSummary = TeamRosterSummary(
+            roster=team_roster)
+        response: TeamRosterSchema = team_roster_schema.dump(
+            team_roster_summary)
 
         return response
 
@@ -168,8 +172,9 @@ class TeamsService():
         ]
 
         # Convert players to json for response
-        defensive_stats_json = defensive_stats_schema.dump(defensive_stats)
-        defensive_to_stats_json = defensive_stats_schema.dump(
+        defensive_stats_json = player_defensive_stats_schema.dump(
+            defensive_stats)
+        defensive_to_stats_json = player_defensive_stats_schema.dump(
             defensive_to_stats)
         kicking_stats_json = kicking_stats_schema.dump(kick_stats)
         kick_return_stats_json = kick_return_stats_schema.dump(
@@ -257,8 +262,9 @@ class TeamsService():
         ]
 
         # Convert players to json for response
-        defensive_stats_json = defensive_stats_schema.dump(defensive_stats)
-        defensive_to_stats_json = defensive_stats_schema.dump(
+        defensive_stats_json = player_defensive_stats_schema.dump(
+            defensive_stats)
+        defensive_to_stats_json = player_defensive_stats_schema.dump(
             defensive_to_stats)
         kicking_stats_json = kicking_stats_schema.dump(kick_stats)
         kick_return_stats_json = kick_return_stats_schema.dump(
@@ -287,12 +293,14 @@ class TeamsService():
 
     def get_team_stats_by_id(self, team_id: int):
         week_year: WeekYearData = self.WeekYearDataService.get_week_year()
-        team_stats_data: TeamSeasonStatsData = self.TeamSeasonStatsDataService.get_team_stats_by_id(team_id=team_id, year=week_year.year)
+        team_stats_data: TeamSeasonStatsData = self.TeamSeasonStatsDataService.get_team_stats_by_id(
+            team_id=team_id, year=week_year.year)
 
         if team_stats_data is None:
             return {}
 
-        team_stats: TeamSeasonStats = self._get_team_season_stats(team_stats_data=team_stats_data)
+        team_stats: TeamSeasonStats = self._get_team_season_stats(
+            team_stats_data=team_stats_data)
         response: TeamSeasonStatsSchema = team_stats_schema.dump(team_stats)
 
         return response
@@ -300,16 +308,18 @@ class TeamsService():
     def get_user_teams_stats(self):
         week_year: WeekYearData = self.WeekYearDataService.get_week_year()
 
-        response = { 'data': []}
+        response = {'data': []}
 
         for user in users:
-            team_stats_data: TeamSeasonStatsData = self.TeamSeasonStatsDataService.get_team_stats_by_id(user.team_id, week_year.year)
+            team_stats_data: TeamSeasonStatsData = self.TeamSeasonStatsDataService.get_team_stats_by_id(
+                user.team_id, week_year.year)
 
             if team_stats_data is None:
                 continue
 
-            team_stats: TeamSeasonStats = self._get_team_season_stats(team_stats_data=team_stats_data)
-            
+            team_stats: TeamSeasonStats = self._get_team_season_stats(
+                team_stats_data=team_stats_data)
+
             team = {}
             team[team_stats.team_id] = team_stats_schema.dump(team_stats)
 
@@ -328,10 +338,14 @@ class TeamsService():
             player for player in players if player.position in Positions.sp_teams_positions
         ]
 
-        avg_overall = round(sum([player.overall for player in players]) / len(players), 1)
-        avg_offense = round(sum(player.overall for player in offense_players) / len(offense_players), 1)
-        avg_defense = round(sum(player.overall for player in defense_players) / len(defense_players), 1)
-        avg_sp_teams = round(sum(player.overall for player in sp_team_players) / len(sp_team_players), 1)
+        avg_overall = round(
+            sum([player.overall for player in players]) / len(players), 1)
+        avg_offense = round(
+            sum(player.overall for player in offense_players) / len(offense_players), 1)
+        avg_defense = round(
+            sum(player.overall for player in defense_players) / len(defense_players), 1)
+        avg_sp_teams = round(
+            sum(player.overall for player in sp_team_players) / len(sp_team_players), 1)
 
         team_details: TeamDetails = TeamDetails(
             id=team_info.id,

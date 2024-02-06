@@ -12,5 +12,8 @@ class PlayersController():
     def get_player_by_player_id(self, player_id: str) -> PlayerSchema:
         return self.PlayersService.get_player_by_player_id(player_id)
     
+    def get_player_of_the_week(self):
+        return self.PlayersService.get_player_of_the_week()
+
     def get_hof(self):
         return self.PlayersService.get_hof()

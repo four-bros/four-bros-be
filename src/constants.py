@@ -15,7 +15,7 @@ from src.schemas.Coach import (
     CoachStatsSchema
 )
 from src.schemas.Commits import CommitsSchema
-from src.schemas.Players import PlayerSchema, PlayerHofSchema
+from src.schemas.Players import PlayerSchema, PlayerHofSchema, PlayerOfTheWeekSchema
 from src.schemas.Stats import (
     PlayerDefensiveStatsSchema,
     PlayerDetailsSchema,
@@ -98,8 +98,9 @@ coach_stat_schema = CoachStatsSchema()
 coach_stats_schema = CoachStatsSchema(many=True)
 commit_schema = CommitsSchema()
 commits_schema = CommitsSchema(many=True)
-defensive_stat_schema = PlayerDefensiveStatsSchema()
-defensive_stats_schema = PlayerDefensiveStatsSchema(many=True)
+player_defensive_stat_schema = PlayerDefensiveStatsSchema()
+player_defensive_stats_schema = PlayerDefensiveStatsSchema(many=True)
+player_of_the_week_schema = PlayerOfTheWeekSchema()
 kicking_stat_schema = PlayerKickingStatsSchema()
 kicking_stats_schema = PlayerKickingStatsSchema(many=True)
 kick_return_stat_schema = PlayerKickReturnStatsSchema()
@@ -125,6 +126,7 @@ rushing_stats_schema = PlayerRushingStatsSchema(many=True)
 total_stat_schema = PlayerTotalStatsSchema()
 total_stats_schema = PlayerTotalStatsSchema(many=True)
 week_year_schema = WeekYearSchema()
+
 
 class Positions():
     QB = 'QB'

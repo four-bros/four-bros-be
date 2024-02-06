@@ -101,7 +101,6 @@ class PassingStats:
         sacked,
         comp_pct
     ):      
-
         self.pass_yards = pass_yards
         self.longest_pass = longest_pass
         self.year = year
