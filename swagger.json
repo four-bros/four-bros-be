@@ -94,6 +94,22 @@
           }
         }
       },
+      "/players/player_of_the_week": {
+        "get": {
+          "description": "Returns the player of the week and honorable mention",
+          "produces": [
+            "application/json"
+          ],
+          "responses": {
+            "200": {
+              "description": "Successful operation"
+            },
+            "500": {
+              "description": "Error"
+            }
+          }
+        }
+      },
       "/rankings": {
         "get": {
           "description": "Returns the various poll rankings",

@@ -34,3 +34,19 @@ class PlayersGameStatsDataService():
             GameKickingStatsData.player_id == player_id,
             GameKickingStatsData.year == year
         ).order_by(desc(GameKickingStatsData.week)).all()
+
+    def get_offensive_stats_leaders_by_week(self, week: int, year: int) -> List[GameOffensiveStatsData]:
+        return session.query(GameOffensiveStatsData).where(
+            GameOffensiveStatsData.week == week,
+            GameOffensiveStatsData.year == year
+        ).order_by(desc(GameOffensiveStatsData.total_yards)).limit(10)
+
+    def get_defensive_stats_leaders_by_week(self, week: int, year: int) -> List[GameDefensiveStatsData]:
+        return session.query(GameDefensiveStatsData).where(
+            GameDefensiveStatsData.week == week,
+            GameDefensiveStatsData.year == year
+        ).order_by(
+            desc(GameDefensiveStatsData.def_tds),
+            desc(GameDefensiveStatsData.ints_made),
+            desc(GameDefensiveStatsData.sacks),
+        ).limit(10)
