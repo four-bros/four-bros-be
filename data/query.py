@@ -2,16 +2,16 @@ from typing import List
 from sqlalchemy import LABEL_STYLE_DISAMBIGUATE_ONLY, desc
 from sqlalchemy.sql import exists
 
-from data import(
+from data import (
     def_stats,
     player_info,
     off_stats,
     team_info,
     week_year
 )
-from src.constants import(
+from src.constants import (
     Base,
-    defensive_stats_schema,
+    player_defensive_stats_schema,
     engine,
     session
 )
@@ -34,14 +34,15 @@ players_schema = PlayerSchema(many=True)
 week_year: WeekYearData = session.query(WeekYearData).first()
 
 top_long_int_ret_data = session.query(PlayerInfoData, SeasonDefensiveStatsData).filter(
-        PlayerInfoData.id == SeasonDefensiveStatsData.player_id,
-        SeasonDefensiveStatsData.year == week_year.year
-        ).order_by(desc(SeasonDefensiveStatsData.long_int_ret)).limit(10)
+    PlayerInfoData.id == SeasonDefensiveStatsData.player_id,
+    SeasonDefensiveStatsData.year == week_year.year
+).order_by(desc(SeasonDefensiveStatsData.long_int_ret)).limit(10)
 
 
-converted_players: List[PlayerDefensiveStats] = [_get_player_season_defensive_stats(player) for player in top_long_int_ret_data]
+converted_players: List[PlayerDefensiveStats] = [
+    _get_player_season_defensive_stats(player) for player in top_long_int_ret_data]
 
-converted_players_json = defensive_stats_schema.dump(converted_players)
+converted_players_json = player_defensive_stats_schema.dump(converted_players)
 
 print(len(converted_players))
 
