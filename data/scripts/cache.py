@@ -1,5 +1,5 @@
 import time
-from src.blueprints.view_methods.records import (
+from data.scripts.records import (
 	get_career_records,
 	get_game_records,
 	get_season_records,
