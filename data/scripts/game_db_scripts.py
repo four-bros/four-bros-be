@@ -791,7 +791,7 @@ async def insert_game_return_stats_into_db(week_year_data, return_stats):
                 long_pr=current_return_stats.long_pr,
                 kr_tds=current_return_stats.kr_tds,
                 pr_tds=current_return_stats.pr_tds,
-                kr_yds=current_return_stats.kr_yds,
+                kr_yds=current_return_stats.kr_yds if current_return_stats.kr_yds < 1000 else 0,
                 pr_yds=current_return_stats.pr_yds,
                 kr_avg=current_return_stats.kr_avg,
                 pr_avg=current_return_stats.pr_avg
@@ -824,7 +824,7 @@ async def insert_game_return_stats_into_db(week_year_data, return_stats):
 			    long_pr=long_pr,
 			    kr_tds=kr_tds,
 			    pr_tds=pr_tds,
-			    kr_yds=kr_yds,
+			    kr_yds=kr_yds if kr_yds < 1000 else 0,
 			    pr_yds=pr_yds,
 			    kr_avg=kr_avg,
 			    pr_avg=pr_avg
