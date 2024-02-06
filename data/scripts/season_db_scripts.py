@@ -1,9 +1,8 @@
-import asyncio
 from typing import List
 from uuid import uuid4
 import time
 
-from src.constants import corrupt_player_ids, corrupt_team_ids, session
+from src.constants import corrupt_player_ids, session
 from src.data_models.PlayerInfoData import PlayerInfoData
 from src.utils.calcs import calculate_pass_rating
 from src.utils.helpers import _convert_stats_year
@@ -11,14 +10,12 @@ from src.data_models.SeasonDefensiveStatsData import SeasonDefensiveStatsData
 from src.data_models.SeasonKickingStatsData import SeasonKickingStatsData
 from src.data_models.SeasonOffensiveStatsData import SeasonOffensiveStatsData
 from src.data_models.SeasonReturnStatsData import SeasonReturnStatsData
-from src.data_models.WeekYearData import WeekYearData
 
 
 ################################################
 ######## insert player data functions ##########
 ################################################
 async def insert_season_def_stats_into_db(week_year_data, def_stats):
-
     start_time = time.time()
     print('Starting insert Season Defensive Stats script.')
 
@@ -133,7 +130,6 @@ async def insert_season_def_stats_into_db(week_year_data, def_stats):
 
 
 async def insert_season_kicking_stats_into_db(week_year_data, kicking_stats):
-
     start_time = time.time()
     print('Starting insert Season Kicking Stats script.')
 
@@ -283,7 +279,6 @@ async def insert_season_kicking_stats_into_db(week_year_data, kicking_stats):
 
 
 async def insert_season_off_stats_into_db(week_year_data, off_stats):
-
     start_time = time.time()
     print('Starting insert Season Offensive Stats script.')
 
@@ -518,7 +513,6 @@ async def insert_season_off_stats_into_db(week_year_data, off_stats):
 
 
 async def insert_season_return_stats_into_db(week_year_data, return_stats):
-
     start_time = time.time()
     print('Starting insert Season Return Stats script.')
 
@@ -584,7 +578,7 @@ async def insert_season_return_stats_into_db(week_year_data, return_stats):
             games_played=record.fields['Games Played'],
             kr_tds=record.fields['KR TDs'],
             pr_tds=record.fields['PR TDs'],
-            kr_yds=record.fields['KR Yds.'],
+            kr_yds=record.fields['KR Yds.'] if record.fields['KR Yds.'] < 2500 else 0,
             pr_yds=record.fields['PR Yds.'],
             kr_avg=kr_avg,
             pr_avg=pr_avg

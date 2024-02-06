@@ -1,5 +1,5 @@
 import time
-from src.blueprints.view_methods.records import (
+from scripts.records import (
 	get_career_records,
 	get_game_records,
 	get_season_records,
@@ -15,7 +15,7 @@ async def cache_player_career_records():
 	start_time = time.time()
 	print('Starting career records cache.')
 
-	career_records = get_career_records('request')
+	career_records = get_career_records()
 
 	career_record: Records = Records(
 		id=1,
@@ -49,7 +49,7 @@ async def cache_player_game_records():
 	start_time = time.time()
 	print('Starting game records cache.')
 
-	game_records = get_game_records('request')
+	game_records = get_game_records()
 
 	game_record: Records = Records(
 		id=2,
@@ -79,7 +79,6 @@ async def cache_player_game_records():
 
 
 async def cache_player_season_records():
-
 	start_time = time.time()
 	print('Starting season records cache.')
 
