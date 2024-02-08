@@ -6,9 +6,9 @@ class RecordsDataService():
     def __init__(self) -> None:
         pass
 
-    def get_player_career_records_cache(self):
+    def get_player_of_the_week_cache(self):
         player_career_records_data: Records = session.query(Records).where(
-            Records.record_type == 'player_career'
+            Records.record_type == 'player_of_the_week'
         ).scalar()
 
         return player_career_records_data.record

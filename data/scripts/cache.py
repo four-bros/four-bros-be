@@ -8,7 +8,42 @@ from scripts.records import (
 )
 from src.constants import session
 from src.data_models.Records import Records
+from src.controllers.PlayersController import PlayersController
 
+PlayersController = PlayersController()
+
+async def cache_player_of_the_week():
+	start_time = time.time()
+	print('Starting player of the week cache.')
+
+	player_of_the_week = PlayersController.get_player_of_the_week()
+
+	player_of_the_week_record: Records = Records(
+		id=6,
+		record_type='player_of_the_week',
+		record=player_of_the_week
+	)
+
+	player_of_the_week_query = session.query(Records).where(
+		Records.record_type == 'player_of_the_week'
+	).scalar()
+
+	if not player_of_the_week_query:
+		session.add(player_of_the_week_record)
+
+	else:
+		player_of_the_week_query.record = player_of_the_week_record.record
+
+	try:
+		session.commit()
+	except:
+		session.rollback()
+		raise
+	finally:
+		session.close()
+		execution_time = time.time() - start_time
+		print(
+			f'Player of the week cache took {(round(execution_time, 2))} seconds to complete.')
 
 async def cache_player_career_records():
 
