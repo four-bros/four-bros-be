@@ -1,7 +1,5 @@
 import asyncio
 import time
-
-# from src.constants import data_dir, user_teams
 from src.utils.helpers import _convert_stats_year
 from data import (
     def_stats,
@@ -49,6 +47,7 @@ from scripts.game_db_scripts import (
     insert_game_return_stats_into_db
 )
 from scripts.cache import (
+    cache_player_of_the_week,
     cache_player_career_records,
     cache_player_game_records,
     cache_player_season_records,
@@ -130,6 +129,7 @@ async def main():
     )
 
     await asyncio.gather(
+        cache_player_of_the_week(),
         cache_player_career_records(),
         cache_player_game_records(),
         cache_player_season_records(),
