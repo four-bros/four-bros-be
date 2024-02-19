@@ -309,19 +309,24 @@ class TeamsService():
         week_year: WeekYearData = self.WeekYearDataService.get_week_year()
 
         response = {'data': []}
+        user_teams_stats = []
 
         for user in users:
             team_stats_data: TeamSeasonStatsData = self.TeamSeasonStatsDataService.get_team_stats_by_id(
-                user.team_id, week_year.year)
+                user.team_id, week_year.year
+            )
 
             if team_stats_data is None:
                 continue
 
             team_stats: TeamSeasonStats = self._get_team_season_stats(team_stats_data=team_stats_data)
+            user_teams_stats.append(team_stats)
 
+        user_teams_stats.sort(key=lambda team: team.total_yards, reverse=True)
+
+        for user_team in user_teams_stats:
             team = {}
-            team[team_stats.team_id] = team_stats_schema.dump(team_stats)
-
+            team[user_team.team_id] = team_stats_schema.dump(user_team)
             response['data'].append(team)
 
         return response
