@@ -113,7 +113,7 @@ class PlayersService():
             )
 
             player_object = {
-                'game_points': game_points,
+                'game_points': round(game_points, 2),
                 'player': player_of_the_week_schema.dump(player),
             }
             players.append(player_object)

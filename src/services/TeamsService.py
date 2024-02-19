@@ -317,8 +317,7 @@ class TeamsService():
             if team_stats_data is None:
                 continue
 
-            team_stats: TeamSeasonStats = self._get_team_season_stats(
-                team_stats_data=team_stats_data)
+            team_stats: TeamSeasonStats = self._get_team_season_stats(team_stats_data=team_stats_data)
 
             team = {}
             team[team_stats.team_id] = team_stats_schema.dump(team_stats)
